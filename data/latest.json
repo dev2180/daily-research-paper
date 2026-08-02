@@ -1,353 +1,168 @@
 {
-  "post_style": "roundup",
-  "week_number": 30,
-  "generated_at": "2026-07-26T15:37:48.162495+00:00",
+  "post_style": "deep-dive",
+  "week_number": 31,
+  "generated_at": "2026-08-02T15:36:50.221174+00:00",
   "paper_of_week": {
     "index": 4,
-    "headline": "Diffusion Models Scale Faster Now",
-    "summary": "Diffusion models are widely used for conditional image generation, but their inference-time scaling has been limited. The key insight of this paper is that progressive seed pruning can significantly speed up diffusion models. This breakthrough matters because it enables faster and more efficient image generation, which is crucial for many applications.",
-    "key_takeaway": "Use progressive seed pruning to scale up diffusion models",
-    "excitement_score": 8,
+    "headline": "PhiZero Revolutionizes World Modeling",
+    "summary": "Existing world models struggle to balance complexity and interpretability. \n         PhiZero introduces a compact discrete representation of world-state transitions, enabling more efficient and effective modeling. \n         This breakthrough has significant implications for areas like robotics and autonomous systems, where accurate world modeling is crucial.",
+    "key_takeaway": "PhiZero's physical language enables more efficient and effective world modeling.",
+    "excitement_score": 9,
     "paper": {
-      "id": "2607.21591v1",
-      "title": "Inference-Time Scaling of Diffusion Models via Progressive Seed Pruning",
-      "summary": "Diffusion and flow-matching models dominate conditional image generation, yet inference-time scaling for these models is far less developed than for autoregressive language models. Because final quality is highly sensitive to the initial noise seed, many approaches spend extra compute on seed search or resampling under a black-box reward, but typically maintaining a constant memory footprint throughout inference. We show that relaxing this constraint enables an underexplored inference-time scaling axis: by front-loading exploration, evaluating many seeds early, and pruning aggressively, we can use a fixed compute budget more effectively. \\emph{Progressive Seed Pruning} (\\PSP) scores intermediate denoised estimates and progressively narrows the candidate set so that only promising trajectories are fully denoised, while keeping the total number of model evaluations fixed. Across diffusion and flow-matching backbones, \\PSP \\ consistently improves reward-guided selection and achieves higher GenEval scores (automated) and better human evaluation on prompt-alignment than best-of-$N$, importance-sampling, and tree-search baselines at matched compute. Project page: https://www.vision.caltech.edu/psp. Code: https://github.com/rogerioagjr/psp.",
+      "id": "2607.28624v1",
+      "title": "PhiZero: A World Model Built Around Physical Language",
+      "summary": "We introduce PhiZero, a physical world model built around physical language, a compact discrete representation of world-state transitions. Existing physical world models typically predict future videos directly in pixel space, leaving the underlying world dynamics implicit within high-dimensional visual predictors. Motivated by humans' ability to abstract predictive structure from visual experience and organize it in natural language for explicit reasoning, we learn physical language from in-the-wild videos through self-supervision and use it to explicitly reason about how the physical world evolves. Accordingly, PhiZero adopts a reason-then-render paradigm: it first infers future world evolution as a physical-language sequence and then renders the inferred transitions into videos. Extensive experiments across generation and understanding benchmarks validate the ability of PhiZero to model physically coherent world evolution. We further show its potential for realistic and interactive world modeling, fine-grained action-conditioned simulation, and zero-shot motion transfer.",
       "authors": [
-        "Rogerio Guimaraes",
-        "Pietro Perona"
+        "Shuyao Shang",
+        "Yuqi Wang",
+        "Ruopeng Gao"
       ],
-      "url": "https://arxiv.org/abs/2607.21591v1",
-      "pdf_url": "https://arxiv.org/pdf/2607.21591v1",
+      "url": "https://arxiv.org/abs/2607.28624v1",
+      "pdf_url": "https://arxiv.org/pdf/2607.28624v1",
       "category": "cs.CV",
       "source": "arxiv",
-      "published": "2026-07-23T17:59:46Z",
-      "github_implementations": 3,
-      "implementation_gap": false
+      "published": "2026-07-30T17:59:46Z"
     }
   },
   "top_papers": [
     {
       "index": 1,
-      "tldr": "3D-Aware VLMs",
+      "tldr": "Learning Seiberg Dualities",
       "bullets": [
-        "Improves 3D task handling",
-        "Combines implicit and explicit geometries",
-        "Enhances vision-language models"
+        "Establishes dualities in physical systems",
+        "Improves understanding of microscopic phenomena",
+        "Enhances modeling of emergent phenomena"
       ],
-      "who_should_read": "CV engineers",
+      "who_should_read": "Theoretical physicists",
       "paper": {
-        "id": "2607.21595v1",
-        "title": "3D-Aware VLMs with Implicit and Explicit Geometries",
-        "summary": "Despite rapid progress, most existing vision-language models (VLMs) built from 2D visual inputs often struggle when handling various 3D tasks that require fine-grained spatial understanding and reasoning. To bridge this gap, we present VLM-IE3D, a unified framework that enhances the 3D spatial awareness of VLMs by equipping them with both implicit and explicit 3D geometries learned from RGB videos. Our VLM-IE3D introduces Implicit Geometry Tokens (IGTs) that capture high-level geometric priors from input videos, as well as complementary Explicit Geometry Tokens (EGTs) that encode detailed geometric structures from reconstructed 3D attributes. On top of that, VLM-IE3D comes with a 3D-aware adapter that effectively fuses the two types of geometric representations with 2D visual cues. This RGB-only design injects strong 3D inductive biases for fine-grained spatial understanding and reasoning without requiring any additional 3D inputs. Extensive experiments show that VLM-IE3D achieves superior performance consistently across various 3D tasks including 3D video detection, 3D visual grounding, 3D dense captioning, and spatial reasoning. Code and models are available at https://github.com/Vegetebird/VLM-IE3D.",
+        "id": "2607.28628v1",
+        "title": "Learning to Trace Seiberg Dualities",
+        "summary": "Dualities play an important role in establishing both microscopic and emergent phenomena in a wide range of physical systems. In practice, though, it can often be computationally challenging to establish when two systems are dual, even when all of the \"rules of the game\" are well-known. Said differently, when confronted with two systems, how can one efficiently establish that they are in fact dual? In this paper we use machine learning methods to address this question for Seiberg dualities of supersymmetric quiver gauge theories. Mathematically, this involves establishing mutations of quivers, which is in turn a variation on the theme of \"learning to unknot\". On the one hand, this leads us to a practical tool for establishing the computational complexity of different dualities. On the other hand, it also allows us to study how different network architectures learn how to trace Seiberg dualities. We find that for quivers with a modest number of quiver nodes (of order $10$), different network architectures consisting of transformers and multi-layer perceptrons tend to outperform deterministic algorithms. Supplementing the network by well-established pathfinder algorithms (essentially \"Google Maps for quivers\") leads to an additional improvement in the efficiency and accuracy of the search strategy. We anticipate that this class of questions can serve as a useful benchmark for frontier AI models applied to theoretical physics.",
         "authors": [
-          "Wenhao Li",
-          "Xueying Jiang",
-          "Quanhao Qian"
+          "Jonathan J. Heckman",
+          "Shani Meynet",
+          "Alessandro Mininno"
         ],
-        "url": "https://arxiv.org/abs/2607.21595v1",
-        "pdf_url": "https://arxiv.org/pdf/2607.21595v1",
-        "category": "cs.CV",
+        "url": "https://arxiv.org/abs/2607.28628v1",
+        "pdf_url": "https://arxiv.org/pdf/2607.28628v1",
+        "category": "hep-th",
         "source": "arxiv",
-        "published": "2026-07-23T17:59:59Z",
-        "github_implementations": 3,
-        "implementation_gap": false
+        "published": "2026-07-30T17:59:56Z",
+        "github_implementations": 0,
+        "implementation_gap": true
       }
     },
     {
       "index": 3,
-      "tldr": "Unified Video Prediction",
+      "tldr": "Human-Centric Ambient Capture",
       "bullets": [
-        "Predicts geometry, appearance, and semantics",
-        "Uses disjoint data",
-        "Enables scene understanding"
+        "Addresses embodied intelligence data bottleneck",
+        "Captures first-person perception and whole-body motion",
+        "Enables dexterous manipulation and interaction"
       ],
-      "who_should_read": "Video analysis researchers",
+      "who_should_read": "Robotics engineers",
       "paper": {
-        "id": "2607.21592v1",
-        "title": "Unified Video Dense Prediction from Disjoint Data",
-        "summary": "Scene understanding requires simultaneous prediction about geometry, appearance, and semantics. However, existing task-specific annotations are fragmented across incompatible, domain-specific datasets. Current unified systems circumvent this by restricting training to fully co-annotated data, or by incurring the large computational cost of pseudo-labeling. To mitigate this, we introduce UniD, a unified video model that jointly predicts eight dense scene properties-depth, surface normals, semantic segmentation, boundaries, human parts, albedo, shading, and materials-all learned from disjoint, domain-specific datasets. We propose a simple yet effective distillation step in which per-task experts supervise a unified backbone through lightweight task projectors, eliminating the need for annotation overlap or pseudo-labeling. Our key insight is that the strong visual priors of a pretrained diffusion model are sufficient to bridge the domain gaps introduced by disjoint training sources, enabling robust generalization to scene-task combinations never seen during training. UniD achieves competitive performance against per-task specialists and multi-task baselines, with strong generalization to out-of-distribution scenarios and enhanced temporal and cross-task consistency. Code and video results are available at https://unid-video.github.io/.",
+        "id": "2607.28625v1",
+        "title": "ACE-Data-0: Human-Centric Ambient Capture as Embodied Data Engine",
+        "summary": "Embodied intelligence faces a fundamental data bottleneck. Models must capture how first-person perception, whole-body motion, dexterous manipulation, object state, sound, and touch evolve together as humans pursue goals over time. Existing datasets fragment this experience across viewpoints, modalities, or spatial scales, leaving the full perception-action loop only partially observed. We introduce the Ambient Capture Engine (ACE), a human-centric data engine that transforms real home environments into spatially calibrated, temporally synchronized recording studios. ACE operates at two complementary scales: a table-scale configuration resolves hand-object manipulation, while a room-scale configuration captures whole-body motion, locomotion, and interactions across a furnished home. ACE records egocentric and multi-view exocentric video, full-body and articulated hand motion, object geometry and 6-DoF trajectories, audio, and tactile signals as a unified multisensory stream. Using ACE, we build ACE-Data-0, comprising 150 hours and 17M video frames across 200 task categories, performed by 50 participants in 2 environments, for a total of 75,000 interaction episodes. The dataset spans atomic manipulation, long-horizon chains of household activities, and human-scene interaction, while preserving natural behavioral variation through goal-level rather than step-by-step instructions. We further introduce a hierarchical benchmark that progresses from signals to scene components and then to interactions. Evaluations of state-of-the-art methods expose substantial gaps under contact, occlusion, egomotion, and long temporal horizons. ACE-Data-0 provides synchronized human demonstrations with aligned perceptual, kinematic, and contact supervision, offering a scalable foundation for imitation learning, world models, vision-language-action systems, and embodied AI.",
         "authors": [
-          "Yihong Sun",
-          "Seoung Wug Oh",
-          "Jiahui Huang"
+          "Yukang Cao",
+          "Haozhe Xie",
+          "Beichen Wen"
         ],
-        "url": "https://arxiv.org/abs/2607.21592v1",
-        "pdf_url": "https://arxiv.org/pdf/2607.21592v1",
+        "url": "https://arxiv.org/abs/2607.28625v1",
+        "pdf_url": "https://arxiv.org/pdf/2607.28625v1",
         "category": "cs.CV",
         "source": "arxiv",
-        "published": "2026-07-23T17:59:50Z",
-        "github_implementations": 3,
-        "implementation_gap": false
+        "published": "2026-07-30T17:59:50Z",
+        "github_implementations": 0,
+        "implementation_gap": true
       }
     },
     {
       "index": 6,
-      "tldr": "Compositional Generalization",
+      "tldr": "Claim-Centered Chemistry Literature",
       "bullets": [
-        "Improves robotic manipulation",
-        "Uses bias-aware evaluation",
-        "Enables diverse instruction following"
+        "Streamlines chemistry literature synthesis",
+        "Assembles specific findings from multiple publications",
+        "Enhances research efficiency and accuracy"
       ],
-      "who_should_read": "Robotics engineers",
+      "who_should_read": "Chemistry researchers",
       "paper": {
-        "id": "2607.21582v1",
-        "title": "Scale Up Strategically: Learning Compositional Generalization via Bias-Aware Evaluation and Data Collection for Robotic Manipulation",
-        "summary": "Compositional generalization is essential for robot to follow diverse instructions. However, pretrained policies are known to take shortcuts, deferring to salient cues rather than grounding language. We introduce a diagnostic framework that localizes this failure to individual \\textit{instruction factors}, \\textit{e.g.,} reusable semantic components such as color, verb, object, size, and spatial attribute. Our framework formalizes instruction factor bias, the tendency of fine-tuned policies to over-rely on dominant factors as shortcuts, and quantifies it through two metrics: Factor Dominance Rate (FDR), capturing pairwise bias between factors, and Factor Dominance Hierarchy (FDH), aggregating these into a global ranking. Evaluation on six foundation policies reveals broadly consistent ordering, \\textit{i.e.}, color $\\geq$ object $\\geq$ spatial $\\geq$ verb $\\geq$ size, with color dominant, and verb and size most under-grounded. We further show the diagnosis is actionable: a bias-aware data collection strategy that reallocates a fixed budget toward under-grounded factors outperforms baselines in simulation and on a real robot using half the demonstrations, thereby enabling more sample-efficient and generalizable policy learning.",
+        "id": "2607.28618v1",
+        "title": "AskChem: Claim-Centered Infrastructure for Chemistry Literature Synthesis",
+        "summary": "Chemistry literature synthesis often requires assembling specific findings scattered across many publications, yet existing literature-search systems primarily return ranked document lists. As a result, scientists and AI agents need to locate relevant information, verify their provenance, and assemble cross-paper answers manually. We present AskChem, a claim-centered infrastructure for cross-paper chemistry search. AskChem changes the unit of retrieval from the paper to the provenance-carrying claim: each paper is converted into atomic, typed claims, each grounded by a source DOI and a verbatim quote or an explicit evidence locator. Over this shared claim store, AskChem exposes complementary structures for search and synthesis: a stabilized faceted taxonomy for hierarchical retrieval and browsing, an evidence graph linking claims through relations, and an exploratory living taxonomy that situates indexed papers under scientific principles. AskChem currently indexes 2.4M claims from 147K papers and provides a web interface, as well as REST, SDK, and MCP access for AI agents. On AskChem-Bench, grounding a GPT-5.5 reader in AskChem yields 100% resolvable DOIs, compared with 88.3% without retrieval, and the highest citation density among five tested systems. AskChem is live at https://askchem.org.",
         "authors": [
-          "Yu Qi",
-          "Zhang Ye",
-          "Xinyi Xu"
+          "Bing Yan",
+          "Gregory Wolfe",
+          "Stefano Martiniani"
         ],
-        "url": "https://arxiv.org/abs/2607.21582v1",
-        "pdf_url": "https://arxiv.org/pdf/2607.21582v1",
-        "category": "cs.RO",
+        "url": "https://arxiv.org/abs/2607.28618v1",
+        "pdf_url": "https://arxiv.org/pdf/2607.28618v1",
+        "category": "cs.CL",
         "source": "arxiv",
-        "published": "2026-07-23T17:57:09Z",
-        "github_implementations": 3,
-        "implementation_gap": false
+        "published": "2026-07-30T17:59:11Z"
       }
     },
     {
       "index": 8,
-      "tldr": "Barzilai-Borwein Convergence",
+      "tldr": "Hybrid Visual Diffusion Transformers",
       "bullets": [
-        "Analyzes convergence dynamics",
-        "Finds limitations in high dimensions",
-        "Impacts optimization methods"
+        "Improves visual generation with high-resolution images",
+        "Enhances long video and multimodal context processing",
+        "Reduces quadratic cost of full attention"
       ],
-      "who_should_read": "Optimization experts",
+      "who_should_read": "Computer vision engineers",
       "paper": {
-        "id": "2607.21579v1",
-        "title": "Barzilai-Borwein Fails Superlinear Convergence on an Open Set of Quadratics for Every Dimension $n\\geq 4$",
-        "summary": "Barzilai--Borwein (BB) method has shown strong practical performance in continuous optimization, yet its convergence dynamics remains poorly understood. In particular, a central unresolved question is whether BB converges superlinearly for almost every strictly convex quadratic problem and initialization. We provide a negative answer to this question. Specifically, for every finite dimension $n\\geq4$, we construct a nonempty open, hence positive-Lebesgue-measure, family of strictly convex quadratic problems and initial points for which the long Barzilai--Borwein method (BB1) converges but cannot converge root-superlinearly. More precisely, with the explicit constants $ρ_{\\min}=10^{-6},ρ_{\\max}=0.61$, every spectral component of the gradient is bounded above and below by the corresponding geometric sequence. Consequently, the gradient norm and the energy norm of the error satisfy two-sided geometric estimates with the same rates, while the objective gap satisfies the corresponding estimates with squared rates. In particular, all three quantities are bounded below by geometric sequences, ruling out superlinear convergence. The construction is highly nontrivial, based on a computer-assisted proof of a nonresonant, attracting seven-cycle of the projectivized BB dynamics in dimension four.",
+        "id": "2607.28611v1",
+        "title": "Chimera: Designing and Chinchilla-Scaling Hybrid Visual Diffusion Transformers",
+        "summary": "Visual generation increasingly requires high-resolution images, long videos, and multimodal context, making the quadratic cost of full attention prohibitive. We introduce Chimera, a hybrid visual diffusion backbone with a principled scaling recipe. Chimera processes text, image, and video tokens in one raster-ordered stream without positional embeddings. It combines Kimi Delta Attention (KDA) for long-context state tracking with O(N) complexity, interleaved Multi-head Latent Attention (MLA) for direct global interaction, and modality-aware short convolutions for local spatiotemporal context. Sparse Mixture-of-Experts (MoE) layers expand capacity while controlling activated compute. To scale this heterogeneous architecture, we introduce HeteroP, a module-wise scheme that transfers hyperparameters across width and depth according to each tensor's functional fan-in and model depth. HeteroP yields a consistently tuned family used to fit Chinchilla-style compute-optimal laws for activated model size, training-token count, and image-video data ratio. Guided by these laws, we train an 11B-parameter Chimera with 2B activated parameters. Experiments show three results. First, measured by pretraining diffusion loss, the dense backbone is 1.7x as compute-efficient as a matched full-attention Wan-2.1 2B baseline, while the complete system reaches 7.3x. Second, without length-specific fine-tuning, Chimera extrapolates zero-shot from 5-second training clips to 30-second videos, with only 6.5% FID degradation in the last five seconds. Third, the fitted laws show that compute-optimal image pretraining divides compute nearly evenly between activated model size and training-token count, whereas video pretraining modestly favors model size at higher budgets. These results establish a foundation for designing and scaling efficient long-context diffusion architectures.",
         "authors": [
-          "Dawei Li",
-          "Xiaotian Jiang",
-          "Mingyi Hong"
+          "Chongjian Ge",
+          "Hanwen Jiang",
+          "Tianyu Wang"
         ],
-        "url": "https://arxiv.org/abs/2607.21579v1",
-        "pdf_url": "https://arxiv.org/pdf/2607.21579v1",
-        "category": "math.OC",
+        "url": "https://arxiv.org/abs/2607.28611v1",
+        "pdf_url": "https://arxiv.org/pdf/2607.28611v1",
+        "category": "cs.CV",
         "source": "arxiv",
-        "published": "2026-07-23T17:56:05Z"
+        "published": "2026-07-30T17:58:02Z"
       }
     },
     {
       "index": 10,
-      "tldr": "Self-Supervised Video Learning",
+      "tldr": "Reproducible Subgroup Fairness Auditing",
       "bullets": [
-        "Learns structured dynamics",
-        "Uses frame-to-frame changes",
-        "Enables visual learning"
+        "Audits clinical risk models for subgroup fairness",
+        "Identifies materially different error rates",
+        "Enhances model transparency and accountability"
       ],
-      "who_should_read": "Video understanding researchers",
+      "who_should_read": "Clinical data scientists",
       "paper": {
-        "id": "2607.21576v1",
-        "title": "Self-Supervised Learning of Structured Dynamics from Videos",
-        "summary": "Understanding motion in video is a fundamental challenge for visual learning, as frame-to-frame change entangles two sources of dynamics: camera motion and object motion. This decomposition has remained underexplored in representation learning, partly because these factors are tightly coupled in natural videos and difficult to supervise separately. Yet recovering it is important for learning robust motion representations that separate meaningful object dynamics from camera-induced variation. We study whether such structured motion representations can be recovered from frozen features of a pretrained image vision transformer. We propose the Structured Dynamics Model (SDM), which explicitly separates the dominant source of temporal change from residual dynamics through future-feature prediction, rather than representing video change with a single entangled latent or with unstructured, spatially dense transition tokens. Training combines self-supervised learning on real video with weak supervision of scene dynamics on synthetic Kubric data. We evaluate SDM on ProbeMotion, a new evaluation suite spanning synthetic and real videos with camera motion, object motion, and combined dynamics. SDM outperforms backbone baselines using global CLS or average-pooled features, and compares favorably to strongly supervised representations such as VGGT on several probes, despite using substantially weaker supervision. These results suggest that pretrained image models can be readily repurposed into structured video-dynamics representations, providing a useful inductive bias for learning and analyzing latent video dynamics.",
+        "id": "2607.28608v1",
+        "title": "KAISEN: Reproducible Subgroup Fairness Auditing for Clinical Risk Models",
+        "summary": "Clinical risk models routinely achieve strong aggregate performance while producing materially different error rates across patient subgroups. Audit pipelines have been proposed to catch this, but their components are rarely stress-tested, so it is unclear which parts of an audit can be trusted and under what conditions. We present KAISEN, a five-phase audit pipeline covering subgroup stratification, disparity measurement, mechanism diagnostics, post-hoc mitigation, and drift monitoring, evaluated to the point of failure on a synthetic benchmark of 16 disease tasks, 15 social-determinant axes from Healthy People 2030, and three prespecified intersections. Four findings follow. (i) Significance tracks each axis's gap against its own minimum detectable effect: rank correlation between significance count and raw equalized-odds difference (EOD) across the 15 axes is rho = 0.56, rising to rho = 0.78 once EOD is standardized by that floor. (ii) Per-group threshold optimization reduces EOD in 48 of 48 held-out runs (paired delta = -0.285, 95% CI [-0.313, -0.252]), while group-wise Platt scaling -- the better calibrator -- behaves as a coin flip on EOD (19 of 48 runs improved, 95% CI [0.26, 0.55]) with mean effect near zero, so what an audit should report is the variance, not the average. (iii) The mechanism diagnostic classifies 144 of 144 controlled cases correctly but recovers none of 48 model-driven cases under proxy misspecification, with no signal that it failed. (iv) CUSUM failures and false alarms track cohort realization far more than disease: at the reference threshold, all 27 false alarms and 7 of 8 missed shifts come from different seeds (chi-squared p = 0.002), so a threshold tuned on one cohort fails to transfer. All results are synthetic with known ground truth and do not establish clinical validity. Code, artifacts, and scripts reproducing every number are released.",
         "authors": [
-          "Lukas Knobel",
-          "Andrew Zisserman",
-          "Yuki M. Asano"
+          "Sparsh Roy",
+          "Samuel Girmachew",
+          "Nishita Chavan"
         ],
-        "url": "https://arxiv.org/abs/2607.21576v1",
-        "pdf_url": "https://arxiv.org/pdf/2607.21576v1",
-        "category": "cs.CV",
+        "url": "https://arxiv.org/abs/2607.28608v1",
+        "pdf_url": "https://arxiv.org/pdf/2607.28608v1",
+        "category": "cs.LG",
         "source": "arxiv",
-        "published": "2026-07-23T17:55:07Z"
+        "published": "2026-07-30T17:57:18Z"
       }
     }
   ],
   "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Implement progressive seed pruning",
-    "why": "It can significantly speed up diffusion models",
-    "time_estimate": "2-3 hours",
-    "difficulty": "intermediate"
+    "action": "Implement PhiZero's physical language",
+    "why": "It can significantly improve world modeling efficiency and effectiveness.",
+    "time_estimate": "4-6 hours",
+    "difficulty": "advanced"
   },
-  "github_repos": [
-    {
-      "id": "1306607268",
-      "title": "haoran-zha/Awesome-Spiking-Neural-Networks-Hub",
-      "summary": "The comprehensive bilingual (EN/中文) hub for Spiking Neural Networks — 340+ papers, models, neuromorphic hardware, datasets, tools & research groups.",
-      "url": "https://github.com/haoran-zha/Awesome-Spiking-Neural-Networks-Hub",
-      "stars": 106,
-      "language": "Python",
-      "topics": [
-        "awesome",
-        "awesome-list",
-        "brain-inspired-computing",
-        "deep-learning",
-        "event-camera",
-        "machine-learning",
-        "neural-networks",
-        "neuromorphic-computing",
-        "neuromorphic-hardware",
-        "paper-list",
-        "snn",
-        "spiking-neural-networks",
-        "spiking-transformer",
-        "surrogate-gradient"
-      ],
-      "source": "github",
-      "created_at": "2026-07-20T12:55:19Z"
-    },
-    {
-      "id": "1307733763",
-      "title": "itshamzabendelladj/AIGuardSIEM",
-      "summary": "A production-grade SIEM/XDR platform for 1M+ EPS ingestion with sub-15ms detection latency. Built with C++, Go, and Python. Features DPDK capture, ONNX ML inference, Sigma rules, eBPF monitoring, and SOAR.",
-      "url": "https://github.com/itshamzabendelladj/AIGuardSIEM",
-      "stars": 74,
-      "language": "C++",
-      "topics": [
-        "anomaly-detection",
-        "cybersecurity",
-        "dpdk",
-        "endpoint-security",
-        "incident-response",
-        "intrusion-detection",
-        "kafka",
-        "kubernetes",
-        "machine-learning",
-        "malware-detection",
-        "mitre-attack",
-        "network-security",
-        "onnx",
-        "security",
-        "siem",
-        "sigma-rules",
-        "soar",
-        "soc",
-        "xdr"
-      ],
-      "source": "github",
-      "created_at": "2026-07-21T13:28:34Z"
-    },
-    {
-      "id": "1307934389",
-      "title": "taovietducofficial/ITLR-Fullstack-Recommender-RAG",
-      "summary": "Hybrid recommender system + RAG chatbot for IT courses (FastAPI + Express/TS + PostgreSQL), with an independent Data Lakehouse module (Spark/Kafka/dbt/Trino) and full CI/CD",
-      "url": "https://github.com/taovietducofficial/ITLR-Fullstack-Recommender-RAG",
-      "stars": 15,
-      "language": "Jupyter Notebook",
-      "topics": [
-        "ci-cd",
-        "collaborative-filtering",
-        "data-lakehouse",
-        "dbt",
-        "docker",
-        "express",
-        "faiss",
-        "fastapi",
-        "kafka",
-        "learning-to-rank",
-        "machine-learning",
-        "nlp",
-        "postgresql",
-        "rag-chatbot",
-        "recommender-system",
-        "spark",
-        "typescript"
-      ],
-      "source": "github",
-      "created_at": "2026-07-21T16:58:26Z"
-    },
-    {
-      "id": "1307024852",
-      "title": "felixrieseberg/language-model-builder",
-      "summary": "An educational macOS app: build and chat with a tiny language model, trained on your Mac",
-      "url": "https://github.com/felixrieseberg/language-model-builder",
-      "stars": 15,
-      "language": null,
-      "topics": [
-        "ai",
-        "llm",
-        "llm-tools",
-        "machine-learning",
-        "mlx"
-      ],
-      "source": "github",
-      "created_at": "2026-07-20T21:20:56Z"
-    },
-    {
-      "id": "1308738904",
-      "title": "theohmwoa/coral-rs",
-      "summary": "Rust stack for the Coral USB Accelerator (Edge TPU): FFI wrapper today, pure-Rust nusb driver as the endgame",
-      "url": "https://github.com/theohmwoa/coral-rs",
-      "stars": 7,
-      "language": "Rust",
-      "topics": [
-        "coral",
-        "edge-tpu",
-        "embedded",
-        "inference",
-        "machine-learning",
-        "rust",
-        "tpu",
-        "usb-driver"
-      ],
-      "source": "github",
-      "created_at": "2026-07-22T11:29:18Z"
-    },
-    {
-      "id": "1307457585",
-      "title": "adamghaida/ai-hall-of-fame",
-      "summary": "A curated, well-sourced collection of documented cases where AI did something genuinely remarkable — across math, physics, chemistry, biology, medicine, and more.",
-      "url": "https://github.com/adamghaida/ai-hall-of-fame",
-      "stars": 7,
-      "language": "Python",
-      "topics": [
-        "ai-research",
-        "alphafold",
-        "artificial-intelligence",
-        "awesome-list",
-        "deep-learning",
-        "deepmind",
-        "machine-learning",
-        "science"
-      ],
-      "source": "github",
-      "created_at": "2026-07-21T08:24:24Z"
-    },
-    {
-      "id": "1308745348",
-      "title": "RightNow-AI/Memoir",
-      "summary": "Weights that never freeze. A continual-learning architecture, and the pre-registered experiment that falsified its central claim. https://arxiv.org/abs/2607.20792",
-      "url": "https://github.com/RightNow-AI/Memoir",
-      "stars": 6,
-      "language": "Python",
-      "topics": [
-        "continual-learning",
-        "fast-weights",
-        "machine-learning",
-        "negative-results",
-        "pytorch"
-      ],
-      "source": "github",
-      "created_at": "2026-07-22T11:35:53Z"
-    },
-    {
-      "id": "1307082261",
-      "title": "chinenyemercy5228-ship-it/stroke-risk-classification-ml",
-      "summary": "Comparative analysis of machine learning models for stroke risk prediction using Python and Scikit-learn.",
-      "url": "https://github.com/chinenyemercy5228-ship-it/stroke-risk-classification-ml",
-      "stars": 6,
-      "language": "Jupyter Notebook",
-      "topics": [
-        "classification",
-        "data-analysis",
-        "data-science",
-        "healthcare",
-        "jupyter-notebook",
-        "machine-learning",
-        "python",
-        "scikit-learn",
-        "stroke-prediction"
-      ],
-      "source": "github",
-      "created_at": "2026-07-20T23:10:28Z"
-    }
-  ],
+  "github_repos": [],
   "hn_posts": [
     {
       "id": "42827913",
@@ -374,5 +189,57 @@
       "created_at": "2025-02-23T22:31:44Z"
     }
   ],
-  "implementation_gaps": []
+  "implementation_gaps": [
+    {
+      "id": "2607.28628v1",
+      "title": "Learning to Trace Seiberg Dualities",
+      "summary": "Dualities play an important role in establishing both microscopic and emergent phenomena in a wide range of physical systems. In practice, though, it can often be computationally challenging to establish when two systems are dual, even when all of the \"rules of the game\" are well-known. Said differently, when confronted with two systems, how can one efficiently establish that they are in fact dual? In this paper we use machine learning methods to address this question for Seiberg dualities of supersymmetric quiver gauge theories. Mathematically, this involves establishing mutations of quivers, which is in turn a variation on the theme of \"learning to unknot\". On the one hand, this leads us to a practical tool for establishing the computational complexity of different dualities. On the other hand, it also allows us to study how different network architectures learn how to trace Seiberg dualities. We find that for quivers with a modest number of quiver nodes (of order $10$), different network architectures consisting of transformers and multi-layer perceptrons tend to outperform deterministic algorithms. Supplementing the network by well-established pathfinder algorithms (essentially \"Google Maps for quivers\") leads to an additional improvement in the efficiency and accuracy of the search strategy. We anticipate that this class of questions can serve as a useful benchmark for frontier AI models applied to theoretical physics.",
+      "authors": [
+        "Jonathan J. Heckman",
+        "Shani Meynet",
+        "Alessandro Mininno"
+      ],
+      "url": "https://arxiv.org/abs/2607.28628v1",
+      "pdf_url": "https://arxiv.org/pdf/2607.28628v1",
+      "category": "hep-th",
+      "source": "arxiv",
+      "published": "2026-07-30T17:59:56Z",
+      "github_implementations": 0,
+      "implementation_gap": true
+    },
+    {
+      "id": "2607.28627v1",
+      "title": "ReToken: One Token to Improve Vision-Language Models for Visual Retrieval",
+      "summary": "Long visual context poses a challenge for vision-language models: performance degrades as the number of distractors grows, and processing all tokens at once is computationally infeasible under GPU memory constraints. We present ReToken, a single learnable embedding trained as an explicit retrieval target that selects a sparse set of query-relevant visual tokens from a pre-filled visual KV cache. Trained on only a small image-QA dataset, ReToken yields consistent gains across image and video benchmarks: on Visual Haystacks it improves Qwen3VL-8B by 13.4 points and InternVL3.5 by 12.4 points (>20% relative), and on LVBench it transfers zero-shot to long video for an 8.0-point gain with Qwen3VL-8B. Thanks to its lightweight design, both training and long-video inference fit on a single H100. Code is available at: https://github.com/avaxiao/ReToken",
+      "authors": [
+        "Yao Xiao",
+        "Reuben Tan",
+        "Zhen Zhu"
+      ],
+      "url": "https://arxiv.org/abs/2607.28627v1",
+      "pdf_url": "https://arxiv.org/pdf/2607.28627v1",
+      "category": "cs.CV",
+      "source": "arxiv",
+      "published": "2026-07-30T17:59:56Z",
+      "github_implementations": 0,
+      "implementation_gap": true
+    },
+    {
+      "id": "2607.28625v1",
+      "title": "ACE-Data-0: Human-Centric Ambient Capture as Embodied Data Engine",
+      "summary": "Embodied intelligence faces a fundamental data bottleneck. Models must capture how first-person perception, whole-body motion, dexterous manipulation, object state, sound, and touch evolve together as humans pursue goals over time. Existing datasets fragment this experience across viewpoints, modalities, or spatial scales, leaving the full perception-action loop only partially observed. We introduce the Ambient Capture Engine (ACE), a human-centric data engine that transforms real home environments into spatially calibrated, temporally synchronized recording studios. ACE operates at two complementary scales: a table-scale configuration resolves hand-object manipulation, while a room-scale configuration captures whole-body motion, locomotion, and interactions across a furnished home. ACE records egocentric and multi-view exocentric video, full-body and articulated hand motion, object geometry and 6-DoF trajectories, audio, and tactile signals as a unified multisensory stream. Using ACE, we build ACE-Data-0, comprising 150 hours and 17M video frames across 200 task categories, performed by 50 participants in 2 environments, for a total of 75,000 interaction episodes. The dataset spans atomic manipulation, long-horizon chains of household activities, and human-scene interaction, while preserving natural behavioral variation through goal-level rather than step-by-step instructions. We further introduce a hierarchical benchmark that progresses from signals to scene components and then to interactions. Evaluations of state-of-the-art methods expose substantial gaps under contact, occlusion, egomotion, and long temporal horizons. ACE-Data-0 provides synchronized human demonstrations with aligned perceptual, kinematic, and contact supervision, offering a scalable foundation for imitation learning, world models, vision-language-action systems, and embodied AI.",
+      "authors": [
+        "Yukang Cao",
+        "Haozhe Xie",
+        "Beichen Wen"
+      ],
+      "url": "https://arxiv.org/abs/2607.28625v1",
+      "pdf_url": "https://arxiv.org/pdf/2607.28625v1",
+      "category": "cs.CV",
+      "source": "arxiv",
+      "published": "2026-07-30T17:59:50Z",
+      "github_implementations": 0,
+      "implementation_gap": true
+    }
+  ]
 }
