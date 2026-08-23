@@ -30,7 +30,7 @@ https://varunb1996.github.io/ml-research-pulse
 | Papers | arXiv Export API | Free |
 | Trending repos | GitHub Search API | Free |
 | Community posts | Hacker News Algolia API | Free |
-| AI Summarisation | **Groq — Llama 3.3 70B** | Free (14,400 req/day) |
+| AI Summarisation | **Groq — GPT-OSS 120B** | Free (14,400 req/day) |
 | Email delivery | Gmail SMTP | Free |
 | Web hosting | GitHub Pages | Free |
 | **Total** | | **$0/year** |
@@ -64,7 +64,7 @@ Go to **Settings → Pages → Source → Deploy from branch → `gh-pages`**
 ### 5. Test it
 Go to **Actions → ML Research Pulse — Weekly Digest → Run workflow**
 
-That's it. Every Sunday at 8 PM IST — papers fetched, summarised by Llama 3.3 70B, web page published, email sent.
+That's it. Every Sunday at 8 PM IST — papers fetched, summarised by GPT-OSS 120B, web page published, email sent.
 
 ---
 
@@ -100,7 +100,7 @@ ml-research-pulse/
 │   ├── fetch_github.py       # GitHub Search API — trending ML repos
 │   ├── fetch_hn.py           # Hacker News Algolia API
 │   ├── aggregator.py         # Merge, dedup, implementation gap detector
-│   ├── summariser.py         # Groq Llama 3.3 70B — rank + summarise (1 API call)
+│   ├── summariser.py         # Groq GPT-OSS 120B — rank + summarise (1 API call)
 │   └── mailer.py             # Gmail SMTP delivery
 ├── templates/
 │   └── email_teaser.html     # Jinja2 HTML email template
@@ -121,7 +121,7 @@ GitHub Actions (cron: Sun 14:30 UTC = 8 PM IST)
   │
   ├── python main.py
   │     ├── fetch: arXiv + Semantic Scholar + GitHub + HN
-  │     ├── summarise: Groq Llama 3.3 70B (single batched prompt)
+  │     ├── summarise: Groq GPT-OSS 120B (single batched prompt)
   │     └── save: output/digest_data.json
   │
   ├── cp digest_data.json → web/public/data/latest.json

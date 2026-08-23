@@ -38,7 +38,7 @@ export default async function Home() {
 
       <footer className="border-t py-10 text-center" style={{ borderColor: "var(--border)" }}>
         <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-          ML Research Pulse · Automated weekly digest · arXiv + Groq Llama 3.3
+          ML Research Pulse · Automated weekly digest · arXiv + Groq GPT-OSS 120B
         </p>
       </footer>
     </div>

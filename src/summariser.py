@@ -4,7 +4,7 @@ import time
 from groq import Groq
 from typing import Any
 
-MODEL = "llama-3.3-70b-versatile"
+MODEL = "openai/gpt-oss-120b"
 
 PERSONA = (
     "You are writing for Varun Bukka, an AI/ML engineer and builder. "
@@ -111,7 +111,7 @@ Return a single valid JSON object with this exact structure:
 top_papers must have exactly 5 entries, all different from paper_of_week.
 Return raw JSON only. No markdown, no explanation, no preamble."""
 
-    print("[summariser] Sending prompt to Groq (Llama 3.3 70B)...")
+    print("[summariser] Sending prompt to Groq (GPT-OSS 120B)...")
     raw = _call(client, prompt)
 
     try:
