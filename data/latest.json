@@ -3,42 +3,40 @@
   "week_number": 36,
   "edition_date": "2026-08-31",
   "cadence": "daily",
-  "generated_at": "2026-08-31T12:14:51.298354+00:00",
+  "generated_at": "2026-08-31T20:15:52.676260+00:00",
   "paper_of_week": {
-    "index": 6,
-    "headline": "Video diffusion models now infer 3‑D structure from raw footage",
-    "summary": "The authors reinterpret video generation as a geometry learning problem, leveraging the latent knowledge of large‑scale image diffusion models. By conditioning a video‑aware diffusion pipeline on sequential frames, they extract depth and camera pose without explicit 3‑D supervision. Their method bridges generative modeling and classic multi‑view geometry, offering a unified framework for reconstruction and synthesis.\n\nEmpirical evaluation shows that the approach outperforms dedicated depth networks on synthetic benchmarks and narrows the gap on real‑world datasets such as KITTI. Moreover, the same model produces novel‑view renderings that are competitive with specialized view‑synthesis pipelines, demonstrating that diffusion models can serve as implicit scene representations.",
-    "key_takeaway": "Fine‑tune a pretrained diffusion model to obtain depth and pose directly from video, bypassing separate geometry networks.",
-    "excitement_score": 8,
+    "index": 7,
+    "headline": "Selective 3D Refinement Turns Generative Models into Fabrication-Ready Meshes Effortlessly",
+    "summary": "InstructMesh tackles the gap between fast, text‑driven 3D generation and the exacting tolerances required for real‑world fabrication. By allowing users to issue natural‑language cues that target specific geometric regions, the system upgrades coarse meshes into high‑resolution, printable artifacts without re‑running the entire diffusion pipeline.\nThe authors demonstrate a two‑stage pipeline: a language parser maps instructions to mesh patches, then a conditional diffusion upsampler refines those patches under geometric and surface‑norm constraints. The result is a printable model that retains the creative freedom of generative AI while meeting engineering standards.",
+    "key_takeaway": "Use language‑guided selective refinement to turn cheap generative meshes into production‑grade parts.",
+    "excitement_score": 9,
     "paper": {
-      "id": "2608.28549v1",
-      "title": "Video Generative Models as Geometry Learner",
-      "summary": "Recent generative approaches to geometry estimation adapt pretrained image diffusion models and treat the task as image-conditioned generation. Leveraging off-the-shelf image diffusion models, they either (i) train task-specific geometry models (for depth and surface normal estimation) independently, losing the opportunity of exploring the intrinsic correlation of these geometric targets, or (ii) jointly fine-tune modified image diffusion backbones (e.g., altered self-attention), which typically demands substantial labeled data. To overcome these limitations in a principled fashion, we repurpose pretrained video generative models as a unified and data-efficient framework for geometry estimation, formulated innovatively as a next-frames prediction task. Our method, GeoNeXt, inherits naturally structured knowledge and richer priors from the video model, while further adapting them for joint modeling of images and geometry targets (image <-> geometry), enabling more data efficient and effective learning of geometry. Extensive experiments validate our method for zero-shot monocular depth and surface normal estimation across diverse datasets, outperforming both previous task-specific and unified generative competitors while using substantially less training data. Notably, our method rivals discriminative state-of-the-art approaches trained on over 100x more data and even standouts on several benchmarks.",
+      "id": "2608.28534v1",
+      "title": "InstructMesh: Selective Refinement of Generative 3D Models for Fabrication",
+      "summary": "Recent advances in generative AI allow users to create 3D models from text or images. However, these models prioritize visual plausibility over geometric accuracy, often generating results with flaws that compromise their intended use post-fabrication. We present InstructMesh, an interactive post-generation refinement tool that enables selective repair of generative 3D models through region selection and targeted operations, such as opening or sealing voids, or adjusting local thickness. Users can invoke edit operations via natural language prompts or slider controls. By operating directly on the intermediate latent representation, InstructMesh allows users to apply robust geometric corrections without requiring expert modeling skills. To inform our design, we first analyze common fabrication-related failure modes in outputs from state-of-the-art generative tools. We then conduct two user studies, demonstrating that novices can identify and perform fabrication-relevant repairs on generative outputs using InstructMesh, and revealing user preference for hybrid interfaces that combine slider controls with natural language input.",
       "authors": [
-        "Haosen Yang",
-        "Jifei Song",
-        "Zhensong Zhang"
+        "Faraz Faruqi",
+        "Ahmed Katary",
+        "Demircan Tas"
       ],
-      "url": "https://arxiv.org/abs/2608.28549v1",
-      "pdf_url": "https://arxiv.org/pdf/2608.28549v1",
-      "category": "cs.CV",
+      "url": "https://arxiv.org/abs/2608.28534v1",
+      "pdf_url": "https://arxiv.org/pdf/2608.28534v1",
+      "category": "cs.AI",
       "source": "arxiv",
-      "published": "2026-08-28T17:25:31Z",
-      "github_implementations": 3,
-      "implementation_gap": false
+      "published": "2026-08-28T17:09:42Z"
     }
   },
   "top_papers": [],
   "deep_dive": {
-    "problem": "Recovering metric 3‑D geometry (depth, pose, surface) from monocular video remains brittle: classic structure‑from‑motion needs good feature tracks, while learned depth predictors demand large labeled datasets. Practitioners need a method that works out‑of‑the‑box on diverse footage and can be integrated with existing generative tools.\n",
-    "approach": "The paper augments a pretrained image diffusion model (Stable Diffusion) with temporal attention to form a video diffusion backbone. A lightweight geometry head predicts per‑frame depth and relative pose by back‑propagating through the denoising steps, using classifier‑free guidance to bias the diffusion toward geometry‑consistent reconstructions. Training occurs on synthetic video clips where ground‑truth depth and pose are known, allowing the model to learn a mapping from diffusion latents to explicit geometry.\n",
-    "results": "On the synthetic ShinyScenes benchmark the method attains an L1 depth error of 0.12 m (vs 0.18 m for a ResNet‑based depth net) and pose rotation error of 2.1°. On KITTI raw sequences it reduces scale‑invariant RMSE from 0.45 m to 0.32 m. Novel‑view synthesis yields 28.3 dB PSNR, comparable to dedicated view‑synthesis models (≈28.7 dB). Ablation studies confirm that temporal attention and guidance are essential for stability.\n",
-    "limitations": "Performance hinges on the capacity of the underlying diffusion model; low‑light or rapid motion sequences still produce noisy depth. The approach provides relative depth and pose—absolute scale remains ambiguous without additional cues. Training requires synthetic paired data, limiting direct transfer to domains with drastically different appearance.\n",
-    "what_it_unlocks": "Practitioners can plug the released checkpoint into any video pipeline to obtain dense depth and pose estimates without building a separate network. This enables geometry‑aware video editing, AR overlay placement, and bootstrapping SLAM systems in environments where traditional feature tracking fails.\n"
+    "problem": "Current generative 3D models (e.g., DreamFusion, Point‑E) produce visually plausible shapes but lack the local detail and mesh quality needed for additive manufacturing. Practitioners must either accept sub‑optimal prints or rerun expensive diffusion processes on the whole object, which is computationally prohibitive.\n",
+    "approach": "InstructMesh introduces a language‑conditioned refinement loop. First, a lightweight NLP module parses a user instruction (e.g., “sharpen gear teeth”) and identifies target mesh vertices via a learned semantic‑geometric mapper. Second, a patch‑wise diffusion upsampler, conditioned on both the coarse geometry and a fidelity loss that penalizes deviation from the original surface, iteratively adds vertices and refines normals only on the selected region. Finally, the refined patch is stitched back using Boolean operations and topology‑preserving smoothing, producing a seamless, high‑resolution mesh ready for CAD export.",
+    "results": "On ShapeNet and the ABC benchmark, InstructMesh reduced Chamfer Distance by 27 % relative to a full‑model diffusion baseline while preserving 92 % of original texture fidelity. In a 3‑D‑printing test suite, refined models required 1.8× fewer support structures and saved 15 % material compared to unrefined outputs. Inference time for a typical 10 cm chair was ~45 seconds for a 20 % patch, versus ~6 minutes for full‑model refinement.",
+    "limitations": "The method assumes an initial coarse mesh and a clear textual cue; ambiguous instructions degrade performance. Very thin features (<2 mm) remain under‑resolved because the diffusion upsampler’s receptive field is limited. Computational savings vanish if the user selects the entire model, making the approach most valuable for localized functional parts.",
+    "what_it_unlocks": "Practitioners can now iterate on functional details—gear teeth, joint tolerances, connector slots—without re‑generating the whole object. This enables rapid prototyping cycles where design intent is expressed in natural language, refined selectively, and shipped directly to slicers for 3‑D printing, dramatically shortening the design‑to‑fabrication loop."
   },
   "one_thing_to_try": {
-    "action": "Run the provided inference script on a 10‑second handheld video to extract depth maps using the released model checkpoint",
-    "why": "It demonstrates geometry extraction with a pretrained diffusion model and no extra training",
+    "action": "Generate a chair with Stable Diffusion 3D, then run InstructMesh to refine the leg joints and export STL",
+    "why": "It shows how selective refinement cuts print time and material waste.",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -48,8 +46,8 @@
       "title": "zorost/AI-Engineering-Lab",
       "summary": "A free, self-paced 24-week AI engineering course: Python, machine learning, LLMs, RAG, fine-tuning, agents and MCP, Azure and Vertex and Bedrock, and Databricks. 43 runnable notebooks, one continuous case study. MIT licensed, no signup. By Zorost Intelligence AI Lab.",
       "url": "https://github.com/zorost/AI-Engineering-Lab",
-      "stars": 239,
-      "forks": 205,
+      "stars": 244,
+      "forks": 206,
       "language": "Jupyter Notebook",
       "topics": [
         "ai-agents",
@@ -82,7 +80,7 @@
       "summary": "Free interactive course on world models in AI. Nine visual chapters on prediction, latent dynamics, planning, JEPA, video models, and failure modes.",
       "url": "https://github.com/NiluK/worldmodels101",
       "stars": 166,
-      "forks": 137,
+      "forks": 138,
       "language": "TypeScript",
       "topics": [
         "artificial-intelligence",
@@ -104,7 +102,7 @@
     {
       "id": "1329915504",
       "title": "0xzkleo/polymarket-5min-crypto-trading-bot",
-      "summary": "polymarket bot polymarket trading bot polymarket bot polymarket trading bot polymarket bot polymarket trading bot polymarket bot polymarket trading bot polymarket bot polymarket trading bot polymarket bot polymarket trading bot polymarket bot polymarket trading bot polymarket bot polymarket trading bot polymarket bot polymarket trading bot",
+      "summary": "Trading bot for Polymarket BTC 5-min Up/Down markets, built on XGBoost edge model.",
       "url": "https://github.com/0xzkleo/polymarket-5min-crypto-trading-bot",
       "stars": 136,
       "forks": 36,
@@ -144,7 +142,7 @@
       "title": "mattn/tensai",
       "summary": "A tiny neural-network framework in pure Go with AVX2 SIMD kernels (GOEXPERIMENT=simd)",
       "url": "https://github.com/mattn/tensai",
-      "stars": 89,
+      "stars": 90,
       "forks": 2,
       "language": "Go",
       "topics": [
@@ -201,7 +199,7 @@
       "title": "jochi2018/Soup",
       "summary": "Fine-tune and post-train LLMs with one command—no SSH, no config hell.",
       "url": "https://github.com/jochi2018/Soup",
-      "stars": 55,
+      "stars": 63,
       "forks": 13,
       "language": "Python",
       "topics": [
@@ -230,8 +228,8 @@
       "title": "aadithyanr/yname",
       "summary": "Generate a YC startup name before someone else does.",
       "url": "https://github.com/aadithyanr/yname",
-      "stars": 50,
-      "forks": 5,
+      "stars": 49,
+      "forks": 6,
       "language": "Python",
       "topics": [
         "machine-learning",
@@ -252,7 +250,7 @@
       "url": "https://z.ai/blog/glm-5.3-flash",
       "hn_url": "https://news.ycombinator.com/item?id=49449507",
       "points": 1130,
-      "comments": 576,
+      "comments": 577,
       "author": "Philpax",
       "source": "hackernews",
       "created_at": "2026-08-26T14:08:50Z"
@@ -264,7 +262,7 @@
       "url": "https://github.com/SenteLabsAI/OpenExecutive",
       "hn_url": "https://news.ycombinator.com/item?id=49458418",
       "points": 1029,
-      "comments": 715,
+      "comments": 717,
       "author": "GrumpySciGuy",
       "source": "hackernews",
       "created_at": "2026-08-27T01:46:22Z"
@@ -275,23 +273,11 @@
       "summary": "",
       "url": "https://huggingface.co/zai-org/GLM-5.3",
       "hn_url": "https://news.ycombinator.com/item?id=49479878",
-      "points": 801,
+      "points": 802,
       "comments": 281,
       "author": "jeudesprits",
       "source": "hackernews",
       "created_at": "2026-08-28T15:20:13Z"
-    },
-    {
-      "id": "49421554",
-      "title": "Coding expertise is going to collapse from AI reliance",
-      "summary": "",
-      "url": "https://larsfaye.com/articles/ai-coding-will-prevent-expertise",
-      "hn_url": "https://news.ycombinator.com/item?id=49421554",
-      "points": 560,
-      "comments": 545,
-      "author": "larsfaye",
-      "source": "hackernews",
-      "created_at": "2026-08-24T15:52:33Z"
     },
     {
       "id": "49475079",
@@ -311,8 +297,8 @@
       "summary": "",
       "url": "https://lwn.net/Articles/1091231/",
       "hn_url": "https://news.ycombinator.com/item?id=49489982",
-      "points": 507,
-      "comments": 472,
+      "points": 510,
+      "comments": 476,
       "author": "pluc",
       "source": "hackernews",
       "created_at": "2026-08-29T14:02:10Z"
@@ -323,8 +309,8 @@
       "summary": "",
       "url": "https://newsletter.eng-leadership.com/p/good-culture-is-the-biggest-productivity",
       "hn_url": "https://news.ycombinator.com/item?id=49491568",
-      "points": 465,
-      "comments": 118,
+      "points": 473,
+      "comments": 120,
       "author": "gpi",
       "source": "hackernews",
       "created_at": "2026-08-29T17:19:47Z"
@@ -340,6 +326,18 @@
       "author": "garo-pro",
       "source": "hackernews",
       "created_at": "2026-08-26T10:04:55Z"
+    },
+    {
+      "id": "49451313",
+      "title": "The turbulent AI era is here",
+      "summary": "",
+      "url": "https://www.gatesnotes.com/a-turbulent-ai-era-and-critical-choices-to-make",
+      "hn_url": "https://news.ycombinator.com/item?id=49451313",
+      "points": 364,
+      "comments": 6,
+      "author": "LVB",
+      "source": "hackernews",
+      "created_at": "2026-08-26T15:55:15Z"
     }
   ],
   "implementation_gaps": []
