@@ -3,111 +3,109 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="color-scheme" content="light only" />
+<meta name="supported-color-schemes" content="light only" />
 <title>ML Research Pulse</title>
 </head>
-<body style="margin:0;padding:0;background:#f9f6f1;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
+{#  Palette matches the web digest exactly, in hex — email clients cannot
+    parse oklch(). Web fonts are unreliable in Gmail/Outlook, so this uses a
+    system sans stack rather than Archivo; everything else carries over:
+    chartreuse masthead, ink on off-white, ranks, and the highlighter. #}
+{% set SIGNAL = '#d4ee40' %}
+{% set INK    = '#0f100c' %}
+{% set INK2   = '#52534e' %}
+{% set INK3   = '#6a6b66' %}
+{% set SURF   = '#fbfbf8' %}
+{% set SUNK   = '#f1f2ed' %}
+{% set RULE   = '#d8dad5' %}
+{% set FONT   = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" %}
 
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#f9f6f1;padding:32px 16px;">
+<body style="margin:0;padding:0;background:{{ SUNK }};font-family:{{ FONT }};-webkit-font-smoothing:antialiased;">
+
+{# Preheader: the line inbox previews show. Hidden in the body itself. #}
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;">
+  {% if data.paper_of_week %}{{ data.paper_of_week.headline }}{% else %}Your AI/ML research board is ready.{% endif %}
+</div>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:{{ SUNK }};padding:24px 12px;">
 <tr><td align="center">
-<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:{{ SURF }};">
 
-  <!-- Header -->
-  <tr><td style="background:#ffffff;border-radius:16px 16px 0 0;border:1px solid #e8e0d4;border-bottom:none;padding:36px 40px 28px;">
-    <table width="100%" cellpadding="0" cellspacing="0">
-      <tr>
-        <td>
-          <span style="display:inline-block;background:#f5ede8;color:#d97757;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:99px;">
-            Week #{{ data.week_number }} · {{ data.post_style | upper }}
-          </span>
-        </td>
-      </tr>
-      <tr><td style="padding-top:16px;">
-        <span style="font-size:28px;font-weight:800;color:#1a1814;font-family:Georgia,'Times New Roman',serif;line-height:1.2;">
-          ML Research <span style="color:#d97757;">Pulse</span>
-        </span>
-      </td></tr>
-      <tr><td style="padding-top:6px;">
-        <span style="font-size:13px;color:#9c9488;">Practitioner-first AI/ML digest</span>
-      </td></tr>
-    </table>
+  <!-- Masthead: the one drenched block, same as the web page -->
+  <tr><td style="background:{{ SIGNAL }};padding:28px 32px 22px;">
+    <p style="margin:0;font-size:34px;line-height:0.9;font-weight:800;letter-spacing:-0.03em;text-transform:uppercase;color:{{ INK }};">
+      ML Research<br />Pulse
+    </p>
+    <p style="margin:16px 0 0;font-size:13px;font-weight:600;color:{{ INK }};opacity:0.75;">
+      Week {{ data.week_number }} &middot; {{ data.post_style }}
+      {% if data.top_papers %} &middot; {{ data.top_papers | length + 1 }} papers ranked{% endif %}
+    </p>
   </td></tr>
 
-  <!-- Accent bar -->
-  <tr><td style="height:3px;background:#d97757;"></td></tr>
-
-  <!-- Paper of the Week -->
   {% if data.paper_of_week %}
   {% set potw = data.paper_of_week %}
   {% set paper = potw.paper %}
-  <tr><td style="background:#ffffff;border-left:1px solid #e8e0d4;border-right:1px solid #e8e0d4;padding:32px 40px;">
-
-    <p style="margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#d97757;">
-      Paper of the Week
-    </p>
-    <h2 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#1a1814;font-family:Georgia,serif;line-height:1.3;">
-      {{ potw.headline }}
-    </h2>
-    <p style="margin:0 0 20px;font-size:13px;color:#9c9488;">
-      {% if paper.authors %}{{ paper.authors[:3] | join(', ') }}{% if paper.authors | length > 3 %} et al.{% endif %}{% endif %}
-      {% if paper.category %} · {{ paper.category }}{% endif %}
-    </p>
-
-    <p style="margin:0 0 20px;font-size:14px;color:#5c5650;line-height:1.7;">
-      {{ potw.summary | truncate(280) }}
-    </p>
-
-    <!-- Key takeaway -->
-    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+  <!-- The lead -->
+  <tr><td style="padding:30px 32px 26px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
       <tr>
-        <td width="3" style="background:#d97757;border-radius:2px;">&nbsp;</td>
-        <td style="padding:12px 16px;background:#f5ede8;border-radius:0 8px 8px 0;">
-          <p style="margin:0 0 4px;font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#d97757;">Key Takeaway</p>
-          <p style="margin:0;font-size:13px;color:#1a1814;">{{ potw.key_takeaway }}</p>
+        <td width="56" style="vertical-align:top;">
+          <p style="margin:0;font-size:40px;line-height:0.8;font-weight:800;letter-spacing:-0.04em;color:{{ INK }};">01</p>
+        </td>
+        <td style="vertical-align:top;">
+          <p style="margin:0 0 10px;font-size:21px;line-height:1.22;font-weight:700;letter-spacing:-0.02em;color:{{ INK }};">
+            {{ potw.headline }}
+          </p>
+          <p style="margin:0 0 4px;font-size:14px;line-height:1.45;font-weight:500;color:{{ INK2 }};">
+            {{ paper.title }}
+          </p>
+          <p style="margin:0;font-size:13px;color:{{ INK3 }};">
+            {% if paper.authors %}{{ paper.authors[:3] | join(', ') }}{% if paper.authors | length > 3 %} et al.{% endif %}{% endif %}
+            {% if paper.category %} &middot; {{ paper.category }}{% endif %}
+            {% if potw.excitement_score %} &middot; {{ potw.excitement_score }}/10 signal{% endif %}
+          </p>
         </td>
       </tr>
     </table>
 
-    <!-- Excitement score -->
-    <p style="margin:0 0 24px;font-size:12px;color:#9c9488;">
-      Excitement score: <strong style="color:#c4870a;">{{ potw.excitement_score }}/10</strong>
+    {% if potw.key_takeaway %}
+    <p style="margin:22px 0 0;font-size:16px;line-height:1.5;font-weight:600;color:{{ INK }};">
+      <span style="background:{{ SIGNAL }};color:{{ INK }};padding:2px 4px;">{{ potw.key_takeaway }}</span>
     </p>
+    {% endif %}
 
-    <!-- CTA buttons -->
-    <table cellpadding="0" cellspacing="0">
-      <tr>
-        <td style="padding-right:12px;">
-          <a href="{{ paper.url }}" style="display:inline-block;background:#d97757;color:#ffffff;font-size:13px;font-weight:600;padding:10px 20px;border-radius:8px;text-decoration:none;">
-            Read Paper →
-          </a>
-        </td>
-        {% if web_url %}
-        <td>
-          <a href="{{ web_url }}" style="display:inline-block;background:#f3ede4;color:#5c5650;font-size:13px;font-weight:600;padding:10px 20px;border-radius:8px;text-decoration:none;border:1px solid #e8e0d4;">
-            Full Digest →
-          </a>
-        </td>
-        {% endif %}
-      </tr>
-    </table>
+    {% if potw.summary %}
+    <p style="margin:20px 0 0;font-size:14.5px;line-height:1.65;color:{{ INK2 }};">
+      {{ potw.summary | truncate(300) }}
+    </p>
+    {% endif %}
 
+    <p style="margin:22px 0 0;font-size:14px;font-weight:700;">
+      <a href="{{ paper.url }}" style="color:{{ INK }};text-decoration:none;border-bottom:3px solid {{ SIGNAL }};padding-bottom:1px;">Read the paper &rarr;</a>
+    </p>
   </td></tr>
   {% endif %}
 
-  <!-- Top papers teaser -->
   {% if data.top_papers %}
-  <tr><td style="background:#f3ede4;border-left:1px solid #e8e0d4;border-right:1px solid #e8e0d4;padding:24px 40px;">
-    <p style="margin:0 0 14px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#9c9488;">
-      Also This Week
-    </p>
-    {% for tp in data.top_papers[:3] %}
-    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:12px;">
+  <!-- The rest of the board -->
+  <tr><td style="padding:0 32px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:2px solid {{ INK }};">
+      <tr><td style="padding:16px 0 4px;">
+        <p style="margin:0;font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:-0.01em;color:{{ INK }};">The rest of the board</p>
+      </td></tr>
+    </table>
+
+    {% for tp in data.top_papers[:4] %}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid {{ RULE }};">
       <tr>
-        <td width="28" style="vertical-align:top;padding-top:2px;">
-          <span style="font-size:11px;font-weight:700;color:#c8bfb0;font-family:monospace;">{{ '%02d' % loop.index }}</span>
+        <td width="42" style="vertical-align:top;padding:14px 0;">
+          <p style="margin:0;font-size:20px;line-height:1;font-weight:800;letter-spacing:-0.03em;color:{{ INK3 }};">{{ '%02d' % (loop.index + 1) }}</p>
         </td>
-        <td>
-          <p style="margin:0 0 2px;font-size:13px;font-weight:600;color:#1a1814;">{{ tp.paper.title | truncate(72) }}</p>
-          <p style="margin:0;font-size:12px;color:#9c9488;">{{ tp.tldr }}</p>
+        <td style="vertical-align:top;padding:14px 0;">
+          <p style="margin:0 0 4px;font-size:14.5px;line-height:1.35;font-weight:700;color:{{ INK }};">
+            <a href="{{ tp.paper.url }}" style="color:{{ INK }};text-decoration:none;">{{ tp.paper.title }}</a>
+          </p>
+          <p style="margin:0;font-size:13.5px;line-height:1.5;color:{{ INK2 }};">{{ tp.tldr }}</p>
         </td>
       </tr>
     </table>
@@ -115,34 +113,39 @@
   </td></tr>
   {% endif %}
 
-  <!-- One thing to try -->
   {% if data.one_thing_to_try %}
   {% set ott = data.one_thing_to_try %}
-  <tr><td style="background:#ffffff;border-left:1px solid #e8e0d4;border-right:1px solid #e8e0d4;padding:24px 40px;">
-    <p style="margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#9c9488;">One Thing To Try</p>
-    <p style="margin:0 0 6px;font-size:14px;font-weight:600;color:#1a1814;">{{ ott.action }}</p>
-    <p style="margin:0;font-size:13px;color:#5c5650;">{{ ott.why }}
-      <span style="color:#9c9488;"> · {{ ott.time_estimate }} · {{ ott.difficulty }}</span>
-    </p>
+  <!-- The one inverted block: the thing to act on, not read -->
+  <tr><td style="padding:26px 32px 0;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:{{ INK }};">
+      <tr><td style="padding:24px 26px;">
+        <p style="margin:0 0 10px;font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:{{ SIGNAL }};">Do this today</p>
+        <p style="margin:0 0 8px;font-size:17px;line-height:1.3;font-weight:700;color:{{ SURF }};">{{ ott.action }}</p>
+        {% if ott.why %}<p style="margin:0 0 12px;font-size:13.5px;line-height:1.55;color:#c9cbc5;">{{ ott.why }}</p>{% endif %}
+        <p style="margin:0;font-size:12.5px;font-weight:600;color:#c9cbc5;">
+          {{ ott.time_estimate }} &middot; {{ ott.difficulty }}
+        </p>
+      </td></tr>
+    </table>
   </td></tr>
   {% endif %}
 
-  <!-- Full digest CTA -->
   {% if web_url %}
-  <tr><td style="background:#1a1814;border-radius:0 0 16px 16px;padding:28px 40px;text-align:center;">
-    <p style="margin:0 0 14px;font-size:13px;color:#9c9488;">
-      GitHub repos, implementation gaps, HN posts & more →
+  <tr><td style="padding:26px 32px 30px;">
+    <p style="margin:0 0 12px;font-size:13.5px;line-height:1.55;color:{{ INK2 }};">
+      {% if data.implementation_gaps %}{{ data.implementation_gaps | length }} paper{{ '' if data.implementation_gaps | length == 1 else 's' }} with no code on GitHub yet,{% endif %}
+      plus trending repos and what Hacker News argued about &mdash;
     </p>
-    <a href="{{ web_url }}" style="display:inline-block;background:#d97757;color:#ffffff;font-size:14px;font-weight:700;padding:12px 28px;border-radius:8px;text-decoration:none;">
-      Read Full Digest Online
-    </a>
+    <p style="margin:0;font-size:15px;font-weight:800;">
+      <a href="{{ web_url }}" style="background:{{ SIGNAL }};color:{{ INK }};text-decoration:none;padding:12px 22px;display:inline-block;">Open the full board &rarr;</a>
+    </p>
   </td></tr>
   {% endif %}
 
-  <!-- Footer -->
-  <tr><td style="padding:20px 0;text-align:center;">
-    <p style="margin:0;font-size:11px;color:#c8bfb0;">
-      ML Research Pulse · Automated weekly digest · arXiv + Groq GPT-OSS 120B
+  <tr><td style="border-top:2px solid {{ INK }};padding:16px 32px 20px;">
+    <p style="margin:0;font-size:11.5px;line-height:1.5;color:{{ INK3 }};">
+      ML Research Pulse &mdash; rebuilt every week, by itself.<br />
+      arXiv &middot; Hacker News &middot; GitHub &middot; summarised by GPT-OSS 120B on Groq
     </p>
   </td></tr>
 

@@ -1,0 +1,5 @@
+{
+  "cadence": "daily",
+  "weekly_day": "sunday",
+  "note": "Controlled from the digest page. cadence: daily | weekly | paused. The workflow runs every day; this decides whether an email goes out."
+}

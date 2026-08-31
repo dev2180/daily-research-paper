@@ -1,14 +1,21 @@
-name: ML Research Pulse - Weekly Digest
+name: ML Research Pulse - Digest
 
 on:
+  # Runs daily. Whether an EMAIL goes out is decided by digest_config.json
+  # (cadence: daily | weekly | paused), which the button on the digest page
+  # updates via the set-cadence workflow. The page itself rebuilds every day.
   schedule:
-    - cron: '30 14 * * 0'
+    - cron: '30 14 * * *'
   workflow_dispatch:
 
 permissions:
   contents: write
   pages: write
   id-token: write
+
+concurrency:
+  group: digest
+  cancel-in-progress: false
 
 jobs:
   build-and-send:
@@ -22,6 +29,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          cache: 'pip'
 
       - name: Install Python dependencies
         run: pip install -r requirements.txt
@@ -43,7 +51,10 @@ jobs:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+          # Raises the GitHub Search rate limit for the repo + gap lookups.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_PAGES_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+          PYTHONIOENCODING: utf-8
           DRY_RUN: "false"
         run: python main.py
 
@@ -55,6 +66,7 @@ jobs:
         working-directory: web
         env:
           NEXT_PUBLIC_BASE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+          NEXT_PUBLIC_REPO_SLUG: ${{ github.repository }}
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
@@ -62,3 +74,18 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: web/out
           publish_branch: gh-pages
+
+      - name: Remember which papers were featured
+        # Persisted so the next edition does not re-feature the same paper.
+        # Must not fail the run when nothing changed.
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add state/seen_papers.json
+          if git diff --staged --quiet; then
+            echo "No state change to commit."
+          else
+            git commit -m "chore: record featured papers [skip ci]"
+            git pull --rebase --autostash origin main || true
+            git push origin HEAD:main
+          fi

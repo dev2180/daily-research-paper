@@ -2,9 +2,33 @@ import os
 import sys
 import json
 
+# Paper titles carry non-ASCII punctuation (non-breaking hyphens, em dashes).
+# On a Windows console that defaults to cp1252 those raise UnicodeEncodeError
+# mid-run and kill the pipeline after the digest has already been written.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
+
 from src.aggregator import aggregate_sources
 from src.summariser import rank_and_summarise
 from src.mailer import send_digest
+from src.config import load_config, should_send_email
+from src import state
+
+
+def _published_ids(digest: dict) -> list[str]:
+    """Paper ids this edition actually featured, so later runs can skip them."""
+    ids = []
+    potw = (digest.get("paper_of_week") or {}).get("paper") or {}
+    if potw.get("id"):
+        ids.append(str(potw["id"]))
+    for tp in digest.get("top_papers") or []:
+        pid = (tp.get("paper") or {}).get("id")
+        if pid:
+            ids.append(str(pid))
+    return ids
 
 
 def main():
@@ -15,28 +39,44 @@ def main():
     dry_run = os.getenv("DRY_RUN", "true").lower() == "true"
     web_url = os.getenv("GITHUB_PAGES_URL", "")
 
+    cfg = load_config()
+    send, reason = should_send_email(cfg)
+    print(f"[config] cadence={cfg['cadence']} (weekly_day={cfg['weekly_day']})")
+    print(f"[config] email today? {'YES' if send else 'NO'} -- {reason}\n")
+
     if dry_run:
         print("[DRY RUN] No email will be sent.\n")
 
     required_secrets = ["GROQ_API_KEY", "GMAIL_USER", "GMAIL_APP_PASSWORD", "RECIPIENT_EMAIL"]
     missing = [s for s in required_secrets if not os.getenv(s)]
-    if missing and not dry_run:
+    if missing and not dry_run and send:
         print(f"[ERROR] Missing secrets: {', '.join(missing)}")
         sys.exit(1)
     elif missing:
         print(f"[DRY RUN] Skipping secret check -- missing: {', '.join(missing)}\n")
 
     # M2: Fetch & aggregate
-    raw_data = aggregate_sources(detect_gaps=True)
+    seen = state.prune(state.load_seen())
+    raw_data = aggregate_sources(
+        detect_gaps=True,
+        cadence=cfg["cadence"],
+        exclude_ids=set(seen),
+    )
 
     print(f"\n{'-' * 55}")
-    print(f"  Week #{raw_data['week_number']} | Style: {raw_data['post_style'].upper()}")
+    print(f"  {raw_data['edition_date']} | Week #{raw_data['week_number']} "
+          f"| Style: {raw_data['post_style'].upper()}")
     print(f"{'-' * 55}")
     print(f"  Papers found   : {len(raw_data['papers'])}")
     print(f"  GitHub repos   : {len(raw_data['github_repos'])}")
     print(f"  HN posts       : {len(raw_data['hn_posts'])}")
     print(f"  Gap papers     : {len(raw_data['implementation_gaps'])}")
+    print(f"  Previously seen: {len(seen)}")
     print(f"{'-' * 55}\n")
+
+    if not raw_data["papers"]:
+        print("[ERROR] No papers left after filtering -- nothing to publish.")
+        sys.exit(1)
 
     # M3: Summarise with Groq
     if os.getenv("GROQ_API_KEY"):
@@ -59,13 +99,20 @@ def main():
     one_thing = digest_data.get("one_thing_to_try") or {}
     print(f"  One thing to try  : {one_thing.get('action', 'N/A')[:65]}\n")
 
-    # M5: Send email
-    if dry_run:
-        print("[DRY RUN] Skipping email send.")
-        print(f"[DRY RUN] Would send to: {os.getenv('RECIPIENT_EMAIL', '<not set>')}")
-        print(f"[DRY RUN] Web URL: {web_url or '<not set>'}")
+    # Remember what we published so the next edition does not repeat it.
+    if os.getenv("GROQ_API_KEY"):
+        state.save_seen(state.record(seen, _published_ids(digest_data)))
 
-        # Save preview HTML for inspection
+    # M5: Send email
+    if dry_run or not send:
+        if not send and not dry_run:
+            print(f"[SKIP] No email this run -- {reason}.")
+            print("[SKIP] The web digest was still rebuilt.")
+        else:
+            print("[DRY RUN] Skipping email send.")
+            print(f"[DRY RUN] Would send to: {os.getenv('RECIPIENT_EMAIL', '<not set>')}")
+            print(f"[DRY RUN] Web URL: {web_url or '<not set>'}")
+
         from jinja2 import Environment, FileSystemLoader, select_autoescape
         env = Environment(
             loader=FileSystemLoader("templates"),
@@ -76,7 +123,7 @@ def main():
         )
         with open("output/email_preview.html", "w", encoding="utf-8") as f:
             f.write(html)
-        print("[DRY RUN] Email preview saved to output/email_preview.html")
+        print("Email preview saved to output/email_preview.html")
     else:
         print("[M5] Sending email via Gmail SMTP...")
         send_digest(digest_data, web_url=web_url)

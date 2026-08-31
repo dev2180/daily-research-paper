@@ -1,0 +1,89 @@
+name: Set digest cadence
+
+# The digest page is a static export with no backend, so its cadence buttons
+# open a prefilled issue instead of calling an API. This turns that issue into
+# a commit. Only the repository owner can change the setting.
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: set-cadence
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    if: startsWith(github.event.issue.title, 'cadence:')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reject non-owner requests
+        if: github.event.issue.user.login != github.repository_owner
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE: ${{ github.event.issue.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh issue comment "$ISSUE" --repo "$REPO" \
+            --body "Only the repository owner can change the digest cadence. No change was made."
+          gh issue close "$ISSUE" --repo "$REPO"
+          echo "Ignored cadence request from a non-owner."
+
+      - name: Checkout
+        if: github.event.issue.user.login == github.repository_owner
+        uses: actions/checkout@v4
+
+      - name: Apply cadence
+        if: github.event.issue.user.login == github.repository_owner
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE: ${{ github.event.issue.number }}
+          REPO: ${{ github.repository }}
+          TITLE: ${{ github.event.issue.title }}
+        run: |
+          set -euo pipefail
+
+          # Title shape: "cadence: <value>"
+          VALUE="$(printf '%s' "$TITLE" | sed 's/^cadence:[[:space:]]*//' | tr '[:upper:]' '[:lower:]' | tr -d '[:space:]')"
+          echo "Requested cadence: '$VALUE'"
+
+          case "$VALUE" in
+            daily|weekly|paused) ;;
+            *)
+              gh issue comment "$ISSUE" --repo "$REPO" \
+                --body "\`$VALUE\` is not a valid cadence. Use \`daily\`, \`weekly\`, or \`paused\`. No change was made."
+              gh issue close "$ISSUE" --repo "$REPO"
+              exit 0
+              ;;
+          esac
+
+          python - "$VALUE" <<'PY'
+          import json, sys, datetime, pathlib
+          value = sys.argv[1]
+          p = pathlib.Path("digest_config.json")
+          cfg = json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
+          cfg["cadence"] = value
+          cfg.setdefault("weekly_day", "sunday")
+          cfg["updated_at"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+          cfg["note"] = ("Controlled from the digest page. cadence: daily | weekly | paused. "
+                         "The workflow runs every day; this decides whether an email goes out.")
+          p.write_text(json.dumps(cfg, indent=2) + "\n", encoding="utf-8")
+          print("wrote", cfg)
+          PY
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add digest_config.json
+          if git diff --staged --quiet; then
+            MSG="Cadence was already \`$VALUE\`. Nothing to change."
+          else
+            git commit -m "chore: set digest cadence to $VALUE [skip ci]"
+            git push origin HEAD:main
+            MSG="Digest cadence set to \`$VALUE\`. It applies from the next daily run, and the page will show it after that build."
+          fi
+
+          gh issue comment "$ISSUE" --repo "$REPO" --body "$MSG"
+          gh issue close "$ISSUE" --repo "$REPO"

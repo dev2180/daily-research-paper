@@ -1,38 +1,169 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------
+   ML Research Pulse — "results board"
+   Light-first: read at 8am in daylight, skimmed in seconds.
+   Ink on a true off-white (chroma ~0, deliberately NOT cream).
+   One signal colour, used the way a highlighter is used: to mark
+   the thing that matters. Never as decoration, never as text.
+   --------------------------------------------------------------- */
+
 :root {
-  --bg: #f9f6f1;
-  --bg-card: #ffffff;
-  --bg-elevated: #f3ede4;
-  --border: #e8e0d4;
-  --border-dark: #c8bfb0;
-  --text-primary: #1a1814;
-  --text-secondary: #5c5650;
-  --text-muted: #9c9488;
-  --accent: #d97757;
-  --accent-light: #f5ede8;
-  --accent-dark: #b85e3e;
-  --green: #2d7d5a;
-  --green-light: #e8f5ef;
-  --amber: #c4870a;
-  --amber-light: #fdf3dc;
-  --blue: #2563a8;
-  --blue-light: #e8f0fa;
+  --signal:        oklch(0.90 0.19 118);
+  --signal-deep:   oklch(0.72 0.16 118);
+  --on-signal:     oklch(0.17 0.008 118);
+
+  --surface:       oklch(0.988 0.004 118);
+  --surface-sunk:  oklch(0.958 0.006 118);
+  --ink:           oklch(0.17 0.008 118);
+  --ink-2:         oklch(0.44 0.008 118);   /* 5.9:1 on surface */
+  --ink-3:         oklch(0.525 0.008 118);  /* >=4.5:1 on surface */
+  --rule:          oklch(0.885 0.006 118);
+  --rule-strong:   oklch(0.78 0.006 118);
+
+  --z-sticky: 100;
+  --z-tooltip: 400;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface:      oklch(0.165 0.008 118);
+    --surface-sunk: oklch(0.215 0.009 118);
+    --ink:          oklch(0.96 0.004 118);
+    --ink-2:        oklch(0.75 0.008 118);
+    --ink-3:        oklch(0.60 0.008 118);
+    --rule:         oklch(0.30 0.008 118);
+    --rule-strong:  oklch(0.42 0.008 118);
+  }
+}
+
+@theme inline {
+  --color-signal:      var(--signal);
+  --color-on-signal:   var(--on-signal);
+  --color-signal-deep: var(--signal-deep);
+  --color-surface:     var(--surface);
+  --color-sunk:        var(--surface-sunk);
+  --color-ink:         var(--ink);
+  --color-ink-2:       var(--ink-2);
+  --color-ink-3:       var(--ink-3);
+  --color-rule:        var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --font-sans:         var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
 
-body {
-  background: var(--bg);
-  color: var(--text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  line-height: 1.6;
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
-::selection { background: var(--accent-light); color: var(--accent-dark); }
+body {
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.55;
+}
 
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 3px; }
+/* Archivo carries a width axis — one family, dramatic contrast. */
+.wd-tight { font-stretch: 78%; }
+.wd-wide  { font-stretch: 122%; }
+.tnum     { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+.balance  { text-wrap: balance; }
+.pretty   { text-wrap: pretty; }
+
+/* The highlighter. A real painted box rather than a gradient sized in em:
+   a gradient band can drift off the glyphs on a wrapped line and strand the
+   text on the page background. box-decoration-break keeps every wrapped
+   fragment marked. Identical in both schemes, so contrast can't diverge. */
+.marked {
+  background-color: var(--signal);
+  color: var(--on-signal);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding: 0.08em 0.16em;
+  margin-inline: -0.16em;
+}
+
+/* Links: ink text, signal underline that fills on hover. */
+.ulink {
+  color: var(--ink);
+  text-decoration: none;
+  background-image: linear-gradient(var(--signal), var(--signal));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 2px;
+  transition: background-size 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ulink:hover, .ulink:focus-visible { background-size: 100% 0.42em; }
+
+:focus-visible {
+  outline: 2px solid var(--signal-deep);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection { background: var(--signal); color: oklch(0.17 0.008 118); }
+
+/* Board rows enter as one list.
+   Transform only — never opacity. A renderer that never advances the
+   transition (hidden tab, headless screenshot, preview crawler) leaves the
+   row stuck in its START state, so that state must be fully legible. A row
+   sitting 14px low is invisible to the reader; a row at opacity 0 is a
+   blank page. Verified: both an animation+backwards and an opacity
+   @starting-style stranded these rows at opacity 0. */
+.row-in {
+  transform: none;
+  transition: transform 560ms cubic-bezier(0.16, 1, 0.3, 1) var(--row-delay, 0ms);
+}
+@starting-style {
+  .row-in { transform: translateY(14px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .row-in { transition: none; }
+  .ulink { transition: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--surface-sunk); }
+::-webkit-scrollbar-thumb { background: var(--rule-strong); border-radius: 0; }
+
+/* Cadence buttons.
+   These were styled with Tailwind colour utilities and the inactive state came
+   out near-black on near-black in dark mode (measured 1.01:1) -- the anchor
+   picked up a competing colour from the generated @supports/preflight cascade
+   rather than .text-ink. Declaring the states unlayered here removes the
+   ambiguity: unlayered rules beat @layer utilities, so this always wins. */
+.cadence-option {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--rule-strong);
+  /* Deliberately NOT `transition: colors`. Transitioning `color` means a
+     renderer that never advances the transition (hidden tab, headless
+     screenshot, an OS theme flip while unfocused) can strand the label at the
+     previous scheme's colour -- measured near-black on near-black. Only the
+     border and background animate; the text colour switches instantly. */
+  transition: border-color 200ms cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cadence-option:hover,
+.cadence-option:focus-visible {
+  border-color: var(--ink);
+}
+.cadence-option[aria-current="true"] {
+  background: var(--signal);
+  color: var(--on-signal);
+  border-color: var(--ink);
+}
+.cadence-option[aria-current="true"] .cadence-detail { color: var(--on-signal); opacity: 0.78; }
+.cadence-detail { color: var(--ink-2); }

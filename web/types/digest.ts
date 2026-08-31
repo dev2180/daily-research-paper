@@ -57,13 +57,25 @@ export interface HNPost {
   source: string
 }
 
+export type Cadence = 'daily' | 'weekly' | 'paused'
+
+export interface DeepDive {
+  problem: string
+  approach: string
+  results: string
+  limitations: string
+  what_it_unlocks: string
+}
+
 export interface DigestData {
   post_style: 'roundup' | 'deep-dive'
   week_number: number
+  edition_date: string
+  cadence: Cadence
   generated_at: string
   paper_of_week: PaperOfWeek
   top_papers: TopPaper[]
-  deep_dive: unknown
+  deep_dive: DeepDive | null
   one_thing_to_try: OneThingToTry
   github_repos: GithubRepo[]
   hn_posts: HNPost[]

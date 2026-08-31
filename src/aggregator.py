@@ -39,7 +39,22 @@ def _detect_implementation_gaps(papers: list[dict], top_n: int = 5) -> list[dict
     return gap_papers
 
 
-def aggregate_sources(detect_gaps: bool = True) -> dict[str, Any]:
+def _edition(cadence: str, today: datetime.date) -> tuple[int, str]:
+    """(week_number, post_style) for this edition.
+
+    post_style previously alternated on the ISO week, so with a daily cadence
+    every edition in a week would carry the same style. Alternate per edition:
+    by day-of-year when daily, by ISO week when weekly.
+    """
+    week = today.isocalendar().week
+    counter = today.timetuple().tm_yday if cadence == "daily" else week
+    return week, ("roundup" if counter % 2 == 0 else "deep-dive")
+
+
+def aggregate_sources(detect_gaps: bool = True, cadence: str = "weekly",
+                      exclude_ids: set[str] | None = None) -> dict[str, Any]:
+    exclude_ids = exclude_ids or set()
+
     print("[aggregator] Fetching arXiv papers...")
     arxiv_papers = fetch_arxiv_papers(max_results=30)
 
@@ -56,14 +71,23 @@ def aggregate_sources(detect_gaps: bool = True) -> dict[str, Any]:
     print(f"[aggregator] {len(all_papers)} unique papers after dedup "
           f"({len(arxiv_papers)} arXiv + {len(pwc_papers)} Semantic Scholar)")
 
+    # Dedup ACROSS runs too, or a daily cadence re-features the same paper on
+    # consecutive days. exclude_ids holds what previous digests published.
+    if exclude_ids:
+        before = len(all_papers)
+        all_papers = [p for p in all_papers if str(p.get("id", "")) not in exclude_ids]
+        skipped = before - len(all_papers)
+        if skipped:
+            print(f"[aggregator] {skipped} papers skipped -- already featured recently")
+
     gap_papers = []
     if detect_gaps and all_papers:
         print("[aggregator] Running implementation gap detector...")
         gap_papers = _detect_implementation_gaps(all_papers, top_n=3)
         print(f"[aggregator] Found {len(gap_papers)} papers with no GitHub implementation")
 
-    week_num = datetime.date.today().isocalendar().week
-    post_style = "roundup" if week_num % 2 == 0 else "deep-dive"
+    today = datetime.datetime.now(datetime.timezone.utc).date()
+    week_num, post_style = _edition(cadence, today)
 
     return {
         "papers": all_papers,
@@ -72,5 +96,7 @@ def aggregate_sources(detect_gaps: bool = True) -> dict[str, Any]:
         "implementation_gaps": gap_papers,
         "post_style": post_style,
         "week_number": week_num,
+        "edition_date": today.isoformat(),
+        "cadence": cadence,
         "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
     }
