@@ -30,6 +30,25 @@ function issueUrl(value: Cadence): string {
   );
 }
 
+/* GitHub delays and sometimes drops scheduled runs, so there has to be a way
+   to force today's send by hand. Same mechanism as the cadence buttons: the
+   digest workflow itself listens for this issue, checks the author is the
+   repo owner, runs, then closes it. */
+const SEND_NOW_URL =
+  `https://github.com/${REPO}/issues/new` +
+  `?title=${encodeURIComponent("send: now")}` +
+  `&labels=${encodeURIComponent("digest-send")}` +
+  `&body=${encodeURIComponent(
+    [
+      "Rebuild the digest and email it now.",
+      "",
+      "Submitting this issue runs the digest workflow immediately, then closes",
+      "this issue. Only the repository owner can trigger it.",
+    ].join("\n"),
+  )}`;
+
+const ACTIONS_URL = `https://github.com/${REPO}/actions/workflows/weekly_digest.yml`;
+
 export default function CadenceControl({ current }: { current: Cadence }) {
   return (
     <section aria-labelledby="cadence-heading" className="border-t border-rule py-10 sm:py-14">
@@ -77,8 +96,30 @@ export default function CadenceControl({ current }: { current: Cadence }) {
         })}
       </ul>
 
-      <p className="pretty mt-5 max-w-[68ch] text-[13.5px] leading-relaxed text-ink-3">
-        Choosing an option opens a prefilled issue on{" "}
+      <div className="mt-8 border-t-2 border-ink pt-6">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-3">
+          <div className="min-w-0">
+            <h3 className="text-[1.05rem] font-bold leading-snug">
+              Today&rsquo;s email never arrived?
+            </h3>
+            <p className="pretty mt-1.5 max-w-[52ch] text-[14px] leading-relaxed text-ink-2">
+              Scheduled runs are best-effort and can be delayed or skipped. This
+              rebuilds the board and sends it right now.
+            </p>
+          </div>
+          <a
+            href={SEND_NOW_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="cadence-option shrink-0 border-2 px-6 py-3 text-[15px] font-bold no-underline"
+          >
+            Send it now &rarr;
+          </a>
+        </div>
+      </div>
+
+      <p className="pretty mt-6 max-w-[68ch] text-[13.5px] leading-relaxed text-ink-3">
+        Both controls open a prefilled issue on{" "}
         <a
           href={`https://github.com/${REPO}`}
           target="_blank"
@@ -87,9 +128,18 @@ export default function CadenceControl({ current }: { current: Cadence }) {
         >
           {REPO}
         </a>
-        . Submit it and a workflow commits the change, then closes the issue.
-        Only the repository owner can change the setting, and the page shows the
-        new value after the next daily build.
+        . Submit it and a workflow does the rest, then closes the issue. Only
+        the repository owner can trigger either one. A cadence change shows on
+        the page after the next build. You can also run it straight from{" "}
+        <a
+          href={ACTIONS_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="ulink font-semibold"
+        >
+          the Actions tab
+        </a>
+        .
       </p>
     </section>
   );

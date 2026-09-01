@@ -12,11 +12,18 @@ on:
     - cron: '30 5 * * *'   # 11:00 IST
     - cron: '30 8 * * *'   # 14:00 IST  last-chance backstop
   workflow_dispatch:
+  # The "Send it now" button on the digest page opens an issue titled
+  # "send: now". We listen here rather than dispatching from another
+  # workflow because GITHUB_TOKEN deliberately cannot trigger a workflow
+  # run, so a dispatch-from-workflow would silently do nothing.
+  issues:
+    types: [opened]
 
 permissions:
   contents: write
   pages: write
   id-token: write
+  issues: write
 
 concurrency:
   group: digest
@@ -31,20 +38,49 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: check
+        env:
+          EVENT: ${{ github.event_name }}
+          TITLE: ${{ github.event.issue.title }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+          OWNER: ${{ github.repository_owner }}
         run: |
           TODAY="$(date -u +%F)"
           LAST="$(python -c "import json,os;p='state/last_run.json';print(json.load(open(p)).get('last_edition','') if os.path.exists(p) else '')" 2>/dev/null || echo '')"
-          echo "today=$TODAY last_edition=$LAST event=${{ github.event_name }}"
-          if [ "${{ github.event_name }}" != "schedule" ]; then
-            echo "should_run=true" >> "$GITHUB_OUTPUT"
-            echo "Manual run - proceeding."
-          elif [ "$LAST" = "$TODAY" ]; then
-            echo "should_run=false" >> "$GITHUB_OUTPUT"
-            echo "Today's edition already went out. This slot no-ops."
-          else
-            echo "should_run=true" >> "$GITHUB_OUTPUT"
-            echo "No edition yet today - proceeding."
-          fi
+          echo "event=$EVENT today=$TODAY last_edition=$LAST"
+
+          case "$EVENT" in
+            workflow_dispatch)
+              echo "should_run=true" >> "$GITHUB_OUTPUT"
+              echo "Manual dispatch - proceeding."
+              ;;
+            issues)
+              # "Send it now" button on the digest page. Owner only.
+              case "$TITLE" in
+                send:*)
+                  if [ "$ISSUE_AUTHOR" = "$OWNER" ]; then
+                    echo "should_run=true" >> "$GITHUB_OUTPUT"
+                    echo "Send-now requested by the owner - proceeding."
+                  else
+                    echo "should_run=false" >> "$GITHUB_OUTPUT"
+                    echo "Send-now requested by $ISSUE_AUTHOR, who is not $OWNER. Ignoring."
+                  fi
+                  ;;
+                *)
+                  echo "should_run=false" >> "$GITHUB_OUTPUT"
+                  echo "Unrelated issue - nothing to do."
+                  ;;
+              esac
+              ;;
+            *)
+              if [ "$LAST" = "$TODAY" ]; then
+                echo "should_run=false" >> "$GITHUB_OUTPUT"
+                echo "Today's edition already went out. This slot no-ops."
+              else
+                echo "should_run=true" >> "$GITHUB_OUTPUT"
+                echo "No edition yet today - proceeding."
+              fi
+              ;;
+          esac
 
   build-and-send:
     needs: guard
@@ -119,3 +155,13 @@ jobs:
             git pull --rebase --autostash origin main || true
             git push origin HEAD:main
           fi
+
+      - name: Close the send-now issue
+        if: github.event_name == 'issues'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE: ${{ github.event.issue.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh issue comment "$ISSUE" --repo "$REPO"             --body "Sent. The digest has been rebuilt and emailed."
+          gh issue close "$ISSUE" --repo "$REPO"
