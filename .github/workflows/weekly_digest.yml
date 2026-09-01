@@ -1,12 +1,16 @@
 name: Daily Research Paper - Digest
 
 on:
-  # Runs daily at 02:30 UTC = 08:00 IST. Whether an EMAIL goes out is decided
-  # by digest_config.json
-  # (cadence: daily | weekly | paused), which the button on the digest page
-  # updates via the set-cadence workflow. The page itself rebuilds every day.
+  # Target is 02:30 UTC = 08:00 IST. GitHub delays scheduled runs heavily on
+  # free runners and sometimes drops them outright -- observed here: one run
+  # 5h44m late, the next skipped entirely. So we fire on several slots through
+  # the morning and let the `guard` job below ensure only the first one that
+  # actually lands does any work. Extra slots cost nothing when they no-op.
   schedule:
-    - cron: '30 2 * * *'
+    - cron: '30 2 * * *'   # 08:00 IST  <- the one we want
+    - cron: '30 3 * * *'   # 09:00 IST
+    - cron: '30 5 * * *'   # 11:00 IST
+    - cron: '30 8 * * *'   # 14:00 IST  last-chance backstop
   workflow_dispatch:
 
 permissions:
@@ -19,7 +23,32 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Has today's edition already been published? A manual run always proceeds.
+  guard:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: check
+        run: |
+          TODAY="$(date -u +%F)"
+          LAST="$(python -c "import json,os;p='state/last_run.json';print(json.load(open(p)).get('last_edition','') if os.path.exists(p) else '')" 2>/dev/null || echo '')"
+          echo "today=$TODAY last_edition=$LAST event=${{ github.event_name }}"
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            echo "Manual run - proceeding."
+          elif [ "$LAST" = "$TODAY" ]; then
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            echo "Today's edition already went out. This slot no-ops."
+          else
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            echo "No edition yet today - proceeding."
+          fi
+
   build-and-send:
+    needs: guard
+    if: needs.guard.outputs.should_run == 'true'
     runs-on: ubuntu-latest
 
     steps:
@@ -82,7 +111,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add state/seen_papers.json
+          git add state/seen_papers.json state/last_run.json
           if git diff --staged --quiet; then
             echo "No state change to commit."
           else

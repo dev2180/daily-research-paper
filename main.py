@@ -99,9 +99,11 @@ def main():
     one_thing = digest_data.get("one_thing_to_try") or {}
     print(f"  One thing to try  : {one_thing.get('action', 'N/A')[:65]}\n")
 
-    # Remember what we published so the next edition does not repeat it.
+    # Remember what we published so the next edition does not repeat it, and
+    # stamp the day so the workflow's extra cron slots know it is already done.
     if os.getenv("GROQ_API_KEY"):
         state.save_seen(state.record(seen, _published_ids(digest_data)))
+        state.save_last_edition()
 
     # M5: Send email
     if dry_run or not send:

@@ -55,3 +55,35 @@ def save_seen(seen: dict[str, str], path: str = STATE_PATH) -> None:
     with open(path, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2)
     print(f"[state] {len(seen)} papers remembered -> {path}")
+
+
+LAST_RUN_PATH = os.path.join("state", "last_run.json")
+
+
+def last_edition(path: str = LAST_RUN_PATH) -> str:
+    """ISO date of the last edition that completed, or '' if unknown."""
+    if not os.path.exists(path):
+        return ""
+    try:
+        with open(path, encoding="utf-8") as f:
+            return str(json.load(f).get("last_edition", ""))
+    except (json.JSONDecodeError, OSError, AttributeError) as e:
+        print(f"[state] last_run unreadable ({e})")
+        return ""
+
+
+def save_last_edition(day: datetime.date | None = None,
+                      path: str = LAST_RUN_PATH) -> None:
+    """Record that today's edition is done.
+
+    GitHub drops and delays scheduled runs, so the workflow fires on several
+    cron slots. This is what stops the extra slots from mailing twice.
+    """
+    day = day or datetime.datetime.now(datetime.timezone.utc).date()
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump({
+            "last_edition": day.isoformat(),
+            "updated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        }, f, indent=2)
+    print(f"[state] edition {day.isoformat()} recorded -> {path}")
