@@ -31,7 +31,6 @@ export default async function Home() {
       <Masthead
         generatedAt={data.generated_at}
         editionDate={data.edition_date}
-        weekNumber={data.week_number}
         postStyle={data.post_style}
         counts={{
           papers: topPapers.length + (data.paper_of_week ? 1 : 0),
@@ -65,7 +64,7 @@ export default async function Home() {
       <footer className="border-t-2 border-ink">
         <div className="mx-auto flex w-full max-w-[76rem] flex-wrap items-baseline justify-between gap-x-8 gap-y-2 px-5 py-8 sm:px-8">
           <p className="text-[13px] font-semibold">
-            ML Research Pulse — rebuilt every day, by itself.
+            Daily Research Paper — rebuilt every morning, by itself.
           </p>
           <p className="text-[13px] text-ink-3">
             arXiv · Hacker News · GitHub · summarised by GPT-OSS 120B on Groq

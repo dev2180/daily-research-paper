@@ -3,8 +3,8 @@ import type { Cadence } from "@/types/digest";
 const REPO = process.env.NEXT_PUBLIC_REPO_SLUG || "dev2180/ml-research-pulse";
 
 const OPTIONS: { value: Cadence; label: string; detail: string }[] = [
-  { value: "daily", label: "Every day", detail: "A fresh board each morning" },
-  { value: "weekly", label: "Once a week", detail: "Sundays, 8 PM IST" },
+  { value: "daily", label: "Every day", detail: "Every morning, 8 AM IST" },
+  { value: "weekly", label: "Once a week", detail: "Sundays, 8 AM IST" },
   { value: "paused", label: "Pause email", detail: "Page keeps updating" },
 ];
 

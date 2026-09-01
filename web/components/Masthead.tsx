@@ -1,7 +1,6 @@
 interface MastheadProps {
   generatedAt: string;
   editionDate?: string;
-  weekNumber: number;
   postStyle: string;
   counts: { papers: number; repos: number; signals: number; gaps: number };
 }
@@ -18,7 +17,6 @@ function Stat({ n, label }: { n: number; label: string }) {
 export default function Masthead({
   generatedAt,
   editionDate,
-  weekNumber,
   postStyle,
   counts,
 }: MastheadProps) {
@@ -39,16 +37,16 @@ export default function Masthead({
         <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-5">
           <div>
             <h1 className="wd-tight text-[clamp(2.5rem,8vw,5rem)] font-extrabold leading-[0.86] tracking-[-0.03em] uppercase">
-              ML Research
+              Daily Research
               <br />
-              Pulse
+              Paper
             </h1>
           </div>
 
           <div className="flex flex-col items-start gap-2 sm:items-end">
             <p className="tnum text-[15px] font-semibold">{stamp}</p>
             <p className="text-[13px] font-medium opacity-70">
-              Edition {weekNumber} · {postStyle}
+              {postStyle}
             </p>
           </div>
         </div>

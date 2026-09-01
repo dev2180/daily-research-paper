@@ -33,7 +33,7 @@ def _published_ids(digest: dict) -> list[str]:
 
 def main():
     print("=" * 55)
-    print("  ML Research Pulse -- Pipeline Starting")
+    print("  Daily Research Paper -- Pipeline Starting")
     print("=" * 55)
 
     dry_run = os.getenv("DRY_RUN", "true").lower() == "true"
@@ -118,8 +118,14 @@ def main():
             loader=FileSystemLoader("templates"),
             autoescape=select_autoescape(["html"]),
         )
+        import datetime as _dt
+        try:
+            _stamp = _dt.date.fromisoformat(
+                digest_data.get("edition_date", "")).strftime("%d %b %Y")
+        except (ValueError, TypeError):
+            _stamp = digest_data.get("edition_date", "")
         html = env.get_template("email_teaser.html").render(
-            data=digest_data, web_url=web_url
+            data=digest_data, web_url=web_url, stamp=_stamp
         )
         with open("output/email_preview.html", "w", encoding="utf-8") as f:
             f.write(html)

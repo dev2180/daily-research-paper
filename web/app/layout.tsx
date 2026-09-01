@@ -10,11 +10,11 @@ const archivo = Archivo({
 });
 
 export const metadata: Metadata = {
-  title: "ML Research Pulse",
+  title: "Daily Research Paper",
   description:
-    "A ranked board of the AI/ML research worth your attention — papers, code gaps, and community signal, rebuilt automatically.",
+    "A ranked board of the AI/ML research worth your attention — papers, code gaps, and community signal, rebuilt every morning.",
   openGraph: {
-    title: "ML Research Pulse",
+    title: "Daily Research Paper",
     description: "A ranked board of the AI/ML research worth your attention.",
     type: "website",
   },

@@ -1,4 +1,4 @@
-# ML Research Pulse ⚡
+# Daily Research Paper ⚡
 
 > Fully automated AI/ML research digest. The board rebuilds every day and publishes to GitHub Pages; how often it emails you is a button on the page itself. Zero paid services.
 
@@ -66,12 +66,12 @@ Go to **Settings → Pages → Source → Deploy from branch → `gh-pages`**
 
 > **Forked this repo?** GitHub disables scheduled workflows in forks by default —
 > the cron will silently never fire. Enable it under **Actions**, or run
-> `gh workflow enable "ML Research Pulse - Digest"`.
+> `gh workflow enable "Daily Research Paper - Digest"`.
 
 ### 5. Test it
-Go to **Actions → ML Research Pulse — Weekly Digest → Run workflow**
+Go to **Actions → Daily Research Paper - Digest → Run workflow**
 
-That's it. The workflow runs daily at 14:30 UTC (8 PM IST): papers fetched,
+That's it. The workflow runs daily at 02:30 UTC (8 AM IST): papers fetched,
 summarised by GPT-OSS 120B, web page published. Whether an **email** goes out is
 decided by `digest_config.json`.
 
@@ -135,7 +135,7 @@ ml-research-pulse/
 ## How It Works
 
 ```
-GitHub Actions (cron: daily 14:30 UTC = 8 PM IST)
+GitHub Actions (cron: daily 02:30 UTC = 8 AM IST)
   │
   ├── python main.py
   │     ├── fetch: arXiv + Semantic Scholar + GitHub + HN
