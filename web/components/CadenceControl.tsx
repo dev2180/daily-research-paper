@@ -1,6 +1,6 @@
 import type { Cadence } from "@/types/digest";
 
-const REPO = process.env.NEXT_PUBLIC_REPO_SLUG || "dev2180/ml-research-pulse";
+const REPO = process.env.NEXT_PUBLIC_REPO_SLUG || "dev2180/daily-research-paper";
 
 const OPTIONS: { value: Cadence; label: string; detail: string }[] = [
   { value: "daily", label: "Every day", detail: "Every morning, 8 AM IST" },
