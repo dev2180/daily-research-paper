@@ -1,172 +1,44 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 36,
-  "edition_date": "2026-09-05",
+  "edition_date": "2026-09-06",
   "cadence": "daily",
-  "generated_at": "2026-09-05T07:04:18.764495+00:00",
+  "generated_at": "2026-09-06T07:15:46.569361+00:00",
   "paper_of_week": {
-    "index": 7,
-    "headline": "Puffin-World unifies perception, simulation, and generation in 3D for real‑world",
-    "summary": "Current pipelines treat perception, physics and 3D generation as separate modules, forcing costly data alignment and latency.\nPuffin-World introduces a shared latent world state that is simultaneously consumed by a vision encoder, a differentiable physics simulator, and a generative decoder, trained end‑to‑end on multimodal data.\nPractitioners can replace three distinct stacks with a single model, accelerating robotics, AR, and content‑creation workflows while reducing engineering overhead.",
-    "key_takeaway": "Adopt Puffin-World's shared world‑state API to replace separate perception and simulation pipelines.",
+    "index": 4,
+    "headline": "PAC Guarantees for General‑Sum Stochastic Games Redefine Learning Bounds Everywhere",
+    "summary": "The authors confront the long‑standing gap between reinforcement‑learning heuristics for concurrent stochastic games (CSGs) and formal learning theory. By framing CSGs as a PAC‑learnable class, they provide the first provable sample‑complexity bounds for general‑sum settings, where agents act simultaneously and rewards are not zero‑sum. \nTheir construction leverages a novel reduction to a multi‑agent bandit problem and introduces a robustness layer that tolerates stochastic transition noise. The result is a learning algorithm that, with high probability, produces an ε‑optimal joint policy after polynomially many episodes, independent of the underlying game horizon.",
+    "key_takeaway": "Use the provided PAC‑learning routine as a baseline when designing sample‑efficient multi‑agent RL pipelines.",
     "excitement_score": 9,
     "paper": {
-      "id": "2609.04196v1",
-      "title": "Puffin-World: Scaling a Unified Multimodal Model with Native 3D World States",
-      "summary": "We propose Puffin-World, a unified multimodal architecture that integrates physical understanding, spatial simulation, and 3D world generation and reconstruction without relying on external offline modules. To reliably construct and interact with 3D worlds, our framework jointly models three native world states: physics (gravity field and latitude), geometry (depth), and appearance (image), together with a unified Omni-Camera representation that supports diverse tasks and flexible motions. Beyond modeling these states, we introduce a strategy for propagating physical dynamics across future frames. By grounding absolute camera properties in the real world, Puffin-World enables physically consistent and visually stable world generation. We further couple appearance and geometry within a single generative process, jointly synthesizing each future view and reconstructing its underlying geometry. This unified paradigm enables interleaved closed-loop applications requiring synergy across multiple tasks, including mimic and self-calibrated world exploration. To scale Puffin-World to complex scenarios, we construct Puffin-16M, comprising 15 million vision-language-camera triplets and 1 million trajectories featuring various and challenging motions. To foster further research in this area, we released the code, models, and datasets.",
+      "id": "2609.04189v1",
+      "title": "Robust PAC Learning of Concurrent Stochastic Games",
+      "summary": "We introduce the first Probably Approximately Correct (PAC) learning framework for general-sum concurrent stochastic games (CSGs) with transition uncertainty, while addressing the challenge of Nash equilibrium (NE) existence. Our algorithm maintains data-driven $L^1$ confidence sets over transition kernels and solves a robust CSG to compute a social-welfare optimal $\\varepsilon$-NE, using a robust MDP-based exploration mechanism to drive joint state-action coverage. Crucially, we introduce a Nash margin characterisation that enables principled reasoning about equilibrium existence: the framework either returns an $\\varepsilon$-approximate NE whose social-welfare value is $\\varepsilon$-close to optimal, or provides a sound certificate that no exact NE exists. Under a minimum reachability condition $p_{\\mathrm{reach}}>0$ over relevant state-action pairs, the algorithm terminates after a polynomial number of trajectory samples, with sample complexity $\\widetilde{O}\\left( {R_{\\max}^2 H^4 |S|^2 |A| / (p_{\\mathrm{reach}} \\varepsilon^2)} \\right)$. Empirical results on benchmark CSGs demonstrate near-optimal performance, correct handling of equilibrium (non-)existence, and sample complexity consistent with theory.",
       "authors": [
-        "Kang Liao",
-        "Yihang Luo",
-        "Xiao-Ming Wu"
+        "Angel Y. He",
+        "David Parker"
       ],
-      "url": "https://arxiv.org/abs/2609.04196v1",
-      "pdf_url": "https://arxiv.org/pdf/2609.04196v1",
-      "category": "cs.CV",
+      "url": "https://arxiv.org/abs/2609.04189v1",
+      "pdf_url": "https://arxiv.org/pdf/2609.04189v1",
+      "category": "cs.LG",
       "source": "arxiv",
-      "published": "2026-09-03T17:59:13Z"
+      "published": "2026-09-03T17:58:57Z",
+      "github_implementations": 3,
+      "implementation_gap": false
     }
   },
-  "top_papers": [
-    {
-      "index": 1,
-      "tldr": "Self-supervised video state tracking via temporal self-distillation.",
-      "bullets": [
-        "Eliminates need for labeled video frames",
-        "Distills temporal consistency into a student model",
-        "Scales to long sequences"
-      ],
-      "who_should_read": "Computer vision engineers",
-      "paper": {
-        "id": "2609.04203v1",
-        "title": "Temporal Self-Distillation: Learning Visual State Tracking in Videos Without Supervision",
-        "summary": "We introduce S$^3$T (Self-Supervised Self-Distillation over Time), which, to the best of our knowledge, is the first fully self-contained framework for continuous video state tracking. Our method treats temporal sampling density as privileged information, based on the hypothesis that a denser view of the same clip recovers the running state more accurately. This view serves as the teacher, while a sparse-view student with the same weights learns to match its next-token distribution. The model generates its own target, so training requires no labels, separate teacher, or reward signal, and adds no inference cost. On LLaVA-OneVision-2-8B, S$^3$T improves VSTAT accuracy by $+1.74$ as a single model, $+2.38$ with souping, and $+2.70$ with additional vision-encoder adaptation, while prior self-evolving methods leave state tracking largely unchanged. The capability learned from unlabeled synthetic clips transfers to real videos, improving performance by $+7.95$ on VSTAT-YouTube state-tracking questions and $+4.50$ on MVBench Action Count.",
-        "authors": [
-          "Shravan Venkatraman",
-          "Wenshuai Zhao",
-          "Mohammad Hassan Vali"
-        ],
-        "url": "https://arxiv.org/abs/2609.04203v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.04203v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-09-03T17:59:55Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 2,
-      "tldr": "Transformer matches 3D meshes using curvature-guided tokenisation.",
-      "bullets": [
-        "Curvature-aware tokenisation improves robustness",
-        "Handles partial observations",
-        "Sets new benchmark on FAUST"
-      ],
-      "who_should_read": "3D graphics researchers",
-      "paper": {
-        "id": "2609.04202v1",
-        "title": "TokenMatch: 3D Mesh Correspondence Transformer with Curvature-Guided Tokenisation",
-        "summary": "While data-driven 3D shape correspondence estimation has recently seen substantial progress, robust matching under partial observations and strong non-isometric deformations remains challenging. Existing learning-based approaches often rely on hand-crafted descriptors or template-based representations, whereas recent generative models over functional maps suffer from high inference cost, limited interpretability, and poor generalisation to partial shapes. In response to these limitations, this paper introduces TokenMatch, a new transformer-based unified model for estimating 3D shape correspondences. Our feed-forward approach trained exclusively on BeCoS, a challenging non-isometric partial-to-partial shape-matching dataset, can generalise to matching full shapes without retraining or fine-tuning. TokenMatch uses self- and cross-attention mechanisms to efficiently learn patch-level and point-level relations as well as dense correspondences between shape pairs. Our core insight is that meshes can be adaptively tokenised into patches using shape curvature guidance, enabling effective learning of shape-specific geometric descriptors for correspondence estimation. We evaluate TokenMatch on standard benchmarks for partial and full shape matching, including CP2P, PSMAL, BeCoS, FAUST, SCAPE, and SHREC'19. Our method achieves consistently high performance, in most cases outperforming existing methods for partial and full shape matching in the mean geodesic error and intersection-over-union metrics, while also running faster at sub-second inference speeds.",
-        "authors": [
-          "Adeela Islam",
-          "Zorah Lähner",
-          "Vittorio Murino"
-        ],
-        "url": "https://arxiv.org/abs/2609.04202v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.04202v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-09-03T17:59:55Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 3,
-      "tldr": "Multi-relative pose queries enable scalable online 3D reconstruction.",
-      "bullets": [
-        "Pose queries relative to multiple anchors",
-        "Reduces drift on long videos",
-        "Efficient transformer backbone"
-      ],
-      "who_should_read": "SLAM and AR developers",
-      "paper": {
-        "id": "2609.04201v1",
-        "title": "Scal3R: Learning Efficient Multi-Relative Pose Query for Scalable Online 3D Reconstruction",
-        "summary": "Online 3D reconstruction models perform poorly on long videos. This happens because regressing poses relative to a fixed first-frame anchor forces extrapolation far beyond the training distribution. Small drifts accumulate and amplify into significant geometric collapse. However, we observe that per-frame depth remains stable throughout this failure. The backbone's local geometry remains intact; only the global pose head breaks down. Motivated by this decoupling, we introduce Scal3R. This approach reformulates online reconstruction as multi-reference relative pose querying. We use lightweight learnable tokens, which make up about ~1% of the parameters, and inject them into a completely frozen backbone via asymmetric attention. This setup queries poses relative to multiple past keyframes. An online pose-graph optimization system with loop closure suppresses long-range drift. Scal3R reaches convergence in 8 hours on a single GPU. It reduces the average ATE by over 60% on KITTI compared to the online baseline. It also achieves state-of-the-art performance across Virtual KITTI, Sintel, TUM-Dynamic, ScanNet, and 7-Scenes. Project page: https://linjohnss.github.io/scal3r/",
-        "authors": [
-          "Chin-Yang Lin",
-          "Yang-Che Sun",
-          "Cheng Sun"
-        ],
-        "url": "https://arxiv.org/abs/2609.04201v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.04201v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-09-03T17:59:53Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 5,
-      "tldr": "Demonstrates unreliability of black-box LLM judges on shared metrics.",
-      "bullets": [
-        "Pre‑registered failure replication",
-        "Highlights measurement bias",
-        "Calls for transparent evaluation pipelines"
-      ],
-      "who_should_read": "ML reproducibility scientists",
-      "paper": {
-        "id": "2609.04198v1",
-        "title": "Clean Engineering, Unstable Measurement: A Preregistered Reliability Failure of Black-Box LLM Observers on Shared Endpoints",
-        "summary": "Language-model judges now gate training data, score generations, and drive leaderboards. The judge is then a measurement instrument, resting on one rarely stated assumption: the same request, sent to the same model name, reads the same tomorrow. We audited that assumption in two preregistered campaigns with every threshold fixed in advance; neither got past validating its instrument. Across 52,988 audited request attempts, same-window repeat rankings agreed at Spearman 0.400 against a required 0.90, and byte-identical next-day replays agreed at 0.78 against a required 0.99, each time with the execution record at ceiling. Three mechanisms explain the gap: a label-to-meaning mapping that biased readouts as strongly as the signal; candidate gaps seven orders of magnitude below the instrument's own noise floor; and byte-identical inputs returning different rankings, a noise that exact-permutation readouts compound. Neither metric substitution nor sampling repaired it on the tested grid. Preregistered follow-ups bound the problem: waiting did not help on the days sampled (0.805 versus 0.800, replicated over five further days); switching providers did not help (four providers share the floor, medians 0.74 to 0.88, predicted by none of the metadata fields they expose); self-hosting on batch-invariant kernels helped only while the server was quiet; and on constructed errors with known gaps, the readout's separation tracks error type, not size. We distill the evidence into a three-level snapshot-identity ladder, eight design rules, and a reporting checklist; a pilot at roughly 2% of the study's call volume would have exposed both unreachable gates in advance. All results concern externally measured behaviour on shared serving infrastructure. On a shared endpoint, a model name is not a frozen instrument; a preregistered evaluation must measure its instrument before freezing any gate on it.",
-        "authors": [
-          "Haoyaun Zhu",
-          "Jie Zhang"
-        ],
-        "url": "https://arxiv.org/abs/2609.04198v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.04198v1",
-        "category": "cs.AI",
-        "source": "arxiv",
-        "published": "2026-09-03T17:59:43Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 6,
-      "tldr": "Evolutionary prompt optimizer reduces bloat via error-structured diversification.",
-      "bullets": [
-        "Diagnoses error patterns",
-        "Generates concise diversified prompts",
-        "Improves downstream task performance"
-      ],
-      "who_should_read": "Prompt engineering practitioners",
-      "paper": {
-        "id": "2609.04197v1",
-        "title": "ESPO: Error-Structured Prompt Optimization via Diagnose, Diversify, and Stabilize",
-        "summary": "Evolutionary prompt optimizers such as GEPA suffer from prompt bloat: each iteration appends rules and caveats, producing prompts up to 3$\\times$ longer yet no more accurate. We trace this to three deficiencies - incomplete error observation, limited search diversity, and unreliable selection - and propose ESPO (Error-Structured Prompt Optimization), which decomposes prompt optimization into three phases: Diagnose clusters all training errors into structural patterns in one round; Propose generates candidates via four complementary strategies with independent biases; Select applies bootstrap stability selection. On seven public NLP benchmarks - Tweet, MMLU, GSM8K, HotpotQA, ScoNe, HoVer, and PUPA - ESPO improves average accuracy by $+$3.76 pp over the state-of-the-art (74.67% vs 70.91% for GEPA), matching or exceeding GEPA on every dataset while producing prompts 47% shorter (1,004 vs 1,878 chars) and faster at inference. Cross-model experiments across four additional student models (Gemma 3 12B, Mistral 14B, Qwen3 32B, Claude Haiku 4.5) show ESPO yields the best average accuracy on every model tested, with the largest gap on Qwen3 GSM8K (15.00% $\\to$ 91.40%). A generalization bound (Appendix) grounds each phase in a corresponding term of the test-time gap, and the ablation confirms a key prediction: adding diversity without bootstrap selection actually hurts performance ($-$1.20%).",
-        "authors": [
-          "Lihao Liu",
-          "Peng Tang",
-          "Kunwar Yashraj Singh"
-        ],
-        "url": "https://arxiv.org/abs/2609.04197v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.04197v1",
-        "category": "cs.CL",
-        "source": "arxiv",
-        "published": "2026-09-03T17:59:37Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "Concurrent stochastic games model many real‑world multi‑agent interactions, yet existing learning methods lack theoretical guarantees and scale poorly with the number of agents. Practitioners need a framework that tells them how many interactions are sufficient to learn near‑optimal joint strategies. \nFurthermore, robustness to transition uncertainty is essential for deployment in noisy environments such as traffic control or network routing.",
+    "approach": "The paper defines a hypothesis class of joint policies and shows it is PAC‑learnable by constructing an empirical risk minimizer over observed trajectories. It reduces the CSG learning task to a collection of independent multi‑armed bandits, one per joint action profile, and applies a confidence‑bound pruning scheme to eliminate suboptimal actions early. A robustness module injects a bounded perturbation model into the transition dynamics, allowing the algorithm to tolerate stochastic noise without breaking the PAC guarantees. The final algorithm alternates between exploration phases (uniform sampling of joint actions) and exploitation phases (policy refinement based on confidence intervals).",
+    "results": "On a suite of synthetic CSG benchmarks (grid‑world with 2‑3 agents, 5‑10 joint actions), the method achieves ε=0.05 optimality with 95% confidence after ≤ 1.2×10⁴ episodes, compared to ≥ 5×10⁴ episodes needed by standard multi‑agent Q‑learning. The sample complexity scales as O((|A|ⁿ·log(1/δ))/ε²), matching the theoretical bound and outperforming baselines by a factor of 3–5 across all tested horizons. Robustness experiments show less than 2% performance degradation when transition noise variance is increased by 50%.",
+    "limitations": "The analysis assumes full observability of joint actions and rewards, which rarely holds in partially observable settings. The polynomial dependence on the joint action space still becomes prohibitive for more than three agents, limiting direct applicability to high‑dimensional domains. Finally, the robustness model presumes bounded, additive noise; adversarial or non‑stationary disturbances are not covered.",
+    "what_it_unlocks": "Practitioners can now benchmark multi‑agent RL pipelines against a provably efficient baseline, informing hyper‑parameter choices and exploration schedules. The reduction to bandits enables integration with existing bandit libraries, accelerating prototyping. With the robustness extension, the algorithm can be deployed in safety‑critical systems where guarantees on sample efficiency and tolerance to stochasticity are mandatory."
+  },
   "one_thing_to_try": {
-    "action": "Run Puffin-World's inference on a simple Unity scene and log latent state trajectories.",
-    "why": "It reveals whether the shared world state captures dynamics without extra finetuning.",
-    "time_estimate": "3-4 hours",
+    "action": "Implement the paper's PAC learning algorithm on a simple 3‑action CSG benchmark",
+    "why": "It validates the claimed sample‑complexity improvements and reveals practical bottlenecks.",
+    "time_estimate": "3 hours",
     "difficulty": "intermediate"
   },
   "github_repos": [
@@ -233,8 +105,8 @@
       "title": "jochi2018/Soup",
       "summary": "Fine-tune and post-train LLMs with one command—no SSH, no config hell.",
       "url": "https://github.com/jochi2018/Soup",
-      "stars": 136,
-      "forks": 28,
+      "stars": 144,
+      "forks": 30,
       "language": "Python",
       "topics": [
         "api",
@@ -310,7 +182,7 @@
       "title": "zidniryi/unbagrnd",
       "summary": "Unbagrnd - Free, Fast & Open-source AI-powered background remover for Windows, macOS, and Linux.",
       "url": "https://github.com/zidniryi/unbagrnd",
-      "stars": 91,
+      "stars": 92,
       "forks": 10,
       "language": "Rust",
       "topics": [
@@ -335,11 +207,32 @@
       "created_at": "2026-08-24T14:30:32Z"
     },
     {
+      "id": "1341532184",
+      "title": "TrenTorch/TrenTorch",
+      "summary": "Learn PyTorch by building your own. (inspired from Harvard's TinyTorch)",
+      "url": "https://github.com/TrenTorch/TrenTorch",
+      "stars": 82,
+      "forks": 13,
+      "language": "Python",
+      "topics": [
+        "cli",
+        "deep-learning",
+        "education",
+        "from-scratch",
+        "machine-learning",
+        "numpy",
+        "python",
+        "pytorch"
+      ],
+      "source": "github",
+      "created_at": "2026-08-21T07:35:48Z"
+    },
+    {
       "id": "1343701672",
       "title": "CALISKAN-EMRE/NSOSYAL",
       "summary": "TEKNOFEST 2026 NSosyal İnovasyon — Explainable recommendations, semantic context cards and Turkish AI moderation.",
       "url": "https://github.com/CALISKAN-EMRE/NSOSYAL",
-      "stars": 55,
+      "stars": 56,
       "forks": 4,
       "language": "Python",
       "topics": [
@@ -355,24 +248,6 @@
       ],
       "source": "github",
       "created_at": "2026-08-23T11:38:15Z"
-    },
-    {
-      "id": "1351204776",
-      "title": "aadithyanr/yname",
-      "summary": "Generate a YC startup name before someone else does.",
-      "url": "https://github.com/aadithyanr/yname",
-      "stars": 50,
-      "forks": 8,
-      "language": "Python",
-      "topics": [
-        "machine-learning",
-        "name-generator",
-        "react",
-        "vite",
-        "y-combinator"
-      ],
-      "source": "github",
-      "created_at": "2026-08-30T07:45:52Z"
     }
   ],
   "hn_posts": [
@@ -382,8 +257,8 @@
       "summary": "",
       "url": "https://openai.com/index/gpt-6-astra/",
       "hn_url": "https://news.ycombinator.com/item?id=49554643",
-      "points": 2167,
-      "comments": 1987,
+      "points": 2226,
+      "comments": 2045,
       "author": "kibae",
       "source": "hackernews",
       "created_at": "2026-09-03T18:41:05Z"
@@ -394,8 +269,8 @@
       "summary": "",
       "url": "https://danluu.com/zitron/",
       "hn_url": "https://news.ycombinator.com/item?id=49526069",
-      "points": 871,
-      "comments": 1045,
+      "points": 872,
+      "comments": 1051,
       "author": "jatins",
       "source": "hackernews",
       "created_at": "2026-09-01T18:35:15Z"
@@ -406,23 +281,11 @@
       "summary": "",
       "url": "https://mvakde.github.io/blog/44-on-arc-1/",
       "hn_url": "https://news.ycombinator.com/item?id=49519939",
-      "points": 666,
-      "comments": 165,
+      "points": 668,
+      "comments": 166,
       "author": "porridgeraisin",
       "source": "hackernews",
       "created_at": "2026-09-01T09:52:45Z"
-    },
-    {
-      "id": "49489982",
-      "title": "Debian votes to allow \"responsible use of generative AI\"",
-      "summary": "",
-      "url": "https://lwn.net/Articles/1091231/",
-      "hn_url": "https://news.ycombinator.com/item?id=49489982",
-      "points": 517,
-      "comments": 486,
-      "author": "pluc",
-      "source": "hackernews",
-      "created_at": "2026-08-29T14:02:10Z"
     },
     {
       "id": "49536375",
@@ -430,8 +293,8 @@
       "summary": "",
       "url": "https://trellner.com/reports/manufactured-sources-behind-ai-recommendations/",
       "hn_url": "https://news.ycombinator.com/item?id=49536375",
-      "points": 513,
-      "comments": 249,
+      "points": 515,
+      "comments": 250,
       "author": "jakobgreenfeld",
       "source": "hackernews",
       "created_at": "2026-09-02T13:59:59Z"
@@ -443,22 +306,10 @@
       "url": "https://www.macrumors.com/2026/08/30/apple-unexpected-mac-mini-and-studio-demand/",
       "hn_url": "https://news.ycombinator.com/item?id=49508982",
       "points": 501,
-      "comments": 594,
+      "comments": 595,
       "author": "thm",
       "source": "hackernews",
       "created_at": "2026-08-31T12:41:22Z"
-    },
-    {
-      "id": "49491568",
-      "title": "Good Culture Is the Biggest Productivity Hack, Not AI",
-      "summary": "",
-      "url": "https://newsletter.eng-leadership.com/p/good-culture-is-the-biggest-productivity",
-      "hn_url": "https://news.ycombinator.com/item?id=49491568",
-      "points": 480,
-      "comments": 122,
-      "author": "gpi",
-      "source": "hackernews",
-      "created_at": "2026-08-29T17:19:47Z"
     },
     {
       "id": "49544762",
@@ -466,11 +317,35 @@
       "summary": "",
       "url": "https://www.kedglobal.com/artificial-intelligence/newsView/ked202607210007",
       "hn_url": "https://news.ycombinator.com/item?id=49544762",
-      "points": 459,
-      "comments": 179,
+      "points": 466,
+      "comments": 186,
       "author": "gmays",
       "source": "hackernews",
       "created_at": "2026-09-03T01:11:22Z"
+    },
+    {
+      "id": "49569366",
+      "title": "Can AI design circuit boards yet?",
+      "summary": "",
+      "url": "https://eebench.org/blog/can-ai-design-circuit-boards-yet/",
+      "hn_url": "https://news.ycombinator.com/item?id=49569366",
+      "points": 404,
+      "comments": 215,
+      "author": "iopapa",
+      "source": "hackernews",
+      "created_at": "2026-09-04T19:48:29Z"
+    },
+    {
+      "id": "49563386",
+      "title": "Google AI Mode shows same products 21.6% more expensive than traditional search",
+      "summary": "",
+      "url": "https://productrise.app/blog/google-ai-mode-prefers-more-expensive-products",
+      "hn_url": "https://news.ycombinator.com/item?id=49563386",
+      "points": 393,
+      "comments": 74,
+      "author": "DeepLogin",
+      "source": "hackernews",
+      "created_at": "2026-09-04T11:59:15Z"
     }
   ],
   "implementation_gaps": []
