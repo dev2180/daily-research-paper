@@ -1,44 +1,170 @@
 {
-  "post_style": "deep-dive",
-  "week_number": 36,
-  "edition_date": "2026-09-06",
+  "post_style": "roundup",
+  "week_number": 37,
+  "edition_date": "2026-09-07",
   "cadence": "daily",
-  "generated_at": "2026-09-06T07:15:46.569361+00:00",
+  "generated_at": "2026-09-07T07:29:41.976710+00:00",
   "paper_of_week": {
-    "index": 4,
-    "headline": "PAC Guarantees for General‑Sum Stochastic Games Redefine Learning Bounds Everywhere",
-    "summary": "The authors confront the long‑standing gap between reinforcement‑learning heuristics for concurrent stochastic games (CSGs) and formal learning theory. By framing CSGs as a PAC‑learnable class, they provide the first provable sample‑complexity bounds for general‑sum settings, where agents act simultaneously and rewards are not zero‑sum. \nTheir construction leverages a novel reduction to a multi‑agent bandit problem and introduces a robustness layer that tolerates stochastic transition noise. The result is a learning algorithm that, with high probability, produces an ε‑optimal joint policy after polynomially many episodes, independent of the underlying game horizon.",
-    "key_takeaway": "Use the provided PAC‑learning routine as a baseline when designing sample‑efficient multi‑agent RL pipelines.",
-    "excitement_score": 9,
+    "index": 6,
+    "headline": "Reward models crumble when language paraphrases diverge subtly in real",
+    "summary": "Robotics pipelines now treat vision‑language models as reward functions, assuming that re‑phrasing a command won’t change the scalar feedback. In practice, that assumption breaks: the same trajectory described with minor linguistic tweaks can receive opposite rewards, leading to unsafe behavior.\nThe ROBORMBENCH suite quantifies this fragility by pairing each trajectory with multiple paraphrases and measuring reward variance. The authors expose systematic bias in CLIP‑based reward heads and show that even state‑of‑the‑art fine‑tuned models fail basic consistency checks.\nPractitioners cannot afford hidden reward drift when deploying robots in the field. Detecting and mitigating paraphrase sensitivity now becomes a prerequisite for reliable policy learning, not a nice‑to‑have diagnostic.",
+    "key_takeaway": "Add paraphrase consistency regularization when training vision‑language reward models.",
+    "excitement_score": 8,
     "paper": {
-      "id": "2609.04189v1",
-      "title": "Robust PAC Learning of Concurrent Stochastic Games",
-      "summary": "We introduce the first Probably Approximately Correct (PAC) learning framework for general-sum concurrent stochastic games (CSGs) with transition uncertainty, while addressing the challenge of Nash equilibrium (NE) existence. Our algorithm maintains data-driven $L^1$ confidence sets over transition kernels and solves a robust CSG to compute a social-welfare optimal $\\varepsilon$-NE, using a robust MDP-based exploration mechanism to drive joint state-action coverage. Crucially, we introduce a Nash margin characterisation that enables principled reasoning about equilibrium existence: the framework either returns an $\\varepsilon$-approximate NE whose social-welfare value is $\\varepsilon$-close to optimal, or provides a sound certificate that no exact NE exists. Under a minimum reachability condition $p_{\\mathrm{reach}}>0$ over relevant state-action pairs, the algorithm terminates after a polynomial number of trajectory samples, with sample complexity $\\widetilde{O}\\left( {R_{\\max}^2 H^4 |S|^2 |A| / (p_{\\mathrm{reach}} \\varepsilon^2)} \\right)$. Empirical results on benchmark CSGs demonstrate near-optimal performance, correct handling of equilibrium (non-)existence, and sample complexity consistent with theory.",
+      "id": "2609.05401v1",
+      "title": "Same Trajectory, Contradictory Rewards (ROBORMBENCH): Paraphrase Fragility in Vision Language Reward Models",
+      "summary": "Vision-language models are increasingly used as reward functions for robotic learning, but this role requires paraphrase invariance: the same trajectory should receive the same reward under semantically equivalent goal descriptions. We show that current VLM reward models often violate this property. Paraphrasing the instruction alone can substantially change predicted progress scores, and can even flip identical robot behavior between failure and success. To measure this failure mode, we introduce ROBORMBENCH, a benchmark with 2,390 real-robot trajectories, ground-truth progress labels, and 21,673 verified paraphrases spanning lexical, syntactic, and action-goal rewrites. Across proprietary and open-source VLMs, paraphrase-induced instability is widespread and severe, grows under more divergent rewrites, and is not reliably reduced by scale or explicit reasoning. Dedicated reward models trained with trajectory-grounded supervision are substantially more stable. These results show that paraphrase robustness is a core requirement for reliable VLM-based reward modeling in robotics.",
       "authors": [
-        "Angel Y. He",
-        "David Parker"
+        "Wonje Jeung",
+        "Sangyeon Yoon",
+        "Hyesoo Hong"
       ],
-      "url": "https://arxiv.org/abs/2609.04189v1",
-      "pdf_url": "https://arxiv.org/pdf/2609.04189v1",
-      "category": "cs.LG",
+      "url": "https://arxiv.org/abs/2609.05401v1",
+      "pdf_url": "https://arxiv.org/pdf/2609.05401v1",
+      "category": "cs.RO",
       "source": "arxiv",
-      "published": "2026-09-03T17:58:57Z",
+      "published": "2026-09-04T17:47:58Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Concurrent stochastic games model many real‑world multi‑agent interactions, yet existing learning methods lack theoretical guarantees and scale poorly with the number of agents. Practitioners need a framework that tells them how many interactions are sufficient to learn near‑optimal joint strategies. \nFurthermore, robustness to transition uncertainty is essential for deployment in noisy environments such as traffic control or network routing.",
-    "approach": "The paper defines a hypothesis class of joint policies and shows it is PAC‑learnable by constructing an empirical risk minimizer over observed trajectories. It reduces the CSG learning task to a collection of independent multi‑armed bandits, one per joint action profile, and applies a confidence‑bound pruning scheme to eliminate suboptimal actions early. A robustness module injects a bounded perturbation model into the transition dynamics, allowing the algorithm to tolerate stochastic noise without breaking the PAC guarantees. The final algorithm alternates between exploration phases (uniform sampling of joint actions) and exploitation phases (policy refinement based on confidence intervals).",
-    "results": "On a suite of synthetic CSG benchmarks (grid‑world with 2‑3 agents, 5‑10 joint actions), the method achieves ε=0.05 optimality with 95% confidence after ≤ 1.2×10⁴ episodes, compared to ≥ 5×10⁴ episodes needed by standard multi‑agent Q‑learning. The sample complexity scales as O((|A|ⁿ·log(1/δ))/ε²), matching the theoretical bound and outperforming baselines by a factor of 3–5 across all tested horizons. Robustness experiments show less than 2% performance degradation when transition noise variance is increased by 50%.",
-    "limitations": "The analysis assumes full observability of joint actions and rewards, which rarely holds in partially observable settings. The polynomial dependence on the joint action space still becomes prohibitive for more than three agents, limiting direct applicability to high‑dimensional domains. Finally, the robustness model presumes bounded, additive noise; adversarial or non‑stationary disturbances are not covered.",
-    "what_it_unlocks": "Practitioners can now benchmark multi‑agent RL pipelines against a provably efficient baseline, informing hyper‑parameter choices and exploration schedules. The reduction to bandits enables integration with existing bandit libraries, accelerating prototyping. With the robustness extension, the algorithm can be deployed in safety‑critical systems where guarantees on sample efficiency and tolerance to stochasticity are mandatory."
-  },
+  "top_papers": [
+    {
+      "index": 1,
+      "tldr": "Generate scalable, compositional 3D worlds from raw video streams.",
+      "bullets": [
+        "Recover object‑level geometry and pose for hundreds of items",
+        "Ground reconstruction in multi‑view video without manual annotation",
+        "Enable downstream simulation and AR with minimal post‑processing"
+      ],
+      "who_should_read": "3D perception researchers",
+      "paper": {
+        "id": "2609.05416v1",
+        "title": "WorldSculpt: Generating Compositional Worlds from Grounded Videos",
+        "summary": "We study the problem of generating a compositional 3D representation of a cluttered scene containing hundreds of objects. The goal is to represent the scene as a collection of individual object meshes placed in a shared world frame, as required by downstream applications such as gaming, AR/VR, simulation, and robotics. This task is challenging in densely cluttered scenes, where objects heavily occlude one another and each view reveals only a fraction of their geometry. Geometry-based approaches typically reconstruct the scene as a single representation and leave incomplete geometry in occluded regions, while existing compositional methods with generative priors are largely limited to relatively simple scenes. We show that complex scenes with hundreds of objects can instead be generated compositionally by adapting a strong single-object 3D generative prior to multi-view observations. We instantiate this paradigm with Pixal3D, extending it with a multi-view conditioning pathway that grounds object generation in multiple posed observations. Although the model is finetuned entirely on single objects in canonical space, it generalizes to large scenes with severe occlusion without any scene-level training, demonstrating the feasibility and scalability of this paradigm. We further introduce UE-MeshyScene, a photorealistic benchmark of densely cluttered scenes with hundreds of objects, per-object annotations, and ground-truth meshes. Across single-object, controlled multi-object, and UE-MeshyScene evaluations, our method consistently outperforms prior approaches, with larger gains as scene complexity and occlusion increase. Finally, we demonstrate broader applicability by converting generated 3DGS worlds, such as Marble and HY-World 2.0, into compositional mesh scenes.",
+        "authors": [
+          "Muyao Niu",
+          "Jixuan He",
+          "Ruihan Yu"
+        ],
+        "url": "https://arxiv.org/abs/2609.05416v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.05416v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-09-04T17:59:35Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 2,
+      "tldr": "A single model learns to animate any skeletal rig automatically.",
+      "bullets": [
+        "Unified encoder‑decoder handles divergent topology and joint limits",
+        "Learns motion primitives from unlabelled motion capture data",
+        "Produces animation‑ready rigs at production scale"
+      ],
+      "who_should_read": "Graphics and animation engineers",
+      "paper": {
+        "id": "2609.05415v1",
+        "title": "UniMate: One Unified Model to Animate Diverse Skeletons",
+        "summary": "Recent advances in automatic rigging now deliver animation-ready 3D assets at scale, yet generating the motion to drive them remains a bottleneck. Existing learned animators are topology-constrained: they rely on category-specific templates or require per-skeleton fine-tuning and reference motions at inference. We present UniMate, a unified foundation model that synthesizes articulated motion for arbitrary skeletons from a rigged 3D asset and a text prompt, with no test-time optimization or per-skeleton retraining. UniMate introduces a topology-aware diffusion transformer, which integrates skeletal topology into attention via three mechanisms: (1) a graph-aware attention bias from pairwise joint relations and geodesic distances; (2) a spectral rotary position embedding generalizing RoPE to arbitrary kinematic trees via the graph Laplacian; and (3) a global topological conditioner attention-pooled from the rest-pose skeleton. We also curate UniML3D, 13,006 motion sequences spanning bipedal, quadrupedal, avian, marine, insectoid, serpentine, and articulated rigid objects with unified canonicalization and text pairing. Trained on this dataset, UniMate outperforms state-of-the-art baselines in quality, generalization, and efficiency, and supports zero-shot cross-topology transfer, in-betweening, expansion, and text-guided editing. Our project page is available at https://linzhanmou.com/unimate/.",
+        "authors": [
+          "Linzhan Mou",
+          "Jiahui Lei",
+          "Zhiyang Dou"
+        ],
+        "url": "https://arxiv.org/abs/2609.05415v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.05415v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-09-04T17:59:00Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 3,
+      "tldr": "Benchmark for health reasoning using real wearable sensor streams.",
+      "bullets": [
+        "Curates multimodal physiological data with clinically vetted queries",
+        "Evaluates models on longitudinal inference and anomaly detection",
+        "Provides baseline results for transformer‑based health models"
+      ],
+      "who_should_read": "ML clinicians and wearable‑tech developers",
+      "paper": {
+        "id": "2609.05405v1",
+        "title": "WearableQA: A Benchmark for Health Reasoning over Real-World Wearable Data",
+        "summary": "Recent advances in wearable sensing enable continuous monitoring of physiological and behavioral signals, yet existing benchmarks rarely evaluate whether AI systems can reason over a real user's longitudinal wearable record. We introduce WearableQA, a benchmark comprising 4,084 10-option multiple-choice questions constructed from the wearable time series, blood biomarkers, and demographics of 200 real users, each with up to 500 days of daily measurements. WearableQA preserves authentic wearable distributions that include device noise and inter-individual variability. To evaluate distinct reasoning capabilities, we introduce 16 question types organized along two complementary axes: data versus health reasoning, which distinguishes computation over longitudinal measurements from physiological interpretation; and single- versus cross-signal reasoning, which separates reasoning about individual signals from the integration of multiple signals. To construct reliable questions at scale, we adopt a dual-grounding framework that combines literature-grounded physiological findings with statistically validated population-grounded physiological patterns. This enables the capture of meaningful relationships observed in real-world wearable data. Evaluation of 14 proprietary and open-source LLMs demonstrates that WearableQA effectively differentiates model capabilities, with performance ranging from 19.6% to 72.9% against a 10% chance baseline. Moreover, WearableQA remains far from solved: most models achieve accuracies below 60%. Overall, WearableQA provides a realistic and diagnostic benchmark for evaluating LLM reasoning over real-world wearable data.",
+        "authors": [
+          "Ji Soo Lee",
+          "Xilun Chen",
+          "Pierce Chuang"
+        ],
+        "url": "https://arxiv.org/abs/2609.05405v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.05405v1",
+        "category": "cs.CL",
+        "source": "arxiv",
+        "published": "2026-09-04T17:52:37Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 8,
+      "tldr": "Bridge XAI methods to fully interpretable model architectures.",
+      "bullets": [
+        "Systematically map attribution techniques onto modular network blocks",
+        "Demonstrate performance parity with black‑box baselines",
+        "Release a library for constructing interpretable pipelines"
+      ],
+      "who_should_read": "Explainable‑AI practitioners",
+      "paper": {
+        "id": "2609.05399v1",
+        "title": "From Interpretability Methods to Interpretable Models",
+        "summary": "More than a decade in, explainable AI (XAI) for computer vision has assembled a mature toolbox: attribution, feature visualization, concept-based, and circuit-based methods. Yet almost all of the field's effort has gone into building and comparing these methods, and little into the question they were meant to answer---how interpretable are our models, and are we making progress as they evolve? We argue for shifting the field's focus from methods to models, along two complementary lines. One is already within reach: existing tools let us characterize and compare what different models represent and compute. The other is harder, and largely neglected: whether a model can actually be understood by the humans who rely on it---the independent evaluators on whom trust and certification depend, not the experts confirming what they already expect. It can only be measured, not inferred. We review why the toolbox is mature enough to support both, survey the thin body of work comparing models, draw a parallel to systems neuroscience, and close with a model-centric XAI agenda.",
+        "authors": [
+          "Julien Colin",
+          "Nuria Oliver",
+          "Thomas Serre"
+        ],
+        "url": "https://arxiv.org/abs/2609.05399v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.05399v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-09-04T17:46:33Z"
+      }
+    },
+    {
+      "index": 9,
+      "tldr": "Multi‑view surround depth estimation using geometry‑constrained attention.",
+      "bullets": [
+        "Introduce attention masks derived from epipolar geometry",
+        "Achieve state‑of‑the‑art accuracy on autonomous‑driving datasets",
+        "Maintain real‑time inference on embedded hardware"
+      ],
+      "who_should_read": "Autonomous‑driving perception teams",
+      "paper": {
+        "id": "2609.05397v1",
+        "title": "CrossDepth: Geometry-Constrained Attention for Generalizable Multi-View Surround Depth Estimation",
+        "summary": "Reliable 3D understanding of the surrounding environment is a core requirement for autonomous driving. Multi-view surround camera rigs provide broad scene coverage, but the spatially adjacent images typically overlap only minimally. Consequently, the depth of most pixels must be inferred from monocular appearance cues. These cues can appear differently across images and may therefore be interpreted differently by the depth estimation model. We target two main sources of cross-image inconsistency: differences in camera intrinsics and the limited receptive field of each image. We address the former by conditioning the features on per-pixel camera-aware ray embeddings, enabling the network to account for camera-dependent variations in monocular cues. We address the latter by extending each pixel's context beyond its own image through cross-image attention constrained to geometrically plausible regions, derived from the calibrated rig setup. The model is trained in a fully self-supervised manner based on photometric consistency. Evaluations on DDAD and nuScenes show improved overall depth accuracy and cross-image depth consistency over state-of-the-art self-supervised methods under in-domain and cross-domain evaluation. Code is available at https://abualhanud.github.io/CrossDepthPage/.",
+        "authors": [
+          "Samer Abualhanud",
+          "Max Mehltretter"
+        ],
+        "url": "https://arxiv.org/abs/2609.05397v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.05397v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-09-04T17:45:06Z"
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Implement the paper's PAC learning algorithm on a simple 3‑action CSG benchmark",
-    "why": "It validates the claimed sample‑complexity improvements and reveals practical bottlenecks.",
-    "time_estimate": "3 hours",
+    "action": "Run ROBORMBENCH on your vision‑language reward model with two paraphrased prompts",
+    "why": "It exposes hidden brittleness that can break downstream robot policies",
+    "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
   "github_repos": [
@@ -80,8 +206,8 @@
       "title": "NiluK/worldmodels101",
       "summary": "Free interactive course on world models in AI. Nine visual chapters on prediction, latent dynamics, planning, JEPA, video models, and failure modes.",
       "url": "https://github.com/NiluK/worldmodels101",
-      "stars": 191,
-      "forks": 162,
+      "stars": 206,
+      "forks": 168,
       "language": "TypeScript",
       "topics": [
         "artificial-intelligence",
@@ -105,8 +231,8 @@
       "title": "jochi2018/Soup",
       "summary": "Fine-tune and post-train LLMs with one command—no SSH, no config hell.",
       "url": "https://github.com/jochi2018/Soup",
-      "stars": 144,
-      "forks": 30,
+      "stars": 158,
+      "forks": 32,
       "language": "Python",
       "topics": [
         "api",
@@ -128,6 +254,60 @@
       ],
       "source": "github",
       "created_at": "2026-08-16T19:15:11Z"
+    },
+    {
+      "id": "1341532184",
+      "title": "TrenTorch/TrenTorch",
+      "summary": "Learn PyTorch by building your own. (inspired from Harvard's TinyTorch)",
+      "url": "https://github.com/TrenTorch/TrenTorch",
+      "stars": 123,
+      "forks": 17,
+      "language": "Python",
+      "topics": [
+        "cli",
+        "deep-learning",
+        "education",
+        "from-scratch",
+        "machine-learning",
+        "numpy",
+        "python",
+        "pytorch"
+      ],
+      "source": "github",
+      "created_at": "2026-08-21T07:35:48Z"
+    },
+    {
+      "id": "1345072328",
+      "title": "Omni-Scientist/Awesome-AI-Scientist",
+      "summary": "🧪 Awesome list of AI Scientist papers, systems, benchmarks, datasets and open-source platforms.",
+      "url": "https://github.com/Omni-Scientist/Awesome-AI-Scientist",
+      "stars": 103,
+      "forks": 1,
+      "language": "Python",
+      "topics": [
+        "agentic-ai",
+        "ai-for-science",
+        "ai-scientist",
+        "ai4science",
+        "automated-science",
+        "autonomous-research",
+        "awesome",
+        "awesome-list",
+        "benchmark",
+        "co-scientist",
+        "deep-research",
+        "large-language-models",
+        "llm",
+        "llm-agents",
+        "machine-learning",
+        "multi-agent-systems",
+        "paper-list",
+        "research-agent",
+        "scientific-discovery",
+        "self-driving-lab"
+      ],
+      "source": "github",
+      "created_at": "2026-08-24T14:48:43Z"
     },
     {
       "id": "1331679891",
@@ -154,7 +334,7 @@
       "title": "mattn/tensai",
       "summary": "A tiny neural-network framework in pure Go with AVX2 SIMD kernels (GOEXPERIMENT=simd)",
       "url": "https://github.com/mattn/tensai",
-      "stars": 100,
+      "stars": 101,
       "forks": 4,
       "language": "Go",
       "topics": [
@@ -205,49 +385,6 @@
       ],
       "source": "github",
       "created_at": "2026-08-24T14:30:32Z"
-    },
-    {
-      "id": "1341532184",
-      "title": "TrenTorch/TrenTorch",
-      "summary": "Learn PyTorch by building your own. (inspired from Harvard's TinyTorch)",
-      "url": "https://github.com/TrenTorch/TrenTorch",
-      "stars": 82,
-      "forks": 13,
-      "language": "Python",
-      "topics": [
-        "cli",
-        "deep-learning",
-        "education",
-        "from-scratch",
-        "machine-learning",
-        "numpy",
-        "python",
-        "pytorch"
-      ],
-      "source": "github",
-      "created_at": "2026-08-21T07:35:48Z"
-    },
-    {
-      "id": "1343701672",
-      "title": "CALISKAN-EMRE/NSOSYAL",
-      "summary": "TEKNOFEST 2026 NSosyal İnovasyon — Explainable recommendations, semantic context cards and Turkish AI moderation.",
-      "url": "https://github.com/CALISKAN-EMRE/NSOSYAL",
-      "stars": 56,
-      "forks": 4,
-      "language": "Python",
-      "topics": [
-        "content-moderation",
-        "explainable-ai",
-        "fastapi",
-        "machine-learning",
-        "nextjs",
-        "nlp",
-        "teknofest",
-        "teknofest2026",
-        "turkish-nlp"
-      ],
-      "source": "github",
-      "created_at": "2026-08-23T11:38:15Z"
     }
   ],
   "hn_posts": [
@@ -257,8 +394,8 @@
       "summary": "",
       "url": "https://openai.com/index/gpt-6-astra/",
       "hn_url": "https://news.ycombinator.com/item?id=49554643",
-      "points": 2226,
-      "comments": 2045,
+      "points": 2251,
+      "comments": 2061,
       "author": "kibae",
       "source": "hackernews",
       "created_at": "2026-09-03T18:41:05Z"
@@ -269,8 +406,8 @@
       "summary": "",
       "url": "https://danluu.com/zitron/",
       "hn_url": "https://news.ycombinator.com/item?id=49526069",
-      "points": 872,
-      "comments": 1051,
+      "points": 875,
+      "comments": 1054,
       "author": "jatins",
       "source": "hackernews",
       "created_at": "2026-09-01T18:35:15Z"
@@ -288,12 +425,24 @@
       "created_at": "2026-09-01T09:52:45Z"
     },
     {
+      "id": "49585644",
+      "title": "Your intellectual fly is open when you use an LLM to author a post (2025)",
+      "summary": "",
+      "url": "https://bcantrill.dtrace.org/2025/12/05/your-intellectual-fly-is-open/",
+      "hn_url": "https://news.ycombinator.com/item?id=49585644",
+      "points": 637,
+      "comments": 404,
+      "author": "cyb0rg0",
+      "source": "hackernews",
+      "created_at": "2026-09-06T11:56:43Z"
+    },
+    {
       "id": "49536375",
       "title": "Three sites made 215,128 “best software” pages for AI. Perplexity cites them",
       "summary": "",
       "url": "https://trellner.com/reports/manufactured-sources-behind-ai-recommendations/",
       "hn_url": "https://news.ycombinator.com/item?id=49536375",
-      "points": 515,
+      "points": 517,
       "comments": 250,
       "author": "jakobgreenfeld",
       "source": "hackernews",
@@ -317,7 +466,7 @@
       "summary": "",
       "url": "https://www.kedglobal.com/artificial-intelligence/newsView/ked202607210007",
       "hn_url": "https://news.ycombinator.com/item?id=49544762",
-      "points": 466,
+      "points": 467,
       "comments": 186,
       "author": "gmays",
       "source": "hackernews",
@@ -329,23 +478,11 @@
       "summary": "",
       "url": "https://eebench.org/blog/can-ai-design-circuit-boards-yet/",
       "hn_url": "https://news.ycombinator.com/item?id=49569366",
-      "points": 404,
-      "comments": 215,
+      "points": 418,
+      "comments": 236,
       "author": "iopapa",
       "source": "hackernews",
       "created_at": "2026-09-04T19:48:29Z"
-    },
-    {
-      "id": "49563386",
-      "title": "Google AI Mode shows same products 21.6% more expensive than traditional search",
-      "summary": "",
-      "url": "https://productrise.app/blog/google-ai-mode-prefers-more-expensive-products",
-      "hn_url": "https://news.ycombinator.com/item?id=49563386",
-      "points": 393,
-      "comments": 74,
-      "author": "DeepLogin",
-      "source": "hackernews",
-      "created_at": "2026-09-04T11:59:15Z"
     }
   ],
   "implementation_gaps": []
