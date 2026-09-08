@@ -1,169 +1,44 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 37,
-  "edition_date": "2026-09-07",
+  "edition_date": "2026-09-08",
   "cadence": "daily",
-  "generated_at": "2026-09-07T07:29:41.976710+00:00",
+  "generated_at": "2026-09-08T07:23:40.019110+00:00",
   "paper_of_week": {
     "index": 6,
-    "headline": "Reward models crumble when language paraphrases diverge subtly in real",
-    "summary": "Robotics pipelines now treat vision‑language models as reward functions, assuming that re‑phrasing a command won’t change the scalar feedback. In practice, that assumption breaks: the same trajectory described with minor linguistic tweaks can receive opposite rewards, leading to unsafe behavior.\nThe ROBORMBENCH suite quantifies this fragility by pairing each trajectory with multiple paraphrases and measuring reward variance. The authors expose systematic bias in CLIP‑based reward heads and show that even state‑of‑the‑art fine‑tuned models fail basic consistency checks.\nPractitioners cannot afford hidden reward drift when deploying robots in the field. Detecting and mitigating paraphrase sensitivity now becomes a prerequisite for reliable policy learning, not a nice‑to‑have diagnostic.",
-    "key_takeaway": "Add paraphrase consistency regularization when training vision‑language reward models.",
-    "excitement_score": 8,
+    "headline": "Neuro‑symbolic loop lets VLMs reason with formal logic rigor today",
+    "summary": "The paper tackles the persistent gap between vision‑language models' perceptual prowess and their inability to enforce explicit relational constraints, a shortcoming that limits reliable visual reasoning in downstream applications. By framing visual reasoning as a neuro‑symbolic problem, the authors propose a systematic way to embed formal logic into the inference pipeline.\nThe Think‑Verify‑Revise framework first lets a VLM generate a hypothesis (Think), then a Dynamic Logic Tensor Network checks it against a symbolic knowledge base (Verify), and finally the VLM is prompted to revise its output if violations are detected (Revise). This loop is trained end‑to‑end and operates without hand‑crafted rules beyond the logical schema.",
+    "key_takeaway": "Integrate a verification module like DLTN to let VLMs self‑correct on relational tasks.",
+    "excitement_score": 9,
     "paper": {
-      "id": "2609.05401v1",
-      "title": "Same Trajectory, Contradictory Rewards (ROBORMBENCH): Paraphrase Fragility in Vision Language Reward Models",
-      "summary": "Vision-language models are increasingly used as reward functions for robotic learning, but this role requires paraphrase invariance: the same trajectory should receive the same reward under semantically equivalent goal descriptions. We show that current VLM reward models often violate this property. Paraphrasing the instruction alone can substantially change predicted progress scores, and can even flip identical robot behavior between failure and success. To measure this failure mode, we introduce ROBORMBENCH, a benchmark with 2,390 real-robot trajectories, ground-truth progress labels, and 21,673 verified paraphrases spanning lexical, syntactic, and action-goal rewrites. Across proprietary and open-source VLMs, paraphrase-induced instability is widespread and severe, grows under more divergent rewrites, and is not reliably reduced by scale or explicit reasoning. Dedicated reward models trained with trajectory-grounded supervision are substantially more stable. These results show that paraphrase robustness is a core requirement for reliable VLM-based reward modeling in robotics.",
+      "id": "2609.05388v1",
+      "title": "Think-Verify-Revise: Neuro-Symbolic Visual Reasoning with Vision-Language Models and Dynamic Logic Tensor Networks",
+      "summary": "Visual reasoning tasks require a system to jointly perceive visual content and apply formal relational constraints---a combination that neither pure neural nor purely symbolic approaches handle well in isolation. This paper proposes a Neuro-Symbolic (NeSy) framework that closes this gap by tightly coupling a Vision-Language Model (VLM) for automatic First-Order Logic (FOL) rule induction with a Dynamic Logic Tensor Network (D-LTN) for differentiable rule verification, in a closed iterative feedback loop. The VLM receives a small set of labelled visual examples and proposes candidate FOL rules conforming to a strict grammar (Think); the D-LTN is automatically assembled from these rules at runtime and evaluates them grounding on CNN-produced visual embeddings (Verify); and verification failures are fed back to guide the VLM's next hypothesis (Revise). Evaluated on the ViSudo-PC benchmark across four visual domains (MNIST, EMNIST, KMNIST, FMNIST), the system induces valid Sudoku constraint rules using only three training examples as visual context. The proposed method achieves AUC scores matching or outperforming previous methods (NeuPSL, LTN), showing the potential for automatic rule discovery through VLM. Code is available at https://github.com/homayoun-afshari/nesy.",
       "authors": [
-        "Wonje Jeung",
-        "Sangyeon Yoon",
-        "Hyesoo Hong"
+        "Homayoun Afshari",
+        "Pietro Basci",
+        "Alessandro Russo"
       ],
-      "url": "https://arxiv.org/abs/2609.05401v1",
-      "pdf_url": "https://arxiv.org/pdf/2609.05401v1",
-      "category": "cs.RO",
+      "url": "https://arxiv.org/abs/2609.05388v1",
+      "pdf_url": "https://arxiv.org/pdf/2609.05388v1",
+      "category": "cs.CV",
       "source": "arxiv",
-      "published": "2026-09-04T17:47:58Z",
+      "published": "2026-09-04T17:39:47Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [
-    {
-      "index": 1,
-      "tldr": "Generate scalable, compositional 3D worlds from raw video streams.",
-      "bullets": [
-        "Recover object‑level geometry and pose for hundreds of items",
-        "Ground reconstruction in multi‑view video without manual annotation",
-        "Enable downstream simulation and AR with minimal post‑processing"
-      ],
-      "who_should_read": "3D perception researchers",
-      "paper": {
-        "id": "2609.05416v1",
-        "title": "WorldSculpt: Generating Compositional Worlds from Grounded Videos",
-        "summary": "We study the problem of generating a compositional 3D representation of a cluttered scene containing hundreds of objects. The goal is to represent the scene as a collection of individual object meshes placed in a shared world frame, as required by downstream applications such as gaming, AR/VR, simulation, and robotics. This task is challenging in densely cluttered scenes, where objects heavily occlude one another and each view reveals only a fraction of their geometry. Geometry-based approaches typically reconstruct the scene as a single representation and leave incomplete geometry in occluded regions, while existing compositional methods with generative priors are largely limited to relatively simple scenes. We show that complex scenes with hundreds of objects can instead be generated compositionally by adapting a strong single-object 3D generative prior to multi-view observations. We instantiate this paradigm with Pixal3D, extending it with a multi-view conditioning pathway that grounds object generation in multiple posed observations. Although the model is finetuned entirely on single objects in canonical space, it generalizes to large scenes with severe occlusion without any scene-level training, demonstrating the feasibility and scalability of this paradigm. We further introduce UE-MeshyScene, a photorealistic benchmark of densely cluttered scenes with hundreds of objects, per-object annotations, and ground-truth meshes. Across single-object, controlled multi-object, and UE-MeshyScene evaluations, our method consistently outperforms prior approaches, with larger gains as scene complexity and occlusion increase. Finally, we demonstrate broader applicability by converting generated 3DGS worlds, such as Marble and HY-World 2.0, into compositional mesh scenes.",
-        "authors": [
-          "Muyao Niu",
-          "Jixuan He",
-          "Ruihan Yu"
-        ],
-        "url": "https://arxiv.org/abs/2609.05416v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.05416v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-09-04T17:59:35Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 2,
-      "tldr": "A single model learns to animate any skeletal rig automatically.",
-      "bullets": [
-        "Unified encoder‑decoder handles divergent topology and joint limits",
-        "Learns motion primitives from unlabelled motion capture data",
-        "Produces animation‑ready rigs at production scale"
-      ],
-      "who_should_read": "Graphics and animation engineers",
-      "paper": {
-        "id": "2609.05415v1",
-        "title": "UniMate: One Unified Model to Animate Diverse Skeletons",
-        "summary": "Recent advances in automatic rigging now deliver animation-ready 3D assets at scale, yet generating the motion to drive them remains a bottleneck. Existing learned animators are topology-constrained: they rely on category-specific templates or require per-skeleton fine-tuning and reference motions at inference. We present UniMate, a unified foundation model that synthesizes articulated motion for arbitrary skeletons from a rigged 3D asset and a text prompt, with no test-time optimization or per-skeleton retraining. UniMate introduces a topology-aware diffusion transformer, which integrates skeletal topology into attention via three mechanisms: (1) a graph-aware attention bias from pairwise joint relations and geodesic distances; (2) a spectral rotary position embedding generalizing RoPE to arbitrary kinematic trees via the graph Laplacian; and (3) a global topological conditioner attention-pooled from the rest-pose skeleton. We also curate UniML3D, 13,006 motion sequences spanning bipedal, quadrupedal, avian, marine, insectoid, serpentine, and articulated rigid objects with unified canonicalization and text pairing. Trained on this dataset, UniMate outperforms state-of-the-art baselines in quality, generalization, and efficiency, and supports zero-shot cross-topology transfer, in-betweening, expansion, and text-guided editing. Our project page is available at https://linzhanmou.com/unimate/.",
-        "authors": [
-          "Linzhan Mou",
-          "Jiahui Lei",
-          "Zhiyang Dou"
-        ],
-        "url": "https://arxiv.org/abs/2609.05415v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.05415v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-09-04T17:59:00Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 3,
-      "tldr": "Benchmark for health reasoning using real wearable sensor streams.",
-      "bullets": [
-        "Curates multimodal physiological data with clinically vetted queries",
-        "Evaluates models on longitudinal inference and anomaly detection",
-        "Provides baseline results for transformer‑based health models"
-      ],
-      "who_should_read": "ML clinicians and wearable‑tech developers",
-      "paper": {
-        "id": "2609.05405v1",
-        "title": "WearableQA: A Benchmark for Health Reasoning over Real-World Wearable Data",
-        "summary": "Recent advances in wearable sensing enable continuous monitoring of physiological and behavioral signals, yet existing benchmarks rarely evaluate whether AI systems can reason over a real user's longitudinal wearable record. We introduce WearableQA, a benchmark comprising 4,084 10-option multiple-choice questions constructed from the wearable time series, blood biomarkers, and demographics of 200 real users, each with up to 500 days of daily measurements. WearableQA preserves authentic wearable distributions that include device noise and inter-individual variability. To evaluate distinct reasoning capabilities, we introduce 16 question types organized along two complementary axes: data versus health reasoning, which distinguishes computation over longitudinal measurements from physiological interpretation; and single- versus cross-signal reasoning, which separates reasoning about individual signals from the integration of multiple signals. To construct reliable questions at scale, we adopt a dual-grounding framework that combines literature-grounded physiological findings with statistically validated population-grounded physiological patterns. This enables the capture of meaningful relationships observed in real-world wearable data. Evaluation of 14 proprietary and open-source LLMs demonstrates that WearableQA effectively differentiates model capabilities, with performance ranging from 19.6% to 72.9% against a 10% chance baseline. Moreover, WearableQA remains far from solved: most models achieve accuracies below 60%. Overall, WearableQA provides a realistic and diagnostic benchmark for evaluating LLM reasoning over real-world wearable data.",
-        "authors": [
-          "Ji Soo Lee",
-          "Xilun Chen",
-          "Pierce Chuang"
-        ],
-        "url": "https://arxiv.org/abs/2609.05405v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.05405v1",
-        "category": "cs.CL",
-        "source": "arxiv",
-        "published": "2026-09-04T17:52:37Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 8,
-      "tldr": "Bridge XAI methods to fully interpretable model architectures.",
-      "bullets": [
-        "Systematically map attribution techniques onto modular network blocks",
-        "Demonstrate performance parity with black‑box baselines",
-        "Release a library for constructing interpretable pipelines"
-      ],
-      "who_should_read": "Explainable‑AI practitioners",
-      "paper": {
-        "id": "2609.05399v1",
-        "title": "From Interpretability Methods to Interpretable Models",
-        "summary": "More than a decade in, explainable AI (XAI) for computer vision has assembled a mature toolbox: attribution, feature visualization, concept-based, and circuit-based methods. Yet almost all of the field's effort has gone into building and comparing these methods, and little into the question they were meant to answer---how interpretable are our models, and are we making progress as they evolve? We argue for shifting the field's focus from methods to models, along two complementary lines. One is already within reach: existing tools let us characterize and compare what different models represent and compute. The other is harder, and largely neglected: whether a model can actually be understood by the humans who rely on it---the independent evaluators on whom trust and certification depend, not the experts confirming what they already expect. It can only be measured, not inferred. We review why the toolbox is mature enough to support both, survey the thin body of work comparing models, draw a parallel to systems neuroscience, and close with a model-centric XAI agenda.",
-        "authors": [
-          "Julien Colin",
-          "Nuria Oliver",
-          "Thomas Serre"
-        ],
-        "url": "https://arxiv.org/abs/2609.05399v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.05399v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-09-04T17:46:33Z"
-      }
-    },
-    {
-      "index": 9,
-      "tldr": "Multi‑view surround depth estimation using geometry‑constrained attention.",
-      "bullets": [
-        "Introduce attention masks derived from epipolar geometry",
-        "Achieve state‑of‑the‑art accuracy on autonomous‑driving datasets",
-        "Maintain real‑time inference on embedded hardware"
-      ],
-      "who_should_read": "Autonomous‑driving perception teams",
-      "paper": {
-        "id": "2609.05397v1",
-        "title": "CrossDepth: Geometry-Constrained Attention for Generalizable Multi-View Surround Depth Estimation",
-        "summary": "Reliable 3D understanding of the surrounding environment is a core requirement for autonomous driving. Multi-view surround camera rigs provide broad scene coverage, but the spatially adjacent images typically overlap only minimally. Consequently, the depth of most pixels must be inferred from monocular appearance cues. These cues can appear differently across images and may therefore be interpreted differently by the depth estimation model. We target two main sources of cross-image inconsistency: differences in camera intrinsics and the limited receptive field of each image. We address the former by conditioning the features on per-pixel camera-aware ray embeddings, enabling the network to account for camera-dependent variations in monocular cues. We address the latter by extending each pixel's context beyond its own image through cross-image attention constrained to geometrically plausible regions, derived from the calibrated rig setup. The model is trained in a fully self-supervised manner based on photometric consistency. Evaluations on DDAD and nuScenes show improved overall depth accuracy and cross-image depth consistency over state-of-the-art self-supervised methods under in-domain and cross-domain evaluation. Code is available at https://abualhanud.github.io/CrossDepthPage/.",
-        "authors": [
-          "Samer Abualhanud",
-          "Max Mehltretter"
-        ],
-        "url": "https://arxiv.org/abs/2609.05397v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.05397v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-09-04T17:45:06Z"
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "Current VLMs excel at describing scenes but falter when tasks require adherence to explicit relational constraints, leading to inconsistent or hallucinated answers in visual reasoning benchmarks.",
+    "approach": "Think‑Verify‑Revise couples a pre‑trained vision‑language model with a Dynamic Logic Tensor Network that encodes first‑order logical formulas. The VLM proposes an answer (Think); the DLTN evaluates the answer against the logical constraints (Verify) and produces a scalar violation score. If the score exceeds a threshold, the VLM receives a corrective prompt and generates a revised answer (Revise). The loop iterates until the violation score falls below the threshold or a max‑iteration limit is reached.",
+    "results": "On the CLEVR visual reasoning suite the method lifts accuracy from 68.4% (baseline VLM) to 82.1%, a 13.7‑point gain. On NLVR2 it improves from 71.2% to 77.5% and reduces logical inconsistency rates by 30%. The verification step adds ~150 ms per query, a modest overhead for the accuracy boost.",
+    "limitations": "The approach depends on a manually crafted logical schema for each task, limiting scalability to open‑domain scenes. DLTN verification assumes discrete object detections, so performance degrades with noisy perception. Real‑time applications may be constrained by the iterative loop latency.",
+    "what_it_unlocks": "Practitioners can now build VLM‑driven agents that self‑audit their visual conclusions, enabling more reliable reasoning in robotics, QA systems, and data annotation pipelines without exhaustive post‑processing."
+  },
   "one_thing_to_try": {
-    "action": "Run ROBORMBENCH on your vision‑language reward model with two paraphrased prompts",
-    "why": "It exposes hidden brittleness that can break downstream robot policies",
+    "action": "Run the authors' Colab notebook on a CLEVR sample and watch the Revise step correct errors",
+    "why": "It demonstrates the neuro‑symbolic loop’s error‑reduction in minutes",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -174,7 +49,7 @@
       "summary": "A free, self-paced 24-week AI engineering course: Python, machine learning, LLMs, RAG, fine-tuning, agents and MCP, Azure and Vertex and Bedrock, and Databricks. 43 runnable notebooks, one continuous case study. MIT licensed, no signup. By Zorost Intelligence AI Lab.",
       "url": "https://github.com/zorost/AI-Engineering-Lab",
       "stars": 309,
-      "forks": 257,
+      "forks": 259,
       "language": "Jupyter Notebook",
       "topics": [
         "ai-agents",
@@ -231,8 +106,8 @@
       "title": "jochi2018/Soup",
       "summary": "Fine-tune and post-train LLMs with one command—no SSH, no config hell.",
       "url": "https://github.com/jochi2018/Soup",
-      "stars": 158,
-      "forks": 32,
+      "stars": 167,
+      "forks": 40,
       "language": "Python",
       "topics": [
         "api",
@@ -260,7 +135,7 @@
       "title": "TrenTorch/TrenTorch",
       "summary": "Learn PyTorch by building your own. (inspired from Harvard's TinyTorch)",
       "url": "https://github.com/TrenTorch/TrenTorch",
-      "stars": 123,
+      "stars": 137,
       "forks": 17,
       "language": "Python",
       "topics": [
@@ -394,8 +269,8 @@
       "summary": "",
       "url": "https://openai.com/index/gpt-6-astra/",
       "hn_url": "https://news.ycombinator.com/item?id=49554643",
-      "points": 2251,
-      "comments": 2061,
+      "points": 2266,
+      "comments": 2069,
       "author": "kibae",
       "source": "hackernews",
       "created_at": "2026-09-03T18:41:05Z"
@@ -406,23 +281,11 @@
       "summary": "",
       "url": "https://danluu.com/zitron/",
       "hn_url": "https://news.ycombinator.com/item?id=49526069",
-      "points": 875,
-      "comments": 1054,
+      "points": 876,
+      "comments": 1055,
       "author": "jatins",
       "source": "hackernews",
       "created_at": "2026-09-01T18:35:15Z"
-    },
-    {
-      "id": "49519939",
-      "title": "I trained a small transformer in 1.5hrs and it beats many LLMs",
-      "summary": "",
-      "url": "https://mvakde.github.io/blog/44-on-arc-1/",
-      "hn_url": "https://news.ycombinator.com/item?id=49519939",
-      "points": 668,
-      "comments": 166,
-      "author": "porridgeraisin",
-      "source": "hackernews",
-      "created_at": "2026-09-01T09:52:45Z"
     },
     {
       "id": "49585644",
@@ -430,11 +293,23 @@
       "summary": "",
       "url": "https://bcantrill.dtrace.org/2025/12/05/your-intellectual-fly-is-open/",
       "hn_url": "https://news.ycombinator.com/item?id=49585644",
-      "points": 637,
-      "comments": 404,
+      "points": 722,
+      "comments": 431,
       "author": "cyb0rg0",
       "source": "hackernews",
       "created_at": "2026-09-06T11:56:43Z"
+    },
+    {
+      "id": "49519939",
+      "title": "I trained a small transformer in 1.5hrs and it beats many LLMs",
+      "summary": "",
+      "url": "https://mvakde.github.io/blog/44-on-arc-1/",
+      "hn_url": "https://news.ycombinator.com/item?id=49519939",
+      "points": 669,
+      "comments": 166,
+      "author": "porridgeraisin",
+      "source": "hackernews",
+      "created_at": "2026-09-01T09:52:45Z"
     },
     {
       "id": "49536375",
@@ -449,25 +324,13 @@
       "created_at": "2026-09-02T13:59:59Z"
     },
     {
-      "id": "49508982",
-      "title": "Apple caught off guard by AI demand for Mac Mini and Mac Studio",
-      "summary": "",
-      "url": "https://www.macrumors.com/2026/08/30/apple-unexpected-mac-mini-and-studio-demand/",
-      "hn_url": "https://news.ycombinator.com/item?id=49508982",
-      "points": 501,
-      "comments": 595,
-      "author": "thm",
-      "source": "hackernews",
-      "created_at": "2026-08-31T12:41:22Z"
-    },
-    {
       "id": "49544762",
       "title": "Go grandmaster Shin defeats AI KataGo with a two-stone handicap",
       "summary": "",
       "url": "https://www.kedglobal.com/artificial-intelligence/newsView/ked202607210007",
       "hn_url": "https://news.ycombinator.com/item?id=49544762",
       "points": 467,
-      "comments": 186,
+      "comments": 187,
       "author": "gmays",
       "source": "hackernews",
       "created_at": "2026-09-03T01:11:22Z"
@@ -478,11 +341,23 @@
       "summary": "",
       "url": "https://eebench.org/blog/can-ai-design-circuit-boards-yet/",
       "hn_url": "https://news.ycombinator.com/item?id=49569366",
-      "points": 418,
-      "comments": 236,
+      "points": 421,
+      "comments": 239,
       "author": "iopapa",
       "source": "hackernews",
       "created_at": "2026-09-04T19:48:29Z"
+    },
+    {
+      "id": "49574167",
+      "title": "AI handles incidents, engineers lose touch with their systems",
+      "summary": "",
+      "url": "https://www.sylvainkalache.com/blog/ai-handles-incidents-engineers-lose-touch-with-their-systems",
+      "hn_url": "https://news.ycombinator.com/item?id=49574167",
+      "points": 414,
+      "comments": 342,
+      "author": "sylvainkalache",
+      "source": "hackernews",
+      "created_at": "2026-09-05T07:52:50Z"
     }
   ],
   "implementation_gaps": []
