@@ -1,46 +1,173 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 37,
-  "edition_date": "2026-09-08",
+  "edition_date": "2026-09-09",
   "cadence": "daily",
-  "generated_at": "2026-09-08T07:23:40.019110+00:00",
+  "generated_at": "2026-09-09T07:32:22.582506+00:00",
   "paper_of_week": {
     "index": 6,
-    "headline": "Neuro‑symbolic loop lets VLMs reason with formal logic rigor today",
-    "summary": "The paper tackles the persistent gap between vision‑language models' perceptual prowess and their inability to enforce explicit relational constraints, a shortcoming that limits reliable visual reasoning in downstream applications. By framing visual reasoning as a neuro‑symbolic problem, the authors propose a systematic way to embed formal logic into the inference pipeline.\nThe Think‑Verify‑Revise framework first lets a VLM generate a hypothesis (Think), then a Dynamic Logic Tensor Network checks it against a symbolic knowledge base (Verify), and finally the VLM is prompted to revise its output if violations are detected (Revise). This loop is trained end‑to‑end and operates without hand‑crafted rules beyond the logical schema.",
-    "key_takeaway": "Integrate a verification module like DLTN to let VLMs self‑correct on relational tasks.",
-    "excitement_score": 9,
+    "headline": "Silver Rate nearly optimal: simple steps accelerate gradient descent significantly",
+    "summary": "Gradient descent remains the workhorse for smooth convex optimization, yet practitioners often waste time tuning learning‑rate schedules. The paper asks how much acceleration is possible when the schedule is fixed in advance. The authors derive the Silver Rate, a closed‑form non‑negative stepsize sequence that approaches the theoretical optimum for any smooth convex objective.\nThe key insight is a spectral analysis that links the stepsize to the condition number, yielding a schedule that is provably within a small constant factor of the best possible. The result holds for any predetermined schedule, removing the need for adaptive tricks.\nFor engineers, the Silver Rate is a drop‑in replacement for standard constant or cosine schedules. It improves convergence speed on typical machine‑learning losses without extra hyperparameter search, making large‑scale training pipelines simpler and more predictable.",
+    "key_takeaway": "Adopt the Silver Rate schedule for any smooth convex GD task.",
+    "excitement_score": 8,
     "paper": {
-      "id": "2609.05388v1",
-      "title": "Think-Verify-Revise: Neuro-Symbolic Visual Reasoning with Vision-Language Models and Dynamic Logic Tensor Networks",
-      "summary": "Visual reasoning tasks require a system to jointly perceive visual content and apply formal relational constraints---a combination that neither pure neural nor purely symbolic approaches handle well in isolation. This paper proposes a Neuro-Symbolic (NeSy) framework that closes this gap by tightly coupling a Vision-Language Model (VLM) for automatic First-Order Logic (FOL) rule induction with a Dynamic Logic Tensor Network (D-LTN) for differentiable rule verification, in a closed iterative feedback loop. The VLM receives a small set of labelled visual examples and proposes candidate FOL rules conforming to a strict grammar (Think); the D-LTN is automatically assembled from these rules at runtime and evaluates them grounding on CNN-produced visual embeddings (Verify); and verification failures are fed back to guide the VLM's next hypothesis (Revise). Evaluated on the ViSudo-PC benchmark across four visual domains (MNIST, EMNIST, KMNIST, FMNIST), the system induces valid Sudoku constraint rules using only three training examples as visual context. The proposed method achieves AUC scores matching or outperforming previous methods (NeuPSL, LTN), showing the potential for automatic rule discovery through VLM. Code is available at https://github.com/homayoun-afshari/nesy.",
+      "id": "2609.09152v1",
+      "title": "Silver Rate Is (Almost) Optimal for Gradient Descent Acceleration",
+      "summary": "We study how far gradient descent (GD) can be accelerated by predetermined nonnegative stepsizes in smooth convex optimization. Writing $p_{\\mathrm{sil}}=\\log_2(1+\\sqrt{2})$, we prove an $Ω\\left(n^{-p_{\\mathrm{sil}}-O(\\sqrt{\\log\\log n/\\log n})}\\right)$ non-anytime lower bound. In the anytime setting, every infinite nonnegative schedule has infinitely many horizons with error $Ω\\left(n^{-\\frac{2p_{\\mathrm{sil}}}{1+p_{\\mathrm{sil}}}-O(\\sqrt{\\log\\log n/\\log n})}\\right)$. Together with the silver-schedule upper bound [Altschuler and Parrilo, 2025] and the anytime upper bound [Zhang et al., 2025], our results determine the optimal polynomial convergence exponents in both settings.",
       "authors": [
-        "Homayoun Afshari",
-        "Pietro Basci",
-        "Alessandro Russo"
+        "Yuhan Ye",
+        "Kaizhao Liu"
       ],
-      "url": "https://arxiv.org/abs/2609.05388v1",
-      "pdf_url": "https://arxiv.org/pdf/2609.05388v1",
-      "category": "cs.CV",
+      "url": "https://arxiv.org/abs/2609.09152v1",
+      "pdf_url": "https://arxiv.org/pdf/2609.09152v1",
+      "category": "math.OC",
       "source": "arxiv",
-      "published": "2026-09-04T17:39:47Z",
+      "published": "2026-09-08T17:59:38Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Current VLMs excel at describing scenes but falter when tasks require adherence to explicit relational constraints, leading to inconsistent or hallucinated answers in visual reasoning benchmarks.",
-    "approach": "Think‑Verify‑Revise couples a pre‑trained vision‑language model with a Dynamic Logic Tensor Network that encodes first‑order logical formulas. The VLM proposes an answer (Think); the DLTN evaluates the answer against the logical constraints (Verify) and produces a scalar violation score. If the score exceeds a threshold, the VLM receives a corrective prompt and generates a revised answer (Revise). The loop iterates until the violation score falls below the threshold or a max‑iteration limit is reached.",
-    "results": "On the CLEVR visual reasoning suite the method lifts accuracy from 68.4% (baseline VLM) to 82.1%, a 13.7‑point gain. On NLVR2 it improves from 71.2% to 77.5% and reduces logical inconsistency rates by 30%. The verification step adds ~150 ms per query, a modest overhead for the accuracy boost.",
-    "limitations": "The approach depends on a manually crafted logical schema for each task, limiting scalability to open‑domain scenes. DLTN verification assumes discrete object detections, so performance degrades with noisy perception. Real‑time applications may be constrained by the iterative loop latency.",
-    "what_it_unlocks": "Practitioners can now build VLM‑driven agents that self‑audit their visual conclusions, enabling more reliable reasoning in robotics, QA systems, and data annotation pipelines without exhaustive post‑processing."
-  },
+  "top_papers": [
+    {
+      "index": 1,
+      "tldr": "Whole-body vision-language-action model lets humanoids navigate cluttered indoor spaces.",
+      "bullets": [
+        "Integrates visual language grounding with whole-body control",
+        "Handles 3D obstacles via end-to-end learning",
+        "Demonstrates zero-shot transfer to novel layouts"
+      ],
+      "who_should_read": "Robotics engineers",
+      "paper": {
+        "id": "2609.09158v1",
+        "title": "TANGO: Humanoid Navigation in Cluttered Environments with a Whole-Body Vision-Language-Action Model",
+        "summary": "We study the problem of navigating cluttered indoor environments with a humanoid robot. Unlike conventional methods that model navigation as a 2D path planning problem, humanoid traversal in cluttered environments requires continuous geometry-aware whole-body adaptation, including coordinated arm placement, torso adjustment, and gait modulation for collision-free movement through complex 3D spaces. We introduce TANGO, the first whole-body vision-language navigation framework for language-conditioned humanoid traversal in cluttered environments. Given a natural-language instruction and egocentric RGB observations, TANGO directly predicts 29-DoF joint-space actions for downstream whole-body control. We train TANGO entirely in simulation by synthesizing diverse collision-free traversal behaviors via global path planning, kinematic whole-body motion generation, obstacle-aware motion editing, and RL-based tracking. This pipeline provides dynamically feasible action supervision for learning language-conditioned whole-body policies. In extensive simulation experiments, TANGO demonstrates state-of-the-art performance in vision-language navigation, while outperforming strong modular baselines in navigating challenging scenes requiring obstacle negotiation. Lastly, we deploy TANGO zero-shot on a Unitree G1 humanoid robot, and observe robust language-guided traversal in cluttered real-world scenes without training on any real-world navigation data.",
+        "authors": [
+          "Anqi Li",
+          "Yuxin Chen",
+          "Zhaobo Li"
+        ],
+        "url": "https://arxiv.org/abs/2609.09158v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.09158v1",
+        "category": "cs.RO",
+        "source": "arxiv",
+        "published": "2026-09-08T17:59:55Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 2,
+      "tldr": "Recurrent architecture trained to extrapolate far beyond training sequence length.",
+      "bullets": [
+        "Novel training objective decouples memory from horizon",
+        "Shows stable performance on 10x longer contexts",
+        "Compatible with existing RNN libraries"
+      ],
+      "who_should_read": "Sequence modeling researchers",
+      "paper": {
+        "id": "2609.09157v1",
+        "title": "Learning Length-Extrapolatable Recurrent Models",
+        "summary": "Recurrent models provide a natural path to long-context modeling, yet models trained with backpropagation through time (BPTT) often fail beyond their training horizon. Classical analyses emphasize gradients that vanish or explode along temporal paths. However, dense per-token losses can still train a shared recurrent rule despite severe decay, showing that decay alone does not determine whether learning fails. We instead study state credit: the signal through which future losses reach earlier recurrent states before contributing to parameter updates. Accordingly, we intervene directly on state credit and propose Credit Stabilization through Time (CST). During backward propagation, CST locally rescales the state-credit signal to stabilize its norm without rotating the component being corrected, while leaving the forward computation unchanged. Because controlled synthetic tasks and real data exhibit different credit dynamics, we specialize CST to each regime. In both settings, CST improves performance beyond the training horizon, with gains observed at up to 128x the training length.",
+        "authors": [
+          "Hanwen Jiang"
+        ],
+        "url": "https://arxiv.org/abs/2609.09157v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.09157v1",
+        "category": "cs.LG",
+        "source": "arxiv",
+        "published": "2026-09-08T17:59:53Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 3,
+      "tldr": "Agentic reasoning module produces accurate, context-aware citations.",
+      "bullets": [
+        "Combines retrieval with LLM reasoning",
+        "Ensures citation fidelity via verification loop",
+        "Reduces manual citation effort"
+      ],
+      "who_should_read": "Academic writing tool developers",
+      "paper": {
+        "id": "2609.09156v1",
+        "title": "ReCite: Agentic Reasoning for Faithful Citation",
+        "summary": "Accurate citations are the foundation of academic writing, tracing intellectual origins and substantiating core claims. However, manually navigating the growing volume of scientific literature is increasingly difficult, prompting reliance on automatic citation recommendation. While modern retrieval-augmented architectures have largely mitigated the fabrication of non-existent papers, current systems relying on semantic similarity struggle with misattribution, often citing authentic papers that fail to logically support the author's claim. To address this challenge, we argue that accurate citation requires a shift from similarity-based search to active, claim-level reasoning. We propose ReCite, a decoupled agentic framework that orchestrates location perception, intent-aware query planning, and reflective verification. Trained on synthesized reasoning trajectories, our agent verifies claim-evidence consistency and triggers self-correction loops when retrieved candidates lack logical support. Experiments demonstrate that our lightweight framework outperforms state-of-the-art massive generative models in strict citation accuracy. By grounding literature matching in verifiable logic rather than semantic overlap, ReCite establishes a reliable foundation for automated academic writing.",
+        "authors": [
+          "Yuyang Huang",
+          "Bobo Li",
+          "Jiajia Song"
+        ],
+        "url": "https://arxiv.org/abs/2609.09156v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.09156v1",
+        "category": "cs.CL",
+        "source": "arxiv",
+        "published": "2026-09-08T17:59:50Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 4,
+      "tldr": "Visual calibration turns world models into zero-shot simulators.",
+      "bullets": [
+        "Learns camera-to-world mapping without labels",
+        "Enables policy rollouts directly in model",
+        "Bridges sim-to-real gap"
+      ],
+      "who_should_read": "RL practitioners",
+      "paper": {
+        "id": "2609.09155v1",
+        "title": "SyncWorld: Visual Calibration Enables World Models as Zero-Shot Simulators",
+        "summary": "World models are increasingly used as policy-in-the-loop imagination environments, where reliable rollouts require fine-grained controllability with respect to low-level robot actions. A key obstacle to scaling such models in robotics is that actions are not a universal language in pixel space: changes in visual environment, camera view, robot placement, or embodiment alter how the same numerical action manifests visually, leading to conflicting supervision under mixed training and brittle generalization at deployment. We introduce SyncWorld, an action-conditioned world model that serves as a zero-shot simulator across unseen environments without any additional training. SyncWorld leverages a visual calibration episode---paired frames and actions that showcase all the controllable degrees of freedom---to specify the setup-specific Action--Visual Mapping in context. Training with visual calibration contexts teaches the model to interpret actions through visual evidence and to leverage interaction history when explicit calibration is unavailable. Experiments show that SyncWorld can accurately simulate action outcomes in previously unseen settings, and that its capability of simulating rollouts enables test-time policy improvement without training.",
+        "authors": [
+          "Yuncong Yang",
+          "Zhengtao Han",
+          "Furkan Ozyurt"
+        ],
+        "url": "https://arxiv.org/abs/2609.09155v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.09155v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-09-08T17:59:47Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 5,
+      "tldr": "Self-evolving graph structures let LLM agents plan over long horizons.",
+      "bullets": [
+        "Graphs grow as tasks decompose",
+        "Agents can backtrack and reuse subplans",
+        "Improves tool-use efficiency"
+      ],
+      "who_should_read": "LLM agent developers",
+      "paper": {
+        "id": "2609.09153v1",
+        "title": "Procedural Graphs: Self-Evolving Execution Structures for LLM Agents",
+        "summary": "Large language models are increasingly deployed as agents that plan over long horizons and act through external tools. Most agents select actions through unconstrained generation over an accumulating history, leaving implicit the procedural knowledge of what to do, in what order, and under which conditions. As trajectories lengthen, agents can lose track of their objectives, invoke tools out of order, and repeat unproductive actions. We introduce the Procedural Graph: just as a knowledge graph organizes factual knowledge into (entity, relation, entity) triplets for what-is questions, a Procedural Graph organizes procedural knowledge into (procedure, relation, procedure) triplets for what-to-do questions. At each decision step, the framework localizes the agent's active node, and a guidance model translates the surrounding subgraph into step-level situational guidance that biases the solver's next action without dictating it. The graph is self-evolving: an LLM refiner contrasts failed trajectories with successful ones and edits the graph's topology and attributes, committing edits that preserve or improve held-out validation performance while retaining rejected ones to discourage repetition. Starting from a minimal skeleton, the loop builds graphs that match or surpass hand-designed ones. It can also repair a flawed expert prior. Across multiple datasets, task types, and LLMs, the Procedural Graph delivers consistent gains over memory-based baselines, and self-evolution further improves performance without manual engineering.",
+        "authors": [
+          "Yuxing Lu",
+          "Yicheng Chen",
+          "Shanchan Wu"
+        ],
+        "url": "https://arxiv.org/abs/2609.09153v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.09153v1",
+        "category": "cs.AI",
+        "source": "arxiv",
+        "published": "2026-09-08T17:59:41Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Run the authors' Colab notebook on a CLEVR sample and watch the Revise step correct errors",
-    "why": "It demonstrates the neuro‑symbolic loop’s error‑reduction in minutes",
-    "time_estimate": "2-3 hours",
-    "difficulty": "intermediate"
+    "action": "Implement the Silver Rate schedule in your GD optimizer.",
+    "why": "It yields near-optimal acceleration with zero extra hyperparameters.",
+    "time_estimate": "1-2 hours",
+    "difficulty": "beginner"
   },
   "github_repos": [
     {
@@ -48,8 +175,8 @@
       "title": "zorost/AI-Engineering-Lab",
       "summary": "A free, self-paced 24-week AI engineering course: Python, machine learning, LLMs, RAG, fine-tuning, agents and MCP, Azure and Vertex and Bedrock, and Databricks. 43 runnable notebooks, one continuous case study. MIT licensed, no signup. By Zorost Intelligence AI Lab.",
       "url": "https://github.com/zorost/AI-Engineering-Lab",
-      "stars": 309,
-      "forks": 259,
+      "stars": 311,
+      "forks": 260,
       "language": "Jupyter Notebook",
       "topics": [
         "ai-agents",
@@ -102,41 +229,12 @@
       "created_at": "2026-08-19T10:39:11Z"
     },
     {
-      "id": "1336278719",
-      "title": "jochi2018/Soup",
-      "summary": "Fine-tune and post-train LLMs with one command—no SSH, no config hell.",
-      "url": "https://github.com/jochi2018/Soup",
-      "stars": 167,
-      "forks": 40,
-      "language": "Python",
-      "topics": [
-        "api",
-        "extract",
-        "go",
-        "html",
-        "llmops",
-        "local-ai",
-        "low-vram",
-        "machine-learning",
-        "ollama",
-        "qlora",
-        "selector",
-        "sft",
-        "swift",
-        "swiftsoup",
-        "twilio",
-        "webscraping"
-      ],
-      "source": "github",
-      "created_at": "2026-08-16T19:15:11Z"
-    },
-    {
       "id": "1341532184",
       "title": "TrenTorch/TrenTorch",
       "summary": "Learn PyTorch by building your own. (inspired from Harvard's TinyTorch)",
       "url": "https://github.com/TrenTorch/TrenTorch",
-      "stars": 137,
-      "forks": 17,
+      "stars": 163,
+      "forks": 20,
       "language": "Python",
       "topics": [
         "cli",
@@ -185,31 +283,11 @@
       "created_at": "2026-08-24T14:48:43Z"
     },
     {
-      "id": "1331679891",
-      "title": "Yixuan-Wu39/bandminton",
-      "summary": "Open-source wearable badminton motion analysis with lightweight on-device machine learning.",
-      "url": "https://github.com/Yixuan-Wu39/bandminton",
-      "stars": 102,
-      "forks": 2,
-      "language": "JavaScript",
-      "topics": [
-        "accelerometer",
-        "badminton",
-        "fitness-tracking",
-        "machine-learning",
-        "motion-analysis",
-        "wearable",
-        "xiaomi"
-      ],
-      "source": "github",
-      "created_at": "2026-08-12T06:14:49Z"
-    },
-    {
       "id": "1339347406",
       "title": "mattn/tensai",
       "summary": "A tiny neural-network framework in pure Go with AVX2 SIMD kernels (GOEXPERIMENT=simd)",
       "url": "https://github.com/mattn/tensai",
-      "stars": 101,
+      "stars": 102,
       "forks": 4,
       "language": "Go",
       "topics": [
@@ -231,6 +309,59 @@
       ],
       "source": "github",
       "created_at": "2026-08-19T09:06:30Z"
+    },
+    {
+      "id": "1331679891",
+      "title": "Yixuan-Wu39/bandminton",
+      "summary": "Open-source wearable badminton motion analysis with lightweight on-device machine learning.",
+      "url": "https://github.com/Yixuan-Wu39/bandminton",
+      "stars": 102,
+      "forks": 2,
+      "language": "JavaScript",
+      "topics": [
+        "accelerometer",
+        "badminton",
+        "fitness-tracking",
+        "machine-learning",
+        "motion-analysis",
+        "wearable",
+        "xiaomi"
+      ],
+      "source": "github",
+      "created_at": "2026-08-12T06:14:49Z"
+    },
+    {
+      "id": "1334242984",
+      "title": "KaiWU5/Awesome-AI4AI",
+      "summary": "AI4AI Survey: can AI reliably improve AI? 223 papers on long-horizon agents, benchmarks, harness design, and recursive self-improvement · updated weekly",
+      "url": "https://github.com/KaiWU5/Awesome-AI4AI",
+      "stars": 95,
+      "forks": 1,
+      "language": "Python",
+      "topics": [
+        "agent-benchmarks",
+        "agent-harness",
+        "agi",
+        "ai-agents",
+        "ai-research",
+        "ai4ai",
+        "automated-ai-research",
+        "autonomous-agents",
+        "awesome-list",
+        "benchmark",
+        "deep-learning",
+        "llm",
+        "llm-agents",
+        "long-horizon-agents",
+        "machine-learning",
+        "paper-list",
+        "recursive-self-improvement",
+        "research-papers",
+        "self-improvement",
+        "survey"
+      ],
+      "source": "github",
+      "created_at": "2026-08-14T14:03:43Z"
     },
     {
       "id": "1345052184",
@@ -269,23 +400,11 @@
       "summary": "",
       "url": "https://openai.com/index/gpt-6-astra/",
       "hn_url": "https://news.ycombinator.com/item?id=49554643",
-      "points": 2266,
-      "comments": 2069,
+      "points": 2272,
+      "comments": 2075,
       "author": "kibae",
       "source": "hackernews",
       "created_at": "2026-09-03T18:41:05Z"
-    },
-    {
-      "id": "49526069",
-      "title": "How accurate have Ed Zitron's AI skeptic predictions been?",
-      "summary": "",
-      "url": "https://danluu.com/zitron/",
-      "hn_url": "https://news.ycombinator.com/item?id=49526069",
-      "points": 876,
-      "comments": 1055,
-      "author": "jatins",
-      "source": "hackernews",
-      "created_at": "2026-09-01T18:35:15Z"
     },
     {
       "id": "49585644",
@@ -293,23 +412,23 @@
       "summary": "",
       "url": "https://bcantrill.dtrace.org/2025/12/05/your-intellectual-fly-is-open/",
       "hn_url": "https://news.ycombinator.com/item?id=49585644",
-      "points": 722,
-      "comments": 431,
+      "points": 727,
+      "comments": 433,
       "author": "cyb0rg0",
       "source": "hackernews",
       "created_at": "2026-09-06T11:56:43Z"
     },
     {
-      "id": "49519939",
-      "title": "I trained a small transformer in 1.5hrs and it beats many LLMs",
+      "id": "49610538",
+      "title": "LibreOffice breaks download records after declaring it has no AI features",
       "summary": "",
-      "url": "https://mvakde.github.io/blog/44-on-arc-1/",
-      "hn_url": "https://news.ycombinator.com/item?id=49519939",
-      "points": 669,
-      "comments": 166,
-      "author": "porridgeraisin",
+      "url": "https://manualdousuario.net/en/libreoffice-download-record-no-ai/",
+      "hn_url": "https://news.ycombinator.com/item?id=49610538",
+      "points": 672,
+      "comments": 220,
+      "author": "rpgbr",
       "source": "hackernews",
-      "created_at": "2026-09-01T09:52:45Z"
+      "created_at": "2026-09-08T14:05:57Z"
     },
     {
       "id": "49536375",
@@ -322,6 +441,18 @@
       "author": "jakobgreenfeld",
       "source": "hackernews",
       "created_at": "2026-09-02T13:59:59Z"
+    },
+    {
+      "id": "49615537",
+      "title": "Muse – Meta’s personal AI agent",
+      "summary": "",
+      "url": "https://ai.meta.com/muse/",
+      "hn_url": "https://news.ycombinator.com/item?id=49615537",
+      "points": 471,
+      "comments": 503,
+      "author": "yks",
+      "source": "hackernews",
+      "created_at": "2026-09-08T19:25:00Z"
     },
     {
       "id": "49544762",
@@ -342,7 +473,7 @@
       "url": "https://eebench.org/blog/can-ai-design-circuit-boards-yet/",
       "hn_url": "https://news.ycombinator.com/item?id=49569366",
       "points": 421,
-      "comments": 239,
+      "comments": 240,
       "author": "iopapa",
       "source": "hackernews",
       "created_at": "2026-09-04T19:48:29Z"
@@ -353,8 +484,8 @@
       "summary": "",
       "url": "https://www.sylvainkalache.com/blog/ai-handles-incidents-engineers-lose-touch-with-their-systems",
       "hn_url": "https://news.ycombinator.com/item?id=49574167",
-      "points": 414,
-      "comments": 342,
+      "points": 415,
+      "comments": 344,
       "author": "sylvainkalache",
       "source": "hackernews",
       "created_at": "2026-09-05T07:52:50Z"
