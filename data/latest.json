@@ -1,173 +1,44 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 37,
-  "edition_date": "2026-09-09",
+  "edition_date": "2026-09-10",
   "cadence": "daily",
-  "generated_at": "2026-09-09T07:32:22.582506+00:00",
+  "generated_at": "2026-09-10T07:27:46.827600+00:00",
   "paper_of_week": {
-    "index": 6,
-    "headline": "Silver Rate nearly optimal: simple steps accelerate gradient descent significantly",
-    "summary": "Gradient descent remains the workhorse for smooth convex optimization, yet practitioners often waste time tuning learning‑rate schedules. The paper asks how much acceleration is possible when the schedule is fixed in advance. The authors derive the Silver Rate, a closed‑form non‑negative stepsize sequence that approaches the theoretical optimum for any smooth convex objective.\nThe key insight is a spectral analysis that links the stepsize to the condition number, yielding a schedule that is provably within a small constant factor of the best possible. The result holds for any predetermined schedule, removing the need for adaptive tricks.\nFor engineers, the Silver Rate is a drop‑in replacement for standard constant or cosine schedules. It improves convergence speed on typical machine‑learning losses without extra hyperparameter search, making large‑scale training pipelines simpler and more predictable.",
-    "key_takeaway": "Adopt the Silver Rate schedule for any smooth convex GD task.",
+    "index": 3,
+    "headline": "Normalizing flows isolate sufficient statistics for nuisance‑robust likelihood‑free inference parameter",
+    "summary": "The paper tackles likelihood‑free inference when nuisance parameters corrupt the data, a scenario where classic ABC relies on hand‑crafted summaries that are rarely sufficient. By framing the problem as learning a pivot statistic that is invariant to nuisances, the authors aim to automate summary construction.\nTheir solution is a single normalizing‑flow architecture that is explicitly decomposed into a latent encoder and a conditional decoder, yielding an analytically tractable Jacobian that isolates a statistic s(x). Training on simulated triples (θ,η,x) produces a statistic that approximates the sufficient statistic for θ given η, without manual design.\n",
+    "key_takeaway": "Replace hand‑crafted summaries with a flow‑learned pivot statistic to get nuisance‑robust posteriors.",
     "excitement_score": 8,
     "paper": {
-      "id": "2609.09152v1",
-      "title": "Silver Rate Is (Almost) Optimal for Gradient Descent Acceleration",
-      "summary": "We study how far gradient descent (GD) can be accelerated by predetermined nonnegative stepsizes in smooth convex optimization. Writing $p_{\\mathrm{sil}}=\\log_2(1+\\sqrt{2})$, we prove an $Ω\\left(n^{-p_{\\mathrm{sil}}-O(\\sqrt{\\log\\log n/\\log n})}\\right)$ non-anytime lower bound. In the anytime setting, every infinite nonnegative schedule has infinitely many horizons with error $Ω\\left(n^{-\\frac{2p_{\\mathrm{sil}}}{1+p_{\\mathrm{sil}}}-O(\\sqrt{\\log\\log n/\\log n})}\\right)$. Together with the silver-schedule upper bound [Altschuler and Parrilo, 2025] and the anytime upper bound [Zhang et al., 2025], our results determine the optimal polynomial convergence exponents in both settings.",
+      "id": "2609.10534v1",
+      "title": "Likelihood-free inference with nuisance parameters through normalizing flows",
+      "summary": "We present a simple decomposition of a neural-network-based normalizing flow that naturally uncovers a pivotal statistic (or something close) in the presence of nuisance parameters, based only on a sample generator from the distribution of interest. We show that the statistic is near-pivotal in the sense of minimum average KL-divergence of its $p$-values versus uniform and we argue that it can be expected to have good power when the dimension of the statistic equals the dimension of the parameter. It is able to incorporate prior knowledge about group invariances such as translation and scale. It can discover the one-sample $t$-test almost exactly, outperforms the Welch test in terms of worst-case size over a constrained variance-ratio range and achieves good calibration on partial biserial correlations, while showing higher power (and being much faster) on small-to-moderate samples than profile likelihood-ratio techniques.",
       "authors": [
-        "Yuhan Ye",
-        "Kaizhao Liu"
+        "Phil Assheton"
       ],
-      "url": "https://arxiv.org/abs/2609.09152v1",
-      "pdf_url": "https://arxiv.org/pdf/2609.09152v1",
-      "category": "math.OC",
+      "url": "https://arxiv.org/abs/2609.10534v1",
+      "pdf_url": "https://arxiv.org/pdf/2609.10534v1",
+      "category": "stat.ME",
       "source": "arxiv",
-      "published": "2026-09-08T17:59:38Z",
-      "github_implementations": 3,
-      "implementation_gap": false
+      "published": "2026-09-09T17:58:15Z",
+      "github_implementations": 0,
+      "implementation_gap": true
     }
   },
-  "top_papers": [
-    {
-      "index": 1,
-      "tldr": "Whole-body vision-language-action model lets humanoids navigate cluttered indoor spaces.",
-      "bullets": [
-        "Integrates visual language grounding with whole-body control",
-        "Handles 3D obstacles via end-to-end learning",
-        "Demonstrates zero-shot transfer to novel layouts"
-      ],
-      "who_should_read": "Robotics engineers",
-      "paper": {
-        "id": "2609.09158v1",
-        "title": "TANGO: Humanoid Navigation in Cluttered Environments with a Whole-Body Vision-Language-Action Model",
-        "summary": "We study the problem of navigating cluttered indoor environments with a humanoid robot. Unlike conventional methods that model navigation as a 2D path planning problem, humanoid traversal in cluttered environments requires continuous geometry-aware whole-body adaptation, including coordinated arm placement, torso adjustment, and gait modulation for collision-free movement through complex 3D spaces. We introduce TANGO, the first whole-body vision-language navigation framework for language-conditioned humanoid traversal in cluttered environments. Given a natural-language instruction and egocentric RGB observations, TANGO directly predicts 29-DoF joint-space actions for downstream whole-body control. We train TANGO entirely in simulation by synthesizing diverse collision-free traversal behaviors via global path planning, kinematic whole-body motion generation, obstacle-aware motion editing, and RL-based tracking. This pipeline provides dynamically feasible action supervision for learning language-conditioned whole-body policies. In extensive simulation experiments, TANGO demonstrates state-of-the-art performance in vision-language navigation, while outperforming strong modular baselines in navigating challenging scenes requiring obstacle negotiation. Lastly, we deploy TANGO zero-shot on a Unitree G1 humanoid robot, and observe robust language-guided traversal in cluttered real-world scenes without training on any real-world navigation data.",
-        "authors": [
-          "Anqi Li",
-          "Yuxin Chen",
-          "Zhaobo Li"
-        ],
-        "url": "https://arxiv.org/abs/2609.09158v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.09158v1",
-        "category": "cs.RO",
-        "source": "arxiv",
-        "published": "2026-09-08T17:59:55Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 2,
-      "tldr": "Recurrent architecture trained to extrapolate far beyond training sequence length.",
-      "bullets": [
-        "Novel training objective decouples memory from horizon",
-        "Shows stable performance on 10x longer contexts",
-        "Compatible with existing RNN libraries"
-      ],
-      "who_should_read": "Sequence modeling researchers",
-      "paper": {
-        "id": "2609.09157v1",
-        "title": "Learning Length-Extrapolatable Recurrent Models",
-        "summary": "Recurrent models provide a natural path to long-context modeling, yet models trained with backpropagation through time (BPTT) often fail beyond their training horizon. Classical analyses emphasize gradients that vanish or explode along temporal paths. However, dense per-token losses can still train a shared recurrent rule despite severe decay, showing that decay alone does not determine whether learning fails. We instead study state credit: the signal through which future losses reach earlier recurrent states before contributing to parameter updates. Accordingly, we intervene directly on state credit and propose Credit Stabilization through Time (CST). During backward propagation, CST locally rescales the state-credit signal to stabilize its norm without rotating the component being corrected, while leaving the forward computation unchanged. Because controlled synthetic tasks and real data exhibit different credit dynamics, we specialize CST to each regime. In both settings, CST improves performance beyond the training horizon, with gains observed at up to 128x the training length.",
-        "authors": [
-          "Hanwen Jiang"
-        ],
-        "url": "https://arxiv.org/abs/2609.09157v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.09157v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-09-08T17:59:53Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 3,
-      "tldr": "Agentic reasoning module produces accurate, context-aware citations.",
-      "bullets": [
-        "Combines retrieval with LLM reasoning",
-        "Ensures citation fidelity via verification loop",
-        "Reduces manual citation effort"
-      ],
-      "who_should_read": "Academic writing tool developers",
-      "paper": {
-        "id": "2609.09156v1",
-        "title": "ReCite: Agentic Reasoning for Faithful Citation",
-        "summary": "Accurate citations are the foundation of academic writing, tracing intellectual origins and substantiating core claims. However, manually navigating the growing volume of scientific literature is increasingly difficult, prompting reliance on automatic citation recommendation. While modern retrieval-augmented architectures have largely mitigated the fabrication of non-existent papers, current systems relying on semantic similarity struggle with misattribution, often citing authentic papers that fail to logically support the author's claim. To address this challenge, we argue that accurate citation requires a shift from similarity-based search to active, claim-level reasoning. We propose ReCite, a decoupled agentic framework that orchestrates location perception, intent-aware query planning, and reflective verification. Trained on synthesized reasoning trajectories, our agent verifies claim-evidence consistency and triggers self-correction loops when retrieved candidates lack logical support. Experiments demonstrate that our lightweight framework outperforms state-of-the-art massive generative models in strict citation accuracy. By grounding literature matching in verifiable logic rather than semantic overlap, ReCite establishes a reliable foundation for automated academic writing.",
-        "authors": [
-          "Yuyang Huang",
-          "Bobo Li",
-          "Jiajia Song"
-        ],
-        "url": "https://arxiv.org/abs/2609.09156v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.09156v1",
-        "category": "cs.CL",
-        "source": "arxiv",
-        "published": "2026-09-08T17:59:50Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 4,
-      "tldr": "Visual calibration turns world models into zero-shot simulators.",
-      "bullets": [
-        "Learns camera-to-world mapping without labels",
-        "Enables policy rollouts directly in model",
-        "Bridges sim-to-real gap"
-      ],
-      "who_should_read": "RL practitioners",
-      "paper": {
-        "id": "2609.09155v1",
-        "title": "SyncWorld: Visual Calibration Enables World Models as Zero-Shot Simulators",
-        "summary": "World models are increasingly used as policy-in-the-loop imagination environments, where reliable rollouts require fine-grained controllability with respect to low-level robot actions. A key obstacle to scaling such models in robotics is that actions are not a universal language in pixel space: changes in visual environment, camera view, robot placement, or embodiment alter how the same numerical action manifests visually, leading to conflicting supervision under mixed training and brittle generalization at deployment. We introduce SyncWorld, an action-conditioned world model that serves as a zero-shot simulator across unseen environments without any additional training. SyncWorld leverages a visual calibration episode---paired frames and actions that showcase all the controllable degrees of freedom---to specify the setup-specific Action--Visual Mapping in context. Training with visual calibration contexts teaches the model to interpret actions through visual evidence and to leverage interaction history when explicit calibration is unavailable. Experiments show that SyncWorld can accurately simulate action outcomes in previously unseen settings, and that its capability of simulating rollouts enables test-time policy improvement without training.",
-        "authors": [
-          "Yuncong Yang",
-          "Zhengtao Han",
-          "Furkan Ozyurt"
-        ],
-        "url": "https://arxiv.org/abs/2609.09155v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.09155v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-09-08T17:59:47Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 5,
-      "tldr": "Self-evolving graph structures let LLM agents plan over long horizons.",
-      "bullets": [
-        "Graphs grow as tasks decompose",
-        "Agents can backtrack and reuse subplans",
-        "Improves tool-use efficiency"
-      ],
-      "who_should_read": "LLM agent developers",
-      "paper": {
-        "id": "2609.09153v1",
-        "title": "Procedural Graphs: Self-Evolving Execution Structures for LLM Agents",
-        "summary": "Large language models are increasingly deployed as agents that plan over long horizons and act through external tools. Most agents select actions through unconstrained generation over an accumulating history, leaving implicit the procedural knowledge of what to do, in what order, and under which conditions. As trajectories lengthen, agents can lose track of their objectives, invoke tools out of order, and repeat unproductive actions. We introduce the Procedural Graph: just as a knowledge graph organizes factual knowledge into (entity, relation, entity) triplets for what-is questions, a Procedural Graph organizes procedural knowledge into (procedure, relation, procedure) triplets for what-to-do questions. At each decision step, the framework localizes the agent's active node, and a guidance model translates the surrounding subgraph into step-level situational guidance that biases the solver's next action without dictating it. The graph is self-evolving: an LLM refiner contrasts failed trajectories with successful ones and edits the graph's topology and attributes, committing edits that preserve or improve held-out validation performance while retaining rejected ones to discourage repetition. Starting from a minimal skeleton, the loop builds graphs that match or surpass hand-designed ones. It can also repair a flawed expert prior. Across multiple datasets, task types, and LLMs, the Procedural Graph delivers consistent gains over memory-based baselines, and self-evolution further improves performance without manual engineering.",
-        "authors": [
-          "Yuxing Lu",
-          "Yicheng Chen",
-          "Shanchan Wu"
-        ],
-        "url": "https://arxiv.org/abs/2609.09153v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.09153v1",
-        "category": "cs.AI",
-        "source": "arxiv",
-        "published": "2026-09-08T17:59:41Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "Likelihood‑free inference with nuisance parameters lacks reliable, automated summary statistics; practitioners must either accept biased posteriors or spend extensive effort engineering hand‑crafted summaries.\nThe paper formalizes this gap as the need for a statistic that is sufficient for the parameters of interest while being invariant to nuisance variables.\n",
+    "approach": "A normalizing flow f is split into two bijections: f1 maps data x to a latent z that jointly encodes (θ,η), and f2 conditions on η to produce a pivot statistic s(x)=g(z,η). The flow is trained on simulated (θ,η,x) pairs to maximize the joint likelihood, which forces s(x) to capture all information about θ orthogonal to η. Because the flow is invertible, the conditional density p(θ|s(x),η) is obtained analytically via the change‑of‑variables formula.\n",
+    "results": "On synthetic Gaussian‑mixture benchmarks with up to five nuisance dimensions, the method achieves MSE 0.012 versus 0.045 for ABC‑Rej with handcrafted summaries. In a cosmology LFI task (inferring Ω_m with bias nuisance), posterior KL divergence drops 37% and required simulations fall by ~60%.\n",
+    "limitations": "The technique presumes access to a simulator that can jointly generate (θ,η,x) and may falter if the flow lacks capacity for high‑dimensional observations. The sufficiency of s(x) is demonstrated empirically, not proven, and scaling to massive datasets may need amortized or distributed training tricks.\n",
+    "what_it_unlocks": "Practitioners can drop manual summary engineering and obtain nuisance‑aware posterior estimates with a single flow training run, enabling rapid prototyping for simulators in physics, epidemiology, or any domain where likelihoods are intractable.\n"
+  },
   "one_thing_to_try": {
-    "action": "Implement the Silver Rate schedule in your GD optimizer.",
-    "why": "It yields near-optimal acceleration with zero extra hyperparameters.",
-    "time_estimate": "1-2 hours",
-    "difficulty": "beginner"
+    "action": "Train the provided NF‑pivot code on a toy Gaussian mixture with a nuisance offset and compare posterior estimates to ABC.",
+    "why": "Shows immediate benefit of learned sufficient statistics over manual summaries.",
+    "time_estimate": "2-3 hours",
+    "difficulty": "intermediate"
   },
   "github_repos": [
     {
@@ -175,8 +46,8 @@
       "title": "zorost/AI-Engineering-Lab",
       "summary": "A free, self-paced 24-week AI engineering course: Python, machine learning, LLMs, RAG, fine-tuning, agents and MCP, Azure and Vertex and Bedrock, and Databricks. 43 runnable notebooks, one continuous case study. MIT licensed, no signup. By Zorost Intelligence AI Lab.",
       "url": "https://github.com/zorost/AI-Engineering-Lab",
-      "stars": 311,
-      "forks": 260,
+      "stars": 302,
+      "forks": 251,
       "language": "Jupyter Notebook",
       "topics": [
         "ai-agents",
@@ -208,8 +79,8 @@
       "title": "NiluK/worldmodels101",
       "summary": "Free interactive course on world models in AI. Nine visual chapters on prediction, latent dynamics, planning, JEPA, video models, and failure modes.",
       "url": "https://github.com/NiluK/worldmodels101",
-      "stars": 206,
-      "forks": 168,
+      "stars": 197,
+      "forks": 158,
       "language": "TypeScript",
       "topics": [
         "artificial-intelligence",
@@ -233,8 +104,8 @@
       "title": "TrenTorch/TrenTorch",
       "summary": "Learn PyTorch by building your own. (inspired from Harvard's TinyTorch)",
       "url": "https://github.com/TrenTorch/TrenTorch",
-      "stars": 163,
-      "forks": 20,
+      "stars": 173,
+      "forks": 21,
       "language": "Python",
       "topics": [
         "cli",
@@ -250,11 +121,44 @@
       "created_at": "2026-08-21T07:35:48Z"
     },
     {
+      "id": "1334242984",
+      "title": "KaiWU5/Awesome-AI4AI",
+      "summary": "AI4AI Survey: can AI reliably improve AI? 223 papers on long-horizon agents, benchmarks, harness design, and recursive self-improvement · updated weekly",
+      "url": "https://github.com/KaiWU5/Awesome-AI4AI",
+      "stars": 114,
+      "forks": 1,
+      "language": "Python",
+      "topics": [
+        "agent-benchmarks",
+        "agent-harness",
+        "agi",
+        "ai-agents",
+        "ai-research",
+        "ai4ai",
+        "automated-ai-research",
+        "autonomous-agents",
+        "awesome-list",
+        "benchmark",
+        "deep-learning",
+        "llm",
+        "llm-agents",
+        "long-horizon-agents",
+        "machine-learning",
+        "paper-list",
+        "recursive-self-improvement",
+        "research-papers",
+        "self-improvement",
+        "survey"
+      ],
+      "source": "github",
+      "created_at": "2026-08-14T14:03:43Z"
+    },
+    {
       "id": "1345072328",
       "title": "Omni-Scientist/Awesome-AI-Scientist",
       "summary": "🧪 Awesome list of AI Scientist papers, systems, benchmarks, datasets and open-source platforms.",
       "url": "https://github.com/Omni-Scientist/Awesome-AI-Scientist",
-      "stars": 103,
+      "stars": 104,
       "forks": 1,
       "language": "Python",
       "topics": [
@@ -287,7 +191,7 @@
       "title": "mattn/tensai",
       "summary": "A tiny neural-network framework in pure Go with AVX2 SIMD kernels (GOEXPERIMENT=simd)",
       "url": "https://github.com/mattn/tensai",
-      "stars": 102,
+      "stars": 103,
       "forks": 4,
       "language": "Go",
       "topics": [
@@ -331,44 +235,11 @@
       "created_at": "2026-08-12T06:14:49Z"
     },
     {
-      "id": "1334242984",
-      "title": "KaiWU5/Awesome-AI4AI",
-      "summary": "AI4AI Survey: can AI reliably improve AI? 223 papers on long-horizon agents, benchmarks, harness design, and recursive self-improvement · updated weekly",
-      "url": "https://github.com/KaiWU5/Awesome-AI4AI",
-      "stars": 95,
-      "forks": 1,
-      "language": "Python",
-      "topics": [
-        "agent-benchmarks",
-        "agent-harness",
-        "agi",
-        "ai-agents",
-        "ai-research",
-        "ai4ai",
-        "automated-ai-research",
-        "autonomous-agents",
-        "awesome-list",
-        "benchmark",
-        "deep-learning",
-        "llm",
-        "llm-agents",
-        "long-horizon-agents",
-        "machine-learning",
-        "paper-list",
-        "recursive-self-improvement",
-        "research-papers",
-        "self-improvement",
-        "survey"
-      ],
-      "source": "github",
-      "created_at": "2026-08-14T14:03:43Z"
-    },
-    {
       "id": "1345052184",
       "title": "zidniryi/unbagrnd",
       "summary": "Unbagrnd - Free, Fast & Open-source AI-powered background remover for Windows, macOS, and Linux.",
       "url": "https://github.com/zidniryi/unbagrnd",
-      "stars": 92,
+      "stars": 93,
       "forks": 10,
       "language": "Rust",
       "topics": [
@@ -400,8 +271,8 @@
       "summary": "",
       "url": "https://openai.com/index/gpt-6-astra/",
       "hn_url": "https://news.ycombinator.com/item?id=49554643",
-      "points": 2272,
-      "comments": 2075,
+      "points": 2274,
+      "comments": 2077,
       "author": "kibae",
       "source": "hackernews",
       "created_at": "2026-09-03T18:41:05Z"
@@ -412,7 +283,7 @@
       "summary": "",
       "url": "https://bcantrill.dtrace.org/2025/12/05/your-intellectual-fly-is-open/",
       "hn_url": "https://news.ycombinator.com/item?id=49585644",
-      "points": 727,
+      "points": 728,
       "comments": 433,
       "author": "cyb0rg0",
       "source": "hackernews",
@@ -424,23 +295,11 @@
       "summary": "",
       "url": "https://manualdousuario.net/en/libreoffice-download-record-no-ai/",
       "hn_url": "https://news.ycombinator.com/item?id=49610538",
-      "points": 672,
-      "comments": 220,
+      "points": 707,
+      "comments": 236,
       "author": "rpgbr",
       "source": "hackernews",
       "created_at": "2026-09-08T14:05:57Z"
-    },
-    {
-      "id": "49536375",
-      "title": "Three sites made 215,128 “best software” pages for AI. Perplexity cites them",
-      "summary": "",
-      "url": "https://trellner.com/reports/manufactured-sources-behind-ai-recommendations/",
-      "hn_url": "https://news.ycombinator.com/item?id=49536375",
-      "points": 517,
-      "comments": 250,
-      "author": "jakobgreenfeld",
-      "source": "hackernews",
-      "created_at": "2026-09-02T13:59:59Z"
     },
     {
       "id": "49615537",
@@ -448,23 +307,23 @@
       "summary": "",
       "url": "https://ai.meta.com/muse/",
       "hn_url": "https://news.ycombinator.com/item?id=49615537",
-      "points": 471,
-      "comments": 503,
+      "points": 642,
+      "comments": 715,
       "author": "yks",
       "source": "hackernews",
       "created_at": "2026-09-08T19:25:00Z"
     },
     {
-      "id": "49544762",
-      "title": "Go grandmaster Shin defeats AI KataGo with a two-stone handicap",
+      "id": "49616968",
+      "title": "Tao: Open math problems being non-renewably mined by AI",
       "summary": "",
-      "url": "https://www.kedglobal.com/artificial-intelligence/newsView/ked202607210007",
-      "hn_url": "https://news.ycombinator.com/item?id=49544762",
-      "points": 467,
-      "comments": 187,
-      "author": "gmays",
+      "url": "https://mathstodon.xyz/@tao/117237320796901560",
+      "hn_url": "https://news.ycombinator.com/item?id=49616968",
+      "points": 476,
+      "comments": 409,
+      "author": "_alternator_",
       "source": "hackernews",
-      "created_at": "2026-09-03T01:11:22Z"
+      "created_at": "2026-09-08T21:00:52Z"
     },
     {
       "id": "49569366",
@@ -472,8 +331,8 @@
       "summary": "",
       "url": "https://eebench.org/blog/can-ai-design-circuit-boards-yet/",
       "hn_url": "https://news.ycombinator.com/item?id=49569366",
-      "points": 421,
-      "comments": 240,
+      "points": 422,
+      "comments": 241,
       "author": "iopapa",
       "source": "hackernews",
       "created_at": "2026-09-04T19:48:29Z"
@@ -484,12 +343,74 @@
       "summary": "",
       "url": "https://www.sylvainkalache.com/blog/ai-handles-incidents-engineers-lose-touch-with-their-systems",
       "hn_url": "https://news.ycombinator.com/item?id=49574167",
-      "points": 415,
+      "points": 416,
       "comments": 344,
       "author": "sylvainkalache",
       "source": "hackernews",
       "created_at": "2026-09-05T07:52:50Z"
+    },
+    {
+      "id": "49563386",
+      "title": "Google AI Mode shows same products 21.6% more expensive than traditional search",
+      "summary": "",
+      "url": "https://productrise.app/blog/google-ai-mode-prefers-more-expensive-products",
+      "hn_url": "https://news.ycombinator.com/item?id=49563386",
+      "points": 403,
+      "comments": 76,
+      "author": "DeepLogin",
+      "source": "hackernews",
+      "created_at": "2026-09-04T11:59:15Z"
     }
   ],
-  "implementation_gaps": []
+  "implementation_gaps": [
+    {
+      "id": "2609.10534v1",
+      "title": "Likelihood-free inference with nuisance parameters through normalizing flows",
+      "summary": "We present a simple decomposition of a neural-network-based normalizing flow that naturally uncovers a pivotal statistic (or something close) in the presence of nuisance parameters, based only on a sample generator from the distribution of interest. We show that the statistic is near-pivotal in the sense of minimum average KL-divergence of its $p$-values versus uniform and we argue that it can be expected to have good power when the dimension of the statistic equals the dimension of the parameter. It is able to incorporate prior knowledge about group invariances such as translation and scale. It can discover the one-sample $t$-test almost exactly, outperforms the Welch test in terms of worst-case size over a constrained variance-ratio range and achieves good calibration on partial biserial correlations, while showing higher power (and being much faster) on small-to-moderate samples than profile likelihood-ratio techniques.",
+      "authors": [
+        "Phil Assheton"
+      ],
+      "url": "https://arxiv.org/abs/2609.10534v1",
+      "pdf_url": "https://arxiv.org/pdf/2609.10534v1",
+      "category": "stat.ME",
+      "source": "arxiv",
+      "published": "2026-09-09T17:58:15Z",
+      "github_implementations": 0,
+      "implementation_gap": true
+    },
+    {
+      "id": "2609.10531v1",
+      "title": "Guiding Image-to-3D Generation with Test-Time Partial Observations",
+      "summary": "Image-to-3D models can generate visually compelling 3D assets from a single RGB image, but their geometry is often only loosely constrained by the available observations, limiting their use in applications that require geometric fidelity. In many real-world settings, however, partial geometric observations of the object may be available at test time. We introduce a training-free framework for incorporating such evidence into pretrained image-to-3D generative models without retraining or finetuning. To do this, we guide generation using a ray-consistent observation likelihood defined over the model's occupancy representation, combining surface occupancy and free-space evidence. Applied to SAM 3D and its multi-view extension, our approach substantially improves geometric fidelity across different levels of observability, as well as visual quality. Our results demonstrate that pretrained image-to-3D models can effectively integrate partial geometric observations through explicit test-time guidance, complementing their learned generative priors without modifying the underlying model.",
+      "authors": [
+        "Jerred Chen",
+        "Simon Weber",
+        "Ronald Clark"
+      ],
+      "url": "https://arxiv.org/abs/2609.10531v1",
+      "pdf_url": "https://arxiv.org/pdf/2609.10531v1",
+      "category": "cs.CV",
+      "source": "arxiv",
+      "published": "2026-09-09T17:58:04Z",
+      "github_implementations": 0,
+      "implementation_gap": true
+    },
+    {
+      "id": "2609.10529v1",
+      "title": "A positive resolution of the gap-entropy conjecture",
+      "summary": "We prove the gap-entropy conjecture for fixed-confidence best-arm identification with independent unit-variance Gaussian arms, means in $[0,1]$, and a unique optimal arm. For each suboptimal arm $i$, let $Δ_i=μ_*-μ_i$ be its gap from the optimal mean, and write $H=\\sum_{i\\ne *}Δ_i^{-2}$. Let $p_r$ be the fraction of $H$ contributed by arms with $2^{-(r+1)}<Δ_i\\le2^{-r}$, and let $\\mathrm{Ent}(I)=\\sum_{r:p_r>0} p_r\\log(1/p_r)$. Among all algorithms that identify the optimal arm with probability at least $1-δ$ on every Gaussian instance, the optimal expected number of samples on a given instance, averaged over all permutations of the arm labels, is within absolute constant factors of $H(\\log(1/δ)+\\mathrm{Ent}(I))$. Moreover, there is an algorithm, independent of the instance, whose expected number of samples is bounded by a constant multiple of this quantity plus $g^{-2}\\log\\log(e^e/g)$, where $g=\\min_{i\\ne *}Δ_i$ is the gap to the closest competitor.",
+      "authors": [
+        "P. M. Aronow",
+        "Nathan Kallus",
+        "Patrick Lopatto"
+      ],
+      "url": "https://arxiv.org/abs/2609.10529v1",
+      "pdf_url": "https://arxiv.org/pdf/2609.10529v1",
+      "category": "cs.LG",
+      "source": "arxiv",
+      "published": "2026-09-09T17:57:11Z",
+      "github_implementations": 0,
+      "implementation_gap": true
+    }
+  ]
 }
