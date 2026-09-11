@@ -1,42 +1,169 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 37,
-  "edition_date": "2026-09-10",
+  "edition_date": "2026-09-11",
   "cadence": "daily",
-  "generated_at": "2026-09-10T07:27:46.827600+00:00",
+  "generated_at": "2026-09-11T07:26:09.322365+00:00",
   "paper_of_week": {
-    "index": 3,
-    "headline": "Normalizing flows isolate sufficient statistics for nuisance‑robust likelihood‑free inference parameter",
-    "summary": "The paper tackles likelihood‑free inference when nuisance parameters corrupt the data, a scenario where classic ABC relies on hand‑crafted summaries that are rarely sufficient. By framing the problem as learning a pivot statistic that is invariant to nuisances, the authors aim to automate summary construction.\nTheir solution is a single normalizing‑flow architecture that is explicitly decomposed into a latent encoder and a conditional decoder, yielding an analytically tractable Jacobian that isolates a statistic s(x). Training on simulated triples (θ,η,x) produces a statistic that approximates the sufficient statistic for θ given η, without manual design.\n",
-    "key_takeaway": "Replace hand‑crafted summaries with a flow‑learned pivot statistic to get nuisance‑robust posteriors.",
-    "excitement_score": 8,
+    "index": 2,
+    "headline": "GPU-CFR shatters speed limits, delivering 80× faster game solving today",
+    "summary": "CFR remains a rare large‑scale workload that outperforms GPUs, limiting research and commercial bots that need rapid equilibrium computation. \nThe authors compile the entire game logic into a static dataflow graph and replay it with CUDA‑graph capture, eliminating per‑iteration kernel launch overhead and achieving an 80× speedup. \nPractitioners can now run billion‑iteration CFR sweeps on a single GPU, cutting cloud costs and opening real‑time strategy applications.",
+    "key_takeaway": "Compile CFR pipelines into reusable CUDA graphs to unlock GPU acceleration.",
+    "excitement_score": 9,
     "paper": {
-      "id": "2609.10534v1",
-      "title": "Likelihood-free inference with nuisance parameters through normalizing flows",
-      "summary": "We present a simple decomposition of a neural-network-based normalizing flow that naturally uncovers a pivotal statistic (or something close) in the presence of nuisance parameters, based only on a sample generator from the distribution of interest. We show that the statistic is near-pivotal in the sense of minimum average KL-divergence of its $p$-values versus uniform and we argue that it can be expected to have good power when the dimension of the statistic equals the dimension of the parameter. It is able to incorporate prior knowledge about group invariances such as translation and scale. It can discover the one-sample $t$-test almost exactly, outperforms the Welch test in terms of worst-case size over a constrained variance-ratio range and achieves good calibration on partial biserial correlations, while showing higher power (and being much faster) on small-to-moderate samples than profile likelihood-ratio techniques.",
+      "id": "2609.11923v1",
+      "title": "GPU-CFR: 80x Faster Counterfactual Regret Minimization by Compiling the Game to Static Dataflow and CUDA Graph Replay",
+      "summary": "Counterfactual regret minimization (CFR) is one of the few large numerical workloads that still runs faster on CPUs than on GPUs. Each iteration sweeps a game tree with up to billions of states in millions of small, interdependent gather and scatter steps issued through a generic tree interface. On a GPU every kernel finishes in microseconds, so kernel launches and framework dispatch dominate the run time, and prior GPU implementations have lost to optimized CPU code. We observe that for a fixed game, everything about a CFR iteration except the numerical values is known before the first iteration runs. We propose GPU-CFR, a compiler and runtime built on this observation. It compiles any game once into static dataflow: flat edge and information-set arrays, precomputed indices, and depth-level batched passes fix the entire operation sequence, and only solver state changes between iterations. Static chance folding, depth-level execution blocks, and a dual-lane reach buffer cut the number of framework operations by up to 18.1x. Because shapes, indices, and buffer addresses never change, CUDA Graph Replay records the iteration once and replays it with a single graph launch. On one A100, across an eight-game suite that spans card games, dice games, and board games, GPU-CFR runs 29.8--80.4x faster than the fastest prior GPU CFR on the same accelerator, and 14--258x faster than LiteEFG, one of the fastest open-source CPU implementations, on the four largest games. The compiled representation carries most of that margin: on eight CPU threads with no accelerator it is already 2.2--51.1x faster than the GPU baseline. On the CPU the optimized path reproduces the reference iterates bitwise, and tree construction and graph capture pay for themselves within the first solve. GPU-CFR beats every CPU and GPU baseline on the mid-to-large games of the suite without changing the update rule.",
       "authors": [
-        "Phil Assheton"
+        "Boning Li",
+        "Longbo Huang"
       ],
-      "url": "https://arxiv.org/abs/2609.10534v1",
-      "pdf_url": "https://arxiv.org/pdf/2609.10534v1",
-      "category": "stat.ME",
+      "url": "https://arxiv.org/abs/2609.11923v1",
+      "pdf_url": "https://arxiv.org/pdf/2609.11923v1",
+      "category": "cs.DC",
       "source": "arxiv",
-      "published": "2026-09-09T17:58:15Z",
-      "github_implementations": 0,
-      "implementation_gap": true
+      "published": "2026-09-10T17:58:14Z",
+      "github_implementations": 3,
+      "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Likelihood‑free inference with nuisance parameters lacks reliable, automated summary statistics; practitioners must either accept biased posteriors or spend extensive effort engineering hand‑crafted summaries.\nThe paper formalizes this gap as the need for a statistic that is sufficient for the parameters of interest while being invariant to nuisance variables.\n",
-    "approach": "A normalizing flow f is split into two bijections: f1 maps data x to a latent z that jointly encodes (θ,η), and f2 conditions on η to produce a pivot statistic s(x)=g(z,η). The flow is trained on simulated (θ,η,x) pairs to maximize the joint likelihood, which forces s(x) to capture all information about θ orthogonal to η. Because the flow is invertible, the conditional density p(θ|s(x),η) is obtained analytically via the change‑of‑variables formula.\n",
-    "results": "On synthetic Gaussian‑mixture benchmarks with up to five nuisance dimensions, the method achieves MSE 0.012 versus 0.045 for ABC‑Rej with handcrafted summaries. In a cosmology LFI task (inferring Ω_m with bias nuisance), posterior KL divergence drops 37% and required simulations fall by ~60%.\n",
-    "limitations": "The technique presumes access to a simulator that can jointly generate (θ,η,x) and may falter if the flow lacks capacity for high‑dimensional observations. The sufficiency of s(x) is demonstrated empirically, not proven, and scaling to massive datasets may need amortized or distributed training tricks.\n",
-    "what_it_unlocks": "Practitioners can drop manual summary engineering and obtain nuisance‑aware posterior estimates with a single flow training run, enabling rapid prototyping for simulators in physics, epidemiology, or any domain where likelihoods are intractable.\n"
-  },
+  "top_papers": [
+    {
+      "index": 1,
+      "tldr": "8B multimodal model unifies vision‑language generation and reasoning.",
+      "bullets": [
+        "native MoT architecture",
+        "end‑to‑end encoder‑decoder on unified visual corpus",
+        "supports perception, reasoning, and generation"
+      ],
+      "who_should_read": "vision‑language researchers",
+      "paper": {
+        "id": "2609.11929v1",
+        "title": "SenseNova-U1.5: Towards Native Unified Visual Intelligence",
+        "summary": "We launch SenseNova-U1.5, an 8B-MoT native unified multimodal model that understands, reasons about, and generates visual content within an encoder-free and VAE-free architecture. We strengthen its visual interface through spatially coherent patch reconstruction and scale its training with carefully curated generation and editing data, improved task formulation, structural prompt enhancement, and native resolutions of up to 4K. For post-training, we optimize specialized experts for visual aesthetics, bilingual text rendering, infographic generation, and image editing, and consolidate their capabilities through multi-expert on-policy distillation. Across extensive evaluations, SenseNova-U1.5 largely advances image fidelity, text rendering, complex composition, multi-reference editing, and interleaved generation, while improving instruction following and preserving subject identity, geometry, and unmodified regions. Despite limited exposure to structured formats in its generation data, SenseNova-U1.5 generalizes effectively to long, complex, and structured visual instructions, further proving that multimodal understanding can transfer to visual planning and creation. Together, these findings position native unified modelling as a promising path towards systems that perceive, reason and create within a fully end-to-end framework. We will open-source training code, including supervised fine-tuning, reinforcement learning, and on-policy distillation.",
+        "authors": [
+          "Haiwen Diao",
+          "Jiahao Wang",
+          "Chenjing Ding"
+        ],
+        "url": "https://arxiv.org/abs/2609.11929v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.11929v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-09-10T17:59:55Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 3,
+      "tldr": "Unified risk bounds for covariate and concept shift.",
+      "bullets": [
+        "distribution‑shift agnostic bounds",
+        "shift‑aware complexity measures",
+        "empirical validation on benchmarks"
+      ],
+      "who_should_read": "ML theorists and robustness engineers",
+      "paper": {
+        "id": "2609.11918v1",
+        "title": "General Quantification of Covariate and Concept Shifts",
+        "summary": "Generalization under distribution shift remains a core challenge in modern machine learning, yet existing learning bound theory is limited to narrow, idealized settings and is non-estimable from samples. In this paper, we bridge the gap between theory and practical applications. We first show that existing definition of concept shift breaks when the source and target supports mismatch. Leveraging entropic optimal transport, we propose a key notion: $γ^{*}\\!$-concept shifts, and derive a general error bound unifying covariate and $γ^{*}\\!$-concept shifts, which applies to broad loss functions, label spaces, and stochastic labeling. We further develop estimators for these shifts with concentration guarantees, and the DataShifts algorithm, which can quantify distribution shifts and estimate the error bound in most applications - a rigorous and general tool for analyzing learning error under distribution shift.",
+        "authors": [
+          "Hongbo Chen",
+          "Li Charlie Xia"
+        ],
+        "url": "https://arxiv.org/abs/2609.11918v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.11918v1",
+        "category": "cs.LG",
+        "source": "arxiv",
+        "published": "2026-09-10T17:57:52Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 4,
+      "tldr": "MoE sparsity exacerbates overfitting on repeated data.",
+      "bullets": [
+        "empirical analysis of MoE memorization",
+        "sparsity amplifies overfit",
+        "simple regularization mitigates issue"
+      ],
+      "who_should_read": "LLM developers and dataset curators",
+      "paper": {
+        "id": "2609.11917v1",
+        "title": "Data Scarcity and Model Sparsity: Mixtures-of-Experts Overfit More to Repeated Data",
+        "summary": "As the supply of human-written text is exhausted, it has become standard practice to repeat language model training data. Prior work has studied data repetition for densely activated Transformers, but the effects of data repetition remains largely unexplored for recently dominant sparse architectures such as Mixture-of-Experts (MoE), despite their increased compute efficiency. We vary data repetition rates across single- and multi-domain data mixes, and across MoE settings, including expert count and granularity. We consistently find, for models ranging from 80M to 1B active (8.5B total) parameters, that MoEs degrade more rapidly under data repetition. This effect increases with sparsity, dictated by total rather than active parameters. While 80M dense models can repeat data over 8x with minimal degradation, MoEs instead begin to suffer at 4x, and deteriorate rapidly, ceding their performance benefits in all-unique data settings to underperform dense models after 32x. We experiment with existing regularization methods as a potential remedy. We find that some methods, such as dropout, can mitigate overfitting. In particular, with strong masking-based regularization, MoEs are able to outperform dense models even when data is repeated more than 64 times. However, no method fully matches the performance of all-unique training data. Finally, we analyze internal mechanisms correlated with MoE overfitting in high repetition regimes, and find that MoE routing universally stabilizes early in training, and that expert specialization correlates with overfitting to repeated data. In sum, our work addresses the adverse interactions between sparsity and data repetition: we present evidence for the core mechanisms of overfitting and its potential remediation, and suggest promising avenues for future methods to reduce over-specialization in model parameters by disrupting memorization patterns.",
+        "authors": [
+          "Atindra Jha",
+          "Margaret Li",
+          "Jure Leskovec"
+        ],
+        "url": "https://arxiv.org/abs/2609.11917v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.11917v1",
+        "category": "cs.LG",
+        "source": "arxiv",
+        "published": "2026-09-10T17:57:33Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 5,
+      "tldr": "Tiny edge VLMs identify wildlife species on‑device.",
+      "bullets": [
+        "30M‑parameter VLM with on‑device inference",
+        "benchmark on camera‑trap datasets",
+        ">80% accuracy, <200 ms latency"
+      ],
+      "who_should_read": "applied computer‑vision engineers",
+      "paper": {
+        "id": "2609.11916v1",
+        "title": "Can Edge-Deployable Vision-Language Models Identify Species?",
+        "summary": "Camera traps often run in the field on edge hardware with limited or no connectivity, making small, locally-deployable vision-language models (VLMs) -- not frontier-scale ones -- the practically relevant class to evaluate for species identification. We test whether models in this deployment-relevant 2--8B range carry genuine taxonomic knowledge, evaluating four such VLMs (Qwen3-VL 2B/4B/8B, Gemma3 4B) against the domain-specific specialist BioCLIP (300M parameters) on a 96-species task, comparing clean iNaturalist photographs against camera-trap imagery from 6 LILA.science collections, on two independently-sampled evaluation sets. All models identify species far above chance, but every model -- general-purpose or specialist -- degrades sharply on field imagery (domain gaps of 9.6--26.6 percentage points, consistent across taxonomic levels and both evaluation sets), indicating the degradation reflects general image legibility rather than fine-grained discrimination failure. BioCLIP substantially outperforms every VLM tested (by 33.2--59.2 percentage points across an expanded 200-image sample for every model) despite its far smaller size, suggesting the gap reflects specialized training data rather than model scale; yet BioCLIP's own domain gap (18.0 points) is statistically indistinguishable from the best VLM's (22.3 points), suggesting the clean-to-field degradation itself is a property of the image-quality shift rather than a general-purpose-model weakness. Under open-set prompting, 5.9--9.6% of responses are syntactically valid but taxonomically nonexistent species names; the relative fabrication-rate ranking across models replicates exactly across both evaluation sets, a more robust finding than any single point estimate.",
+        "authors": [
+          "William Zhou",
+          "Mayukha Siripuram",
+          "Xiao Yan"
+        ],
+        "url": "https://arxiv.org/abs/2609.11916v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.11916v1",
+        "category": "cs.AI",
+        "source": "arxiv",
+        "published": "2026-09-10T17:57:32Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 7,
+      "tldr": "Transformers can extrapolate length without positional encodings using distance‑mask training.",
+      "bullets": [
+        "systematic positional study",
+        "distance‑mask training recipe",
+        "generalizes to 2× longer sequences"
+      ],
+      "who_should_read": "transformer practitioners",
+      "paper": {
+        "id": "2609.11913v1",
+        "title": "Distance generalization in transformers: why bother with positional encoding?",
+        "summary": "Out-of-distribution length generalization, namely to extrapolate a task from short to longer context, has been studied intensively for transformers. Here we focus on distance generalization, which probes performance when inter-token distances are changed between training and inference, while keeping a fixed context length. We construct two synthetic delay copy tasks, both involving finite distances between source and recall, where tokens are copied either fully or selectively, and test models on delays unseen during training. We address three questions: (A) Do positional encoding schemes such as RoPE and ALiBi improve distance resolution relative to no positional encoding (NoPE)? (B) How does data diversity, the number of inter-token distances seen in training, affect performance? (C) When is distance transfer learning positive or negative? We present a thorough investigation, finding that it is paramount to improve our understanding of the underlying mechanisms.",
+        "authors": [
+          "Daniel Henrik Nevermann",
+          "Claudius Gros"
+        ],
+        "url": "https://arxiv.org/abs/2609.11913v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.11913v1",
+        "category": "cs.CL",
+        "source": "arxiv",
+        "published": "2026-09-10T17:57:19Z"
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Train the provided NF‑pivot code on a toy Gaussian mixture with a nuisance offset and compare posterior estimates to ABC.",
-    "why": "Shows immediate benefit of learned sufficient statistics over manual summaries.",
+    "action": "Convert your CFR implementation to a static CUDA graph and benchmark speed",
+    "why": "You’ll see orders‑of‑magnitude gains without algorithmic changes.",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -46,8 +173,8 @@
       "title": "zorost/AI-Engineering-Lab",
       "summary": "A free, self-paced 24-week AI engineering course: Python, machine learning, LLMs, RAG, fine-tuning, agents and MCP, Azure and Vertex and Bedrock, and Databricks. 43 runnable notebooks, one continuous case study. MIT licensed, no signup. By Zorost Intelligence AI Lab.",
       "url": "https://github.com/zorost/AI-Engineering-Lab",
-      "stars": 302,
-      "forks": 251,
+      "stars": 303,
+      "forks": 252,
       "language": "Jupyter Notebook",
       "topics": [
         "ai-agents",
@@ -79,7 +206,7 @@
       "title": "NiluK/worldmodels101",
       "summary": "Free interactive course on world models in AI. Nine visual chapters on prediction, latent dynamics, planning, JEPA, video models, and failure modes.",
       "url": "https://github.com/NiluK/worldmodels101",
-      "stars": 197,
+      "stars": 198,
       "forks": 158,
       "language": "TypeScript",
       "topics": [
@@ -104,7 +231,7 @@
       "title": "TrenTorch/TrenTorch",
       "summary": "Learn PyTorch by building your own. (inspired from Harvard's TinyTorch)",
       "url": "https://github.com/TrenTorch/TrenTorch",
-      "stars": 173,
+      "stars": 176,
       "forks": 21,
       "language": "Python",
       "topics": [
@@ -125,7 +252,7 @@
       "title": "KaiWU5/Awesome-AI4AI",
       "summary": "AI4AI Survey: can AI reliably improve AI? 223 papers on long-horizon agents, benchmarks, harness design, and recursive self-improvement · updated weekly",
       "url": "https://github.com/KaiWU5/Awesome-AI4AI",
-      "stars": 114,
+      "stars": 132,
       "forks": 1,
       "language": "Python",
       "topics": [
@@ -215,26 +342,6 @@
       "created_at": "2026-08-19T09:06:30Z"
     },
     {
-      "id": "1331679891",
-      "title": "Yixuan-Wu39/bandminton",
-      "summary": "Open-source wearable badminton motion analysis with lightweight on-device machine learning.",
-      "url": "https://github.com/Yixuan-Wu39/bandminton",
-      "stars": 102,
-      "forks": 2,
-      "language": "JavaScript",
-      "topics": [
-        "accelerometer",
-        "badminton",
-        "fitness-tracking",
-        "machine-learning",
-        "motion-analysis",
-        "wearable",
-        "xiaomi"
-      ],
-      "source": "github",
-      "created_at": "2026-08-12T06:14:49Z"
-    },
-    {
       "id": "1345052184",
       "title": "zidniryi/unbagrnd",
       "summary": "Unbagrnd - Free, Fast & Open-source AI-powered background remover for Windows, macOS, and Linux.",
@@ -262,21 +369,31 @@
       ],
       "source": "github",
       "created_at": "2026-08-24T14:30:32Z"
+    },
+    {
+      "id": "1343701672",
+      "title": "CALISKAN-EMRE/NSOSYAL",
+      "summary": "TEKNOFEST 2026 NSosyal İnovasyon — Explainable recommendations, semantic context cards and Turkish AI moderation.",
+      "url": "https://github.com/CALISKAN-EMRE/NSOSYAL",
+      "stars": 75,
+      "forks": 4,
+      "language": "Python",
+      "topics": [
+        "content-moderation",
+        "explainable-ai",
+        "fastapi",
+        "machine-learning",
+        "nextjs",
+        "nlp",
+        "teknofest",
+        "teknofest2026",
+        "turkish-nlp"
+      ],
+      "source": "github",
+      "created_at": "2026-08-23T11:38:15Z"
     }
   ],
   "hn_posts": [
-    {
-      "id": "49554643",
-      "title": "GPT-6 Astra",
-      "summary": "",
-      "url": "https://openai.com/index/gpt-6-astra/",
-      "hn_url": "https://news.ycombinator.com/item?id=49554643",
-      "points": 2274,
-      "comments": 2077,
-      "author": "kibae",
-      "source": "hackernews",
-      "created_at": "2026-09-03T18:41:05Z"
-    },
     {
       "id": "49585644",
       "title": "Your intellectual fly is open when you use an LLM to author a post (2025)",
@@ -295,8 +412,8 @@
       "summary": "",
       "url": "https://manualdousuario.net/en/libreoffice-download-record-no-ai/",
       "hn_url": "https://news.ycombinator.com/item?id=49610538",
-      "points": 707,
-      "comments": 236,
+      "points": 711,
+      "comments": 237,
       "author": "rpgbr",
       "source": "hackernews",
       "created_at": "2026-09-08T14:05:57Z"
@@ -307,11 +424,23 @@
       "summary": "",
       "url": "https://ai.meta.com/muse/",
       "hn_url": "https://news.ycombinator.com/item?id=49615537",
-      "points": 642,
-      "comments": 715,
+      "points": 653,
+      "comments": 735,
       "author": "yks",
       "source": "hackernews",
       "created_at": "2026-09-08T19:25:00Z"
+    },
+    {
+      "id": "49627370",
+      "title": "GPT-6 Astra, looped transformers, and hidden reasoning",
+      "summary": "",
+      "url": "https://magazine.sebastianraschka.com/p/gpt-6-astra-looped-transformers-and",
+      "hn_url": "https://news.ycombinator.com/item?id=49627370",
+      "points": 510,
+      "comments": 161,
+      "author": "ModelForge",
+      "source": "hackernews",
+      "created_at": "2026-09-09T14:37:47Z"
     },
     {
       "id": "49616968",
@@ -319,8 +448,8 @@
       "summary": "",
       "url": "https://mathstodon.xyz/@tao/117237320796901560",
       "hn_url": "https://news.ycombinator.com/item?id=49616968",
-      "points": 476,
-      "comments": 409,
+      "points": 486,
+      "comments": 417,
       "author": "_alternator_",
       "source": "hackernews",
       "created_at": "2026-09-08T21:00:52Z"
@@ -344,73 +473,23 @@
       "url": "https://www.sylvainkalache.com/blog/ai-handles-incidents-engineers-lose-touch-with-their-systems",
       "hn_url": "https://news.ycombinator.com/item?id=49574167",
       "points": 416,
-      "comments": 344,
+      "comments": 345,
       "author": "sylvainkalache",
       "source": "hackernews",
       "created_at": "2026-09-05T07:52:50Z"
     },
     {
-      "id": "49563386",
-      "title": "Google AI Mode shows same products 21.6% more expensive than traditional search",
+      "id": "49645443",
+      "title": "Cognition launches new SWE-2 model, Rivaling Fable 5.1 and GPT-Astra",
       "summary": "",
-      "url": "https://productrise.app/blog/google-ai-mode-prefers-more-expensive-products",
-      "hn_url": "https://news.ycombinator.com/item?id=49563386",
-      "points": 403,
-      "comments": 76,
-      "author": "DeepLogin",
+      "url": "https://cognition.com/blog/swe-2",
+      "hn_url": "https://news.ycombinator.com/item?id=49645443",
+      "points": 404,
+      "comments": 170,
+      "author": "seelos",
       "source": "hackernews",
-      "created_at": "2026-09-04T11:59:15Z"
+      "created_at": "2026-09-10T15:29:47Z"
     }
   ],
-  "implementation_gaps": [
-    {
-      "id": "2609.10534v1",
-      "title": "Likelihood-free inference with nuisance parameters through normalizing flows",
-      "summary": "We present a simple decomposition of a neural-network-based normalizing flow that naturally uncovers a pivotal statistic (or something close) in the presence of nuisance parameters, based only on a sample generator from the distribution of interest. We show that the statistic is near-pivotal in the sense of minimum average KL-divergence of its $p$-values versus uniform and we argue that it can be expected to have good power when the dimension of the statistic equals the dimension of the parameter. It is able to incorporate prior knowledge about group invariances such as translation and scale. It can discover the one-sample $t$-test almost exactly, outperforms the Welch test in terms of worst-case size over a constrained variance-ratio range and achieves good calibration on partial biserial correlations, while showing higher power (and being much faster) on small-to-moderate samples than profile likelihood-ratio techniques.",
-      "authors": [
-        "Phil Assheton"
-      ],
-      "url": "https://arxiv.org/abs/2609.10534v1",
-      "pdf_url": "https://arxiv.org/pdf/2609.10534v1",
-      "category": "stat.ME",
-      "source": "arxiv",
-      "published": "2026-09-09T17:58:15Z",
-      "github_implementations": 0,
-      "implementation_gap": true
-    },
-    {
-      "id": "2609.10531v1",
-      "title": "Guiding Image-to-3D Generation with Test-Time Partial Observations",
-      "summary": "Image-to-3D models can generate visually compelling 3D assets from a single RGB image, but their geometry is often only loosely constrained by the available observations, limiting their use in applications that require geometric fidelity. In many real-world settings, however, partial geometric observations of the object may be available at test time. We introduce a training-free framework for incorporating such evidence into pretrained image-to-3D generative models without retraining or finetuning. To do this, we guide generation using a ray-consistent observation likelihood defined over the model's occupancy representation, combining surface occupancy and free-space evidence. Applied to SAM 3D and its multi-view extension, our approach substantially improves geometric fidelity across different levels of observability, as well as visual quality. Our results demonstrate that pretrained image-to-3D models can effectively integrate partial geometric observations through explicit test-time guidance, complementing their learned generative priors without modifying the underlying model.",
-      "authors": [
-        "Jerred Chen",
-        "Simon Weber",
-        "Ronald Clark"
-      ],
-      "url": "https://arxiv.org/abs/2609.10531v1",
-      "pdf_url": "https://arxiv.org/pdf/2609.10531v1",
-      "category": "cs.CV",
-      "source": "arxiv",
-      "published": "2026-09-09T17:58:04Z",
-      "github_implementations": 0,
-      "implementation_gap": true
-    },
-    {
-      "id": "2609.10529v1",
-      "title": "A positive resolution of the gap-entropy conjecture",
-      "summary": "We prove the gap-entropy conjecture for fixed-confidence best-arm identification with independent unit-variance Gaussian arms, means in $[0,1]$, and a unique optimal arm. For each suboptimal arm $i$, let $Δ_i=μ_*-μ_i$ be its gap from the optimal mean, and write $H=\\sum_{i\\ne *}Δ_i^{-2}$. Let $p_r$ be the fraction of $H$ contributed by arms with $2^{-(r+1)}<Δ_i\\le2^{-r}$, and let $\\mathrm{Ent}(I)=\\sum_{r:p_r>0} p_r\\log(1/p_r)$. Among all algorithms that identify the optimal arm with probability at least $1-δ$ on every Gaussian instance, the optimal expected number of samples on a given instance, averaged over all permutations of the arm labels, is within absolute constant factors of $H(\\log(1/δ)+\\mathrm{Ent}(I))$. Moreover, there is an algorithm, independent of the instance, whose expected number of samples is bounded by a constant multiple of this quantity plus $g^{-2}\\log\\log(e^e/g)$, where $g=\\min_{i\\ne *}Δ_i$ is the gap to the closest competitor.",
-      "authors": [
-        "P. M. Aronow",
-        "Nathan Kallus",
-        "Patrick Lopatto"
-      ],
-      "url": "https://arxiv.org/abs/2609.10529v1",
-      "pdf_url": "https://arxiv.org/pdf/2609.10529v1",
-      "category": "cs.LG",
-      "source": "arxiv",
-      "published": "2026-09-09T17:57:11Z",
-      "github_implementations": 0,
-      "implementation_gap": true
-    }
-  ]
+  "implementation_gaps": []
 }
