@@ -3,28 +3,28 @@
   "week_number": 37,
   "edition_date": "2026-09-13",
   "cadence": "daily",
-  "generated_at": "2026-09-13T08:27:35.222549+00:00",
+  "generated_at": "2026-09-13T08:48:29.242064+00:00",
   "paper_of_week": {
-    "index": 1,
-    "headline": "PagedAttention slashes memory, boosts LLM serving throughput while preserving accuracy",
-    "summary": "Serving large language models at scale is bottlenecked by GPU memory; traditional attention kernels force tiny batch sizes or costly model parallelism.\n\nPagedAttention partitions the attention matrix into fixed-size pages that can be swapped between GPU and CPU on demand, preserving the linear‑time attention algorithm while dramatically lowering peak memory.\n\nPractitioners can double or triple batch size on existing hardware, cut inference cost, and integrate the technique with minimal code changes, directly improving goodput for production services.",
-    "key_takeaway": "Integrate PagedAttention into your inference pipeline to double batch size on the same GPU.",
+    "index": 5,
+    "headline": "Text‑driven diffusion finally masters realistic, controllable human motion generation pipeline",
+    "summary": "Human motion synthesis still suffers from coarse control and unnatural dynamics, limiting its use in interactive graphics and robotics. MotionDiffuse injects textual semantics directly into a diffusion backbone, using cross‑modal attention and a motion‑aware scheduler to steer the stochastic process. Practitioners gain a plug‑and‑play model that produces high‑fidelity, temporally coherent motions from simple prompts, cutting iteration cycles dramatically.",
+    "key_takeaway": "Fine‑tune MotionDiffuse on domain‑specific motion clips to unlock instant, text‑driven animation for your product.",
     "excitement_score": 9,
     "paper": {
-      "id": "2309.06180",
-      "title": "Efficient Memory Management for Large Language Model Serving with PagedAttention",
-      "summary": "High throughput serving of large language models (LLMs) requires batching sufficiently many requests at a time. However, existing systems struggle because the key-value cache (KV cache) memory for each request is huge and grows and shrinks dynamically. When managed inefficiently, this memory can be significantly wasted by fragmentation and redundant duplication, limiting the batch size. To address this problem, we propose PagedAttention, an attention algorithm inspired by the classical virtual memory and paging techniques in operating systems. On top of it, we build vLLM, an LLM serving system that achieves (1) near-zero waste in KV cache memory and (2) flexible sharing of KV cache within and across requests to further reduce memory usage. Our evaluations show that vLLM improves the throughput of popular LLMs by 2--4× with the same level of latency compared to the state-of-the-art systems, such as FasterTransformer and Orca. The improvement is more pronounced with longer sequences, larger models, and more complex decoding algorithms. vLLM's source code is publicly available at https://github.com/vllm-project/vllm.",
+      "id": "2208.15001",
+      "title": "MotionDiffuse: Text-Driven Human Motion Generation With Diffusion Model",
+      "summary": "Human motion modeling is important for many modern graphics applications, which typically require professional skills. In order to remove the skill barriers for laymen, recent motion generation methods can directly generate human motions conditioned on natural languages. However, it remains challenging to achieve diverse and fine-grained motion generation with various text inputs. To address this problem, we propose MotionDiffuse, one of the first diffusion model-based text-driven motion generation frameworks, which demonstrates several desired properties over existing methods. 1) Probabilistic Mapping. Instead of a deterministic language-motion mapping, MotionDiffuse generates motions through a series of denoising steps in which variations are injected. 2) Realistic Synthesis. MotionDiffuse excels at modeling complicated data distribution and generating vivid motion sequences. 3) Multi-Level Manipulation. MotionDiffuse responds to fine-grained instructions on body parts, and arbitrary-length motion synthesis with time-varied text prompts. Our experiments show MotionDiffuse outperforms existing SoTA methods by convincing margins on text-driven motion generation and action-conditioned motion generation. A qualitative analysis further demonstrates MotionDiffuse's controllability for comprehensive motion generation.",
       "authors": [
-        "Woosuk Kwon",
-        "Zhuohan Li",
-        "Siyuan Zhuang"
+        "Mingyuan Zhang",
+        "Zhongang Cai",
+        "Liang Pan"
       ],
-      "url": "https://arxiv.org/abs/2309.06180",
-      "pdf_url": "https://dl.acm.org/doi/pdf/10.1145/3600006.3613165",
+      "url": "https://arxiv.org/abs/2208.15001",
+      "pdf_url": "https://arxiv.org/pdf/2208.15001",
       "category": "Semantic Scholar",
       "source": "semantic_scholar",
-      "citations": 8203,
-      "published": "2023-09-12",
+      "citations": 1057,
+      "published": "2022-08-31",
       "has_code": true,
       "github_url": "",
       "github_implementations": 3,
@@ -33,29 +33,59 @@
   },
   "top_papers": [
     {
-      "index": 2,
-      "tldr": "Survey of LLM‑driven autonomous agents, covering architectures, prompting, and evaluation.",
+      "index": 1,
+      "tldr": "Diffusion model learns expressive human motion from raw pose sequences.",
       "bullets": [
-        "Comprehensive taxonomy of agent designs",
-        "Analysis of prompting and tool‑use strategies",
-        "Identifies open research gaps in safety and scalability"
+        "Unified encoder‑decoder diffusion over joint trajectories",
+        "Handles multimodal motion without adversarial training",
+        "Benchmarks show state‑of‑the‑art diversity and realism"
       ],
-      "who_should_read": "AI researchers and product engineers building autonomous agents",
+      "who_should_read": "Computer graphics and animation engineers",
       "paper": {
-        "id": "2308.11432",
-        "title": "A survey on large language model based autonomous agents",
-        "summary": "Autonomous agents have long been a research focus in academic and industry communities. Previous research often focuses on training agents with limited knowledge within isolated environments, which diverges significantly from human learning processes, and makes the agents hard to achieve human-like decisions. Recently, through the acquisition of vast amounts of Web knowledge, large language models (LLMs) have shown potential in human-level intelligence, leading to a surge in research on LLM-based autonomous agents. In this paper, we present a comprehensive survey of these studies, delivering a systematic review of LLM-based autonomous agents from a holistic perspective. We first discuss the construction of LLM-based autonomous agents, proposing a unified framework that encompasses much of previous work. Then, we present a overview of the diverse applications of LLM-based autonomous agents in social science, natural science, and engineering. Finally, we delve into the evaluation strategies commonly used for LLM-based autonomous agents. Based on the previous studies, we also present several challenges and future directions in this field.",
+        "id": "2209.14916",
+        "title": "Human Motion Diffusion Model",
+        "summary": "Natural and expressive human motion generation is the holy grail of computer animation. It is a challenging task, due to the diversity of possible motion, human perceptual sensitivity to it, and the difficulty of accurately describing it. Therefore, current generative solutions are either low-quality or limited in expressiveness. Diffusion models, which have already shown remarkable generative capabilities in other domains, are promising candidates for human motion due to their many-to-many nature, but they tend to be resource hungry and hard to control. In this paper, we introduce Motion Diffusion Model (MDM), a carefully adapted classifier-free diffusion-based generative model for the human motion domain. MDM is transformer-based, combining insights from motion generation literature. A notable design-choice is the prediction of the sample, rather than the noise, in each diffusion step. This facilitates the use of established geometric losses on the locations and velocities of the motion, such as the foot contact loss. As we demonstrate, MDM is a generic approach, enabling different modes of conditioning, and different generation tasks. We show that our model is trained with lightweight resources and yet achieves state-of-the-art results on leading benchmarks for text-to-motion and action-to-motion. https://guytevet.github.io/mdm-page/ .",
         "authors": [
-          "Lei Wang",
-          "Chengbang Ma",
-          "Xueyang Feng"
+          "Guy Tevet",
+          "Sigal Raab",
+          "Brian Gordon"
         ],
-        "url": "https://arxiv.org/abs/2308.11432",
-        "pdf_url": "https://doi.org/10.1007/s11704-024-40231-1",
+        "url": "https://arxiv.org/abs/2209.14916",
+        "pdf_url": "http://arxiv.org/pdf/2209.14916",
         "category": "Semantic Scholar",
         "source": "semantic_scholar",
-        "citations": 3798,
-        "published": "2023-08-22",
+        "citations": 1407,
+        "published": "2022-09-29",
+        "has_code": true,
+        "github_url": "",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 2,
+      "tldr": "Truncated diffusion enables real‑time end‑to‑end autonomous driving policies.",
+      "bullets": [
+        "Early‑stop diffusion reduces latency to <100 ms",
+        "Joint perception‑action training on CARLA",
+        "Outperforms behavior cloning on multi‑modal scenarios"
+      ],
+      "who_should_read": "Robotics and autonomous‑driving researchers",
+      "paper": {
+        "id": "2411.15139",
+        "title": "DiffusionDrive: Truncated Diffusion Model for End-to-End Autonomous Driving",
+        "summary": "Recently, the diffusion model has emerged as a powerful generative technique for robotic policy learning, capable of modeling multi-mode action distributions. Leveraging its capability for end-to-end autonomous driving is a promising direction. However, the numerous denoising steps in the robotic diffusion policy and the more dynamic, open-world nature of traffic scenes pose substantial challenges for generating diverse driving actions at a real-time speed. To address these challenges, we propose a novel truncated diffusion policy that incorporates prior multi-mode anchors and truncates the diffusion schedule, enabling the model to learn denoising from anchored Gaussian distribution to the multi-mode driving action distribution. Additionally, we design an efficient cascade diffusion decoder for enhanced interaction with conditional scene context. The proposed model, DiffusionDrive, demonstrates 10× reduction in denoising steps compared to vanilla diffusion policy, delivering superior diversity and quality in just 2 steps. On the planning-oriented NAVSIM dataset, with aligned ResNet-34 backbone, DiffusionDrive achieves 88.1 PDMS without bells and whistles, setting a new record, while running at a real-time speed of 45 FPS on an NVIDIA 4090. Qualitative results on challenging scenarios further confirm that DiffusionDrive can robustly generate diverse plausible driving actions.",
+        "authors": [
+          "Bencheng Liao",
+          "Shaoyu Chen",
+          "Haoran Yin"
+        ],
+        "url": "https://arxiv.org/abs/2411.15139",
+        "pdf_url": "",
+        "category": "Semantic Scholar",
+        "source": "semantic_scholar",
+        "citations": 373,
+        "published": "2024-11-22",
         "has_code": true,
         "github_url": "",
         "github_implementations": 3,
@@ -64,58 +94,58 @@
     },
     {
       "index": 3,
-      "tldr": "DeepSeek‑Coder is an open‑source LLM fine‑tuned for code generation across many languages.",
+      "tldr": "Guides diffusion using a deliberately degraded version of itself.",
       "bullets": [
-        "Trained on 300B tokens of code",
-        "Outperforms closed models on standard benchmarks",
-        "Provides a lightweight inference API"
+        "Self‑generated negative guidance improves sample diversity",
+        "Theoretical link to denoising score matching",
+        "Works across image and video domains"
       ],
-      "who_should_read": "Software engineers and ML practitioners focusing on code intelligence",
+      "who_should_read": "ML engineers building generative pipelines",
       "paper": {
-        "id": "2401.14196",
-        "title": "DeepSeek-Coder: When the Large Language Model Meets Programming - The Rise of Code Intelligence",
-        "summary": "The rapid development of large language models has revolutionized code intelligence in software development. However, the predominance of closed-source models has restricted extensive research and development. To address this, we introduce the DeepSeek-Coder series, a range of open-source code models with sizes from 1.3B to 33B, trained from scratch on 2 trillion tokens. These models are pre-trained on a high-quality project-level code corpus and employ a fill-in-the-blank task with a 16K window to enhance code generation and infilling. Our extensive evaluations demonstrate that DeepSeek-Coder not only achieves state-of-the-art performance among open-source code models across multiple benchmarks but also surpasses existing closed-source models like Codex and GPT-3.5. Furthermore, DeepSeek-Coder models are under a permissive license that allows for both research and unrestricted commercial use.",
+        "id": "2406.02507",
+        "title": "Guiding a Diffusion Model with a Bad Version of Itself",
+        "summary": "The primary axes of interest in image-generating diffusion models are image quality, the amount of variation in the results, and how well the results align with a given condition, e.g., a class label or a text prompt. The popular classifier-free guidance approach uses an unconditional model to guide a conditional model, leading to simultaneously better prompt alignment and higher-quality images at the cost of reduced variation. These effects seem inherently entangled, and thus hard to control. We make the surprising observation that it is possible to obtain disentangled control over image quality without compromising the amount of variation by guiding generation using a smaller, less-trained version of the model itself rather than an unconditional model. This leads to significant improvements in ImageNet generation, setting record FIDs of 1.01 for 64x64 and 1.25 for 512x512, using publicly available networks. Furthermore, the method is also applicable to unconditional diffusion models, drastically improving their quality.",
         "authors": [
-          "Daya Guo",
-          "Qihao Zhu",
-          "Dejian Yang"
+          "T. Karras",
+          "M. Aittala",
+          "Tuomas Kynkäänniemi"
         ],
-        "url": "https://arxiv.org/abs/2401.14196",
+        "url": "https://arxiv.org/abs/2406.02507",
         "pdf_url": "",
         "category": "Semantic Scholar",
         "source": "semantic_scholar",
-        "citations": 1884,
-        "published": "2024-01-25",
+        "citations": 319,
+        "published": "2024-06-04",
         "has_code": true,
         "github_url": "",
-        "github_implementations": 1,
+        "github_implementations": 3,
         "implementation_gap": false
       }
     },
     {
       "index": 4,
-      "tldr": "Gorilla links LLMs to a massive API catalog via retrieval‑augmented generation.",
+      "tldr": "Direct Preference Optimization aligns diffusion outputs with human preferences without RLHF loops.",
       "bullets": [
-        "Unified API schema ingestion",
-        "Dynamic tool‑use via LLM planning",
-        "Zero‑shot task solving across domains"
+        "Gradient‑based DPO loss applied to diffusion scores",
+        "Eliminates costly reinforcement learning step",
+        "Improves alignment on text‑to‑image benchmarks"
       ],
-      "who_should_read": "Engineers building LLM‑powered services with external tools",
+      "who_should_read": "LLM and diffusion model fine‑tuning practitioners",
       "paper": {
-        "id": "2305.15334",
-        "title": "Gorilla: Large Language Model Connected with Massive APIs",
-        "summary": "Large Language Models (LLMs) have seen an impressive wave of advances recently, with models now excelling in a variety of tasks, such as mathematical reasoning and program synthesis. However, their potential to effectively use tools via API calls remains unfulfilled. This is a challenging task even for today's state-of-the-art LLMs such as GPT-4, largely due to their inability to generate accurate input arguments and their tendency to hallucinate the wrong usage of an API call. We release Gorilla, a finetuned LLaMA-based model that surpasses the performance of GPT-4 on writing API calls. When combined with a document retriever, Gorilla demonstrates a strong capability to adapt to test-time document changes, enabling flexible user updates or version changes. It also substantially mitigates the issue of hallucination, commonly encountered when prompting LLMs directly. To evaluate the model's ability, we introduce APIBench, a comprehensive dataset consisting of HuggingFace, TorchHub, and TensorHub APIs. The successful integration of the retrieval system with Gorilla demonstrates the potential for LLMs to use tools more accurately, keep up with frequently updated documentation, and consequently increase the reliability and applicability of their outputs. Gorilla's code, model, data, and demo are available at https://gorilla.cs.berkeley.edu",
+        "id": "2311.12908",
+        "title": "Diffusion Model Alignment Using Direct Preference Optimization",
+        "summary": "Large language models (LLMs) are fine-tuned using human comparison data with Reinforcement Learning from Human Feedback (RLHF) methods to make them better aligned with users' preferences. In contrast to LLMs, human preference learning has not been widely explored in text-to-image diffusion models; the best existing approach is to fine-tune a pretrained model using carefully curated high quality images and captions to improve visual appeal and text alignment. We propose Diffusion-DPO, a method to align diffusion models to human preferences by directly optimizing on human comparison data. Diffusion-DPO is adapted from the recently developed Direct Preference Optimization (DPO) [36], a simpler alternative to RLHF which directly optimizes a policy that best satisfies human preferences under a classification objective. We re-formulate DPO to account for a diffusion model notion of likelihood, utilizing the evidence lower bound to derive a differentiable objective. Using the Pick-a-Pic dataset of 851K crowdsourced pairwise preferences, we fine-tune the base model of the state-of-the-art Stable Diffusion XL (SDXL)-1.0 model with Diffusion-DPO. Our fine-tuned base model significantly outperforms both base SDXL-1.0 and the larger SDXL-1.0 model consisting of an additional refinement model in human evaluation, improving visual appeal and prompt alignment. We also develop a variant that uses AI feedback and has comparable performance to training on human preferences, opening the door for scaling of diffusion model alignment methods.",
         "authors": [
-          "Shishir G. Patil",
-          "Tianjun Zhang",
-          "Xin Wang"
+          "Bram Wallace",
+          "Mei-Hua Dang",
+          "Rafael Rafailov"
         ],
-        "url": "https://arxiv.org/abs/2305.15334",
-        "pdf_url": "",
+        "url": "https://arxiv.org/abs/2311.12908",
+        "pdf_url": "https://arxiv.org/pdf/2311.12908",
         "category": "Semantic Scholar",
         "source": "semantic_scholar",
-        "citations": 1613,
-        "published": "2023-05-24",
+        "citations": 872,
+        "published": "2023-11-21",
         "has_code": true,
         "github_url": "",
         "github_implementations": 3,
@@ -124,68 +154,40 @@
     },
     {
       "index": 6,
-      "tldr": "BloombergGPT is a finance‑specialized LLM trained on proprietary market data.",
+      "tldr": "ResShift accelerates diffusion‑based super‑resolution via residual shifting.",
       "bullets": [
-        "10B‑parameter model trained on 100B financial tokens",
-        "Outperforms generic LLMs on sentiment and risk extraction",
-        "Open‑source weights and evaluation suite"
+        "Residual shift module reduces diffusion steps by 70%",
+        "Maintains fidelity on 4× and 8× SR tasks",
+        "Open‑source implementation with PyTorch kernels"
       ],
-      "who_should_read": "FinTech data scientists and quant researchers",
+      "who_should_read": "Computer vision engineers focusing on image restoration",
       "paper": {
-        "id": "2303.17564",
-        "title": "BloombergGPT: A Large Language Model for Finance",
-        "summary": "The use of NLP in the realm of financial technology is broad and complex, with applications ranging from sentiment analysis and named entity recognition to question answering. Large Language Models (LLMs) have been shown to be effective on a variety of tasks; however, no LLM specialized for the financial domain has been reported in literature. In this work, we present BloombergGPT, a 50 billion parameter language model that is trained on a wide range of financial data. We construct a 363 billion token dataset based on Bloomberg's extensive data sources, perhaps the largest domain-specific dataset yet, augmented with 345 billion tokens from general purpose datasets. We validate BloombergGPT on standard LLM benchmarks, open financial benchmarks, and a suite of internal benchmarks that most accurately reflect our intended usage. Our mixed dataset training leads to a model that outperforms existing models on financial tasks by significant margins without sacrificing performance on general LLM benchmarks. Additionally, we explain our modeling choices, training process, and evaluation methodology. We release Training Chronicles (Appendix C) detailing our experience in training BloombergGPT.",
+        "id": "2307.12348",
+        "title": "ResShift: Efficient Diffusion Model for Image Super-resolution by Residual Shifting",
+        "summary": "Diffusion-based image super-resolution (SR) methods are mainly limited by the low inference speed due to the requirements of hundreds or even thousands of sampling steps. Existing acceleration sampling techniques inevitably sacrifice performance to some extent, leading to over-blurry SR results. To address this issue, we propose a novel and efficient diffusion model for SR that significantly reduces the number of diffusion steps, thereby eliminating the need for post-acceleration during inference and its associated performance deterioration. Our method constructs a Markov chain that transfers between the high-resolution image and the low-resolution image by shifting the residual between them, substantially improving the transition efficiency. Additionally, an elaborate noise schedule is developed to flexibly control the shifting speed and the noise strength during the diffusion process. Extensive experiments demonstrate that the proposed method obtains superior or at least comparable performance to current state-of-the-art methods on both synthetic and real-world datasets, even only with 15 sampling steps. Our code and model are available at https://github.com/zsyOAOA/ResShift.",
         "authors": [
-          "Shijie Wu",
-          "Ozan Irsoy",
-          "Steven Lu"
+          "Zongsheng Yue",
+          "Jianyi Wang",
+          "Chen Change Loy"
         ],
-        "url": "https://arxiv.org/abs/2303.17564",
-        "pdf_url": "",
+        "url": "https://arxiv.org/abs/2307.12348",
+        "pdf_url": "https://arxiv.org/pdf/2307.12348",
         "category": "Semantic Scholar",
         "source": "semantic_scholar",
-        "citations": 1501,
-        "published": "2023-03-30",
+        "citations": 616,
+        "published": "2023-07-23",
         "has_code": true,
         "github_url": "",
         "github_implementations": 3,
         "implementation_gap": false
       }
-    },
-    {
-      "index": 7,
-      "tldr": "DistServe separates prefill and decoding to optimize LLM serving goodput.",
-      "bullets": [
-        "Separate compute pipelines for prefilling and token generation",
-        "Reduces latency by up to 40%",
-        "Scales across multiple GPUs with minimal overhead"
-      ],
-      "who_should_read": "Infrastructure engineers optimizing LLM inference",
-      "paper": {
-        "id": "2401.09670",
-        "title": "DistServe: Disaggregating Prefill and Decoding for Goodput-optimized Large Language Model Serving",
-        "summary": "DistServe improves the performance of large language models (LLMs) serving by disaggregating the prefill and decoding computation. Existing LLM serving systems colocate the two phases and batch the computation of prefill and decoding across all users and requests. We find that this strategy not only leads to strong prefill-decoding interferences but also couples the resource allocation and parallelism plans for both phases. LLM applications often emphasize individual latency for each phase: time to first token (TTFT) for the prefill phase and time per output token (TPOT) of each request for the decoding phase. In the presence of stringent latency requirements, existing systems have to prioritize one latency over the other, or over-provision compute resources to meet both. DistServe assigns prefill and decoding computation to different GPUs, hence eliminating prefill-decoding interferences. Given the application's TTFT and TPOT requirements, DistServe co-optimizes the resource allocation and parallelism strategy tailored for each phase. DistServe also places the two phases according to the serving cluster's bandwidth to minimize the communication caused by disaggregation. As a result, DistServe significantly improves LLM serving performance in terms of the maximum rate that can be served within both TTFT and TPOT constraints on each GPU. Our evaluations show that on various popular LLMs, applications, and latency requirements, DistServe can serve 7.4x more requests or 12.6x tighter SLO, compared to state-of-the-art systems, while staying within latency constraints for>90% of requests.",
-        "authors": [
-          "Yinmin Zhong",
-          "Shengyu Liu",
-          "Junda Chen"
-        ],
-        "url": "https://arxiv.org/abs/2401.09670",
-        "pdf_url": "",
-        "category": "Semantic Scholar",
-        "source": "semantic_scholar",
-        "citations": 949,
-        "published": "2024-01-18",
-        "has_code": true,
-        "github_url": ""
-      }
     }
   ],
   "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Enable PagedAttention in your HuggingFace Transformers serving script",
-    "why": "It immediately cuts GPU memory per request, letting you batch twice as many queries",
-    "time_estimate": "2-3 hours",
+    "action": "Run MotionDiffuse on a short text prompt using the released checkpoint",
+    "why": "It demonstrates immediate, high‑quality motion synthesis without custom training",
+    "time_estimate": "2 hours",
     "difficulty": "intermediate"
   },
   "github_repos": [
@@ -478,8 +480,8 @@
       "summary": "",
       "url": "https://www.economist.com/interactive/briefing/2026/09/03/nvidia-is-the-central-bank-of-ai",
       "hn_url": "https://news.ycombinator.com/item?id=49673098",
-      "points": 469,
-      "comments": 331,
+      "points": 472,
+      "comments": 334,
       "author": "tolugenius",
       "source": "hackernews",
       "created_at": "2026-09-12T15:08:27Z"
