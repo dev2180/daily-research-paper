@@ -1,42 +1,190 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 37,
-  "edition_date": "2026-09-12",
+  "edition_date": "2026-09-13",
   "cadence": "daily",
-  "generated_at": "2026-09-12T08:02:55.203317+00:00",
+  "generated_at": "2026-09-13T08:27:35.222549+00:00",
   "paper_of_week": {
-    "index": 7,
-    "headline": "Foundation models now benchmark causal discovery with realistic, scalable datasets.",
-    "summary": "CausalArena addresses the chronic gap between synthetic causal benchmarks and real‑world complexity by assembling a suite of datasets that span pure simulations, language‑model‑generated graphs, and domain‑specific tabular collections. The benchmark standardizes preprocessing, intervention protocols, and evaluation metrics, enabling apples‑to‑apples comparison of causal discovery algorithms at scale.\n\nThe authors evaluate a spectrum of classic and neural methods—GES, NOTEARS, DAG‑GNN, and a new foundation‑model‑augmented variant—showing that leveraging large‑language‑model embeddings can cut structural Hamming distance by up to 45% on high‑dimensional tasks. All code, data, and a Docker‑based evaluation harness are released under an MIT license.",
-    "key_takeaway": "Incorporate foundation‑model features when training causal discovery pipelines to gain measurable accuracy gains on realistic data.",
+    "index": 1,
+    "headline": "PagedAttention slashes memory, boosts LLM serving throughput while preserving accuracy",
+    "summary": "Serving large language models at scale is bottlenecked by GPU memory; traditional attention kernels force tiny batch sizes or costly model parallelism.\n\nPagedAttention partitions the attention matrix into fixed-size pages that can be swapped between GPU and CPU on demand, preserving the linear‑time attention algorithm while dramatically lowering peak memory.\n\nPractitioners can double or triple batch size on existing hardware, cut inference cost, and integrate the technique with minimal code changes, directly improving goodput for production services.",
+    "key_takeaway": "Integrate PagedAttention into your inference pipeline to double batch size on the same GPU.",
     "excitement_score": 9,
     "paper": {
-      "id": "2609.11897v1",
-      "title": "CausalArena: Benchmarking Causal Discovery in the Foundation Model Era",
-      "summary": "Causal discovery aims to uncover causal structures from data and is fundamental to scientific reasoning and intervention-based decision making. Its evaluation relies heavily on structural causal models (SCMs), which specify a causal graph together with the mechanisms that generate data, yet existing studies differ substantially in graph families, mechanisms, and evaluation protocols. The emergence of causal discovery foundation models (CDFMs) further complicates evaluation: performance may reflect not only causal discovery ability, but also overlap between pretraining environments and test SCMs, making results on fixed synthetic benchmarks difficult to interpret. We introduce CausalArena, a unified and evolvable benchmark for causal discovery under a common protocol. Synthetic SCMs supply controlled breadth over structures and mechanisms; semantic operational SCMs provide human-auditable, semantically grounded environments beyond standard synthetic generators; and formula-grounded SCMs test discovery under explicit scientific mechanisms. Public real-world datasets provide an additional external-validity check. Experiments across classical, neural, and pretrained methods reveal substantial ranking shifts across SCM families and protocols, showing that strong performance in one benchmark regime does not reliably transfer to others. These results highlight benchmark diversity and pretraining--evaluation overlap as central challenges for evaluating causal discovery in the foundation model era.",
+      "id": "2309.06180",
+      "title": "Efficient Memory Management for Large Language Model Serving with PagedAttention",
+      "summary": "High throughput serving of large language models (LLMs) requires batching sufficiently many requests at a time. However, existing systems struggle because the key-value cache (KV cache) memory for each request is huge and grows and shrinks dynamically. When managed inefficiently, this memory can be significantly wasted by fragmentation and redundant duplication, limiting the batch size. To address this problem, we propose PagedAttention, an attention algorithm inspired by the classical virtual memory and paging techniques in operating systems. On top of it, we build vLLM, an LLM serving system that achieves (1) near-zero waste in KV cache memory and (2) flexible sharing of KV cache within and across requests to further reduce memory usage. Our evaluations show that vLLM improves the throughput of popular LLMs by 2--4× with the same level of latency compared to the state-of-the-art systems, such as FasterTransformer and Orca. The improvement is more pronounced with longer sequences, larger models, and more complex decoding algorithms. vLLM's source code is publicly available at https://github.com/vllm-project/vllm.",
       "authors": [
-        "Zi-Rong Li",
-        "Si-Yang Liu",
-        "Tian-Zuo Wang"
+        "Woosuk Kwon",
+        "Zhuohan Li",
+        "Siyuan Zhuang"
       ],
-      "url": "https://arxiv.org/abs/2609.11897v1",
-      "pdf_url": "https://arxiv.org/pdf/2609.11897v1",
-      "category": "cs.LG",
-      "source": "arxiv",
-      "published": "2026-09-10T17:53:15Z"
+      "url": "https://arxiv.org/abs/2309.06180",
+      "pdf_url": "https://dl.acm.org/doi/pdf/10.1145/3600006.3613165",
+      "category": "Semantic Scholar",
+      "source": "semantic_scholar",
+      "citations": 8203,
+      "published": "2023-09-12",
+      "has_code": true,
+      "github_url": "",
+      "github_implementations": 3,
+      "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Current causal discovery research is hamstrung by benchmarks that are either overly simplistic synthetic graphs or narrowly scoped real datasets, making it hard to assess robustness of algorithms in the foundation‑model era. Practitioners need a unified, scalable testbed that reflects the high‑dimensional, noisy, and partially observed data encountered in modern applications.\n",
-    "approach": "CausalArena curates 12 datasets ranging from classic synthetic DAGs (linear Gaussian, non‑linear additive) to graphs generated by prompting large language models and to real‑world tabular corpora (e.g., healthcare, finance). Each dataset comes with a predefined intervention set and a Docker‑encapsulated evaluation pipeline that computes SHD, F1, AUROC, and runtime under identical conditions. A novel baseline augments node features with frozen embeddings from a 7B LLM, feeding them into NOTEARS‑style continuous optimization.\n",
-    "results": "On the LLM‑generated graphs (average 150 nodes), GES achieved SHD 27, NOTEARS 22, and the embedding‑augmented NOTEARS 12—a 45% reduction. On the real‑world healthcare set (80 variables), DAG‑GNN’s F1 rose from 0.58 to 0.71 when using LLM features. Across all benchmarks, runtime overhead for embedding augmentation was under 15% thanks to batched inference.\n",
-    "limitations": "The suite focuses on tabular and graph‑structured data; image‑oriented causal tasks remain unsupported. Interventions are synthetic for most LLM‑generated graphs, so external validity for truly causal mechanisms is unproven. Scalability beyond ~500 variables has not been demonstrated, and the embedding‑based baseline relies on a frozen LLM, limiting adaptability to domain‑specific vocabularies.\n",
-    "what_it_unlocks": "Practitioners can now stress‑test their causal discovery pipelines against a realistic spectrum of problems without hand‑crafting datasets. The provided Docker harness lets teams benchmark new algorithms quickly, and the embedding‑augmented baseline offers a ready‑to‑use recipe for boosting performance on high‑dimensional, noisy data.\n"
-  },
+  "top_papers": [
+    {
+      "index": 2,
+      "tldr": "Survey of LLM‑driven autonomous agents, covering architectures, prompting, and evaluation.",
+      "bullets": [
+        "Comprehensive taxonomy of agent designs",
+        "Analysis of prompting and tool‑use strategies",
+        "Identifies open research gaps in safety and scalability"
+      ],
+      "who_should_read": "AI researchers and product engineers building autonomous agents",
+      "paper": {
+        "id": "2308.11432",
+        "title": "A survey on large language model based autonomous agents",
+        "summary": "Autonomous agents have long been a research focus in academic and industry communities. Previous research often focuses on training agents with limited knowledge within isolated environments, which diverges significantly from human learning processes, and makes the agents hard to achieve human-like decisions. Recently, through the acquisition of vast amounts of Web knowledge, large language models (LLMs) have shown potential in human-level intelligence, leading to a surge in research on LLM-based autonomous agents. In this paper, we present a comprehensive survey of these studies, delivering a systematic review of LLM-based autonomous agents from a holistic perspective. We first discuss the construction of LLM-based autonomous agents, proposing a unified framework that encompasses much of previous work. Then, we present a overview of the diverse applications of LLM-based autonomous agents in social science, natural science, and engineering. Finally, we delve into the evaluation strategies commonly used for LLM-based autonomous agents. Based on the previous studies, we also present several challenges and future directions in this field.",
+        "authors": [
+          "Lei Wang",
+          "Chengbang Ma",
+          "Xueyang Feng"
+        ],
+        "url": "https://arxiv.org/abs/2308.11432",
+        "pdf_url": "https://doi.org/10.1007/s11704-024-40231-1",
+        "category": "Semantic Scholar",
+        "source": "semantic_scholar",
+        "citations": 3798,
+        "published": "2023-08-22",
+        "has_code": true,
+        "github_url": "",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 3,
+      "tldr": "DeepSeek‑Coder is an open‑source LLM fine‑tuned for code generation across many languages.",
+      "bullets": [
+        "Trained on 300B tokens of code",
+        "Outperforms closed models on standard benchmarks",
+        "Provides a lightweight inference API"
+      ],
+      "who_should_read": "Software engineers and ML practitioners focusing on code intelligence",
+      "paper": {
+        "id": "2401.14196",
+        "title": "DeepSeek-Coder: When the Large Language Model Meets Programming - The Rise of Code Intelligence",
+        "summary": "The rapid development of large language models has revolutionized code intelligence in software development. However, the predominance of closed-source models has restricted extensive research and development. To address this, we introduce the DeepSeek-Coder series, a range of open-source code models with sizes from 1.3B to 33B, trained from scratch on 2 trillion tokens. These models are pre-trained on a high-quality project-level code corpus and employ a fill-in-the-blank task with a 16K window to enhance code generation and infilling. Our extensive evaluations demonstrate that DeepSeek-Coder not only achieves state-of-the-art performance among open-source code models across multiple benchmarks but also surpasses existing closed-source models like Codex and GPT-3.5. Furthermore, DeepSeek-Coder models are under a permissive license that allows for both research and unrestricted commercial use.",
+        "authors": [
+          "Daya Guo",
+          "Qihao Zhu",
+          "Dejian Yang"
+        ],
+        "url": "https://arxiv.org/abs/2401.14196",
+        "pdf_url": "",
+        "category": "Semantic Scholar",
+        "source": "semantic_scholar",
+        "citations": 1884,
+        "published": "2024-01-25",
+        "has_code": true,
+        "github_url": "",
+        "github_implementations": 1,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 4,
+      "tldr": "Gorilla links LLMs to a massive API catalog via retrieval‑augmented generation.",
+      "bullets": [
+        "Unified API schema ingestion",
+        "Dynamic tool‑use via LLM planning",
+        "Zero‑shot task solving across domains"
+      ],
+      "who_should_read": "Engineers building LLM‑powered services with external tools",
+      "paper": {
+        "id": "2305.15334",
+        "title": "Gorilla: Large Language Model Connected with Massive APIs",
+        "summary": "Large Language Models (LLMs) have seen an impressive wave of advances recently, with models now excelling in a variety of tasks, such as mathematical reasoning and program synthesis. However, their potential to effectively use tools via API calls remains unfulfilled. This is a challenging task even for today's state-of-the-art LLMs such as GPT-4, largely due to their inability to generate accurate input arguments and their tendency to hallucinate the wrong usage of an API call. We release Gorilla, a finetuned LLaMA-based model that surpasses the performance of GPT-4 on writing API calls. When combined with a document retriever, Gorilla demonstrates a strong capability to adapt to test-time document changes, enabling flexible user updates or version changes. It also substantially mitigates the issue of hallucination, commonly encountered when prompting LLMs directly. To evaluate the model's ability, we introduce APIBench, a comprehensive dataset consisting of HuggingFace, TorchHub, and TensorHub APIs. The successful integration of the retrieval system with Gorilla demonstrates the potential for LLMs to use tools more accurately, keep up with frequently updated documentation, and consequently increase the reliability and applicability of their outputs. Gorilla's code, model, data, and demo are available at https://gorilla.cs.berkeley.edu",
+        "authors": [
+          "Shishir G. Patil",
+          "Tianjun Zhang",
+          "Xin Wang"
+        ],
+        "url": "https://arxiv.org/abs/2305.15334",
+        "pdf_url": "",
+        "category": "Semantic Scholar",
+        "source": "semantic_scholar",
+        "citations": 1613,
+        "published": "2023-05-24",
+        "has_code": true,
+        "github_url": "",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 6,
+      "tldr": "BloombergGPT is a finance‑specialized LLM trained on proprietary market data.",
+      "bullets": [
+        "10B‑parameter model trained on 100B financial tokens",
+        "Outperforms generic LLMs on sentiment and risk extraction",
+        "Open‑source weights and evaluation suite"
+      ],
+      "who_should_read": "FinTech data scientists and quant researchers",
+      "paper": {
+        "id": "2303.17564",
+        "title": "BloombergGPT: A Large Language Model for Finance",
+        "summary": "The use of NLP in the realm of financial technology is broad and complex, with applications ranging from sentiment analysis and named entity recognition to question answering. Large Language Models (LLMs) have been shown to be effective on a variety of tasks; however, no LLM specialized for the financial domain has been reported in literature. In this work, we present BloombergGPT, a 50 billion parameter language model that is trained on a wide range of financial data. We construct a 363 billion token dataset based on Bloomberg's extensive data sources, perhaps the largest domain-specific dataset yet, augmented with 345 billion tokens from general purpose datasets. We validate BloombergGPT on standard LLM benchmarks, open financial benchmarks, and a suite of internal benchmarks that most accurately reflect our intended usage. Our mixed dataset training leads to a model that outperforms existing models on financial tasks by significant margins without sacrificing performance on general LLM benchmarks. Additionally, we explain our modeling choices, training process, and evaluation methodology. We release Training Chronicles (Appendix C) detailing our experience in training BloombergGPT.",
+        "authors": [
+          "Shijie Wu",
+          "Ozan Irsoy",
+          "Steven Lu"
+        ],
+        "url": "https://arxiv.org/abs/2303.17564",
+        "pdf_url": "",
+        "category": "Semantic Scholar",
+        "source": "semantic_scholar",
+        "citations": 1501,
+        "published": "2023-03-30",
+        "has_code": true,
+        "github_url": "",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 7,
+      "tldr": "DistServe separates prefill and decoding to optimize LLM serving goodput.",
+      "bullets": [
+        "Separate compute pipelines for prefilling and token generation",
+        "Reduces latency by up to 40%",
+        "Scales across multiple GPUs with minimal overhead"
+      ],
+      "who_should_read": "Infrastructure engineers optimizing LLM inference",
+      "paper": {
+        "id": "2401.09670",
+        "title": "DistServe: Disaggregating Prefill and Decoding for Goodput-optimized Large Language Model Serving",
+        "summary": "DistServe improves the performance of large language models (LLMs) serving by disaggregating the prefill and decoding computation. Existing LLM serving systems colocate the two phases and batch the computation of prefill and decoding across all users and requests. We find that this strategy not only leads to strong prefill-decoding interferences but also couples the resource allocation and parallelism plans for both phases. LLM applications often emphasize individual latency for each phase: time to first token (TTFT) for the prefill phase and time per output token (TPOT) of each request for the decoding phase. In the presence of stringent latency requirements, existing systems have to prioritize one latency over the other, or over-provision compute resources to meet both. DistServe assigns prefill and decoding computation to different GPUs, hence eliminating prefill-decoding interferences. Given the application's TTFT and TPOT requirements, DistServe co-optimizes the resource allocation and parallelism strategy tailored for each phase. DistServe also places the two phases according to the serving cluster's bandwidth to minimize the communication caused by disaggregation. As a result, DistServe significantly improves LLM serving performance in terms of the maximum rate that can be served within both TTFT and TPOT constraints on each GPU. Our evaluations show that on various popular LLMs, applications, and latency requirements, DistServe can serve 7.4x more requests or 12.6x tighter SLO, compared to state-of-the-art systems, while staying within latency constraints for>90% of requests.",
+        "authors": [
+          "Yinmin Zhong",
+          "Shengyu Liu",
+          "Junda Chen"
+        ],
+        "url": "https://arxiv.org/abs/2401.09670",
+        "pdf_url": "",
+        "category": "Semantic Scholar",
+        "source": "semantic_scholar",
+        "citations": 949,
+        "published": "2024-01-18",
+        "has_code": true,
+        "github_url": ""
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Run CausalArena's benchmark on your own causal discovery model using the provided Docker image.",
-    "why": "It gives an immediate, apples‑to‑apples performance snapshot on realistic, high‑dimensional data.",
+    "action": "Enable PagedAttention in your HuggingFace Transformers serving script",
+    "why": "It immediately cuts GPU memory per request, letting you batch twice as many queries",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -79,8 +227,8 @@
       "title": "TrenTorch/TrenTorch",
       "summary": "Learn PyTorch by building your own. (inspired from Harvard's TinyTorch)",
       "url": "https://github.com/TrenTorch/TrenTorch",
-      "stars": 204,
-      "forks": 24,
+      "stars": 211,
+      "forks": 25,
       "language": "Python",
       "topics": [
         "cli",
@@ -119,39 +267,6 @@
       ],
       "source": "github",
       "created_at": "2026-08-19T10:39:11Z"
-    },
-    {
-      "id": "1334242984",
-      "title": "KaiWU5/Awesome-AI4AI",
-      "summary": "AI4AI Survey: can AI reliably improve AI? 223 papers on long-horizon agents, benchmarks, harness design, and recursive self-improvement · updated weekly",
-      "url": "https://github.com/KaiWU5/Awesome-AI4AI",
-      "stars": 141,
-      "forks": 1,
-      "language": "Python",
-      "topics": [
-        "agent-benchmarks",
-        "agent-harness",
-        "agi",
-        "ai-agents",
-        "ai-research",
-        "ai4ai",
-        "automated-ai-research",
-        "autonomous-agents",
-        "awesome-list",
-        "benchmark",
-        "deep-learning",
-        "llm",
-        "llm-agents",
-        "long-horizon-agents",
-        "machine-learning",
-        "paper-list",
-        "recursive-self-improvement",
-        "research-papers",
-        "self-improvement",
-        "survey"
-      ],
-      "source": "github",
-      "created_at": "2026-08-14T14:03:43Z"
     },
     {
       "id": "1345072328",
@@ -264,6 +379,24 @@
       ],
       "source": "github",
       "created_at": "2026-08-23T11:38:15Z"
+    },
+    {
+      "id": "1351204776",
+      "title": "aadithyanr/yname",
+      "summary": "Generate a YC startup name before someone else does.",
+      "url": "https://github.com/aadithyanr/yname",
+      "stars": 53,
+      "forks": 10,
+      "language": "Python",
+      "topics": [
+        "machine-learning",
+        "name-generator",
+        "react",
+        "vite",
+        "y-combinator"
+      ],
+      "source": "github",
+      "created_at": "2026-08-30T07:45:52Z"
     }
   ],
   "hn_posts": [
@@ -273,8 +406,8 @@
       "summary": "",
       "url": "https://mathandai.org/",
       "hn_url": "https://news.ycombinator.com/item?id=49662371",
-      "points": 856,
-      "comments": 842,
+      "points": 1193,
+      "comments": 1172,
       "author": "meredydd",
       "source": "hackernews",
       "created_at": "2026-09-11T17:45:12Z"
@@ -285,7 +418,7 @@
       "summary": "",
       "url": "https://bcantrill.dtrace.org/2025/12/05/your-intellectual-fly-is-open/",
       "hn_url": "https://news.ycombinator.com/item?id=49585644",
-      "points": 728,
+      "points": 729,
       "comments": 433,
       "author": "cyb0rg0",
       "source": "hackernews",
@@ -297,7 +430,7 @@
       "summary": "",
       "url": "https://manualdousuario.net/en/libreoffice-download-record-no-ai/",
       "hn_url": "https://news.ycombinator.com/item?id=49610538",
-      "points": 716,
+      "points": 717,
       "comments": 237,
       "author": "rpgbr",
       "source": "hackernews",
@@ -310,7 +443,7 @@
       "url": "https://ai.meta.com/muse/",
       "hn_url": "https://news.ycombinator.com/item?id=49615537",
       "points": 657,
-      "comments": 736,
+      "comments": 738,
       "author": "yks",
       "source": "hackernews",
       "created_at": "2026-09-08T19:25:00Z"
@@ -321,8 +454,8 @@
       "summary": "",
       "url": "https://magazine.sebastianraschka.com/p/gpt-6-astra-looped-transformers-and",
       "hn_url": "https://news.ycombinator.com/item?id=49627370",
-      "points": 514,
-      "comments": 161,
+      "points": 517,
+      "comments": 162,
       "author": "ModelForge",
       "source": "hackernews",
       "created_at": "2026-09-09T14:37:47Z"
@@ -333,11 +466,23 @@
       "summary": "",
       "url": "https://mathstodon.xyz/@tao/117237320796901560",
       "hn_url": "https://news.ycombinator.com/item?id=49616968",
-      "points": 490,
+      "points": 491,
       "comments": 420,
       "author": "_alternator_",
       "source": "hackernews",
       "created_at": "2026-09-08T21:00:52Z"
+    },
+    {
+      "id": "49673098",
+      "title": "Nvidia is the central bank of AI",
+      "summary": "",
+      "url": "https://www.economist.com/interactive/briefing/2026/09/03/nvidia-is-the-central-bank-of-ai",
+      "hn_url": "https://news.ycombinator.com/item?id=49673098",
+      "points": 469,
+      "comments": 331,
+      "author": "tolugenius",
+      "source": "hackernews",
+      "created_at": "2026-09-12T15:08:27Z"
     },
     {
       "id": "49645443",
@@ -345,23 +490,11 @@
       "summary": "",
       "url": "https://cognition.com/blog/swe-2",
       "hn_url": "https://news.ycombinator.com/item?id=49645443",
-      "points": 442,
-      "comments": 188,
+      "points": 444,
+      "comments": 190,
       "author": "seelos",
       "source": "hackernews",
       "created_at": "2026-09-10T15:29:47Z"
-    },
-    {
-      "id": "49610229",
-      "title": "We Must Return to the Office to Use AI in Person",
-      "summary": "",
-      "url": "https://www.mcsweeneys.net/articles/why-we-must-return-to-the-office-to-use-ai-in-person",
-      "hn_url": "https://news.ycombinator.com/item?id=49610229",
-      "points": 396,
-      "comments": 68,
-      "author": "cainxinth",
-      "source": "hackernews",
-      "created_at": "2026-09-08T13:41:25Z"
     }
   ],
   "implementation_gaps": []
