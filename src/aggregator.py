@@ -59,7 +59,10 @@ def aggregate_sources(detect_gaps: bool = True, cadence: str = "weekly",
     arxiv_papers = fetch_arxiv_papers(max_results=30)
 
     print("[aggregator] Fetching Semantic Scholar trending papers...")
-    pwc_papers = fetch_pwc_trending(limit=10)
+    # Was limit=10, which (with fetch_pwc's early break) often meant only
+    # 1-2 of the 4 queries actually ran -- a small pool easily exhausted by
+    # the 21-day "already seen" filter when arXiv also fails that day.
+    pwc_papers = fetch_pwc_trending(limit=24)
 
     print("[aggregator] Fetching GitHub trending repos...")
     github_repos = fetch_github_trending(limit=8)

@@ -14,11 +14,20 @@ def fetch_pwc_trending(limit: int = 10) -> list[dict[str, Any]]:
     papers = []
     seen_ids = set()
 
-    for query in AI_QUERIES[:2]:
+    # Was AI_QUERIES[:2], capping the whole fallback pool at ~14 candidates.
+    # On 2026-09-14 arXiv failed AND this returned 0 new results -- everything
+    # it had was already in the 21-day "seen" window. Querying all four terms
+    # widens the pool so one bad arXiv day doesn't also empty this out.
+    for query in AI_QUERIES:
         params = {
             "query": query,
             "fields": S2_FIELDS,
-            "limit": limit // 2 + 2,
+            # Was limit // 2 + 2, sized for exactly 2 queries splitting the
+            # target -- with 4 queries now, that undercounted per query and
+            # the len(papers) >= limit break below often stopped after query
+            # 1, defeating the point of querying more terms. Flat per-query
+            # cap instead; the final papers[:limit] slice still bounds output.
+            "limit": 8,
             "sort": "citationCount:desc",
         }
         headers = {"User-Agent": "ml-research-pulse/1.0"}
@@ -27,7 +36,12 @@ def fetch_pwc_trending(limit: int = 10) -> list[dict[str, Any]]:
             try:
                 resp = requests.get(S2_API, params=params, headers=headers, timeout=12)
                 if resp.status_code == 429:
-                    time.sleep(5 * (attempt + 1))
+                    wait = 5 * (attempt + 1)
+                    # Was silent -- when every query hit this branch (observed
+                    # while debugging the arXiv outages) the run logged
+                    # "0 papers" with zero indication why.
+                    print(f"[fetch_s2] 429 for '{query}' -- waiting {wait}s (attempt {attempt+1}/3)")
+                    time.sleep(wait)
                     continue
                 resp.raise_for_status()
                 data = resp.json()
