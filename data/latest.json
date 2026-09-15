@@ -1,48 +1,190 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 38,
-  "edition_date": "2026-09-14",
+  "edition_date": "2026-09-15",
   "cadence": "daily",
-  "generated_at": "2026-09-14T09:08:53.673529+00:00",
+  "generated_at": "2026-09-15T13:46:11.514164+00:00",
   "paper_of_week": {
     "index": 1,
-    "headline": "LLM agents reshape interaction: autonomy, tool-use, and alignment in real-world",
-    "summary": "By systematically comparing evaluation protocols, the authors expose a performance gap: tool‑augmented agents consistently outperform pure prompting by roughly 30 % on multi‑step task suites. The paper also highlights open challenges in grounding, long‑term planning, and alignment, proposing a research agenda that prioritizes robust tool integration and transparent evaluation.",
-    "key_takeaway": "Start prototyping a tool‑augmented LLM agent using LangChain today.",
-    "excitement_score": 8,
+    "headline": "Shifted windows enable scalable, high‑resolution vision Transformers for real‑world tasks",
+    "summary": "Vision models still struggle with high‑resolution inputs and computational cost. Traditional ViT treats images as flat token sequences, leading to quadratic attention and limited scalability.\n\nSwin introduces a hierarchical design with shifted windows that restrict attention to local regions while allowing cross‑window interaction. This yields linear complexity and a natural multi‑scale feature pyramid.\n\nPractitioners can drop in Swin as a drop‑in backbone, gaining faster training, better memory usage, and state‑of‑the‑art accuracy on detection and segmentation without redesigning pipelines.",
+    "key_takeaway": "Replace your CNN backbone with Swin for faster training and comparable accuracy.",
+    "excitement_score": 9,
     "paper": {
-      "id": "2309.07864",
-      "title": "The Rise and Potential of Large Language Model Based Agents: A Survey",
-      "summary": "For a long time, humanity has pursued artificial intelligence (AI) equivalent to or surpassing the human level, with AI agents considered a promising vehicle for this pursuit. AI agents are artificial entities that sense their environment, make decisions, and take actions. Many efforts have been made to develop intelligent agents, but they mainly focus on advancement in algorithms or training strategies to enhance specific capabilities or performance on particular tasks. Actually, what the community lacks is a general and powerful model to serve as a starting point for designing AI agents that can adapt to diverse scenarios. Due to the versatile capabilities they demonstrate, large language models (LLMs) are regarded as potential sparks for Artificial General Intelligence (AGI), offering hope for building general AI agents. Many researchers have leveraged LLMs as the foundation to build AI agents and have achieved significant progress. In this paper, we perform a comprehensive survey on LLM-based agents. We start by tracing the concept of agents from its philosophical origins to its development in AI, and explain why LLMs are suitable foundations for agents. Building upon this, we present a general framework for LLM-based agents, comprising three main components: brain, perception, and action, and the framework can be tailored for different applications. Subsequently, we explore the extensive applications of LLM-based agents in three aspects: single-agent scenarios, multi-agent scenarios, and human-agent cooperation. Following this, we delve into agent societies, exploring the behavior and personality of LLM-based agents, the social phenomena that emerge from an agent society, and the insights they offer for human society. Finally, we discuss several key topics and open problems within the field. A repository for the related papers at https://github.com/WooooDyy/LLM-Agent-Paper-List.",
+      "id": "2103.14030",
+      "title": "Swin Transformer: Hierarchical Vision Transformer using Shifted Windows",
+      "summary": "This paper presents a new vision Transformer, called Swin Transformer, that capably serves as a general-purpose backbone for computer vision. Challenges in adapting Transformer from language to vision arise from differences between the two domains, such as large variations in the scale of visual entities and the high resolution of pixels in images compared to words in text. To address these differences, we propose a hierarchical Transformer whose representation is computed with Shifted windows. The shifted windowing scheme brings greater efficiency by limiting self-attention computation to non-overlapping local windows while also allowing for cross-window connection. This hierarchical architecture has the flexibility to model at various scales and has linear computational complexity with respect to image size. These qualities of Swin Transformer make it compatible with a broad range of vision tasks, including image classification (87.3 top-1 accuracy on ImageNet-1K) and dense prediction tasks such as object detection (58.7 box AP and 51.1 mask AP on COCO test-dev) and semantic segmentation (53.5 mIoU on ADE20K val). Its performance surpasses the previous state-of-the-art by a large margin of +2.7 box AP and +2.6 mask AP on COCO, and +3.2 mIoU on ADE20K, demonstrating the potential of Transformer-based models as vision backbones. The hierarchical design and the shifted window approach also prove beneficial for all-MLP architectures. The code and models are publicly available at https://github.com/microsoft/Swin-Transformer.",
       "authors": [
-        "Zhiheng Xi",
-        "Wenxiang Chen",
-        "Xin Guo"
+        "Ze Liu",
+        "Yutong Lin",
+        "Yue Cao"
       ],
-      "url": "https://arxiv.org/abs/2309.07864",
-      "pdf_url": "https://arxiv.org/pdf/2309.07864",
+      "url": "https://arxiv.org/abs/2103.14030",
+      "pdf_url": "http://arxiv.org/pdf/2103.14030",
       "category": "Semantic Scholar",
       "source": "semantic_scholar",
-      "citations": 2055,
-      "published": "2023-09-14",
+      "citations": 35590,
+      "published": null,
       "has_code": true,
       "github_url": "",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Practitioners lack a coherent framework to understand the exploding variety of LLM‑based agents, making it hard to select architectures that balance autonomy, tool use, and safety. The survey addresses this gap by defining the concrete problem of unifying disparate design patterns and evaluation methods into a single taxonomy.",
-    "approach": "The authors conduct a systematic literature review, extracting architectural components (prompt, fine‑tuning, external tools), interaction loops (single‑turn, multi‑turn, planning), and evaluation metrics (task success, reasoning depth, alignment scores). They then construct a hierarchical taxonomy and benchmark matrix, and finally synthesize design guidelines that map problem domains to the most suitable agent class.",
-    "results": "Analysis of 120+ papers shows four dominant capability clusters: (1) zero‑shot prompting, (2) fine‑tuned instruction following, (3) tool‑calling agents, and (4) embodied agents. Tool‑calling agents achieve a 30 % higher success rate on the WebShop and HotpotQA multi‑step benchmarks compared to pure prompting, while fine‑tuned agents improve reasoning accuracy by 12 % on GSM‑8K. The survey also quantifies that alignment evaluations appear in only 22 % of studies, underscoring a critical blind spot.",
-    "limitations": "The review is limited to English publications up to June 2024, potentially missing recent fast‑moving advances. Results rely on reported numbers rather than reproducible experiments, so cross‑paper comparisons may be noisy. Finally, the taxonomy may need revision as new modalities (e.g., multimodal grounding) become mainstream.",
-    "what_it_unlocks": "Practitioners can immediately adopt the taxonomy to choose the appropriate agent architecture for their use case, prioritize tool integration, and benchmark against the identified standard suites. The design guidelines enable rapid prototyping of safe, multi‑step agents without extensive fine‑tuning, accelerating product development cycles."
-  },
+  "top_papers": [
+    {
+      "index": 2,
+      "tldr": "Convolution‑free hierarchical transformer for dense prediction tasks",
+      "bullets": [
+        "Pure attention backbone",
+        "No convolutions at any stage",
+        "Strong performance on segmentation"
+      ],
+      "who_should_read": "Computer vision engineers focusing on dense prediction",
+      "paper": {
+        "id": "2102.12122",
+        "title": "Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolutions",
+        "summary": "Although convolutional neural networks (CNNs) have achieved great success in computer vision, this work investigates a simpler, convolution-free backbone network use-fid for many dense prediction tasks. Unlike the recently-proposed Vision Transformer (ViT) that was designed for image classification specifically, we introduce the Pyramid Vision Transformer (PVT), which overcomes the difficulties of porting Transformer to various dense prediction tasks. PVT has several merits compared to current state of the arts. (1) Different from ViT that typically yields low-resolution outputs and incurs high computational and memory costs, PVT not only can be trained on dense partitions of an image to achieve high output resolution, which is important for dense prediction, but also uses a progressive shrinking pyramid to reduce the computations of large feature maps. (2) PVT inherits the advantages of both CNN and Transformer, making it a unified backbone for various vision tasks without convolutions, where it can be used as a direct replacement for CNN backbones. (3) We validate PVT through extensive experiments, showing that it boosts the performance of many downstream tasks, including object detection, instance and semantic segmentation. For example, with a comparable number of parameters, PVT+RetinaNet achieves 40.4 AP on the COCO dataset, surpassing ResNet50+RetinNet (36.3 AP) by 4.1 absolute AP (see Figure 2). We hope that PVT could, serre as an alternative and useful backbone for pixel-level predictions and facilitate future research.",
+        "authors": [
+          "Wenhai Wang",
+          "Enze Xie",
+          "Xiang Li"
+        ],
+        "url": "https://arxiv.org/abs/2102.12122",
+        "pdf_url": "https://arxiv.org/pdf/2102.12122",
+        "category": "Semantic Scholar",
+        "source": "semantic_scholar",
+        "citations": 5264,
+        "published": "2021-02-24",
+        "has_code": true,
+        "github_url": "",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 3,
+      "tldr": "Enhanced Pyramid Vision Transformer with improved training tricks",
+      "bullets": [
+        "Layer‑scale and Conv‑FFN upgrades",
+        "Better initialization",
+        "Higher throughput"
+      ],
+      "who_should_read": "Researchers optimizing transformer baselines",
+      "paper": {
+        "id": "2106.13797",
+        "title": "PVT v2: Improved baselines with Pyramid Vision Transformer",
+        "summary": "Transformers have recently lead to encouraging progress in computer vision. In this work, we present new baselines by improving the original Pyramid Vision Transformer (PVT v1) by adding three designs: (i) a linear complexity attention layer, (ii) an overlapping patch embedding, and (iii) a convolutional feed-forward network. With these modifications, PVT v2 reduces the computational complexity of PVT v1 to linearity and provides significant improvements on fundamental vision tasks such as classification, detection, and segmentation. In particular, PVT v2 achieves comparable or better performance than recent work such as the Swin transformer. We hope this work will facilitate state-of-the-art transformer research in computer vision. Code is available at https://github.com/whai362/PVT.",
+        "authors": [
+          "Wenhai Wang",
+          "Enze Xie",
+          "Xiang Li"
+        ],
+        "url": "https://arxiv.org/abs/2106.13797",
+        "pdf_url": "https://link.springer.com/content/pdf/10.1007/s41095-022-0274-8.pdf",
+        "category": "Semantic Scholar",
+        "source": "semantic_scholar",
+        "citations": 2619,
+        "published": "2021-06-25",
+        "has_code": true,
+        "github_url": "",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 4,
+      "tldr": "Mobile‑friendly transformer blending CNN inductive bias with attention",
+      "bullets": [
+        "Hybrid convolution‑attention blocks",
+        "Low‑flops design",
+        "On‑device inference ready"
+      ],
+      "who_should_read": "Mobile AI developers",
+      "paper": {
+        "id": "2110.02178",
+        "title": "MobileViT: Light-weight, General-purpose, and Mobile-friendly Vision Transformer",
+        "summary": "Light-weight convolutional neural networks (CNNs) are the de-facto for mobile vision tasks. Their spatial inductive biases allow them to learn representations with fewer parameters across different vision tasks. However, these networks are spatially local. To learn global representations, self-attention-based vision trans-formers (ViTs) have been adopted. Unlike CNNs, ViTs are heavy-weight. In this paper, we ask the following question: is it possible to combine the strengths of CNNs and ViTs to build a light-weight and low latency network for mobile vision tasks? Towards this end, we introduce MobileViT, a light-weight and general-purpose vision transformer for mobile devices. MobileViT presents a different perspective for the global processing of information with transformers, i.e., transformers as convolutions. Our results show that MobileViT significantly outperforms CNN- and ViT-based networks across different tasks and datasets. On the ImageNet-1k dataset, MobileViT achieves top-1 accuracy of 78.4% with about 6 million parameters, which is 3.2% and 6.2% more accurate than MobileNetv3 (CNN-based) and DeIT (ViT-based) for a similar number of parameters. On the MS-COCO object detection task, MobileViT is 5.7% more accurate than MobileNetv3 for a similar number of parameters. Our source code is open-source and available at: https://github.com/apple/ml-cvnets",
+        "authors": [
+          "Sachin Mehta",
+          "Mohammad Rastegari"
+        ],
+        "url": "https://arxiv.org/abs/2110.02178",
+        "pdf_url": "",
+        "category": "Semantic Scholar",
+        "source": "semantic_scholar",
+        "citations": 2548,
+        "published": "2021-10-05",
+        "has_code": true,
+        "github_url": "",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 5,
+      "tldr": "Pure‑transformer architecture for video classification",
+      "bullets": [
+        "Spatio‑temporal attention tubes",
+        "Scalable to long clips",
+        "Matches CNN video models"
+      ],
+      "who_should_read": "Video analytics engineers",
+      "paper": {
+        "id": "2103.15691",
+        "title": "ViViT: A Video Vision Transformer",
+        "summary": "We present pure-transformer based models for video classification, drawing upon the recent success of such models in image classification. Our model extracts spatiotemporal tokens from the input video, which are then encoded by a series of transformer layers. In order to handle the long sequences of tokens encountered in video, we propose several, efficient variants of our model which factorise the spatial- and temporal-dimensions of the input. Although transformer-based models are known to only be effective when large training datasets are available, we show how we can effectively regularise the model during training and leverage pretrained image models to be able to train on comparatively small datasets. We conduct thorough ablation studies, and achieve state-of-the-art results on multiple video classification benchmarks including Kinetics 400 and 600, Epic Kitchens, Something-Something v2 and Moments in Time, outperforming prior methods based on deep 3D convolutional networks.",
+        "authors": [
+          "Anurag Arnab",
+          "Mostafa Dehghani",
+          "G. Heigold"
+        ],
+        "url": "https://arxiv.org/abs/2103.15691",
+        "pdf_url": "https://arxiv.org/pdf/2103.15691",
+        "category": "Semantic Scholar",
+        "source": "semantic_scholar",
+        "citations": 3243,
+        "published": "2021-03-29",
+        "has_code": true,
+        "github_url": "",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 7,
+      "tldr": "Cross‑scale attention merges fine and coarse features for classification",
+      "bullets": [
+        "Dual‑branch architecture",
+        "Cross‑attention between resolutions",
+        "Improved accuracy on ImageNet"
+      ],
+      "who_should_read": "Vision researchers exploring multi‑scale designs",
+      "paper": {
+        "id": "2103.14899",
+        "title": "CrossViT: Cross-Attention Multi-Scale Vision Transformer for Image Classification",
+        "summary": "The recently developed vision transformer (ViT) has achieved promising results on image classification compared to convolutional neural networks. Inspired by this, in this paper, we study how to learn multi-scale feature representations in transformer models for image classification. To this end, we propose a dual-branch transformer to com-bine image patches (i.e., tokens in a transformer) of different sizes to produce stronger image features. Our approach processes small-patch and large-patch tokens with two separate branches of different computational complexity and these tokens are then fused purely by attention multiple times to complement each other. Furthermore, to reduce computation, we develop a simple yet effective token fusion module based on cross attention, which uses a single token for each branch as a query to exchange information with other branches. Our proposed cross-attention only requires linear time for both computational and memory complexity instead of quadratic time otherwise. Extensive experiments demonstrate that our approach performs better than or on par with several concurrent works on vision transformer, in addition to efficient CNN models. For example, on the ImageNet1K dataset, with some architectural changes, our approach outperforms the recent DeiT by a large margin of 2% with a small to moderate increase in FLOPs and model parameters. Our source codes and models are available at https://github.com/IBM/CrossViT.",
+        "authors": [
+          "C. Chen",
+          "Quanfu Fan",
+          "Rameswar Panda"
+        ],
+        "url": "https://arxiv.org/abs/2103.14899",
+        "pdf_url": "https://arxiv.org/pdf/2103.14899",
+        "category": "Semantic Scholar",
+        "source": "semantic_scholar",
+        "citations": 2245,
+        "published": "2021-03-27",
+        "has_code": true,
+        "github_url": ""
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Implement a simple tool‑calling LLM agent with LangChain's OpenAI wrapper",
-    "why": "It demonstrates the core loop surveyed and yields immediate functional capability",
-    "time_estimate": "2-3 hours",
+    "action": "Fine‑tune Swin Transformer on your dataset using pretrained weights",
+    "why": "It yields strong performance with minimal compute",
+    "time_estimate": "2‑3 hours",
     "difficulty": "intermediate"
   },
   "github_repos": [
@@ -51,8 +193,8 @@
       "title": "zorost/AI-Engineering-Lab",
       "summary": "A free, self-paced 24-week AI engineering course: Python, machine learning, LLMs, RAG, fine-tuning, agents and MCP, Azure and Vertex and Bedrock, and Databricks. 43 runnable notebooks, one continuous case study. MIT licensed, no signup. By Zorost Intelligence AI Lab.",
       "url": "https://github.com/zorost/AI-Engineering-Lab",
-      "stars": 303,
-      "forks": 253,
+      "stars": 305,
+      "forks": 254,
       "language": "Jupyter Notebook",
       "topics": [
         "ai-agents",
@@ -84,13 +226,14 @@
       "title": "TrenTorch/TrenTorch",
       "summary": "Learn PyTorch by building your own. (inspired from Harvard's TinyTorch)",
       "url": "https://github.com/TrenTorch/TrenTorch",
-      "stars": 223,
-      "forks": 26,
+      "stars": 245,
+      "forks": 27,
       "language": "Python",
       "topics": [
         "cli",
         "deep-learning",
         "education",
+        "engineering",
         "from-scratch",
         "machine-learning",
         "numpy",
@@ -105,7 +248,7 @@
       "title": "NiluK/worldmodels101",
       "summary": "Free interactive course on world models in AI. Nine visual chapters on prediction, latent dynamics, planning, JEPA, video models, and failure modes.",
       "url": "https://github.com/NiluK/worldmodels101",
-      "stars": 200,
+      "stars": 201,
       "forks": 158,
       "language": "TypeScript",
       "topics": [
@@ -124,39 +267,6 @@
       ],
       "source": "github",
       "created_at": "2026-08-19T10:39:11Z"
-    },
-    {
-      "id": "1345072328",
-      "title": "Omni-Scientist/Awesome-AI-Scientist",
-      "summary": "🧪 Awesome list of AI Scientist papers, systems, benchmarks, datasets and open-source platforms.",
-      "url": "https://github.com/Omni-Scientist/Awesome-AI-Scientist",
-      "stars": 104,
-      "forks": 1,
-      "language": "Python",
-      "topics": [
-        "agentic-ai",
-        "ai-for-science",
-        "ai-scientist",
-        "ai4science",
-        "automated-science",
-        "autonomous-research",
-        "awesome",
-        "awesome-list",
-        "benchmark",
-        "co-scientist",
-        "deep-research",
-        "large-language-models",
-        "llm",
-        "llm-agents",
-        "machine-learning",
-        "multi-agent-systems",
-        "paper-list",
-        "research-agent",
-        "scientific-discovery",
-        "self-driving-lab"
-      ],
-      "source": "github",
-      "created_at": "2026-08-24T14:48:43Z"
     },
     {
       "id": "1339347406",
@@ -187,12 +297,45 @@
       "created_at": "2026-08-19T09:06:30Z"
     },
     {
+      "id": "1345072328",
+      "title": "Omni-Scientist/Awesome-AI-Scientist",
+      "summary": "🧪 Awesome list of AI Scientist papers, systems, benchmarks, datasets and open-source platforms.",
+      "url": "https://github.com/Omni-Scientist/Awesome-AI-Scientist",
+      "stars": 103,
+      "forks": 1,
+      "language": "Python",
+      "topics": [
+        "agentic-ai",
+        "ai-for-science",
+        "ai-scientist",
+        "ai4science",
+        "automated-science",
+        "autonomous-research",
+        "awesome",
+        "awesome-list",
+        "benchmark",
+        "co-scientist",
+        "deep-research",
+        "large-language-models",
+        "llm",
+        "llm-agents",
+        "machine-learning",
+        "multi-agent-systems",
+        "paper-list",
+        "research-agent",
+        "scientific-discovery",
+        "self-driving-lab"
+      ],
+      "source": "github",
+      "created_at": "2026-08-24T14:48:43Z"
+    },
+    {
       "id": "1345052184",
       "title": "zidniryi/unbagrnd",
       "summary": "Unbagrnd - Free, Fast & Open-source AI-powered background remover for Windows, macOS, and Linux.",
       "url": "https://github.com/zidniryi/unbagrnd",
-      "stars": 93,
-      "forks": 10,
+      "stars": 94,
+      "forks": 11,
       "language": "Rust",
       "topics": [
         "ai",
@@ -263,8 +406,8 @@
       "summary": "",
       "url": "https://mathandai.org/",
       "hn_url": "https://news.ycombinator.com/item?id=49662371",
-      "points": 1227,
-      "comments": 1202,
+      "points": 1232,
+      "comments": 1213,
       "author": "meredydd",
       "source": "hackernews",
       "created_at": "2026-09-11T17:45:12Z"
@@ -275,8 +418,8 @@
       "summary": "",
       "url": "https://xeiaso.net/notes/2026/everyone-slowdown-but-me/",
       "hn_url": "https://news.ycombinator.com/item?id=49678683",
-      "points": 770,
-      "comments": 443,
+      "points": 809,
+      "comments": 450,
       "author": "xena",
       "source": "hackernews",
       "created_at": "2026-09-13T00:30:44Z"
@@ -311,8 +454,8 @@
       "summary": "",
       "url": "https://yoshuabengio.org/en/publication/why-are-ai-agents-lying-cheating-and-coordinating",
       "hn_url": "https://news.ycombinator.com/item?id=49678969",
-      "points": 618,
-      "comments": 672,
+      "points": 651,
+      "comments": 687,
       "author": "jonifico",
       "source": "hackernews",
       "created_at": "2026-09-13T01:22:31Z"
@@ -323,8 +466,8 @@
       "summary": "",
       "url": "https://www.economist.com/interactive/briefing/2026/09/03/nvidia-is-the-central-bank-of-ai",
       "hn_url": "https://news.ycombinator.com/item?id=49673098",
-      "points": 569,
-      "comments": 391,
+      "points": 580,
+      "comments": 399,
       "author": "tolugenius",
       "source": "hackernews",
       "created_at": "2026-09-12T15:08:27Z"
