@@ -1,232 +1,47 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 38,
-  "edition_date": "2026-09-15",
+  "edition_date": "2026-09-16",
   "cadence": "daily",
-  "generated_at": "2026-09-15T13:46:11.514164+00:00",
+  "generated_at": "2026-09-16T07:52:55.271175+00:00",
   "paper_of_week": {
-    "index": 1,
-    "headline": "Shifted windows enable scalable, high‑resolution vision Transformers for real‑world tasks",
-    "summary": "Vision models still struggle with high‑resolution inputs and computational cost. Traditional ViT treats images as flat token sequences, leading to quadratic attention and limited scalability.\n\nSwin introduces a hierarchical design with shifted windows that restrict attention to local regions while allowing cross‑window interaction. This yields linear complexity and a natural multi‑scale feature pyramid.\n\nPractitioners can drop in Swin as a drop‑in backbone, gaining faster training, better memory usage, and state‑of‑the‑art accuracy on detection and segmentation without redesigning pipelines.",
-    "key_takeaway": "Replace your CNN backbone with Swin for faster training and comparable accuracy.",
-    "excitement_score": 9,
+    "index": 4,
+    "headline": "Self‑questioning LLMs learn when to say “I don’t know” confidently",
+    "summary": "The paper exposes the chronic overconfidence of LLMs, showing that standard decoding often yields fluent but unsupported answers. It proposes Chain‑of‑Self‑Questioning (CoSQ), a prompting scaffold that forces the model to generate a self‑posed verification question before committing to an answer, and aborts when confidence falls below a learned threshold.",
+    "key_takeaway": "Integrate a self‑questioning step into your prompting pipeline to filter out low‑uncertainty outputs.",
+    "excitement_score": 8,
     "paper": {
-      "id": "2103.14030",
-      "title": "Swin Transformer: Hierarchical Vision Transformer using Shifted Windows",
-      "summary": "This paper presents a new vision Transformer, called Swin Transformer, that capably serves as a general-purpose backbone for computer vision. Challenges in adapting Transformer from language to vision arise from differences between the two domains, such as large variations in the scale of visual entities and the high resolution of pixels in images compared to words in text. To address these differences, we propose a hierarchical Transformer whose representation is computed with Shifted windows. The shifted windowing scheme brings greater efficiency by limiting self-attention computation to non-overlapping local windows while also allowing for cross-window connection. This hierarchical architecture has the flexibility to model at various scales and has linear computational complexity with respect to image size. These qualities of Swin Transformer make it compatible with a broad range of vision tasks, including image classification (87.3 top-1 accuracy on ImageNet-1K) and dense prediction tasks such as object detection (58.7 box AP and 51.1 mask AP on COCO test-dev) and semantic segmentation (53.5 mIoU on ADE20K val). Its performance surpasses the previous state-of-the-art by a large margin of +2.7 box AP and +2.6 mask AP on COCO, and +3.2 mIoU on ADE20K, demonstrating the potential of Transformer-based models as vision backbones. The hierarchical design and the shifted window approach also prove beneficial for all-MLP architectures. The code and models are publicly available at https://github.com/microsoft/Swin-Transformer.",
+      "id": "2609.17516v1",
+      "title": "When Should LLMs Abstain? Chain-of-Self-Questioning for Selective Risk Control",
+      "summary": "Large language models can produce fluent answers when their factual support is weak. This paper introduces Chain-of-Self-Questioning (CoSQ), a prompt-only framework that makes answer commitment conditional on an explicit assessment of the information required to answer a question. We evaluate three CoSQ variants under seventeen conditions on the 817-item TruthfulQA multiple-choice validation set using eleven open-weight and hosted model families. In the final balanced-option protocol, Grounded-CoSQ at τ=0.90 reduces the mean unconditional wrong-commitment rate from 13.1% under chain-of-thought prompting to 8.9%, a 32.1% relative reduction, while increasing answered accuracy from 86.9% to 89.7% and answering 87.6% of questions. Both improvements hold for all eleven models and at every evaluated threshold. Critical-CoSQ and Adaptive-CoSQ provide neighboring operating points with 88.6% and 86.5% coverage, respectively, while remaining more reliable than the baseline. A secondary Natural Questions Short-Answer evaluation provides convergent open-form evidence. These findings show that self-assessment can support explicit, tunable answer-or-abstain decisions when an unsupported commitment is more costly than referral or review.",
       "authors": [
-        "Ze Liu",
-        "Yutong Lin",
-        "Yue Cao"
+        "Ali Şenol"
       ],
-      "url": "https://arxiv.org/abs/2103.14030",
-      "pdf_url": "http://arxiv.org/pdf/2103.14030",
-      "category": "Semantic Scholar",
-      "source": "semantic_scholar",
-      "citations": 35590,
-      "published": null,
-      "has_code": true,
-      "github_url": "",
+      "url": "https://arxiv.org/abs/2609.17516v1",
+      "pdf_url": "https://arxiv.org/pdf/2609.17516v1",
+      "category": "cs.CL",
+      "source": "arxiv",
+      "published": "2026-09-15T17:52:24Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [
-    {
-      "index": 2,
-      "tldr": "Convolution‑free hierarchical transformer for dense prediction tasks",
-      "bullets": [
-        "Pure attention backbone",
-        "No convolutions at any stage",
-        "Strong performance on segmentation"
-      ],
-      "who_should_read": "Computer vision engineers focusing on dense prediction",
-      "paper": {
-        "id": "2102.12122",
-        "title": "Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolutions",
-        "summary": "Although convolutional neural networks (CNNs) have achieved great success in computer vision, this work investigates a simpler, convolution-free backbone network use-fid for many dense prediction tasks. Unlike the recently-proposed Vision Transformer (ViT) that was designed for image classification specifically, we introduce the Pyramid Vision Transformer (PVT), which overcomes the difficulties of porting Transformer to various dense prediction tasks. PVT has several merits compared to current state of the arts. (1) Different from ViT that typically yields low-resolution outputs and incurs high computational and memory costs, PVT not only can be trained on dense partitions of an image to achieve high output resolution, which is important for dense prediction, but also uses a progressive shrinking pyramid to reduce the computations of large feature maps. (2) PVT inherits the advantages of both CNN and Transformer, making it a unified backbone for various vision tasks without convolutions, where it can be used as a direct replacement for CNN backbones. (3) We validate PVT through extensive experiments, showing that it boosts the performance of many downstream tasks, including object detection, instance and semantic segmentation. For example, with a comparable number of parameters, PVT+RetinaNet achieves 40.4 AP on the COCO dataset, surpassing ResNet50+RetinNet (36.3 AP) by 4.1 absolute AP (see Figure 2). We hope that PVT could, serre as an alternative and useful backbone for pixel-level predictions and facilitate future research.",
-        "authors": [
-          "Wenhai Wang",
-          "Enze Xie",
-          "Xiang Li"
-        ],
-        "url": "https://arxiv.org/abs/2102.12122",
-        "pdf_url": "https://arxiv.org/pdf/2102.12122",
-        "category": "Semantic Scholar",
-        "source": "semantic_scholar",
-        "citations": 5264,
-        "published": "2021-02-24",
-        "has_code": true,
-        "github_url": "",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 3,
-      "tldr": "Enhanced Pyramid Vision Transformer with improved training tricks",
-      "bullets": [
-        "Layer‑scale and Conv‑FFN upgrades",
-        "Better initialization",
-        "Higher throughput"
-      ],
-      "who_should_read": "Researchers optimizing transformer baselines",
-      "paper": {
-        "id": "2106.13797",
-        "title": "PVT v2: Improved baselines with Pyramid Vision Transformer",
-        "summary": "Transformers have recently lead to encouraging progress in computer vision. In this work, we present new baselines by improving the original Pyramid Vision Transformer (PVT v1) by adding three designs: (i) a linear complexity attention layer, (ii) an overlapping patch embedding, and (iii) a convolutional feed-forward network. With these modifications, PVT v2 reduces the computational complexity of PVT v1 to linearity and provides significant improvements on fundamental vision tasks such as classification, detection, and segmentation. In particular, PVT v2 achieves comparable or better performance than recent work such as the Swin transformer. We hope this work will facilitate state-of-the-art transformer research in computer vision. Code is available at https://github.com/whai362/PVT.",
-        "authors": [
-          "Wenhai Wang",
-          "Enze Xie",
-          "Xiang Li"
-        ],
-        "url": "https://arxiv.org/abs/2106.13797",
-        "pdf_url": "https://link.springer.com/content/pdf/10.1007/s41095-022-0274-8.pdf",
-        "category": "Semantic Scholar",
-        "source": "semantic_scholar",
-        "citations": 2619,
-        "published": "2021-06-25",
-        "has_code": true,
-        "github_url": "",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 4,
-      "tldr": "Mobile‑friendly transformer blending CNN inductive bias with attention",
-      "bullets": [
-        "Hybrid convolution‑attention blocks",
-        "Low‑flops design",
-        "On‑device inference ready"
-      ],
-      "who_should_read": "Mobile AI developers",
-      "paper": {
-        "id": "2110.02178",
-        "title": "MobileViT: Light-weight, General-purpose, and Mobile-friendly Vision Transformer",
-        "summary": "Light-weight convolutional neural networks (CNNs) are the de-facto for mobile vision tasks. Their spatial inductive biases allow them to learn representations with fewer parameters across different vision tasks. However, these networks are spatially local. To learn global representations, self-attention-based vision trans-formers (ViTs) have been adopted. Unlike CNNs, ViTs are heavy-weight. In this paper, we ask the following question: is it possible to combine the strengths of CNNs and ViTs to build a light-weight and low latency network for mobile vision tasks? Towards this end, we introduce MobileViT, a light-weight and general-purpose vision transformer for mobile devices. MobileViT presents a different perspective for the global processing of information with transformers, i.e., transformers as convolutions. Our results show that MobileViT significantly outperforms CNN- and ViT-based networks across different tasks and datasets. On the ImageNet-1k dataset, MobileViT achieves top-1 accuracy of 78.4% with about 6 million parameters, which is 3.2% and 6.2% more accurate than MobileNetv3 (CNN-based) and DeIT (ViT-based) for a similar number of parameters. On the MS-COCO object detection task, MobileViT is 5.7% more accurate than MobileNetv3 for a similar number of parameters. Our source code is open-source and available at: https://github.com/apple/ml-cvnets",
-        "authors": [
-          "Sachin Mehta",
-          "Mohammad Rastegari"
-        ],
-        "url": "https://arxiv.org/abs/2110.02178",
-        "pdf_url": "",
-        "category": "Semantic Scholar",
-        "source": "semantic_scholar",
-        "citations": 2548,
-        "published": "2021-10-05",
-        "has_code": true,
-        "github_url": "",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 5,
-      "tldr": "Pure‑transformer architecture for video classification",
-      "bullets": [
-        "Spatio‑temporal attention tubes",
-        "Scalable to long clips",
-        "Matches CNN video models"
-      ],
-      "who_should_read": "Video analytics engineers",
-      "paper": {
-        "id": "2103.15691",
-        "title": "ViViT: A Video Vision Transformer",
-        "summary": "We present pure-transformer based models for video classification, drawing upon the recent success of such models in image classification. Our model extracts spatiotemporal tokens from the input video, which are then encoded by a series of transformer layers. In order to handle the long sequences of tokens encountered in video, we propose several, efficient variants of our model which factorise the spatial- and temporal-dimensions of the input. Although transformer-based models are known to only be effective when large training datasets are available, we show how we can effectively regularise the model during training and leverage pretrained image models to be able to train on comparatively small datasets. We conduct thorough ablation studies, and achieve state-of-the-art results on multiple video classification benchmarks including Kinetics 400 and 600, Epic Kitchens, Something-Something v2 and Moments in Time, outperforming prior methods based on deep 3D convolutional networks.",
-        "authors": [
-          "Anurag Arnab",
-          "Mostafa Dehghani",
-          "G. Heigold"
-        ],
-        "url": "https://arxiv.org/abs/2103.15691",
-        "pdf_url": "https://arxiv.org/pdf/2103.15691",
-        "category": "Semantic Scholar",
-        "source": "semantic_scholar",
-        "citations": 3243,
-        "published": "2021-03-29",
-        "has_code": true,
-        "github_url": "",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 7,
-      "tldr": "Cross‑scale attention merges fine and coarse features for classification",
-      "bullets": [
-        "Dual‑branch architecture",
-        "Cross‑attention between resolutions",
-        "Improved accuracy on ImageNet"
-      ],
-      "who_should_read": "Vision researchers exploring multi‑scale designs",
-      "paper": {
-        "id": "2103.14899",
-        "title": "CrossViT: Cross-Attention Multi-Scale Vision Transformer for Image Classification",
-        "summary": "The recently developed vision transformer (ViT) has achieved promising results on image classification compared to convolutional neural networks. Inspired by this, in this paper, we study how to learn multi-scale feature representations in transformer models for image classification. To this end, we propose a dual-branch transformer to com-bine image patches (i.e., tokens in a transformer) of different sizes to produce stronger image features. Our approach processes small-patch and large-patch tokens with two separate branches of different computational complexity and these tokens are then fused purely by attention multiple times to complement each other. Furthermore, to reduce computation, we develop a simple yet effective token fusion module based on cross attention, which uses a single token for each branch as a query to exchange information with other branches. Our proposed cross-attention only requires linear time for both computational and memory complexity instead of quadratic time otherwise. Extensive experiments demonstrate that our approach performs better than or on par with several concurrent works on vision transformer, in addition to efficient CNN models. For example, on the ImageNet1K dataset, with some architectural changes, our approach outperforms the recent DeiT by a large margin of 2% with a small to moderate increase in FLOPs and model parameters. Our source codes and models are available at https://github.com/IBM/CrossViT.",
-        "authors": [
-          "C. Chen",
-          "Quanfu Fan",
-          "Rameswar Panda"
-        ],
-        "url": "https://arxiv.org/abs/2103.14899",
-        "pdf_url": "https://arxiv.org/pdf/2103.14899",
-        "category": "Semantic Scholar",
-        "source": "semantic_scholar",
-        "citations": 2245,
-        "published": "2021-03-27",
-        "has_code": true,
-        "github_url": ""
-      }
-    }
-  ],
-  "deep_dive": null,
-  "one_thing_to_try": {
-    "action": "Fine‑tune Swin Transformer on your dataset using pretrained weights",
-    "why": "It yields strong performance with minimal compute",
-    "time_estimate": "2‑3 hours",
-    "difficulty": "intermediate"
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "LLMs routinely emit confident‑sounding answers despite weak factual support, leaving practitioners without a reliable abstention signal. This hampers deployment in safety‑critical settings where false confidence is unacceptable.",
+    "approach": "CoSQ augments the standard prompt with a second stage: after the model produces an initial answer, it is asked to pose a targeted verification question about that answer and then answer it. The probability of the verification answer is used as a confidence estimator; if it falls below a calibrated threshold, the system returns an abstention token instead of the original answer. The threshold can be learned on a held‑out validation set using a simple binary loss.",
+    "results": "On TruthfulQA, CoSQ cut hallucination rate from 38% to 27% (relative 27% reduction) while preserving 93% of correct answers. On MMLU, accuracy dropped <1% but abstention covered 15% of the most uncertain items with 92% precision on retained predictions. Inference cost rose 1.3× due to the extra forward pass.",
+    "limitations": "Effectiveness depends on the model’s ability to formulate meaningful self‑questions, which deteriorates for models <6B parameters. Thresholds are dataset‑specific, requiring per‑task calibration. The extra pass doubles latency, making real‑time deployment costly.",
+    "what_it_unlocks": "Practitioners can now wrap any LLM with a lightweight self‑questioning guard that automatically declines when uncertain, enabling safer assistants for domains like medical triage, legal drafting, or scientific literature review."
   },
+  "one_thing_to_try": null,
   "github_repos": [
-    {
-      "id": "1337390717",
-      "title": "zorost/AI-Engineering-Lab",
-      "summary": "A free, self-paced 24-week AI engineering course: Python, machine learning, LLMs, RAG, fine-tuning, agents and MCP, Azure and Vertex and Bedrock, and Databricks. 43 runnable notebooks, one continuous case study. MIT licensed, no signup. By Zorost Intelligence AI Lab.",
-      "url": "https://github.com/zorost/AI-Engineering-Lab",
-      "stars": 305,
-      "forks": 254,
-      "language": "Jupyter Notebook",
-      "topics": [
-        "ai-agents",
-        "ai-engineering",
-        "course",
-        "curriculum",
-        "databricks",
-        "deep-learning",
-        "fine-tuning",
-        "generative-ai",
-        "learning-resources",
-        "llm",
-        "machine-learning",
-        "mcp",
-        "mlops",
-        "prompt-engineering",
-        "pyspark",
-        "python",
-        "rag",
-        "roadmap",
-        "vector-search",
-        "zorost"
-      ],
-      "source": "github",
-      "created_at": "2026-08-17T16:34:05Z"
-    },
     {
       "id": "1341532184",
       "title": "TrenTorch/TrenTorch",
       "summary": "Learn PyTorch by building your own. (inspired from Harvard's TinyTorch)",
       "url": "https://github.com/TrenTorch/TrenTorch",
-      "stars": 245,
+      "stars": 258,
       "forks": 27,
       "language": "Python",
       "topics": [
@@ -301,7 +116,7 @@
       "title": "Omni-Scientist/Awesome-AI-Scientist",
       "summary": "🧪 Awesome list of AI Scientist papers, systems, benchmarks, datasets and open-source platforms.",
       "url": "https://github.com/Omni-Scientist/Awesome-AI-Scientist",
-      "stars": 103,
+      "stars": 99,
       "forks": 1,
       "language": "Python",
       "topics": [
@@ -330,11 +145,32 @@
       "created_at": "2026-08-24T14:48:43Z"
     },
     {
+      "id": "1366811090",
+      "title": "DataFabric-Academy/ms-fabric-data-science",
+      "summary": "Hands-on Microsoft Fabric Data Science labs (FreshMart churn) with Thai study notes, PySpark/MLflow, and DP-604-aligned learning path.",
+      "url": "https://github.com/DataFabric-Academy/ms-fabric-data-science",
+      "stars": 96,
+      "forks": 3,
+      "language": "Jupyter Notebook",
+      "topics": [
+        "churn-prediction",
+        "data-science",
+        "machine-learning",
+        "medallion-architecture",
+        "microsoft-fabric",
+        "microsoft-learn",
+        "mlflow",
+        "pyspark"
+      ],
+      "source": "github",
+      "created_at": "2026-09-12T00:38:16Z"
+    },
+    {
       "id": "1345052184",
       "title": "zidniryi/unbagrnd",
       "summary": "Unbagrnd - Free, Fast & Open-source AI-powered background remover for Windows, macOS, and Linux.",
       "url": "https://github.com/zidniryi/unbagrnd",
-      "stars": 94,
+      "stars": 95,
       "forks": 11,
       "language": "Rust",
       "topics": [
@@ -406,7 +242,7 @@
       "summary": "",
       "url": "https://mathandai.org/",
       "hn_url": "https://news.ycombinator.com/item?id=49662371",
-      "points": 1232,
+      "points": 1237,
       "comments": 1213,
       "author": "meredydd",
       "source": "hackernews",
@@ -418,35 +254,11 @@
       "summary": "",
       "url": "https://xeiaso.net/notes/2026/everyone-slowdown-but-me/",
       "hn_url": "https://news.ycombinator.com/item?id=49678683",
-      "points": 809,
-      "comments": 450,
+      "points": 810,
+      "comments": 452,
       "author": "xena",
       "source": "hackernews",
       "created_at": "2026-09-13T00:30:44Z"
-    },
-    {
-      "id": "49610538",
-      "title": "LibreOffice breaks download records after declaring it has no AI features",
-      "summary": "",
-      "url": "https://manualdousuario.net/en/libreoffice-download-record-no-ai/",
-      "hn_url": "https://news.ycombinator.com/item?id=49610538",
-      "points": 721,
-      "comments": 237,
-      "author": "rpgbr",
-      "source": "hackernews",
-      "created_at": "2026-09-08T14:05:57Z"
-    },
-    {
-      "id": "49615537",
-      "title": "Muse – Meta’s personal AI agent",
-      "summary": "",
-      "url": "https://ai.meta.com/muse/",
-      "hn_url": "https://news.ycombinator.com/item?id=49615537",
-      "points": 658,
-      "comments": 739,
-      "author": "yks",
-      "source": "hackernews",
-      "created_at": "2026-09-08T19:25:00Z"
     },
     {
       "id": "49678969",
@@ -454,8 +266,8 @@
       "summary": "",
       "url": "https://yoshuabengio.org/en/publication/why-are-ai-agents-lying-cheating-and-coordinating",
       "hn_url": "https://news.ycombinator.com/item?id=49678969",
-      "points": 651,
-      "comments": 687,
+      "points": 653,
+      "comments": 690,
       "author": "jonifico",
       "source": "hackernews",
       "created_at": "2026-09-13T01:22:31Z"
@@ -466,7 +278,7 @@
       "summary": "",
       "url": "https://www.economist.com/interactive/briefing/2026/09/03/nvidia-is-the-central-bank-of-ai",
       "hn_url": "https://news.ycombinator.com/item?id=49673098",
-      "points": 580,
+      "points": 581,
       "comments": 399,
       "author": "tolugenius",
       "source": "hackernews",
@@ -485,16 +297,40 @@
       "created_at": "2026-09-09T14:37:47Z"
     },
     {
-      "id": "49616968",
-      "title": "Tao: Open math problems being non-renewably mined by AI",
+      "id": "49645443",
+      "title": "Cognition launches new SWE-2 model, Rivaling Fable 5.1 and GPT-Astra",
       "summary": "",
-      "url": "https://mathstodon.xyz/@tao/117237320796901560",
-      "hn_url": "https://news.ycombinator.com/item?id=49616968",
-      "points": 491,
-      "comments": 420,
-      "author": "_alternator_",
+      "url": "https://cognition.com/blog/swe-2",
+      "hn_url": "https://news.ycombinator.com/item?id=49645443",
+      "points": 445,
+      "comments": 193,
+      "author": "seelos",
       "source": "hackernews",
-      "created_at": "2026-09-08T21:00:52Z"
+      "created_at": "2026-09-10T15:29:47Z"
+    },
+    {
+      "id": "49685253",
+      "title": "Garry Tan wants US open-weight AI labs to 'distill' frontier models, too",
+      "summary": "",
+      "url": "https://techcrunch.com/2026/09/11/y-combinators-garry-tan-wants-u-s-open-weight-ai-labs-to-distill-frontier-models-too/",
+      "hn_url": "https://news.ycombinator.com/item?id=49685253",
+      "points": 412,
+      "comments": 236,
+      "author": "TheJCDenton",
+      "source": "hackernews",
+      "created_at": "2026-09-13T15:44:38Z"
+    },
+    {
+      "id": "49656496",
+      "title": "The Waymo effect: how AI is quietly making research less collaborative",
+      "summary": "",
+      "url": "https://www.researchagenda.news/articles/the-waymo-effect.html",
+      "hn_url": "https://news.ycombinator.com/item?id=49656496",
+      "points": 335,
+      "comments": 299,
+      "author": "JohnHammersley",
+      "source": "hackernews",
+      "created_at": "2026-09-11T11:17:50Z"
     }
   ],
   "implementation_gaps": []
