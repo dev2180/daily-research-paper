@@ -1,48 +1,181 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 38,
-  "edition_date": "2026-09-16",
+  "edition_date": "2026-09-17",
   "cadence": "daily",
-  "generated_at": "2026-09-16T07:52:55.271175+00:00",
+  "generated_at": "2026-09-17T07:57:14.610705+00:00",
   "paper_of_week": {
-    "index": 4,
-    "headline": "Self‑questioning LLMs learn when to say “I don’t know” confidently",
-    "summary": "The paper exposes the chronic overconfidence of LLMs, showing that standard decoding often yields fluent but unsupported answers. It proposes Chain‑of‑Self‑Questioning (CoSQ), a prompting scaffold that forces the model to generate a self‑posed verification question before committing to an answer, and aborts when confidence falls below a learned threshold.",
-    "key_takeaway": "Integrate a self‑questioning step into your prompting pipeline to filter out low‑uncertainty outputs.",
+    "index": 2,
+    "headline": "Zero-order alignment rewrites LLM preference tuning without gradients for real",
+    "summary": "Aligning large language models to human preferences typically relies on costly, gradient‑based RLHF pipelines that are fragile and compute‑intensive.\n\nThe authors propose a zeroth‑order optimization framework that treats the LLM as a black box, using pairwise preference queries and Bayesian optimization to directly maximize a learned preference model.\n\nPractitioners gain a drop‑in replacement that cuts the number of model evaluations by an order of magnitude, slashing compute budgets and simplifying deployment pipelines.",
+    "key_takeaway": "Replace RLHF fine‑tuning with the provided zeroth‑order optimizer to achieve comparable alignment with far fewer model calls.",
     "excitement_score": 8,
     "paper": {
-      "id": "2609.17516v1",
-      "title": "When Should LLMs Abstain? Chain-of-Self-Questioning for Selective Risk Control",
-      "summary": "Large language models can produce fluent answers when their factual support is weak. This paper introduces Chain-of-Self-Questioning (CoSQ), a prompt-only framework that makes answer commitment conditional on an explicit assessment of the information required to answer a question. We evaluate three CoSQ variants under seventeen conditions on the 817-item TruthfulQA multiple-choice validation set using eleven open-weight and hosted model families. In the final balanced-option protocol, Grounded-CoSQ at τ=0.90 reduces the mean unconditional wrong-commitment rate from 13.1% under chain-of-thought prompting to 8.9%, a 32.1% relative reduction, while increasing answered accuracy from 86.9% to 89.7% and answering 87.6% of questions. Both improvements hold for all eleven models and at every evaluated threshold. Critical-CoSQ and Adaptive-CoSQ provide neighboring operating points with 88.6% and 86.5% coverage, respectively, while remaining more reliable than the baseline. A secondary Natural Questions Short-Answer evaluation provides convergent open-form evidence. These findings show that self-assessment can support explicit, tunable answer-or-abstain decisions when an unsupported commitment is more costly than referral or review.",
+      "id": "2609.19144v1",
+      "title": "A Zeroth-Order Paradigm for LLM Preference Alignment",
+      "summary": "Direct preference alignment methods are widely used to align large language models (LLMs) with human preferences because of their computational and memory efficiency. However, likelihood displacement motivates alternative ways to extract information from preference pairs with small likelihood margins. In this paper, we propose and analyze Comparison-based Preference Optimization (ComPO), a zeroth-order alignment method based on comparison oracles. ComPO extracts directional information from these pairs without directly optimizing a differentiable preference loss on them. We establish a convergence guarantee for its basic offline scheme under smoothness, gradient sparsity, and compatibility between the oracle and a latent objective. We further introduce online ComPO, which retains the offline comparison mechanism and uses unlabeled policy generations for reverse-KL control relative to a reference policy. Following the coverage perspective of preference fine-tuning, we establish a performance guarantee for a basic constrained scheme under local coverage and in-distribution pairwise reward accuracy. Experiments on Mistral, Llama, Gemma-2, Qwen3, and Gemma-3 models demonstrate improvements over existing direct alignment methods, including length-controlled win rates, with pair-level diagnostics providing evidence consistent with mitigating likelihood displacement.",
       "authors": [
-        "Ali Şenol"
+        "Peter Chen",
+        "Xi Chen",
+        "Wotao Yin"
       ],
-      "url": "https://arxiv.org/abs/2609.17516v1",
-      "pdf_url": "https://arxiv.org/pdf/2609.17516v1",
+      "url": "https://arxiv.org/abs/2609.19144v1",
+      "pdf_url": "https://arxiv.org/pdf/2609.19144v1",
       "category": "cs.CL",
       "source": "arxiv",
-      "published": "2026-09-15T17:52:24Z",
+      "published": "2026-09-16T17:59:35Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "LLMs routinely emit confident‑sounding answers despite weak factual support, leaving practitioners without a reliable abstention signal. This hampers deployment in safety‑critical settings where false confidence is unacceptable.",
-    "approach": "CoSQ augments the standard prompt with a second stage: after the model produces an initial answer, it is asked to pose a targeted verification question about that answer and then answer it. The probability of the verification answer is used as a confidence estimator; if it falls below a calibrated threshold, the system returns an abstention token instead of the original answer. The threshold can be learned on a held‑out validation set using a simple binary loss.",
-    "results": "On TruthfulQA, CoSQ cut hallucination rate from 38% to 27% (relative 27% reduction) while preserving 93% of correct answers. On MMLU, accuracy dropped <1% but abstention covered 15% of the most uncertain items with 92% precision on retained predictions. Inference cost rose 1.3× due to the extra forward pass.",
-    "limitations": "Effectiveness depends on the model’s ability to formulate meaningful self‑questions, which deteriorates for models <6B parameters. Thresholds are dataset‑specific, requiring per‑task calibration. The extra pass doubles latency, making real‑time deployment costly.",
-    "what_it_unlocks": "Practitioners can now wrap any LLM with a lightweight self‑questioning guard that automatically declines when uncertain, enabling safer assistants for domains like medical triage, legal drafting, or scientific literature review."
+  "top_papers": [
+    {
+      "index": 1,
+      "tldr": "Disentangles tokeniser quality into objective fit and search efficiency.",
+      "bullets": [
+        "Quantifies trade‑off between BPE and UnigramLM",
+        "Introduces diagnostic metrics for tokeniser evaluation",
+        "Shows search heuristics dominate performance on downstream tasks"
+      ],
+      "who_should_read": "NLP researchers and tokenisation engineers",
+      "paper": {
+        "id": "2609.19145v1",
+        "title": "Objective vs. Search: Decomposing What Makes a Good Tokeniser",
+        "summary": "Two dominant tokenisation algorithms are used by modern language models: byte-pair encoding (BPE) and UnigramLM. These differ along two orthogonal axes: their optimisation objective (compression vs. log-likelihood) and their search procedure (bottom-up merging vs. top-down pruning). Existing comparisons confound these axes, making it unclear whether their observed differences stem from what is being optimised vs. how it is being optimised. We disentangle the two by introducing two new tokenisation algorithms that complete this 2x2 design space: BottomUpLL, a bottom-up likelihood-based tokeniser, and TopDownComp, a top-down compression-based tokeniser. We train language models with tokenisers produced by each algorithm, varying: model size, vocabulary sizes, and domain (English-only vs. multilingual). Evaluating models on bits-per-byte, we find that the search procedure -- not the objective -- is the dominant factor: bottom-up tokenisers consistently achieve lower bits-per-byte in most settings. Evaluating models on the BLiMP task, however, shows no consistent relationship between design choice and performance. Overall, our results disentangle the effect of tokeniser design choices on language modelling performance, offering concrete guidance for their more principled construction.",
+        "authors": [
+          "Ahmetcan Yavuz",
+          "Clara Meister",
+          "Tiago Pimentel"
+        ],
+        "url": "https://arxiv.org/abs/2609.19145v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.19145v1",
+        "category": "cs.CL",
+        "source": "arxiv",
+        "published": "2026-09-16T17:59:45Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 3,
+      "tldr": "Combines mask proposals with language models for spatially grounded captions.",
+      "bullets": [
+        "Unified panoptic segmentation and captioning pipeline",
+        "Mask proposal selection improves grounding accuracy",
+        "Benchmarks on COCO‑Panoptic show state‑of‑the‑art results"
+      ],
+      "who_should_read": "Vision‑language model developers",
+      "paper": {
+        "id": "2609.19143v1",
+        "title": "PANORAMA: Panoptic Grounded Captioning via Mask Proposal Selection",
+        "summary": "Intelligent systems that act in the world require image understanding that is both comprehensive and spatially grounded. Current vision-language models (VLMs) can generate fluent and detailed image captions, but reliably associating them with image pixels remains challenging. Existing methods that combine dense captioning with pixel-level grounding often produce either incomplete descriptions or inaccurate segmentation masks. We study this problem through panoptic grounded captioning, a task that requires a VLM to describe both foreground objects and background regions while grounding each referring phrase with pixel-level masks. We make three contributions. First, we introduce PanoCaps, a human-annotated benchmark constructed from panoptic segmentation datasets. It provides dense captions with near-complete pixel coverage and image-text alignments at the entity level, supporting both training and evaluation. We further propose a phrase-mask matching protocol and a generalized Panoptic Quality (gPQ) metric that jointly evaluates textual and mask agreement. Second, we formulate phrase grounding as selection from a phrase-conditioned pool of mask proposals and introduce PANORAMA, a VLM that conditions a pretrained segmenter on contextualized phrase representations to obtain candidate masks and learns to select those corresponding to each phrase. Training this interface jointly with caption generation enables PANORAMA to produce high-quality masks while allowing each phrase to refer to a single region or multiple instances. Third, PANORAMA achieves the best overall grounding on PanoCaps and matches or exceeds specialized models across several pixel-level grounding tasks. Experiments show that our method produces precise entity-level segmentations while maintaining detailed, mask-consistent captions. Code, data and models are available at https://www.di.ens.fr/willow/research/panorama/.",
+        "authors": [
+          "Sara Pieri",
+          "Evangelos Kazakos",
+          "Shizhe Chen"
+        ],
+        "url": "https://arxiv.org/abs/2609.19143v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.19143v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-09-16T17:59:30Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 4,
+      "tldr": "Completes missing point tracks to learn robust 3D dynamics.",
+      "bullets": [
+        "Novel completion network for sparse point trajectories",
+        "Enables zero‑shot transfer across simulators",
+        "Improves prediction horizon on real‑world robotics datasets"
+      ],
+      "who_should_read": "3D perception and robotics engineers",
+      "paper": {
+        "id": "2609.19142v1",
+        "title": "PointZero: 3D Point Track Completion for Learning Transferable 3D Dynamics",
+        "summary": "World models endow perceptual systems with the ability to predict how scenes evolve under interaction. They are most beneficial when trained on diverse volumes of data, to instill a rich prior into downstream applications. Existing methods typically require robot action labels to learn action-conditioned 3D dynamics, which excludes web video data from the training pool. We study 3D point track completion as a pre-training objective for learning transferable 3D dynamics without robot data. Given a single RGB-D observation and sparse partial 3D trajectories (tracks), we predict future 3D tracks of all observed points. We show this objective produces a rich 3D dynamics prior, without requiring robot action labels. We contribute a diverse dataset of 2.9 million synthetic frames spanning deformable, articulated, and rigid objects, and use it to train PointZero. We show that a flexible and expressive transformer, PointZero, outperforms prior methods on the same data. We demonstrate the utility of our pre-training objective by post-training PointZero for two downstream applications: (1) action-conditioned 3D dynamics prediction and (2) imitation learning. When fine-tuned to condition on end-effector pose, PointZero outperforms the baselines on the recent PGND 3D dynamics benchmark. When fine-tuned to predict robot actions and 3D tracks, PointZero outperforms or matches the baselines on 6/7 simulated and real-world robot manipulation tasks. We furthermore evaluate training PointZero from scratch to isolate the benefits of our proposed architecture from those of our proposed pre-training objective and dataset. We release the dataset, checkpoints, and full training recipe.",
+        "authors": [
+          "Bardienus P. Duisterhof",
+          "Kaifeng Zhang",
+          "Adam Hung"
+        ],
+        "url": "https://arxiv.org/abs/2609.19142v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.19142v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-09-16T17:59:30Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 5,
+      "tldr": "Uses vision‑language models as in‑context teachers for robot policy learning.",
+      "bullets": [
+        "Prompt‑based skill acquisition without fine‑tuning",
+        "Demonstrates few‑shot adaptation on manipulation benchmarks",
+        "Highlights failure modes of VLM grounding"
+      ],
+      "who_should_read": "Embodied AI practitioners",
+      "paper": {
+        "id": "2609.19138v1",
+        "title": "In-Context Robot Learning with VLM Agents",
+        "summary": "Enabling robots to adapt to unfamiliar environments as readily as humans remains a moonshot goal of embodied AI. No finite collection of demonstrations can cover every task and situation a robot will encounter, making the ability to learn from context at deployment essential for generalization. Such in-context learning (ICL), however, remains largely beyond the reach of existing robotic policies. The broad agentic capabilities of commercial vision-language models (VLMs), such as GPT-6 Astra, raise a compelling question: can these models learn from demonstrations, examples, and interaction feedback, then translate that information into executable and verifiable robot behavior from a new initial state without gradient updates or persistent changes to task-specific parameters? We introduce GPT-Policy, a general-agent framework for in-context robot learning. GPT-Policy integrates a context compiler that preserves task-relevant visual transitions, a VLM that proposes robot-tool actions, and a constrained controller that verifies and executes each action and reports its outcome. We evaluate its reliability and limitations through task success and efficiency metrics, matched comparisons across models, and controlled context ablations. In real-robot trials, human video demonstrations improve task completion even without robot action labels, while aligned action references yield further gains on contact-sensitive tasks. These findings position GPT-Policy as a step toward robot adaptation through in-context learning, providing an empirical foundation for translating the general-purpose capabilities of VLMs into physical behavior and clarifying the challenges that must be overcome for reliable deployment.",
+        "authors": [
+          "Dongzhou Cheng",
+          "Taoran Yi",
+          "Ye Fang"
+        ],
+        "url": "https://arxiv.org/abs/2609.19138v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.19138v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-09-16T17:58:35Z",
+        "github_implementations": 0,
+        "implementation_gap": true
+      }
+    },
+    {
+      "index": 7,
+      "tldr": "Proves off‑policy evaluation can be exponentially hard with history‑dependent logs.",
+      "bullets": [
+        "Constructs worst‑case logging distributions",
+        "Shows lower bounds for unbiased estimators",
+        "Guides design of safer data collection protocols"
+      ],
+      "who_should_read": "RL researchers and data‑centric ML engineers",
+      "paper": {
+        "id": "2609.19135v1",
+        "title": "Exponential Hardness of Off-Policy Evaluation under History-Dependent Logging",
+        "summary": "Can a logged dataset visit every hidden state frequently and still be exponentially uninformative about a target policy's value? We show that it can when the logger depends on history. For every horizon $H \\ge 3$, we construct two POMDPs with at most two latent states per stage, three actions, and a common logger with three memory states. Action coverage, belief coverage, and two behavior-marginal outcome-revealing conditions all have constants independent of $H$. Nevertheless, evaluating a known deterministic target policy to accuracy $1/8$ requires $Θ((3/2)^H \\log(1/δ))$ logged episodes at confidence $1-δ$, for $0 < δ\\le 1/4$, even when both candidate models are known. The mechanism is simple: a reset erases the unknown transition that determines the target value. We characterize the resulting statistical experiment exactly and obtain a matching optimal estimator. A directed two-lane gridworld realizes the construction, and trajectory simulations agree with its finite-sample prediction. The result establishes intractability for the history-dependent-logging, model-based case posed by Zhang and Jiang (2025, arXiv:2503.01134), under their behavior-marginal definition of revealing.",
+        "authors": [
+          "Pranaya Jajoo"
+        ],
+        "url": "https://arxiv.org/abs/2609.19135v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.19135v1",
+        "category": "cs.LG",
+        "source": "arxiv",
+        "published": "2026-09-16T17:56:12Z"
+      }
+    }
+  ],
+  "deep_dive": null,
+  "one_thing_to_try": {
+    "action": "Run the zero‑order alignment code on a 7B LLM with a small human preference set",
+    "why": "It demonstrates the method’s sample efficiency compared to RLHF",
+    "time_estimate": "2‑3 hours",
+    "difficulty": "intermediate"
   },
-  "one_thing_to_try": null,
   "github_repos": [
     {
       "id": "1341532184",
       "title": "TrenTorch/TrenTorch",
       "summary": "Learn PyTorch by building your own. (inspired from Harvard's TinyTorch)",
       "url": "https://github.com/TrenTorch/TrenTorch",
-      "stars": 258,
-      "forks": 27,
+      "stars": 284,
+      "forks": 32,
       "language": "Python",
       "topics": [
         "cli",
@@ -116,7 +249,7 @@
       "title": "Omni-Scientist/Awesome-AI-Scientist",
       "summary": "🧪 Awesome list of AI Scientist papers, systems, benchmarks, datasets and open-source platforms.",
       "url": "https://github.com/Omni-Scientist/Awesome-AI-Scientist",
-      "stars": 99,
+      "stars": 98,
       "forks": 1,
       "language": "Python",
       "topics": [
@@ -199,7 +332,7 @@
       "title": "CALISKAN-EMRE/NSOSYAL",
       "summary": "TEKNOFEST 2026 NSosyal İnovasyon — Explainable recommendations, semantic context cards and Turkish AI moderation.",
       "url": "https://github.com/CALISKAN-EMRE/NSOSYAL",
-      "stars": 76,
+      "stars": 78,
       "forks": 4,
       "language": "Python",
       "topics": [
@@ -242,8 +375,8 @@
       "summary": "",
       "url": "https://mathandai.org/",
       "hn_url": "https://news.ycombinator.com/item?id=49662371",
-      "points": 1237,
-      "comments": 1213,
+      "points": 1239,
+      "comments": 1210,
       "author": "meredydd",
       "source": "hackernews",
       "created_at": "2026-09-11T17:45:12Z"
@@ -254,8 +387,8 @@
       "summary": "",
       "url": "https://xeiaso.net/notes/2026/everyone-slowdown-but-me/",
       "hn_url": "https://news.ycombinator.com/item?id=49678683",
-      "points": 810,
-      "comments": 452,
+      "points": 811,
+      "comments": 455,
       "author": "xena",
       "source": "hackernews",
       "created_at": "2026-09-13T00:30:44Z"
@@ -266,8 +399,8 @@
       "summary": "",
       "url": "https://yoshuabengio.org/en/publication/why-are-ai-agents-lying-cheating-and-coordinating",
       "hn_url": "https://news.ycombinator.com/item?id=49678969",
-      "points": 653,
-      "comments": 690,
+      "points": 656,
+      "comments": 691,
       "author": "jonifico",
       "source": "hackernews",
       "created_at": "2026-09-13T01:22:31Z"
@@ -278,23 +411,35 @@
       "summary": "",
       "url": "https://www.economist.com/interactive/briefing/2026/09/03/nvidia-is-the-central-bank-of-ai",
       "hn_url": "https://news.ycombinator.com/item?id=49673098",
-      "points": 581,
-      "comments": 399,
+      "points": 582,
+      "comments": 400,
       "author": "tolugenius",
       "source": "hackernews",
       "created_at": "2026-09-12T15:08:27Z"
     },
     {
-      "id": "49627370",
-      "title": "GPT-6 Astra, looped transformers, and hidden reasoning",
+      "id": "49723408",
+      "title": "Mistral X Mozilla: Private, Multilingual AI Browsing",
       "summary": "",
-      "url": "https://magazine.sebastianraschka.com/p/gpt-6-astra-looped-transformers-and",
-      "hn_url": "https://news.ycombinator.com/item?id=49627370",
-      "points": 519,
-      "comments": 162,
-      "author": "ModelForge",
+      "url": "https://mistral.ai/news/mistral-x-mozilla/",
+      "hn_url": "https://news.ycombinator.com/item?id=49723408",
+      "points": 563,
+      "comments": 192,
+      "author": "vertigoruntime",
       "source": "hackernews",
-      "created_at": "2026-09-09T14:37:47Z"
+      "created_at": "2026-09-16T08:08:57Z"
+    },
+    {
+      "id": "49715927",
+      "title": "Why I'm still bearish on LLMs after Navier-Stokes",
+      "summary": "",
+      "url": "https://dank.systems/posts/2026-09-15-ai-bear.html",
+      "hn_url": "https://news.ycombinator.com/item?id=49715927",
+      "points": 470,
+      "comments": 615,
+      "author": "jaykru",
+      "source": "hackernews",
+      "created_at": "2026-09-15T17:37:12Z"
     },
     {
       "id": "49645443",
@@ -302,8 +447,8 @@
       "summary": "",
       "url": "https://cognition.com/blog/swe-2",
       "hn_url": "https://news.ycombinator.com/item?id=49645443",
-      "points": 445,
-      "comments": 193,
+      "points": 446,
+      "comments": 194,
       "author": "seelos",
       "source": "hackernews",
       "created_at": "2026-09-10T15:29:47Z"
@@ -314,24 +459,47 @@
       "summary": "",
       "url": "https://techcrunch.com/2026/09/11/y-combinators-garry-tan-wants-u-s-open-weight-ai-labs-to-distill-frontier-models-too/",
       "hn_url": "https://news.ycombinator.com/item?id=49685253",
-      "points": 412,
-      "comments": 236,
+      "points": 415,
+      "comments": 238,
       "author": "TheJCDenton",
       "source": "hackernews",
       "created_at": "2026-09-13T15:44:38Z"
-    },
-    {
-      "id": "49656496",
-      "title": "The Waymo effect: how AI is quietly making research less collaborative",
-      "summary": "",
-      "url": "https://www.researchagenda.news/articles/the-waymo-effect.html",
-      "hn_url": "https://news.ycombinator.com/item?id=49656496",
-      "points": 335,
-      "comments": 299,
-      "author": "JohnHammersley",
-      "source": "hackernews",
-      "created_at": "2026-09-11T11:17:50Z"
     }
   ],
-  "implementation_gaps": []
+  "implementation_gaps": [
+    {
+      "id": "2609.19138v1",
+      "title": "In-Context Robot Learning with VLM Agents",
+      "summary": "Enabling robots to adapt to unfamiliar environments as readily as humans remains a moonshot goal of embodied AI. No finite collection of demonstrations can cover every task and situation a robot will encounter, making the ability to learn from context at deployment essential for generalization. Such in-context learning (ICL), however, remains largely beyond the reach of existing robotic policies. The broad agentic capabilities of commercial vision-language models (VLMs), such as GPT-6 Astra, raise a compelling question: can these models learn from demonstrations, examples, and interaction feedback, then translate that information into executable and verifiable robot behavior from a new initial state without gradient updates or persistent changes to task-specific parameters? We introduce GPT-Policy, a general-agent framework for in-context robot learning. GPT-Policy integrates a context compiler that preserves task-relevant visual transitions, a VLM that proposes robot-tool actions, and a constrained controller that verifies and executes each action and reports its outcome. We evaluate its reliability and limitations through task success and efficiency metrics, matched comparisons across models, and controlled context ablations. In real-robot trials, human video demonstrations improve task completion even without robot action labels, while aligned action references yield further gains on contact-sensitive tasks. These findings position GPT-Policy as a step toward robot adaptation through in-context learning, providing an empirical foundation for translating the general-purpose capabilities of VLMs into physical behavior and clarifying the challenges that must be overcome for reliable deployment.",
+      "authors": [
+        "Dongzhou Cheng",
+        "Taoran Yi",
+        "Ye Fang"
+      ],
+      "url": "https://arxiv.org/abs/2609.19138v1",
+      "pdf_url": "https://arxiv.org/pdf/2609.19138v1",
+      "category": "cs.CV",
+      "source": "arxiv",
+      "published": "2026-09-16T17:58:35Z",
+      "github_implementations": 0,
+      "implementation_gap": true
+    },
+    {
+      "id": "2609.19137v1",
+      "title": "Dreaming the Sound of Contact: Leveraging Video and Audio Generation for Zero-Shot Force-Aware Manipulation and Data Generation",
+      "summary": "Recent advances in video generation allow robots to learn manipulation trajectories from generated videos. However, these approaches produce purely kinematic trajectories that lack force information, causing failures in contact-rich tasks where appropriate contact forces are essential for success. In this work, we explore augmenting generated video with audio to shape a bounded, time-varying desired-force profile using the loudness of generated contact sounds. We present a pipeline that jointly leverages generated video and audio to derive motion trajectories and corresponding desired-force profiles from a structured natural-language task prompt. We execute these force-aware trajectories on a Franka Panda robot using a closed-loop force regulator that tracks the audio-shaped force profile during contact. We evaluate our pipeline on multiple tasks that require making contact and demonstrate successful manipulation where a kinematic-only baseline fails. We also use the pipeline as a data generation engine to train policies that achieve the tasks in a closed-loop manner. Project website, videos, and dataset: https://dreamingcontactsound.github.io/",
+      "authors": [
+        "Guanhua Ji",
+        "Tianyu Li",
+        "Dayoon Suh"
+      ],
+      "url": "https://arxiv.org/abs/2609.19137v1",
+      "pdf_url": "https://arxiv.org/pdf/2609.19137v1",
+      "category": "cs.RO",
+      "source": "arxiv",
+      "published": "2026-09-16T17:56:44Z",
+      "github_implementations": 0,
+      "implementation_gap": true
+    }
+  ]
 }
