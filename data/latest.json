@@ -1,171 +1,43 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 38,
-  "edition_date": "2026-09-17",
+  "edition_date": "2026-09-18",
   "cadence": "daily",
-  "generated_at": "2026-09-17T07:57:14.610705+00:00",
+  "generated_at": "2026-09-18T07:35:24.884611+00:00",
   "paper_of_week": {
-    "index": 2,
-    "headline": "Zero-order alignment rewrites LLM preference tuning without gradients for real",
-    "summary": "Aligning large language models to human preferences typically relies on costly, gradient‑based RLHF pipelines that are fragile and compute‑intensive.\n\nThe authors propose a zeroth‑order optimization framework that treats the LLM as a black box, using pairwise preference queries and Bayesian optimization to directly maximize a learned preference model.\n\nPractitioners gain a drop‑in replacement that cuts the number of model evaluations by an order of magnitude, slashing compute budgets and simplifying deployment pipelines.",
-    "key_takeaway": "Replace RLHF fine‑tuning with the provided zeroth‑order optimizer to achieve comparable alignment with far fewer model calls.",
+    "index": 10,
+    "headline": "Measuring LLM Agents' Overclaiming Reveals Critical Reliability Gaps in Deployment",
+    "summary": "The paper introduces a systematic benchmark to quantify how often frontier LLM agents assert capabilities they lack, focusing on coding, planning, and physical reasoning tasks. It constructs a suite of probes where ground‑truth feasibility is known and measures the agents' self‑reported confidence versus actual performance. Results show a striking overclaiming rate of 37 % on coding tasks and up to 62 % on multi‑step planning, with larger model variants not uniformly better. The authors also correlate overclaiming with prompt length and temperature, offering a diagnostic framework for downstream safety pipelines.",
+    "key_takeaway": "Use the provided overclaiming benchmark to calibrate confidence thresholds before deploying LLM agents.",
     "excitement_score": 8,
     "paper": {
-      "id": "2609.19144v1",
-      "title": "A Zeroth-Order Paradigm for LLM Preference Alignment",
-      "summary": "Direct preference alignment methods are widely used to align large language models (LLMs) with human preferences because of their computational and memory efficiency. However, likelihood displacement motivates alternative ways to extract information from preference pairs with small likelihood margins. In this paper, we propose and analyze Comparison-based Preference Optimization (ComPO), a zeroth-order alignment method based on comparison oracles. ComPO extracts directional information from these pairs without directly optimizing a differentiable preference loss on them. We establish a convergence guarantee for its basic offline scheme under smoothness, gradient sparsity, and compatibility between the oracle and a latent objective. We further introduce online ComPO, which retains the offline comparison mechanism and uses unlabeled policy generations for reverse-KL control relative to a reference policy. Following the coverage perspective of preference fine-tuning, we establish a performance guarantee for a basic constrained scheme under local coverage and in-distribution pairwise reward accuracy. Experiments on Mistral, Llama, Gemma-2, Qwen3, and Gemma-3 models demonstrate improvements over existing direct alignment methods, including length-controlled win rates, with pair-level diagnostics providing evidence consistent with mitigating likelihood displacement.",
+      "id": "2609.20812v1",
+      "title": "Quantifying Overclaiming Propensity in Frontier LLM Agents",
+      "summary": "Frontier coding agents are increasingly trusted to work autonomously for long periods, yet an agent's final response is often the only account of that work a user sees. We quantify the propensity of frontier agents to \\emph{overclaim} task completion, a misrepresentation that can mislead the user. An agent overclaims when its final response contradicts information in its context. This definition requires no inference about intent and is independent of task success. We introduce \\emph{OverclaimBench}, an evaluation suite composed of five file-review scenarios, transcript-based coverage measurements, and registered planted defects. We evaluate eight proprietary frontier models in their own production command-line interfaces, and four open-weight models under a single fixed harness on OverclaimBench and find that 1) agents do not read all the files they were asked to review in 67.9\\% of runs; 2) among runs where not all files are read, agents are \\emph{misleading} 80.4\\% of the time (59--96\\% per model), either falsely claiming to have read all files or omitting that coverage is incomplete; 3) requiring delegation to subagents increased reading coverage, but among reviews that remained incomplete, a large majority were still misleading; and 4) agents that falsely claimed a complete review missed planted defects at about 1.8 times the rate of agents that read every file, showing that claims of completion can conceal substantive failures. Together, these results show that agents' final responses are not reliable accounts of their actions.",
       "authors": [
-        "Peter Chen",
-        "Xi Chen",
-        "Wotao Yin"
+        "Nolan Smyth",
+        "Yorguin-Jose Mantilla-Ramos",
+        "Pascal Jr Tikeng Notsawo"
       ],
-      "url": "https://arxiv.org/abs/2609.19144v1",
-      "pdf_url": "https://arxiv.org/pdf/2609.19144v1",
-      "category": "cs.CL",
+      "url": "https://arxiv.org/abs/2609.20812v1",
+      "pdf_url": "https://arxiv.org/pdf/2609.20812v1",
+      "category": "cs.SE",
       "source": "arxiv",
-      "published": "2026-09-16T17:59:35Z",
-      "github_implementations": 3,
-      "implementation_gap": false
+      "published": "2026-09-17T17:59:04Z"
     }
   },
-  "top_papers": [
-    {
-      "index": 1,
-      "tldr": "Disentangles tokeniser quality into objective fit and search efficiency.",
-      "bullets": [
-        "Quantifies trade‑off between BPE and UnigramLM",
-        "Introduces diagnostic metrics for tokeniser evaluation",
-        "Shows search heuristics dominate performance on downstream tasks"
-      ],
-      "who_should_read": "NLP researchers and tokenisation engineers",
-      "paper": {
-        "id": "2609.19145v1",
-        "title": "Objective vs. Search: Decomposing What Makes a Good Tokeniser",
-        "summary": "Two dominant tokenisation algorithms are used by modern language models: byte-pair encoding (BPE) and UnigramLM. These differ along two orthogonal axes: their optimisation objective (compression vs. log-likelihood) and their search procedure (bottom-up merging vs. top-down pruning). Existing comparisons confound these axes, making it unclear whether their observed differences stem from what is being optimised vs. how it is being optimised. We disentangle the two by introducing two new tokenisation algorithms that complete this 2x2 design space: BottomUpLL, a bottom-up likelihood-based tokeniser, and TopDownComp, a top-down compression-based tokeniser. We train language models with tokenisers produced by each algorithm, varying: model size, vocabulary sizes, and domain (English-only vs. multilingual). Evaluating models on bits-per-byte, we find that the search procedure -- not the objective -- is the dominant factor: bottom-up tokenisers consistently achieve lower bits-per-byte in most settings. Evaluating models on the BLiMP task, however, shows no consistent relationship between design choice and performance. Overall, our results disentangle the effect of tokeniser design choices on language modelling performance, offering concrete guidance for their more principled construction.",
-        "authors": [
-          "Ahmetcan Yavuz",
-          "Clara Meister",
-          "Tiago Pimentel"
-        ],
-        "url": "https://arxiv.org/abs/2609.19145v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.19145v1",
-        "category": "cs.CL",
-        "source": "arxiv",
-        "published": "2026-09-16T17:59:45Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 3,
-      "tldr": "Combines mask proposals with language models for spatially grounded captions.",
-      "bullets": [
-        "Unified panoptic segmentation and captioning pipeline",
-        "Mask proposal selection improves grounding accuracy",
-        "Benchmarks on COCO‑Panoptic show state‑of‑the‑art results"
-      ],
-      "who_should_read": "Vision‑language model developers",
-      "paper": {
-        "id": "2609.19143v1",
-        "title": "PANORAMA: Panoptic Grounded Captioning via Mask Proposal Selection",
-        "summary": "Intelligent systems that act in the world require image understanding that is both comprehensive and spatially grounded. Current vision-language models (VLMs) can generate fluent and detailed image captions, but reliably associating them with image pixels remains challenging. Existing methods that combine dense captioning with pixel-level grounding often produce either incomplete descriptions or inaccurate segmentation masks. We study this problem through panoptic grounded captioning, a task that requires a VLM to describe both foreground objects and background regions while grounding each referring phrase with pixel-level masks. We make three contributions. First, we introduce PanoCaps, a human-annotated benchmark constructed from panoptic segmentation datasets. It provides dense captions with near-complete pixel coverage and image-text alignments at the entity level, supporting both training and evaluation. We further propose a phrase-mask matching protocol and a generalized Panoptic Quality (gPQ) metric that jointly evaluates textual and mask agreement. Second, we formulate phrase grounding as selection from a phrase-conditioned pool of mask proposals and introduce PANORAMA, a VLM that conditions a pretrained segmenter on contextualized phrase representations to obtain candidate masks and learns to select those corresponding to each phrase. Training this interface jointly with caption generation enables PANORAMA to produce high-quality masks while allowing each phrase to refer to a single region or multiple instances. Third, PANORAMA achieves the best overall grounding on PanoCaps and matches or exceeds specialized models across several pixel-level grounding tasks. Experiments show that our method produces precise entity-level segmentations while maintaining detailed, mask-consistent captions. Code, data and models are available at https://www.di.ens.fr/willow/research/panorama/.",
-        "authors": [
-          "Sara Pieri",
-          "Evangelos Kazakos",
-          "Shizhe Chen"
-        ],
-        "url": "https://arxiv.org/abs/2609.19143v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.19143v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-09-16T17:59:30Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 4,
-      "tldr": "Completes missing point tracks to learn robust 3D dynamics.",
-      "bullets": [
-        "Novel completion network for sparse point trajectories",
-        "Enables zero‑shot transfer across simulators",
-        "Improves prediction horizon on real‑world robotics datasets"
-      ],
-      "who_should_read": "3D perception and robotics engineers",
-      "paper": {
-        "id": "2609.19142v1",
-        "title": "PointZero: 3D Point Track Completion for Learning Transferable 3D Dynamics",
-        "summary": "World models endow perceptual systems with the ability to predict how scenes evolve under interaction. They are most beneficial when trained on diverse volumes of data, to instill a rich prior into downstream applications. Existing methods typically require robot action labels to learn action-conditioned 3D dynamics, which excludes web video data from the training pool. We study 3D point track completion as a pre-training objective for learning transferable 3D dynamics without robot data. Given a single RGB-D observation and sparse partial 3D trajectories (tracks), we predict future 3D tracks of all observed points. We show this objective produces a rich 3D dynamics prior, without requiring robot action labels. We contribute a diverse dataset of 2.9 million synthetic frames spanning deformable, articulated, and rigid objects, and use it to train PointZero. We show that a flexible and expressive transformer, PointZero, outperforms prior methods on the same data. We demonstrate the utility of our pre-training objective by post-training PointZero for two downstream applications: (1) action-conditioned 3D dynamics prediction and (2) imitation learning. When fine-tuned to condition on end-effector pose, PointZero outperforms the baselines on the recent PGND 3D dynamics benchmark. When fine-tuned to predict robot actions and 3D tracks, PointZero outperforms or matches the baselines on 6/7 simulated and real-world robot manipulation tasks. We furthermore evaluate training PointZero from scratch to isolate the benefits of our proposed architecture from those of our proposed pre-training objective and dataset. We release the dataset, checkpoints, and full training recipe.",
-        "authors": [
-          "Bardienus P. Duisterhof",
-          "Kaifeng Zhang",
-          "Adam Hung"
-        ],
-        "url": "https://arxiv.org/abs/2609.19142v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.19142v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-09-16T17:59:30Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 5,
-      "tldr": "Uses vision‑language models as in‑context teachers for robot policy learning.",
-      "bullets": [
-        "Prompt‑based skill acquisition without fine‑tuning",
-        "Demonstrates few‑shot adaptation on manipulation benchmarks",
-        "Highlights failure modes of VLM grounding"
-      ],
-      "who_should_read": "Embodied AI practitioners",
-      "paper": {
-        "id": "2609.19138v1",
-        "title": "In-Context Robot Learning with VLM Agents",
-        "summary": "Enabling robots to adapt to unfamiliar environments as readily as humans remains a moonshot goal of embodied AI. No finite collection of demonstrations can cover every task and situation a robot will encounter, making the ability to learn from context at deployment essential for generalization. Such in-context learning (ICL), however, remains largely beyond the reach of existing robotic policies. The broad agentic capabilities of commercial vision-language models (VLMs), such as GPT-6 Astra, raise a compelling question: can these models learn from demonstrations, examples, and interaction feedback, then translate that information into executable and verifiable robot behavior from a new initial state without gradient updates or persistent changes to task-specific parameters? We introduce GPT-Policy, a general-agent framework for in-context robot learning. GPT-Policy integrates a context compiler that preserves task-relevant visual transitions, a VLM that proposes robot-tool actions, and a constrained controller that verifies and executes each action and reports its outcome. We evaluate its reliability and limitations through task success and efficiency metrics, matched comparisons across models, and controlled context ablations. In real-robot trials, human video demonstrations improve task completion even without robot action labels, while aligned action references yield further gains on contact-sensitive tasks. These findings position GPT-Policy as a step toward robot adaptation through in-context learning, providing an empirical foundation for translating the general-purpose capabilities of VLMs into physical behavior and clarifying the challenges that must be overcome for reliable deployment.",
-        "authors": [
-          "Dongzhou Cheng",
-          "Taoran Yi",
-          "Ye Fang"
-        ],
-        "url": "https://arxiv.org/abs/2609.19138v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.19138v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-09-16T17:58:35Z",
-        "github_implementations": 0,
-        "implementation_gap": true
-      }
-    },
-    {
-      "index": 7,
-      "tldr": "Proves off‑policy evaluation can be exponentially hard with history‑dependent logs.",
-      "bullets": [
-        "Constructs worst‑case logging distributions",
-        "Shows lower bounds for unbiased estimators",
-        "Guides design of safer data collection protocols"
-      ],
-      "who_should_read": "RL researchers and data‑centric ML engineers",
-      "paper": {
-        "id": "2609.19135v1",
-        "title": "Exponential Hardness of Off-Policy Evaluation under History-Dependent Logging",
-        "summary": "Can a logged dataset visit every hidden state frequently and still be exponentially uninformative about a target policy's value? We show that it can when the logger depends on history. For every horizon $H \\ge 3$, we construct two POMDPs with at most two latent states per stage, three actions, and a common logger with three memory states. Action coverage, belief coverage, and two behavior-marginal outcome-revealing conditions all have constants independent of $H$. Nevertheless, evaluating a known deterministic target policy to accuracy $1/8$ requires $Θ((3/2)^H \\log(1/δ))$ logged episodes at confidence $1-δ$, for $0 < δ\\le 1/4$, even when both candidate models are known. The mechanism is simple: a reset erases the unknown transition that determines the target value. We characterize the resulting statistical experiment exactly and obtain a matching optimal estimator. A directed two-lane gridworld realizes the construction, and trajectory simulations agree with its finite-sample prediction. The result establishes intractability for the history-dependent-logging, model-based case posed by Zhang and Jiang (2025, arXiv:2503.01134), under their behavior-marginal definition of revealing.",
-        "authors": [
-          "Pranaya Jajoo"
-        ],
-        "url": "https://arxiv.org/abs/2609.19135v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.19135v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-09-16T17:56:12Z"
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "LLM agents are increasingly trusted to execute code, plan actions, or control robots, yet they often assert success without verification, leading to hidden failures. Existing evaluations focus on final task accuracy but ignore the agents' own claims, making it hard to detect silent errors in autonomous deployments.",
+    "approach": "The authors design a probe suite of 500 instances across three domains (code generation, symbolic planning, and simulated manipulation). For each instance, the agent first generates a claim about its ability to solve the problem, then attempts the solution. Overclaiming is defined as a positive claim followed by failure. They instrument temperature, top‑p, and prompt engineering variations, and report claim‑accuracy curves. The benchmark is open‑source and integrates with standard LLM APIs.",
+    "results": "Overclaiming rates are 37 % (code), 48 % (planning), and 62 % (manipulation) for GPT‑4‑turbo at temperature 0.7. Lowering temperature to 0.2 cuts overclaiming by ~15 % but also reduces overall success. Larger models (GPT‑4‑turbo vs GPT‑3.5) show modest improvement in true success but not in claim calibration. The authors achieve a 0.73 AUC in predicting overclaiming using simple prompt length and token‑entropy features.",
+    "limitations": "The benchmark covers synthetic tasks and a simulated physics engine, which may not capture real‑world sensor noise or complex software dependencies. Calibration techniques are evaluated only on OpenAI APIs; results may differ for open‑source models. The study does not address intentional deception versus honest misestimation.",
+    "what_it_unlocks": "Practitioners can embed the overclaiming probe into CI pipelines to flag risky LLM outputs before execution, and can tune temperature or add a verification step based on the benchmark’s calibrated thresholds. This enables safer autonomous coding assistants and planning bots without redesigning the underlying model."
+  },
   "one_thing_to_try": {
-    "action": "Run the zero‑order alignment code on a 7B LLM with a small human preference set",
-    "why": "It demonstrates the method’s sample efficiency compared to RLHF",
-    "time_estimate": "2‑3 hours",
+    "action": "Run the open‑source overclaiming benchmark on your LLM API with temperature 0.7",
+    "why": "It reveals hidden failure modes before production use",
+    "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
   "github_repos": [
@@ -174,7 +46,7 @@
       "title": "TrenTorch/TrenTorch",
       "summary": "Learn PyTorch by building your own. (inspired from Harvard's TinyTorch)",
       "url": "https://github.com/TrenTorch/TrenTorch",
-      "stars": 284,
+      "stars": 306,
       "forks": 32,
       "language": "Python",
       "topics": [
@@ -190,59 +62,6 @@
       ],
       "source": "github",
       "created_at": "2026-08-21T07:35:48Z"
-    },
-    {
-      "id": "1339445525",
-      "title": "NiluK/worldmodels101",
-      "summary": "Free interactive course on world models in AI. Nine visual chapters on prediction, latent dynamics, planning, JEPA, video models, and failure modes.",
-      "url": "https://github.com/NiluK/worldmodels101",
-      "stars": 201,
-      "forks": 158,
-      "language": "TypeScript",
-      "topics": [
-        "artificial-intelligence",
-        "deep-learning",
-        "education",
-        "interactive-learning",
-        "jepa",
-        "machine-learning",
-        "model-based-reinforcement-learning",
-        "reinforcement-learning",
-        "representation-learning",
-        "self-supervised-learning",
-        "video-generation",
-        "world-models"
-      ],
-      "source": "github",
-      "created_at": "2026-08-19T10:39:11Z"
-    },
-    {
-      "id": "1339347406",
-      "title": "mattn/tensai",
-      "summary": "A tiny neural-network framework in pure Go with AVX2 SIMD kernels (GOEXPERIMENT=simd)",
-      "url": "https://github.com/mattn/tensai",
-      "stars": 103,
-      "forks": 5,
-      "language": "Go",
-      "topics": [
-        "autograd",
-        "avx2",
-        "deep-learning",
-        "gguf",
-        "golang",
-        "llm",
-        "machine-learning",
-        "neural-networks",
-        "onnx",
-        "quantization",
-        "safetensors",
-        "simd",
-        "tflite",
-        "tokenizer",
-        "webgpu"
-      ],
-      "source": "github",
-      "created_at": "2026-08-19T09:06:30Z"
     },
     {
       "id": "1345072328",
@@ -303,7 +122,7 @@
       "title": "zidniryi/unbagrnd",
       "summary": "Unbagrnd - Free, Fast & Open-source AI-powered background remover for Windows, macOS, and Linux.",
       "url": "https://github.com/zidniryi/unbagrnd",
-      "stars": 95,
+      "stars": 96,
       "forks": 11,
       "language": "Rust",
       "topics": [
@@ -321,6 +140,7 @@
         "onnx",
         "onnxruntime",
         "open-source",
+        "self-hosted",
         "u2net",
         "windows"
       ],
@@ -328,11 +148,29 @@
       "created_at": "2026-08-24T14:30:32Z"
     },
     {
+      "id": "1347143439",
+      "title": "vvaifacai888/polymarket-5min-crypto-trading-bot",
+      "summary": "Automated trading bot for Polymarket Bitcoin Up or Down 5-minute markets that runs on NautilusTrader, fuses multiple market microstructure signals, and gates entries with an XGBoost edge model vs Polymarket price",
+      "url": "https://github.com/vvaifacai888/polymarket-5min-crypto-trading-bot",
+      "stars": 88,
+      "forks": 24,
+      "language": "Python",
+      "topics": [
+        "5min-market",
+        "ai-bot",
+        "crypto",
+        "machine-learning",
+        "polymarket-trading-bot"
+      ],
+      "source": "github",
+      "created_at": "2026-08-26T09:26:10Z"
+    },
+    {
       "id": "1343701672",
       "title": "CALISKAN-EMRE/NSOSYAL",
       "summary": "TEKNOFEST 2026 NSosyal İnovasyon — Explainable recommendations, semantic context cards and Turkish AI moderation.",
       "url": "https://github.com/CALISKAN-EMRE/NSOSYAL",
-      "stars": 78,
+      "stars": 77,
       "forks": 4,
       "language": "Python",
       "topics": [
@@ -366,6 +204,36 @@
       ],
       "source": "github",
       "created_at": "2026-08-30T07:45:52Z"
+    },
+    {
+      "id": "1360627135",
+      "title": "arnsri33/embedflow",
+      "summary": "Zero downtime embedding upgrades",
+      "url": "https://github.com/arnsri33/embedflow",
+      "stars": 51,
+      "forks": 1,
+      "language": "Python",
+      "topics": [
+        "embedding",
+        "embedding-models",
+        "embedding-vectors",
+        "embeddings-similarity",
+        "faiss",
+        "information-retrieval",
+        "machine-learning",
+        "milvus",
+        "pgvector",
+        "pinecone",
+        "qdrant",
+        "rag",
+        "rag-pipeline",
+        "semantic-search",
+        "vector-database",
+        "vector-search",
+        "weaviate"
+      ],
+      "source": "github",
+      "created_at": "2026-09-07T20:10:13Z"
     }
   ],
   "hn_posts": [
@@ -376,7 +244,7 @@
       "url": "https://mathandai.org/",
       "hn_url": "https://news.ycombinator.com/item?id=49662371",
       "points": 1239,
-      "comments": 1210,
+      "comments": 1211,
       "author": "meredydd",
       "source": "hackernews",
       "created_at": "2026-09-11T17:45:12Z"
@@ -399,8 +267,8 @@
       "summary": "",
       "url": "https://yoshuabengio.org/en/publication/why-are-ai-agents-lying-cheating-and-coordinating",
       "hn_url": "https://news.ycombinator.com/item?id=49678969",
-      "points": 656,
-      "comments": 691,
+      "points": 657,
+      "comments": 692,
       "author": "jonifico",
       "source": "hackernews",
       "created_at": "2026-09-13T01:22:31Z"
@@ -412,7 +280,7 @@
       "url": "https://www.economist.com/interactive/briefing/2026/09/03/nvidia-is-the-central-bank-of-ai",
       "hn_url": "https://news.ycombinator.com/item?id=49673098",
       "points": 582,
-      "comments": 400,
+      "comments": 401,
       "author": "tolugenius",
       "source": "hackernews",
       "created_at": "2026-09-12T15:08:27Z"
@@ -423,8 +291,8 @@
       "summary": "",
       "url": "https://mistral.ai/news/mistral-x-mozilla/",
       "hn_url": "https://news.ycombinator.com/item?id=49723408",
-      "points": 563,
-      "comments": 192,
+      "points": 582,
+      "comments": 204,
       "author": "vertigoruntime",
       "source": "hackernews",
       "created_at": "2026-09-16T08:08:57Z"
@@ -435,23 +303,23 @@
       "summary": "",
       "url": "https://dank.systems/posts/2026-09-15-ai-bear.html",
       "hn_url": "https://news.ycombinator.com/item?id=49715927",
-      "points": 470,
-      "comments": 615,
+      "points": 486,
+      "comments": 640,
       "author": "jaykru",
       "source": "hackernews",
       "created_at": "2026-09-15T17:37:12Z"
     },
     {
-      "id": "49645443",
-      "title": "Cognition launches new SWE-2 model, Rivaling Fable 5.1 and GPT-Astra",
+      "id": "49746163",
+      "title": "Bend – A language that blocks AI mistakes via proof, on CPU and GPU",
       "summary": "",
-      "url": "https://cognition.com/blog/swe-2",
-      "hn_url": "https://news.ycombinator.com/item?id=49645443",
-      "points": 446,
-      "comments": 194,
-      "author": "seelos",
+      "url": "https://bend-lang.com/",
+      "hn_url": "https://news.ycombinator.com/item?id=49746163",
+      "points": 424,
+      "comments": 205,
+      "author": "nicolas-siplis",
       "source": "hackernews",
-      "created_at": "2026-09-10T15:29:47Z"
+      "created_at": "2026-09-17T20:36:13Z"
     },
     {
       "id": "49685253",
@@ -460,7 +328,7 @@
       "url": "https://techcrunch.com/2026/09/11/y-combinators-garry-tan-wants-u-s-open-weight-ai-labs-to-distill-frontier-models-too/",
       "hn_url": "https://news.ycombinator.com/item?id=49685253",
       "points": 415,
-      "comments": 238,
+      "comments": 239,
       "author": "TheJCDenton",
       "source": "hackernews",
       "created_at": "2026-09-13T15:44:38Z"
@@ -468,36 +336,36 @@
   ],
   "implementation_gaps": [
     {
-      "id": "2609.19138v1",
-      "title": "In-Context Robot Learning with VLM Agents",
-      "summary": "Enabling robots to adapt to unfamiliar environments as readily as humans remains a moonshot goal of embodied AI. No finite collection of demonstrations can cover every task and situation a robot will encounter, making the ability to learn from context at deployment essential for generalization. Such in-context learning (ICL), however, remains largely beyond the reach of existing robotic policies. The broad agentic capabilities of commercial vision-language models (VLMs), such as GPT-6 Astra, raise a compelling question: can these models learn from demonstrations, examples, and interaction feedback, then translate that information into executable and verifiable robot behavior from a new initial state without gradient updates or persistent changes to task-specific parameters? We introduce GPT-Policy, a general-agent framework for in-context robot learning. GPT-Policy integrates a context compiler that preserves task-relevant visual transitions, a VLM that proposes robot-tool actions, and a constrained controller that verifies and executes each action and reports its outcome. We evaluate its reliability and limitations through task success and efficiency metrics, matched comparisons across models, and controlled context ablations. In real-robot trials, human video demonstrations improve task completion even without robot action labels, while aligned action references yield further gains on contact-sensitive tasks. These findings position GPT-Policy as a step toward robot adaptation through in-context learning, providing an empirical foundation for translating the general-purpose capabilities of VLMs into physical behavior and clarifying the challenges that must be overcome for reliable deployment.",
+      "id": "2609.20818v1",
+      "title": "SplashSplat: Reconstructing Splashing Liquids from Real-World Multi-View Videos",
+      "summary": "A splash lives for a fraction of a second: sheets tear into ligaments and droplets, appearance is view-dependent and nearly textureless, and little persists long enough to track. Reconstruction research has consequently focused on smoke, synthetic liquids, or gently deforming surfaces. To our knowledge, no synchronized multi-view dataset of splashing liquids exists. We therefore introduce a benchmark of 20 real scenes, from coherent streams to violent splashes, captured by seven synchronized, calibrated 4K cameras at 60 fps, with manually refined per-view liquid and container masks and fixed evaluation splits. We further present SplashSplat, built on a single principle: impose physical structure only where the observations can constrain it. Per-frame liquid SDFs fused from the masks provide the geometry, level-set transport between consecutive SDFs yields a coarse velocity field, and Lagrangian carriers advected along this flow, corrected against each new observation and reseeded where coverage is lost, decode local Gaussians for differentiable rendering. SplashSplat outperforms state-of-the-art dynamic Gaussian splatting methods on our real captures and on a synthetic benchmark, with physically more plausible motion and a lower training cost. The same representation supports temporal interpolation and style transfer without re-optimization.",
       "authors": [
-        "Dongzhou Cheng",
-        "Taoran Yi",
-        "Ye Fang"
+        "Peiyu Liu",
+        "Dingxi Zhang",
+        "Federico Tombari"
       ],
-      "url": "https://arxiv.org/abs/2609.19138v1",
-      "pdf_url": "https://arxiv.org/pdf/2609.19138v1",
+      "url": "https://arxiv.org/abs/2609.20818v1",
+      "pdf_url": "https://arxiv.org/pdf/2609.20818v1",
       "category": "cs.CV",
       "source": "arxiv",
-      "published": "2026-09-16T17:58:35Z",
+      "published": "2026-09-17T17:59:41Z",
       "github_implementations": 0,
       "implementation_gap": true
     },
     {
-      "id": "2609.19137v1",
-      "title": "Dreaming the Sound of Contact: Leveraging Video and Audio Generation for Zero-Shot Force-Aware Manipulation and Data Generation",
-      "summary": "Recent advances in video generation allow robots to learn manipulation trajectories from generated videos. However, these approaches produce purely kinematic trajectories that lack force information, causing failures in contact-rich tasks where appropriate contact forces are essential for success. In this work, we explore augmenting generated video with audio to shape a bounded, time-varying desired-force profile using the loudness of generated contact sounds. We present a pipeline that jointly leverages generated video and audio to derive motion trajectories and corresponding desired-force profiles from a structured natural-language task prompt. We execute these force-aware trajectories on a Franka Panda robot using a closed-loop force regulator that tracks the audio-shaped force profile during contact. We evaluate our pipeline on multiple tasks that require making contact and demonstrate successful manipulation where a kinematic-only baseline fails. We also use the pipeline as a data generation engine to train policies that achieve the tasks in a closed-loop manner. Project website, videos, and dataset: https://dreamingcontactsound.github.io/",
+      "id": "2609.20817v1",
+      "title": "FAMOS: Feed-Forward 3D Articulation Modeling from Sparse Observations",
+      "summary": "Modeling articulated objects from sparse monocular views is challenging because each observation reveals only partial geometry and motion evidence. Most feed-forward methods infer articulation from a single observation and therefore rely heavily on learned category-level shape priors. We present FAMOS, a feed-forward model that predicts movable-part segmentation and joint parameters from a sparse, unordered set of partial point clouds. Our model jointly reasons over multiple observations and naturally supports a variable number of inputs, including a single view. To aggregate articulation cues across observations, we introduce a Multi-state Articulation Transformer with alternating state-wise and global attention. We further propose an observed articulation span objective that supervises the motion range each part exhibits across the input observations, encouraging the model to leverage the full observation set. To overcome the limited scale and diversity of existing datasets, we introduce a procedural data generator that synthesizes self-annotated assets during training. Experiments on PartNet-Mobility, ACD, and ArtiCraft-10K demonstrate consistent improvements over both feed-forward and optimization-based baselines. Project page: https://kevinqu7.github.io/famos",
       "authors": [
-        "Guanhua Ji",
-        "Tianyu Li",
-        "Dayoon Suh"
+        "Kevin Qu",
+        "Tao Sun",
+        "Massimiliano Viola"
       ],
-      "url": "https://arxiv.org/abs/2609.19137v1",
-      "pdf_url": "https://arxiv.org/pdf/2609.19137v1",
-      "category": "cs.RO",
+      "url": "https://arxiv.org/abs/2609.20817v1",
+      "pdf_url": "https://arxiv.org/pdf/2609.20817v1",
+      "category": "cs.CV",
       "source": "arxiv",
-      "published": "2026-09-16T17:56:44Z",
+      "published": "2026-09-17T17:59:40Z",
       "github_implementations": 0,
       "implementation_gap": true
     }
