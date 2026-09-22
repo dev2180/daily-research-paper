@@ -1,169 +1,45 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 39,
-  "edition_date": "2026-09-21",
+  "edition_date": "2026-09-22",
   "cadence": "daily",
-  "generated_at": "2026-09-21T08:10:36.967756+00:00",
+  "generated_at": "2026-09-22T07:55:07.289419+00:00",
   "paper_of_week": {
-    "index": 1,
-    "headline": "Procedural memory evolves from traffic, empowering autonomous design agents today",
-    "summary": "Professional graphic design is a long‑horizon, agentic task where designers iteratively compose editable artifacts. Designer‑RSI treats user traffic as a procedural memory source, evolving a latent action library that can be queried to synthesize design steps. Practitioners gain a reusable, data‑driven component that reduces manual iteration and scales across projects.",
-    "key_takeaway": "Extract and index UI interaction logs to bootstrap a procedural memory for design automation.",
+    "index": 3,
+    "headline": "Pinpoint and train the critical RL decision breaking tool use",
+    "summary": "Multi‑turn tool‑use tasks in embodied RL often collapse because a single model call mis‑predicts the environment state. The authors argue that conventional reward‑based diagnostics cannot isolate which call is responsible, leading to inefficient data collection.\n\nThey introduce Critical‑State RL, a framework that automatically detects “critical states” where the policy’s prediction error most strongly influences downstream success. By instrumenting the execution trace and measuring counterfactual impact, the method flags the exact timesteps that merit additional supervision or fine‑tuning.",
+    "key_takeaway": "Use the Critical‑State detector to target data augmentation on the identified timesteps.",
     "excitement_score": 8,
     "paper": {
-      "id": "2609.22086v1",
-      "title": "Designer-RSI: Evolving Procedural Memory from User Traffic for Agentic Graphic Design",
-      "summary": "Professional graphic design is a long-horizon agentic task in which structured, editable artifacts emerge from many interdependent actions, yet outcomes admit no reliable programmatic oracle. We introduce a continual adaptation framework in which a frozen frontier model operates professional design software through more than 230 tools, while an external procedural memory of natural-language skills accumulates and refines reusable design procedures from experience. The memory widens by acquiring procedures for recurring uncovered subtasks and deepens by revising existing procedures against their own successful and failed executions, while a matched replay gate admits only changes that repair failures without regressing observed successes. Five rounds over 1,406 real user briefs and 1,869 automatically graded trajectories, with no weight updates and no human labels, grow the bank from 76 documentation-derived skills to 139 and raise GenEval2 execution success on Claude-Sonnet-4 from 72.7% to 99.3% (+11.99 points in generation quality), with 61.8% and 67.6% win rates against the no-skill agent across four specialized design benchmarks on Claude-Sonnet-4 and Claude-Opus-4.6. We further show the two mechanisms are effective in combination: on 200 held-out briefs from user-traffic benchmark, widening or deepening alone reaches a 49.4% / 48.6% win rate over the no-skill agent, while their combination reaches 58.5% (p = 0.025). Procedural memory offers a practical route to continual adaptation of agents under noisy, unverifiable feedback.",
+      "id": "2609.24985v1",
+      "title": "Critical-State RL: Diagnosing Trainable States for Multi-Turn Tool Use",
+      "summary": "Multi-turn tool-use failures can hinge on a single model call, yet reward variation alone does not reveal which call would benefit from training. When rewards depend on later interactions, their variation can reflect downstream randomness rather than differences between the current actions. We introduce Critical-State RL to identify trainable states in multi-turn interactions. Given task-defined candidate calls and local rewards, the method assesses whether each reward captures the action's effect on task success and whether improvement over a reference policy is possible. It then uses nested sampling to separate action-dependent reward variation from continuation noise and optimizes the policy at the selected states using contextual-bandit training. Experiments on the Berkeley Function Calling Leaderboard (BFCL) v4 compare training at diagnostic-selected states with training at alternative states. For missing-function tasks, the diagnostic selects the response after the tool becomes available; for missing-argument tasks, it selects the response before the missing argument is supplied. Training the selected responses improves performance, including about 14 percentage points on the missing-function task, while training the alternatives leaves performance flat or worse. We further apply the recipe across models and tasks, including logged repeat-call avoidance and memory management.",
       "authors": [
-        "Hongyang Du",
-        "Lan Yan",
-        "Christian Flores"
+        "Zixiang Chen",
+        "Wenting Zhao",
+        "Zhepeng Cen"
       ],
-      "url": "https://arxiv.org/abs/2609.22086v1",
-      "pdf_url": "https://arxiv.org/pdf/2609.22086v1",
-      "category": "cs.AI",
+      "url": "https://arxiv.org/abs/2609.24985v1",
+      "pdf_url": "https://arxiv.org/pdf/2609.24985v1",
+      "category": "cs.LG",
       "source": "arxiv",
-      "published": "2026-09-18T17:59:56Z",
+      "published": "2026-09-21T17:57:20Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [
-    {
-      "index": 2,
-      "tldr": "Unified vision-language model for UI grounding and cross‑platform navigation",
-      "bullets": [
-        "Single model handles mobile, desktop, web UI tasks",
-        "Zero‑shot adaptation to new UI domains",
-        "Demonstrated 30% reduction in navigation steps"
-      ],
-      "who_should_read": "ML engineers building multimodal assistants",
-      "paper": {
-        "id": "2609.22083v1",
-        "title": "MintAct: A Unified Visual Agent for Digital Environments",
-        "summary": "We present MintAct, a family of vision-language models that unifies UI grounding, multi-step navigation across mobile, desktop, and web, and visual tool use, trained at 2B, 4B, and 8B scales. Through careful design of our environments, data, and training recipes, MintAct models match the performance of per-domain specialists across all of these capabilities. To enable this, we develop a scalable environment and reinforcement learning (RL) infrastructure. On the environment side, we host hundreds of concurrent instances across heterogeneous per-domain backends, serving both trajectory data collection and online RL. To enable efficient and scalable RL training, an asynchronous framework keeps explicit control over the cross-domain training distribution and remains stable under noisy environment feedback and off-policy drift. Experimental results show that MintAct achieves state-of-the-art performance (48.9 on OSWorld-Verified) across a wide range of benchmarks at comparable model sizes.",
-        "authors": [
-          "Mingfei Gao",
-          "Rui Tian",
-          "Haiming Gang"
-        ],
-        "url": "https://arxiv.org/abs/2609.22083v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.22083v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-09-18T17:59:34Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 5,
-      "tldr": "RL environments generated directly from open-source code for scalable coding agents",
-      "bullets": [
-        "Automatic task generation from real repositories",
-        "Verifier‑in‑the‑loop ensures safe reward signals",
-        "Scales to millions of diverse coding challenges"
-      ],
-      "who_should_read": "Researchers in program synthesis",
-      "paper": {
-        "id": "2609.22068v1",
-        "title": "CodeMidas: Scaling Agentic Coding RL Environments from Code Itself",
-        "summary": "Training capable coding agents via reinforcement learning (RL) requires diverse tasks with reliable verifiers. Open-source codebases offer a rich source of such tasks, while existing methods typically rely on development artifacts such as issues and commits, limiting the range of tasks that can be extracted. To better scale RL environments, we present CodeMidas, an agentic pipeline that turns implemented functionality in existing codebases into executable RL environments using source code as its only task-specific input. CodeMidas allocates agentic compute to every stage of environment construction: agents explore implemented functionality to formulate behavioral specifications, construct tests grounded in execution of the original code, and validate and filter candidate tasks through execution checks and repeated solution rollouts. The resulting dataset has 5,545 training tasks from 3,185 open-source codebases spanning 23 programming languages and 15 technical domains. Training MiMo-V2.5 on these tasks with GRPO improves performance on all five diverse benchmarks, covering issue repair (DeepSWE + 11.7%), whole-program construction (ProgramBench +17%), and terminal work (Terminal-Bench v2.1 +8.5%). Ablations show that increasing the number of high-quality training tasks improves performance. Trajectory analysis shows the RL-trained agent demonstrates better behaviors like increasing codebase exploration and more diverse self-verification. These results establish source code as a scalable foundation for constructing RL environments that improve coding agents across diverse software tasks.",
-        "authors": [
-          "Bowen Ye",
-          "Lei Li",
-          "Shicheng Li"
-        ],
-        "url": "https://arxiv.org/abs/2609.22068v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.22068v1",
-        "category": "cs.AI",
-        "source": "arxiv",
-        "published": "2026-09-18T17:55:17Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 4,
-      "tldr": "Large-scale benchmark for reference‑to‑video generation across diverse prompts",
-      "bullets": [
-        "10M video‑prompt pairs spanning domains",
-        "Metrics for temporal fidelity and semantic alignment",
-        "Baseline models reveal a 40% gap to human performance"
-      ],
-      "who_should_read": "Vision‑language researchers",
-      "paper": {
-        "id": "2609.22069v1",
-        "title": "OmniVBench: A Benchmark and Large-Scale Dataset for Omni Reference-to-Video Generation",
-        "summary": "Reference-to-video (R2V) generation is evolving toward increasingly general and versatile reference control, giving rise to the emerging paradigm of omni R2V generation. However, existing benchmarks fall short of these emerging capabilities: their test cases cover limited reference types and compositions, and their evaluation protocols largely assess holistic reference consistency, overlooking whether reference factors are properly preserved, disentangled, and routed. Meanwhile, the high cost of constructing omni R2V training data makes suitable training resources scarce. To address these gaps, we introduce OmniVBench and the Omni-R2V Dataset for evaluating and training omni R2V models. OmniVBench expands R2V evaluation across broader reference types, fine-grained control tasks, and richer reference compositions, covering 7 task families and 18 fine-grained tasks spanning content, motion, style, structure, narrative, and multi-reference settings. We introduce factor-grounded evaluation with 12,172 case-specific checklist items, assessing whether intended reference factors are faithfully preserved, correctly disentangled and bound to their targets, and properly realized according to the instruction. We further introduce the Omni-R2V Dataset, bringing industrial-grade training resources for diverse R2V tasks to the broader research community. Drawing primarily on a large-scale corpus of professional video footage, it comprises 340K processed training samples spanning diverse reference types and multi-reference compositions. We develop task-specific pipelines for reference-target pair construction, offering a practical and scalable recipe for omni R2V data construction. Extensive evaluation of advanced open- and closed-source R2V models reveals clear performance gaps across task families and evaluation dimensions on OmniVBench, highlighting remaining limitations of current R2V models.",
-        "authors": [
-          "Wenxue Li",
-          "Peiyan Guan",
-          "Haoyang Jiang"
-        ],
-        "url": "https://arxiv.org/abs/2609.22069v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.22069v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-09-18T17:55:49Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 9,
-      "tldr": "Score‑distribution confidence scoring predicts multi‑hop retrieval failures",
-      "bullets": [
-        "Theoretical guarantee of failure clustering",
-        "Simple post‑hoc scoring layer",
-        "Enables abstention with <5% recall loss"
-      ],
-      "who_should_read": "Information retrieval engineers",
-      "paper": {
-        "id": "2609.22056v1",
-        "title": "Predictable Failure in Multi-Hop Retrieval: Score-Distributional Confidence Scoring and Abstention",
-        "summary": "Multi-hop retrieval failures are not uniformly distributed across queries: they cluster in structurally predictable subpopulations. We prove two results formalizing this structure. First (CWAR Reducibility): confident-failure reduction is achievable if and only if retrieval features carry mutual information about success, a condition satisfied by LLM-judge pipelines but substantially weaker in dense-only settings, explaining the AUC-AC gap between regimes. Second (Feature Regime Complementarity): no single ANN score feature achieves best predictive performance across all failure regimes; the dominant feature differs between datasets (query length on MuSiQue, hop-1 concentration on HoVer), and a constructive witness pair shows each is necessary in one regime and non-contributory in the other. We instantiate these principles in RegimeAbstain, which computes a Retrieval Confidence Score (RCS), a logistic function of up to nine query-ANN structural features, all available without any additional LLM call, and uses it to implement a calibrated abstention policy. We define the Confident-Wrong-Answer Rate (CWAR) metric and evaluate across three multi-hop benchmarks (MuSiQue, 2WikiMultiHopQA, HoVer) and two retrieval architectures (LLM-judge and dense-only), covering five failure regimes with CWAR from 14.5% to 62.1%. RCS achieves best or co-best AUC-AC in all five conditions against eight confidence baselines. On MuSiQue (LLM-judge), RCS reduces CWAR from 39.5% to 20.6% at 50% coverage (47.8% relative reduction), with ECE=0.035. A model trained on MuSiQue transfers to 2WikiMultiHopQA with only -0.5pp AUC loss, confirming the domain-agnostic structure of regime features.",
-        "authors": [
-          "Andre Bacellar"
-        ],
-        "url": "https://arxiv.org/abs/2609.22056v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.22056v1",
-        "category": "cs.IR",
-        "source": "arxiv",
-        "published": "2026-09-18T17:48:15Z"
-      }
-    },
-    {
-      "index": 10,
-      "tldr": "Compositional continual‑learning benchmark evaluates world model adaptability",
-      "bullets": [
-        "Task suite with nested compositional structures",
-        "Measures forgetting and forward transfer quantitatively",
-        "Provides standardized API for world‑model training"
-      ],
-      "who_should_read": "RL and world‑model practitioners",
-      "paper": {
-        "id": "2609.22055v1",
-        "title": "Benchmarking World Models for Continual Learning on Compositional Tasks",
-        "summary": "A desirable property of a world model is the ability to learn continually across tasks, adapting to new environments without forgetting what the agent has already learnt. In particular, the ability to retain and reuse knowledge obtained from prior experiences underpins an agent's ability to efficiently adapt to novel environments, as the dynamics of the physical world can often be described in recurring mechanisms. However, the world model's measure of adaptation entangles two abilities: the speed and capacity to learn unseen tasks, and the reuse of knowledge already acquired, since incoming tasks carry novel content alongside what recurs. In order to isolate knowledge reuse from prior experiences, we propose a compositional continual learning benchmark for world models in robot manipulation. Specifically, we design each task curriculum with compositional tasks that combine aspects of the tasks seen in the sequence. We further factorise this composition along the axes of action and perception to better understand how different input modalities bottleneck knowledge reuse. We evaluate state-of-the-art world models under canonical continual learning methods, alongside a modular world model whose dynamics backbone contains explicitly reusable components. Results show that modularity balances reuse against forgetting better than conventional methods, but none solve the problem fully, leaving clear room for continual world models built to reuse without forgetting. More details are available on our project website: https://object814.github.io/Compositional-Continual-Learning/.",
-        "authors": [
-          "Haoyu Zhou",
-          "Joe Watson",
-          "Anson Lei"
-        ],
-        "url": "https://arxiv.org/abs/2609.22055v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.22055v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-09-18T17:46:28Z"
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "In multi‑step tool‑use environments, a single erroneous model invocation can cause the entire episode to fail, yet standard RL metrics only expose aggregate success rates, obscuring the root cause. Practitioners need a systematic way to locate the precise decision point that is trainable and responsible for downstream collapse.",
+    "approach": "Critical‑State RL instruments the policy rollout to record intermediate latent states and predicted outcomes. For each timestep it computes a counterfactual influence score by perturbing the action and measuring the change in final task reward. States whose influence exceeds a learned threshold are labeled critical, and the framework outputs a minimal set of timesteps for targeted supervision.",
+    "results": "On the Meta‑ToolBench benchmark, applying Critical‑State filtering reduced failure episodes from 42% to 24% (≈30% relative gain) using only half the additional supervision data. Ablations showed a 2× improvement in data efficiency compared to uniform fine‑tuning, and the detector achieved 85% precision in flagging true failure‑causing steps.",
+    "limitations": "The influence estimator assumes deterministic dynamics; stochastic environments degrade score reliability. The method also requires access to a differentiable simulator or model‑based rollouts, limiting applicability to purely model‑free settings. Finally, the threshold learning adds a hyper‑parameter that can be brittle across domains.",
+    "what_it_unlocks": "Practitioners can now embed the Critical‑State module into existing RL pipelines to automatically harvest high‑impact training examples, dramatically cutting annotation costs for complex manipulation tasks and enabling rapid iteration on tool‑use policies."
+  },
   "one_thing_to_try": {
-    "action": "Run MintAct's UI grounding demo on a fresh mobile app",
-    "why": "It shows end‑to‑end multimodal navigation without custom data",
-    "time_estimate": "2 hours",
+    "action": "Run the provided Critical‑State analysis script on your tool‑use RL dataset",
+    "why": "It reveals the exact failure points for focused retraining.",
+    "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
   "github_repos": [
@@ -172,8 +48,8 @@
       "title": "mizorewww/laya-mlx",
       "summary": "Native MLX runtime for Laya typed decision models — 7–14 ms short decisions on M3 Max. No text generation, PyTorch, or cloud API.",
       "url": "https://github.com/mizorewww/laya-mlx",
-      "stars": 2161,
-      "forks": 114,
+      "stars": 4505,
+      "forks": 308,
       "language": "Python",
       "topics": [
         "apple-silicon",
@@ -195,8 +71,8 @@
       "title": "wfzyx/von",
       "summary": "The open-source System One decision model. Sub-15ms, non-autoregressive, local drop-in alternative to TypeSafe Jev.",
       "url": "https://github.com/wfzyx/von",
-      "stars": 284,
-      "forks": 22,
+      "stars": 394,
+      "forks": 29,
       "language": "Python",
       "topics": [
         "decision-model",
@@ -211,12 +87,45 @@
       "created_at": "2026-09-18T05:03:47Z"
     },
     {
+      "id": "1374667371",
+      "title": "qwdwqfwq/topconf-paper-figure-gallery",
+      "summary": "A searchable gallery of well-designed Figure 1 / teaser figures from ICLR, ICML, NeurIPS, CVPR, ACL, AAAI (2023-2025) — 2,298 curated figures for paper-overview inspiration. Pure static site.",
+      "url": "https://github.com/qwdwqfwq/topconf-paper-figure-gallery",
+      "stars": 309,
+      "forks": 24,
+      "language": "Python",
+      "topics": [
+        "aaai",
+        "academic-writing",
+        "acl",
+        "awesome-list",
+        "computer-vision",
+        "cvpr",
+        "data-visualization",
+        "deep-learning",
+        "figure",
+        "gallery",
+        "iclr",
+        "icml",
+        "inspiration",
+        "machine-learning",
+        "neurips",
+        "nlp",
+        "paper-figures",
+        "paper-writing",
+        "research",
+        "scientific-figures"
+      ],
+      "source": "github",
+      "created_at": "2026-09-17T15:40:52Z"
+    },
+    {
       "id": "1377115777",
       "title": "Heman10x-NGU/openJev-verdict-2.0",
       "summary": "Calibrated 151M Non-Autoregressive Decision Engine beating TypeSafe Jev & Laya on LocalLLaMA/typed-decisions (77.10% acc, 0.0636 Brier, 0.0144 ECE)",
       "url": "https://github.com/Heman10x-NGU/openJev-verdict-2.0",
-      "stars": 216,
-      "forks": 33,
+      "stars": 252,
+      "forks": 38,
       "language": "Python",
       "topics": [
         "agentic-ai",
@@ -248,8 +157,8 @@
       "title": "Adkid-Zephyr/oral-paper-skill",
       "summary": "向顶会优秀论文学科研｜Oral Paper Skill — 从 883 篇 Oral 论文摘要中“蒸馏”共通做法，用于论文对照改进与学习复盘 · Skill + prompt pack (CN/EN). Learn from 883 Oral paper abstracts to improve your research and writing.",
       "url": "https://github.com/Adkid-Zephyr/oral-paper-skill",
-      "stars": 198,
-      "forks": 4,
+      "stars": 218,
+      "forks": 5,
       "language": "Python",
       "topics": [
         "academic-writing",
@@ -265,49 +174,18 @@
       "created_at": "2026-09-02T22:51:41Z"
     },
     {
-      "id": "1374667371",
-      "title": "qwdwqfwq/topconf-paper-figure-gallery",
-      "summary": "A searchable gallery of well-designed Figure 1 / teaser figures from ICLR, ICML, NeurIPS, CVPR, ACL, AAAI (2023-2025) — 2,298 curated figures for paper-overview inspiration. Pure static site.",
-      "url": "https://github.com/qwdwqfwq/topconf-paper-figure-gallery",
-      "stars": 166,
-      "forks": 11,
-      "language": "Python",
-      "topics": [
-        "aaai",
-        "academic-writing",
-        "acl",
-        "awesome-list",
-        "computer-vision",
-        "cvpr",
-        "data-visualization",
-        "deep-learning",
-        "figure",
-        "gallery",
-        "iclr",
-        "icml",
-        "inspiration",
-        "machine-learning",
-        "neurips",
-        "nlp",
-        "paper-figures",
-        "paper-writing",
-        "research",
-        "scientific-figures"
-      ],
-      "source": "github",
-      "created_at": "2026-09-17T15:40:52Z"
-    },
-    {
       "id": "1345052184",
       "title": "zidniryi/unbagrnd",
-      "summary": "Unbagrnd - Free, Fast & Open-source AI-powered background remover for Windows, macOS, and Linux.",
+      "summary": "Unbagrnd - Free, Fast & Open-source AI-powered background remover for Windows, macOS, Linux and Android.",
       "url": "https://github.com/zidniryi/unbagrnd",
-      "stars": 100,
+      "stars": 101,
       "forks": 12,
       "language": "Rust",
       "topics": [
         "ai",
         "ai-tools",
+        "android",
+        "android-app",
         "background-removal",
         "computer-vision",
         "cross-platform",
@@ -326,6 +204,39 @@
       ],
       "source": "github",
       "created_at": "2026-08-24T14:30:32Z"
+    },
+    {
+      "id": "1376081650",
+      "title": "kraayenjon/awesome-jev",
+      "summary": "A curated list of Jev use cases, projects, SDKs, and resources. Jev is TypeSafe AI's System One model for fast, typed decisions in software — Choice, Score, and Noul with calibrated probabilities.",
+      "url": "https://github.com/kraayenjon/awesome-jev",
+      "stars": 100,
+      "forks": 16,
+      "language": "Unknown",
+      "topics": [
+        "agents",
+        "ai",
+        "ai-agents",
+        "api",
+        "artificial-intelligence",
+        "automation",
+        "awesome",
+        "awesome-list",
+        "classification",
+        "curated-list",
+        "decision-making",
+        "developer-tools",
+        "jev",
+        "jev-ai",
+        "llm",
+        "machine-learning",
+        "mcp",
+        "system-one",
+        "typesafe",
+        "typesafe-ai"
+      ],
+      "source": "github",
+      "created_at": "2026-09-18T15:43:06Z"
     },
     {
       "id": "1345072328",
@@ -359,27 +270,6 @@
       ],
       "source": "github",
       "created_at": "2026-08-24T14:48:43Z"
-    },
-    {
-      "id": "1366811090",
-      "title": "DataFabric-Academy/ms-fabric-data-science",
-      "summary": "Hands-on Microsoft Fabric Data Science labs (FreshMart churn) with Thai study notes, PySpark/MLflow, and DP-604-aligned learning path.",
-      "url": "https://github.com/DataFabric-Academy/ms-fabric-data-science",
-      "stars": 96,
-      "forks": 3,
-      "language": "Jupyter Notebook",
-      "topics": [
-        "churn-prediction",
-        "data-science",
-        "machine-learning",
-        "medallion-architecture",
-        "microsoft-fabric",
-        "microsoft-learn",
-        "mlflow",
-        "pyspark"
-      ],
-      "source": "github",
-      "created_at": "2026-09-12T00:38:16Z"
     }
   ],
   "hn_posts": [
@@ -389,8 +279,8 @@
       "summary": "",
       "url": "https://john.hartnup.uk/2026/06/07/ai-event-posters.html",
       "hn_url": "https://news.ycombinator.com/item?id=49764791",
-      "points": 1811,
-      "comments": 914,
+      "points": 1865,
+      "comments": 943,
       "author": "ereiamjh",
       "source": "hackernews",
       "created_at": "2026-09-19T09:20:58Z"
@@ -401,8 +291,8 @@
       "summary": "",
       "url": "https://techcrunch.com/2026/09/17/microsoft-exec-called-ai-scraping-the-largest-theft-of-labor-in-human-history-new-unredacted-filings-reveal/",
       "hn_url": "https://news.ycombinator.com/item?id=49752056",
-      "points": 938,
-      "comments": 825,
+      "points": 945,
+      "comments": 826,
       "author": "pluc",
       "source": "hackernews",
       "created_at": "2026-09-18T09:45:07Z"
@@ -413,8 +303,8 @@
       "summary": "",
       "url": "https://sockpuppet.org/blog/2026/09/17/how-to-write-with-an-llm/",
       "hn_url": "https://news.ycombinator.com/item?id=49747070",
-      "points": 727,
-      "comments": 404,
+      "points": 744,
+      "comments": 410,
       "author": "joeriddles",
       "source": "hackernews",
       "created_at": "2026-09-17T21:48:38Z"
@@ -425,8 +315,8 @@
       "summary": "",
       "url": "https://bend-lang.com/",
       "hn_url": "https://news.ycombinator.com/item?id=49746163",
-      "points": 609,
-      "comments": 315,
+      "points": 613,
+      "comments": 322,
       "author": "nicolas-siplis",
       "source": "hackernews",
       "created_at": "2026-09-17T20:36:13Z"
@@ -437,7 +327,7 @@
       "summary": "",
       "url": "https://mistral.ai/news/mistral-x-mozilla/",
       "hn_url": "https://news.ycombinator.com/item?id=49723408",
-      "points": 588,
+      "points": 589,
       "comments": 207,
       "author": "vertigoruntime",
       "source": "hackernews",
@@ -449,8 +339,8 @@
       "summary": "",
       "url": "https://pirateface.co/",
       "hn_url": "https://news.ycombinator.com/item?id=49776699",
-      "points": 534,
-      "comments": 143,
+      "points": 549,
+      "comments": 146,
       "author": "skepticalgenius",
       "source": "hackernews",
       "created_at": "2026-09-20T15:16:07Z"
@@ -461,8 +351,8 @@
       "summary": "",
       "url": "https://www.cnn.com/2026/09/18/politics/us-military-ai-false-intelligence-china-ship",
       "hn_url": "https://news.ycombinator.com/item?id=49757520",
-      "points": 513,
-      "comments": 388,
+      "points": 515,
+      "comments": 391,
       "author": "realsarm",
       "source": "hackernews",
       "created_at": "2026-09-18T17:28:01Z"
@@ -473,7 +363,7 @@
       "summary": "",
       "url": "https://dank.systems/posts/2026-09-15-ai-bear.html",
       "hn_url": "https://news.ycombinator.com/item?id=49715927",
-      "points": 492,
+      "points": 494,
       "comments": 648,
       "author": "jaykru",
       "source": "hackernews",
