@@ -1,61 +1,34 @@
 {
-  "post_style": "roundup",
-  "week_number": 39,
-  "edition_date": "2026-09-27",
+  "post_style": "deep-dive",
+  "week_number": 40,
+  "edition_date": "2026-09-28",
   "cadence": "daily",
-  "generated_at": "2026-09-27T08:28:32.352492+00:00",
+  "generated_at": "2026-09-28T08:54:29.258813+00:00",
   "paper_of_week": {
-    "index": 5,
-    "headline": "Real-time speech fact-checking via retrieval-augmented neural verification for broadcast platforms",
-    "summary": "Misinformation now proliferates in spoken media—news clips, podcasts, and live broadcasts—where traditional text‑based fact‑checking pipelines falter. The paper tackles this gap by treating speech as a first‑class source and building a retrieval‑augmented verifier that aligns audio embeddings with external knowledge bases. The core insight is a dual‑encoder architecture that jointly processes transcribed speech and retrieved documents, using a contrastive loss to surface claim‑support pairs without hand‑crafted cues. Practitioners gain a drop‑in module that can be slotted into existing monitoring stacks, delivering near‑real‑time alerts and reducing manual verification overhead.",
-    "key_takeaway": "Deploy a retrieval‑augmented speech verifier to flag false claims on‑the‑fly.",
-    "excitement_score": 9,
+    "index": 4,
+    "headline": "Reverse diffusion theory finally meets first-order optimality guarantees for training",
+    "summary": "The work tackles the longstanding mismatch between diffusion‑based sampling and optimization theory, asking when a reverse diffusion trajectory can be certified as a first‑order stationary point of an implicit loss. By recasting the reverse SDE as a stochastic gradient estimator, the authors bridge the gap and provide a convergence guarantee that mirrors classic SGD rates.\n\nEmpirically they validate the bound on synthetic mixtures and on CIFAR‑10, showing that gradient norms decay as predicted and that comparable image quality is achieved with fewer reverse steps. The results suggest that diffusion sampling can be treated as an optimizer rather than a black‑box sampler.",
+    "key_takeaway": "Use the paper’s gradient‑norm stopping criterion to truncate diffusion sampling without losing fidelity.",
+    "excitement_score": 8,
     "paper": {
-      "id": "2609.30227v1",
-      "title": "To Trust or Not to Trust: Retrieval-Augmented Fact Checking in Speech",
-      "summary": "Online misinformation increasingly appears in spoken formats such as news clips, podcasts, interviews, political speeches, and social media videos, creating a need for fact-checking systems that can verify claims directly from speech. We introduce VeriSpeak, a probe benchmark for studying speech-based fact verification in Large Audio Language Models (LALMs). VeriSpeak contains 3,879 spoken claims spanning temporal, geographical, and relational facts, with balanced true and false labels. The benchmark is designed to examine whether factual verification ability transfers from text to speech, and whether retrieval-augmented LALMs can use textual evidence to correctly support or refute spoken claims. Our experiments reveal a consistent text-speech modality gap: LALMs that verify written claims reliably often fail on the same claims when spoken. Moreover, retrieval alone provides limited gains because models frequently conflate retrieved evidence with the spoken claim. In contrast, retrieval combined with explicit reasoning improves claim-evidence comparison, with a thinking-tuned LALM reaching 86.1% accuracy. VeriSpeak highlights that effective speech misinformation detection requires not only speech understanding, but also grounded reasoning over retrieved evidence. The dataset is publicly available via Hugging Face at https://huggingface.co/datasets/abhiram4572/VeriSpeak.",
+      "id": "2609.31612v1",
+      "title": "First-Order Stationarity of Reverse Diffusions",
+      "summary": "Recent literature has shown a strong connection between optimization and sampling. We develop the corresponding first-order theory for diffusion models. First, the SDE-based reverse-time flows of overdamped and underdamped Langevin diffusions contract relative Fisher divergences at explicit exponential rates whenever the stationary potential of the forward process is strongly convex---a condition on the noising process one chooses, not on the data. This is a unique advantage of SDE-based reverse diffusion, absent in the reverse process based on ODEs. Second, we incorporate discretization and establish averaged first-order stationarity bounds---the sampling analog of averaged gradient-norm guarantees in nonconvex optimization---for samplers of both overdamped and underdamped diffusion models. As in nonconvex optimization, the convexity-free certificate is local: it guarantees score consistency, not global mode weights.",
       "authors": [
-        "Debajyoti Mazumder",
-        " Mamta",
-        "Abhirama Subramanyam Penamakuri"
+        "Zhifeng Chen",
+        "Chenyang Jiang",
+        "Yazhen Wang"
       ],
-      "url": "https://arxiv.org/abs/2609.30227v1",
-      "pdf_url": "https://arxiv.org/pdf/2609.30227v1",
-      "category": "cs.LG",
+      "url": "https://arxiv.org/abs/2609.31612v1",
+      "pdf_url": "https://arxiv.org/pdf/2609.31612v1",
+      "category": "stat.ML",
       "source": "arxiv",
-      "published": "2026-09-24T17:50:40Z",
+      "published": "2026-09-25T17:57:43Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [
-    {
-      "index": 1,
-      "tldr": "Detect conspiratorial discourse without explicit lexical cues using agentic context modeling.",
-      "bullets": [
-        "Introduces agentic representation that captures intent beyond surface text.",
-        "Leverages graph‑based propagation to uncover hidden conspiracy networks.",
-        "Demonstrates robust detection on multilingual social media datasets."
-      ],
-      "who_should_read": "Social media analysts and NLP security engineers",
-      "paper": {
-        "id": "2609.30250v1",
-        "title": "Agentic Detection of Online Conspiracies",
-        "summary": "Conspiratorial discourse on social media is not always expressed through explicit claims or stable lexical markers. The same surface content may express endorsement, legitimate concerns, criticism, satire, or mockery. The main challenge is therefore not only recognizing conspiracy-related claims, but inferring the speaker's intent -- the utterance's illocutionary force. We argue that this can be achieved through the use of relevant social contexts and propose an agentic framework, equipped with a set of tools supporting social queries.   We demonstrate the benefits of our approach on a unique dataset of Hebrew tweets, covering 80\\%--90\\% of the public Hebrew tweets published over a four-year span (late 2018-- early 2023), encompassing several election cycles as well as the COVID pandemic years and related vaccination campaigns. This extensive coverage can be used in recovering different social contexts. Evaluating our framework on a manually-annotated adversarial dataset, we find that context-aware workflows consistently outperform text-only classification and that the agentic framework performs significantly better than other frameworks and settings, including a non-agentic model exposed to the same contexts available to the agent. We further provide an analysis of the results, the errors and efficiency (token economy) tradeoffs.   These findings support viewing the task of conspiracy detection as a socially embedded interpretation task, in which effective classification depends not only on access to contexts, but also on adaptive reasoning in which the agent uses tools on a per-case basis, asking only for evidence relevant to its current reasoning step.",
-        "authors": [
-          "Lior Biton",
-          "Oren Tsur"
-        ],
-        "url": "https://arxiv.org/abs/2609.30250v1",
-        "pdf_url": "https://arxiv.org/pdf/2609.30250v1",
-        "category": "cs.CL",
-        "source": "arxiv",
-        "published": "2026-09-24T17:58:43Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    }
-  ],
+  "top_papers": [],
   "deep_dive": null,
   "one_thing_to_try": null,
   "github_repos": [
@@ -64,8 +37,8 @@
       "title": "mizorewww/laya-mlx",
       "summary": "Native MLX runtime for Laya typed decision models — 7–14 ms short decisions on M3 Max. No text generation, PyTorch, or cloud API.",
       "url": "https://github.com/mizorewww/laya-mlx",
-      "stars": 6441,
-      "forks": 504,
+      "stars": 6525,
+      "forks": 512,
       "language": "Python",
       "topics": [
         "apple-silicon",
@@ -87,8 +60,8 @@
       "title": "wfzyx/von",
       "summary": "The open-source System One decision model. Sub-15ms, non-autoregressive, local drop-in alternative to TypeSafe Jev.",
       "url": "https://github.com/wfzyx/von",
-      "stars": 716,
-      "forks": 53,
+      "stars": 737,
+      "forks": 54,
       "language": "Python",
       "topics": [
         "decision-model",
@@ -107,8 +80,8 @@
       "title": "qwdwqfwq/topconf-paper-figure-gallery",
       "summary": "3,516 curated Figure 1 / teasers from ICLR, ICML, NeurIPS, CVPR, ACL, AAAI (2023-2026), with tier badges and FigureForge retrieval-augmented figure drafting",
       "url": "https://github.com/qwdwqfwq/topconf-paper-figure-gallery",
-      "stars": 481,
-      "forks": 33,
+      "stars": 555,
+      "forks": 38,
       "language": "Python",
       "topics": [
         "aaai",
@@ -138,13 +111,15 @@
     {
       "id": "1360078054",
       "title": "muellerberndt/cadence",
-      "summary": "Artificial brains as equilibrium networks that continuously update their world model from experience. Disagreements are repaired locally between neurons, the model is guaranteed to converge to a global normal form.",
+      "summary": "Deep recursive settlement networks (DRSNs) built from cortical columns that continuously update their world model from experience.",
       "url": "https://github.com/muellerberndt/cadence",
-      "stars": 320,
+      "stars": 322,
       "forks": 37,
       "language": "Python",
       "topics": [
         "agi",
+        "asi",
+        "celebral-cortex",
         "distributed-systems",
         "general-intelligence",
         "machine-learning",
@@ -156,11 +131,32 @@
       "created_at": "2026-09-07T10:20:11Z"
     },
     {
+      "id": "1355304204",
+      "title": "Adkid-Zephyr/oral-paper-skill",
+      "summary": "向顶会优秀论文学科研｜Oral Paper Skill — 从 883 篇 Oral 论文摘要中“蒸馏”共通做法，用于论文对照改进与学习复盘 · Skill + prompt pack (CN/EN). Learn from 883 Oral paper abstracts to improve your research and writing.",
+      "url": "https://github.com/Adkid-Zephyr/oral-paper-skill",
+      "stars": 295,
+      "forks": 12,
+      "language": "Python",
+      "topics": [
+        "academic-writing",
+        "claude-code",
+        "codex-skills",
+        "iclr",
+        "icml",
+        "machine-learning",
+        "neurips",
+        "research"
+      ],
+      "source": "github",
+      "created_at": "2026-09-02T22:51:41Z"
+    },
+    {
       "id": "1377115777",
       "title": "Heman10x-NGU/openJev-verdict-2.0",
       "summary": "Calibrated 151M Non-Autoregressive Decision Engine beating TypeSafe Jev & Laya on LocalLLaMA/typed-decisions (77.10% acc, 0.0636 Brier, 0.0144 ECE)",
       "url": "https://github.com/Heman10x-NGU/openJev-verdict-2.0",
-      "stars": 290,
+      "stars": 291,
       "forks": 43,
       "language": "Python",
       "topics": [
@@ -189,33 +185,12 @@
       "created_at": "2026-09-19T12:14:46Z"
     },
     {
-      "id": "1355304204",
-      "title": "Adkid-Zephyr/oral-paper-skill",
-      "summary": "向顶会优秀论文学科研｜Oral Paper Skill — 从 883 篇 Oral 论文摘要中“蒸馏”共通做法，用于论文对照改进与学习复盘 · Skill + prompt pack (CN/EN). Learn from 883 Oral paper abstracts to improve your research and writing.",
-      "url": "https://github.com/Adkid-Zephyr/oral-paper-skill",
-      "stars": 281,
-      "forks": 12,
-      "language": "Python",
-      "topics": [
-        "academic-writing",
-        "claude-code",
-        "codex-skills",
-        "iclr",
-        "icml",
-        "machine-learning",
-        "neurips",
-        "research"
-      ],
-      "source": "github",
-      "created_at": "2026-09-02T22:51:41Z"
-    },
-    {
       "id": "1376081650",
       "title": "kraayenjon/awesome-jev",
       "summary": "A curated list of Jev use cases, projects, SDKs, and resources. Jev is TypeSafe AI's System One model for fast, typed decisions in software — Choice, Score, and Noul with calibrated probabilities.",
       "url": "https://github.com/kraayenjon/awesome-jev",
-      "stars": 146,
-      "forks": 33,
+      "stars": 155,
+      "forks": 34,
       "language": "Unknown",
       "topics": [
         "agents",
@@ -247,8 +222,8 @@
       "title": "Simreal-AI/Simreal-MLBench",
       "summary": "[Public preview] Externally scored agentic ML research benchmark: 60 tasks, real competition ground truth. Open protocol, operated evaluation.",
       "url": "https://github.com/Simreal-AI/Simreal-MLBench",
-      "stars": 113,
-      "forks": 15,
+      "stars": 152,
+      "forks": 17,
       "language": "Python",
       "topics": [
         "agentic",
@@ -277,8 +252,8 @@
       "summary": "",
       "url": "https://openai.com/index/introducing-gpt-6-sol-and-luna/",
       "hn_url": "https://news.ycombinator.com/item?id=49805509",
-      "points": 1774,
-      "comments": 853,
+      "points": 1775,
+      "comments": 855,
       "author": "OfficialTurkey",
       "source": "hackernews",
       "created_at": "2026-09-22T18:00:34Z"
@@ -289,8 +264,8 @@
       "summary": "",
       "url": "https://www.bloomberg.com/graphics/2026-iran-school-attack/",
       "hn_url": "https://news.ycombinator.com/item?id=49806430",
-      "points": 966,
-      "comments": 547,
+      "points": 970,
+      "comments": 551,
       "author": "devonnull",
       "source": "hackernews",
       "created_at": "2026-09-22T19:03:38Z"
@@ -302,7 +277,7 @@
       "url": "https://www.cryptocellar.org/bgac/the-mvueh-break.html",
       "hn_url": "https://news.ycombinator.com/item?id=49801324",
       "points": 735,
-      "comments": 444,
+      "comments": 447,
       "author": "sohkamyung",
       "source": "hackernews",
       "created_at": "2026-09-22T13:52:15Z"
@@ -313,23 +288,23 @@
       "summary": "",
       "url": "https://www.reddit.com/r/facebook/comments/1wotwrk/meta_takes_down_a_critical_video_about_meta_ai/",
       "hn_url": "https://news.ycombinator.com/item?id=49827794",
-      "points": 628,
-      "comments": 390,
+      "points": 631,
+      "comments": 393,
       "author": "pieterr",
       "source": "hackernews",
       "created_at": "2026-09-24T08:23:03Z"
     },
     {
-      "id": "49776699",
-      "title": "Pirate Face Rescues LLM Models from Deletion",
+      "id": "49797323",
+      "title": "Can gzip be a language model?",
       "summary": "",
-      "url": "https://pirateface.co/",
-      "hn_url": "https://news.ycombinator.com/item?id=49776699",
-      "points": 569,
-      "comments": 148,
-      "author": "skepticalgenius",
+      "url": "https://nathan.rs/posts/gzip-lm/",
+      "hn_url": "https://news.ycombinator.com/item?id=49797323",
+      "points": 409,
+      "comments": 164,
+      "author": "networked",
       "source": "hackernews",
-      "created_at": "2026-09-20T15:16:07Z"
+      "created_at": "2026-09-22T06:08:39Z"
     },
     {
       "id": "49824686",
@@ -337,8 +312,8 @@
       "summary": "",
       "url": "https://www.kenklippenstein.com/p/feds-think-ai-critics-are-foreign",
       "hn_url": "https://news.ycombinator.com/item?id=49824686",
-      "points": 392,
-      "comments": 455,
+      "points": 394,
+      "comments": 456,
       "author": "nmeagent",
       "source": "hackernews",
       "created_at": "2026-09-24T00:41:31Z"
@@ -349,23 +324,23 @@
       "summary": "",
       "url": "https://alexn.org/blog/2026/09/22/ai-has-no-wisdom-and-neither-will-you/",
       "hn_url": "https://news.ycombinator.com/item?id=49799965",
-      "points": 384,
+      "points": 386,
       "comments": 554,
       "author": "dimonomid",
       "source": "hackernews",
       "created_at": "2026-09-22T12:11:09Z"
     },
     {
-      "id": "49792067",
-      "title": "AI coding has made CI a bottleneck, so we reworked ours to keep up",
+      "id": "49868083",
+      "title": "There are no \"rogue\" AI agents",
       "summary": "",
-      "url": "https://linear.app/now/ci-bottleneck-reworked",
-      "hn_url": "https://news.ycombinator.com/item?id=49792067",
-      "points": 316,
-      "comments": 407,
-      "author": "julian_digital",
+      "url": "https://eoinhiggins.substack.com/p/there-are-no-rogue-ai-agents",
+      "hn_url": "https://news.ycombinator.com/item?id=49868083",
+      "points": 364,
+      "comments": 251,
+      "author": "zzzeek",
       "source": "hackernews",
-      "created_at": "2026-09-21T19:23:33Z"
+      "created_at": "2026-09-27T16:19:46Z"
     }
   ],
   "implementation_gaps": []
