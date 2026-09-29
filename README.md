@@ -20,9 +20,6 @@ These are genuinely different pages, not the same layout with a different label.
 
 ---
 
-## Web Hosting
-
-https://varunb1996.github.io/ml-research-pulse
 
 
 ## Stack
