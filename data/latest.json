@@ -1,44 +1,168 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 40,
-  "edition_date": "2026-09-30",
+  "edition_date": "2026-10-01",
   "cadence": "daily",
-  "generated_at": "2026-09-30T08:54:49.741376+00:00",
+  "generated_at": "2026-10-01T09:18:56.161110+00:00",
   "paper_of_week": {
-    "index": 4,
-    "headline": "Local denoising forces samples into distinct semantic classes quickly during",
-    "summary": "The authors dissect diffusion denoising into two temporal regimes: an early speciation window where a noisy sample commits to a semantic category, and a later refinement window that sharpens visual details. By tracking class‑conditional statistics of intermediate latents, they show that semantic structure emerges far before the model reaches a photorealistic state.\n\nBuilding on this observation they formalize “semantic speciation” as a measurable divergence between class distributions, validate it across DDPM, Stable Diffusion, and latent diffusion models, and demonstrate that a simple linear probe on early denoised latents attains a large fraction of final‑image classification accuracy.",
-    "key_takeaway": "Treat the first few denoising steps as a cheap, high‑throughput semantic encoder.",
-    "excitement_score": 8,
+    "index": 1,
+    "headline": "Continuous flow unites language and vision, reshaping multimodal generation paradigm",
+    "summary": "Current multimodal models struggle to jointly represent language and vision in a truly unified, continuous space, limiting fidelity and downstream control. \nMultimodal Flow introduces a fully continuous generative framework that models both modalities as flows in a shared embedding space, enabling seamless cross‑modal sampling and interpolation. \nPractitioners gain a single model that can generate coherent image‑text pairs, perform conditional generation, and support downstream tasks without costly modality‑specific heads.",
+    "key_takeaway": "Adopt Multimodal Flow as a base model for any cross‑modal generation pipeline to cut engineering overhead.",
+    "excitement_score": 9,
     "paper": {
-      "id": "2609.38176v1",
-      "title": "Breakdown of Local Denoising as Semantic Speciation",
-      "summary": "The dynamics of generative models exhibit two apparently distinct temporal windows: a speciation window, in which a sample commits to a semantic class, and a nonlocality window, in which local context windows become insufficient for generation. Motivated by evidence of their near-concurrence in a variety of frontier models, we investigate their relationship through the spatial distribution of semantic information. Under a \"common cause\" hypothesis, we prove that the nonlocality window must lie in the speciation window. This hypothesis postulates that semantic labels explain a fraction of the correlations between distant tokens, a condition that is natural for many real datasets. We further give conditions under which both windows shrink to a single limiting time as system size grows, defining a \"phase transition\", and verify this behavior analytically in Gaussian mixtures. Together, these results identify conditions under which semantic information explains the concurrence of speciation and nonlocality, connecting two complementary perspectives on the emergence of semantic structure in generative modeling.",
+      "id": "2609.40362v1",
+      "title": "Multimodal Flow: Unified Flow Modeling of Language and Vision in Embedding Spaces",
+      "summary": "We present Multimodal Flow, a fully continuous generative model of language and vision. Most unified multimodal models either model both language and quantized images as discrete tokens or combine discrete language prediction with continuous image generation. The former introduces a visual quantization bottleneck. The latter requires modality-dependent objectives and sampling procedures. Fully continuous modeling avoids these trade-offs and enables a shared generative process, but remains underexplored for multimodal pretraining. Multimodal Flow introduces a unified continuous architecture that integrates multimodal continuous representations with a shared chunk-causal flow backbone. It organizes text blocks and images as ordered continuous hyperchunks, preserving textual token order and visual spatial structure. The backbone learns a single vector field over these hyperchunks through Flow Matching. Joint attention enables cross-modal interaction, while modality-specific feed-forward networks process each modality. The model predicts multiple target chunks in parallel during training and generates hyperchunks sequentially at inference. We instantiate MF-1 and pretrain it on multimodal data. Across 0.6B, 1.2B, and 1.6B scales, continued pretraining consistently improves multimodal modeling. With only 150B pretraining tokens, MF-1 achieves an average score of 82.8 across GenEval and DPG-Bench and 75.3 across VQAv2, MMBench, and POPE, remaining competitive with unified models trained on substantially more data. Under matched data, optimization, and parameter budgets, Multimodal Flow further outperforms representative hybrid and discrete models. These results establish continuous chunk-based embedding flow modeling as a new fully continuous paradigm for unified multimodal modeling. The related code and model are publicly released at https://github.com/hustvl/Multimodal-Flow.",
       "authors": [
-        "Guangkuo Liu",
-        "Mert Okyay",
-        "Yifan F. Zhang"
+        "Hongyuan Tao",
+        "Xinggang Wang",
+        "Lianghui Zhu"
       ],
-      "url": "https://arxiv.org/abs/2609.38176v1",
-      "pdf_url": "https://arxiv.org/pdf/2609.38176v1",
-      "category": "cs.LG",
+      "url": "https://arxiv.org/abs/2609.40362v1",
+      "pdf_url": "https://arxiv.org/pdf/2609.40362v1",
+      "category": "cs.CV",
       "source": "arxiv",
-      "published": "2026-09-29T17:59:50Z",
+      "published": "2026-09-30T17:59:57Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Understanding when and how diffusion models encode semantic information is essential for both interpretability and practical reuse of intermediate representations, yet existing analyses treat the denoising trajectory as a black box.",
-    "approach": "The method monitors the evolution of class‑conditional latent distributions during reverse diffusion. It computes KL divergence and linear separability metrics after each denoising step, and fits a breakpoint where the divergence curve sharply increases—defining the speciation window. Experiments run a pretrained image classifier on intermediate latents and train linear probes to quantify emergent semantics.",
-    "results": "Across five benchmark datasets, class KL divergence spikes around 20‑30% of total steps. A linear probe trained on latents at 30% denoising reaches 68% top‑1 accuracy on CIFAR‑10, 72% on ImageNet‑100, roughly 80% of the accuracy obtained on fully denoised images. The phenomenon persists for both pixel‑space and latent‑space diffusion models, with similar breakpoints despite differing architectures.",
-    "limitations": "The analysis is confined to image diffusion; video or 3D generative models are not examined. It relies on external classifiers, so causality between denoising dynamics and semantic emergence remains inferred, not proven. Conditioning signals (e.g., text prompts) can shift the speciation point, which the paper only scratches superficially.",
-    "what_it_unlocks": "Practitioners can harvest early denoised latents as low‑cost semantic embeddings for retrieval, clustering, or conditional generation, avoiding full sampling. This enables rapid prototyping of diffusion‑based classifiers and opens pathways for hybrid pipelines that combine diffusion priors with downstream discriminative tasks."
-  },
+  "top_papers": [
+    {
+      "index": 2,
+      "tldr": "Optimizes multimodal clinical prompts by ranking relevance, boosting diagnostic accuracy and safety.",
+      "bullets": [
+        "Ranking‑aware loss aligns prompts with clinical priorities",
+        "Few‑shot prompt tuning reduces data needs",
+        "Demonstrates improved ROC on radiology benchmarks"
+      ],
+      "who_should_read": "Clinical AI engineers",
+      "paper": {
+        "id": "2609.40361v1",
+        "title": "Ranking-Aware Prompt Optimization for Multimodal Clinical Diagnosis",
+        "summary": "Multimodal large language models (MLLMs) are rapidly advancing clinical diagnosis, yet their adaptation pipelines remain anchored to accuracy-based objectives. Clinical data are heavily class-imbalanced: a constant-majority predictor can score above 90% accuracy while being clinically useless. We therefore evaluate and optimize for AUROC, a threshold-free score that ranks positives above negatives and is invariant to class balance. We focus on prompt optimization in MLLMs. Reflective methods such as GEPA use a binary scores matrix with one row per evaluation instance and one column per candidate prompt; cells record per-instance correctness, so the column average is accuracy and drives candidate selection. We introduce pair-level Pareto prompt evolution (Ranking-PE), which replaces each correctness row with a pairwise-ordering row over (positive, negative) instance pairs: the cell is 1 if the candidate scores the positive higher than the paired negative. The column average then equals empirical AUROC (by the Wilcoxon-Mann-Whitney identity). We apply this swap at all three layers the prompt evolution search reads from - the scores matrix that decides Pareto dominance, the per-example feedback to the reflection LM, and final candidate selection - at no extra model calls and with no surrogate loss. Across three diseases on MIMIC, accuracy-based prompt evolution can degrade ranking; Ranking-PE reverses this, beating the accuracy-based recipe by +5.8 AUROC pp on fine-tuned Qwen3-VL-8B and +16.2 pp on MedGemma-4B. Ablations examine each design component and show that a medical-grade visual backbone - via vision-encoder-tuned SFT or medical pretraining - is a prerequisite that prompt search cannot replace - our recipe extends reflective prompt evolution from text-only data to multimodal clinical decision-making.",
+        "authors": [
+          "Tian Xia",
+          "Minghao Liu",
+          "Yiqing Liang"
+        ],
+        "url": "https://arxiv.org/abs/2609.40361v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.40361v1",
+        "category": "cs.LG",
+        "source": "arxiv",
+        "published": "2026-09-30T17:59:56Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 5,
+      "tldr": "Introduces physical-language code to model video dynamics, enforcing physics in world models.",
+      "bullets": [
+        "Defines a differentiable physical language",
+        "Integrates with video prediction networks",
+        "Improves physical consistency metrics on simulated datasets"
+      ],
+      "who_should_read": "Video AI researchers",
+      "paper": {
+        "id": "2609.40358v1",
+        "title": "Physis-Lang: Self-Evolving Language as a Physical Representation for Video World Model",
+        "summary": "Video world models are expected to predict how the physical world evolves, yet they often produce visually plausible videos that violate basic physical principles. Existing approaches commonly assume that natural language is insufficient to represent the physical knowledge required for reliable generation, and therefore introduce additional visual, latent, numerical, or planning-based signals. We revisit this assumption and introduce Physis-Lang, a self-evolving framework that treats physical language as a shared and optimizable representation across data curation, model training, and video generation. Physis-Lang represents physical processes through language that describes their relevant entities, causes, interactions, governing principles, temporal evolution, and effects. To improve this representation, we construct PhysCapBench, which decomposes physical processes into atomic assertions and evaluates captions using recall and precision. An agentic loop iteratively analyzes assertion-level errors and refines the instruction used to produce physical captions. Physis-Lang further converts model deficiencies into textual descriptions and uses language-guided retrieval to identify visually diverse videos that cover missing physical processes. Experiments on four widely used physical video benchmarks with Wan and Cosmos backbones demonstrate consistent improvements in physical plausibility. Notably, starting from open-source Cosmos3-Nano backbones, our Physis-Lang-enhanced models surpass the leading proprietary Veo 3.1 model.",
+        "authors": [
+          "Liming Lu",
+          "Xianzheng Ma",
+          "Wenkun He"
+        ],
+        "url": "https://arxiv.org/abs/2609.40358v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.40358v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-09-30T17:59:51Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 7,
+      "tldr": "General-purpose agents learn 3D assembly from pretrained models, reducing task-specific data.",
+      "bullets": [
+        "Leverages foundation models for part semantics",
+        "Implements a spatial reasoning module",
+        "Achieves assembly success with <5% of prior data"
+      ],
+      "who_should_read": "Robotics engineers",
+      "paper": {
+        "id": "2609.40353v1",
+        "title": "AssemblyWorld: Rethinking 3D Assembly with General-Purpose Agents",
+        "summary": "The task of 3D assembly requires translating an understanding of parts and their relationships into precise spatial arrangements. Can pretrained general-purpose agents assemble objects through visual interaction without additional assembly-specific fine-tuning? To investigate this question, we introduce AssemblyWorld, an interactive 3D environment in which agents inspect rendered views and manipulate supplied rigid parts, guided by images or assembly manuals when available. Agents perceive part geometry through 2D views rather than direct access to mesh vertices or faces, while their resulting assemblies are evaluated geometrically. Building on this environment, we construct AssemblyWorldBench, comprising 100 assembly tasks across 80 objects spanning furniture, industrial assembly, and fracture reassembly. Evaluating eight agent systems reveals substantial differences in their capabilities. The strongest system achieves 80.9% part accuracy but 59.4% complete-assembly success. The evaluated open-source systems lag substantially behind their stronger closed-source peers in both execution reliability and assembly accuracy. Analyses of visual references, interaction trajectories, and failures show how agents revise assemblies while leaving residual positioning errors. AssemblyWorld provides a common setting for both assessing the capabilities of interactive assembly agents and characterizing the gap between approximate structure recovery and precise reconstruction.",
+        "authors": [
+          "Jiahao Zhang",
+          "Yeying Fan",
+          "Moitreya Chatterjee"
+        ],
+        "url": "https://arxiv.org/abs/2609.40353v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.40353v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-09-30T17:59:14Z"
+      }
+    },
+    {
+      "index": 8,
+      "tldr": "Shows image classifiers can self-supervise video representations efficiently via masked siamese training.",
+      "bullets": [
+        "Reuses frozen image nets as video encoders",
+        "Masked siamese loss captures temporal cues",
+        "Matches state‑of‑the‑art on Kinetics with 30% less compute"
+      ],
+      "who_should_read": "Self‑supervised learning practitioners",
+      "paper": {
+        "id": "2609.40347v1",
+        "title": "Image Classifiers are Efficient Self-Supervised Video Representation Learners",
+        "summary": "We introduce VideoMSN, a Masked Siamese Network framework for efficient self-supervised spatio-temporal representation learning in videos. Instead of relying on heavy 3D architectures or reconstruction-based autoencoders for learning with unlabeled data, we repurpose standard image Vision Transformers by representing videos as super images which are grids composed of frames sampled from videos. From each super image, we construct two views: one with spatial patch masking and the other with temporal frame masking, ensuring no information leakage across frames. A shared Vision Transformer (ViT) encoder aligns their embeddings using a masked Siamese loss, capturing both motion and appearance cues without reconstruction. Our decoder-free formulation leverages an image foundation model towards efficient video representation learning. Starting from pretrained DINO-v3 and DeiT-v3 image encoders, VideoMSN achieves state-of-the-art performance on Kinetics-400, UCF101, and HMDB51 while requiring up to $32\\times$ fewer and $160\\times$ fewer video pretraining epochs compared to prior video self-supervised learning methods. Our proposed approach also shows strong performance in low-shot classification, confirming the transferability of the learned representations in a label-scarce scenario. Project Page: https://cvir.github.io/projects/videomsn.",
+        "authors": [
+          "Owais Iqbal",
+          "Sudipta Sarkar",
+          "Shyam Marjit"
+        ],
+        "url": "https://arxiv.org/abs/2609.40347v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.40347v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-09-30T17:59:03Z"
+      }
+    },
+    {
+      "index": 10,
+      "tldr": "Analyzes scaling egocentric data for robot learning, identifying alignment and coverage trade‑offs.",
+      "bullets": [
+        "Benchmarks 100 M+ egocentric clips",
+        "Quantifies human‑robot alignment impact",
+        "Provides guidelines for dataset curation"
+      ],
+      "who_should_read": "Robot learning researchers",
+      "paper": {
+        "id": "2609.40341v1",
+        "title": "Ego4WAM: What Matters When Scaling Egocentric Human Data for Robot Learning?",
+        "summary": "Egocentric human data provides a scalable source of experience for robot learning, but varies substantially in human-robot alignment, behavioral coverage, and available supervision. Existing work shows favorable scaling with increasing human data, but it remains unclear which data properties drive downstream robot gains and how to use such data throughout the training pipeline. We present a systematic study of egocentric human data with different alignment and supervision under a unified world-action model framework. With the model backbone fixed, we disentangle the effects of human-robot alignment, data duration and task diversity, action supervision, and data usage strategies. We find that aligned human demonstrations substantially improve out-of-distribution generalization and reduce target-task robot data requirements; data duration and task diversity affect downstream capabilities differently; and video-only supervision remains effective without action labels, providing a strong foundation for subsequent video-action training. We validate these findings through closed-loop policy evaluation on both real robots and RoboDojo. Rather than treating data duration as the sole scaling axis, Ego4WAM shows how alignment, task diversity, available supervision, and usage strategy jointly shape the value of egocentric human data for robot learning.",
+        "authors": [
+          "Zhihao Sun",
+          "Liu Liu",
+          "Xinjiang Wang"
+        ],
+        "url": "https://arxiv.org/abs/2609.40341v1",
+        "pdf_url": "https://arxiv.org/pdf/2609.40341v1",
+        "category": "cs.RO",
+        "source": "arxiv",
+        "published": "2026-09-30T17:58:35Z"
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Run a linear probe on 30%‑denoised latents to classify CIFAR‑10 images",
-    "why": "It validates that semantic speciation provides usable features far before full generation",
+    "action": "Integrate laya-mlx runtime to benchmark 10k decision queries",
+    "why": "It reveals sub‑15 ms latency on commodity hardware, critical for real‑time agents",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -48,8 +172,8 @@
       "title": "mizorewww/laya-mlx",
       "summary": "Native MLX runtime for Laya typed decision models — 7–14 ms short decisions on M3 Max. No text generation, PyTorch, or cloud API.",
       "url": "https://github.com/mizorewww/laya-mlx",
-      "stars": 6643,
-      "forks": 522,
+      "stars": 6668,
+      "forks": 529,
       "language": "Python",
       "topics": [
         "apple-silicon",
@@ -71,8 +195,8 @@
       "title": "wfzyx/von",
       "summary": "The open-source System One decision model. Sub-15ms, non-autoregressive, local drop-in alternative to TypeSafe Jev.",
       "url": "https://github.com/wfzyx/von",
-      "stars": 780,
-      "forks": 57,
+      "stars": 796,
+      "forks": 59,
       "language": "Python",
       "topics": [
         "decision-model",
@@ -91,8 +215,8 @@
       "title": "qwdwqfwq/topconf-paper-figure-gallery",
       "summary": "3,516 curated Figure 1 / teasers from ICLR, ICML, NeurIPS, CVPR, ACL, AAAI (2023-2026), with tier badges and FigureForge retrieval-augmented figure drafting",
       "url": "https://github.com/qwdwqfwq/topconf-paper-figure-gallery",
-      "stars": 653,
-      "forks": 42,
+      "stars": 692,
+      "forks": 45,
       "language": "Python",
       "topics": [
         "aaai",
@@ -124,8 +248,8 @@
       "title": "muellerberndt/cadence",
       "summary": "A deep real-time brain that learns from experience. Flat, state-coupled and recursive patch-net settlement, with code and reproducible demos.",
       "url": "https://github.com/muellerberndt/cadence",
-      "stars": 328,
-      "forks": 37,
+      "stars": 330,
+      "forks": 38,
       "language": "Python",
       "topics": [
         "embodied-ai",
@@ -144,7 +268,7 @@
       "title": "Adkid-Zephyr/oral-paper-skill",
       "summary": "向顶会优秀论文学科研｜Oral Paper Skill — 从 883 篇 Oral 论文摘要中“蒸馏”共通做法，用于论文对照改进与学习复盘 · Skill + prompt pack (CN/EN). Learn from 883 Oral paper abstracts to improve your research and writing.",
       "url": "https://github.com/Adkid-Zephyr/oral-paper-skill",
-      "stars": 306,
+      "stars": 310,
       "forks": 13,
       "language": "Python",
       "topics": [
@@ -198,8 +322,8 @@
       "title": "Simreal-AI/Simreal-MLBench",
       "summary": "[Public preview] Externally scored agentic ML research benchmark: 60 tasks, real competition ground truth. Open protocol, operated evaluation.",
       "url": "https://github.com/Simreal-AI/Simreal-MLBench",
-      "stars": 204,
-      "forks": 26,
+      "stars": 230,
+      "forks": 30,
       "language": "Python",
       "topics": [
         "agentic",
@@ -226,7 +350,7 @@
       "summary": "A curated list of Jev use cases, projects, SDKs, and resources. Jev is TypeSafe AI's System One model for fast, typed decisions in software — Choice, Score, and Noul with calibrated probabilities.",
       "url": "https://github.com/kraayenjon/awesome-jev",
       "stars": 164,
-      "forks": 35,
+      "forks": 36,
       "language": "Unknown",
       "topics": [
         "agents",
@@ -261,23 +385,11 @@
       "summary": "",
       "url": "https://openai.com/index/introducing-gpt-6-1-sol/",
       "hn_url": "https://news.ycombinator.com/item?id=49896586",
-      "points": 923,
-      "comments": 819,
+      "points": 1053,
+      "comments": 936,
       "author": "crorella",
       "source": "hackernews",
       "created_at": "2026-09-29T17:06:45Z"
-    },
-    {
-      "id": "49827794",
-      "title": "Meta takes down a critical video about meta AI Glasses after filming at Meta",
-      "summary": "",
-      "url": "https://www.reddit.com/r/facebook/comments/1wotwrk/meta_takes_down_a_critical_video_about_meta_ai/",
-      "hn_url": "https://news.ycombinator.com/item?id=49827794",
-      "points": 631,
-      "comments": 394,
-      "author": "pieterr",
-      "source": "hackernews",
-      "created_at": "2026-09-24T08:23:03Z"
     },
     {
       "id": "49883471",
@@ -285,8 +397,8 @@
       "summary": "",
       "url": "https://calnewport.com/its-time-to-investigate-the-ai-labs/",
       "hn_url": "https://news.ycombinator.com/item?id=49883471",
-      "points": 604,
-      "comments": 266,
+      "points": 620,
+      "comments": 277,
       "author": "ibobev",
       "source": "hackernews",
       "created_at": "2026-09-28T19:53:35Z"
@@ -297,8 +409,8 @@
       "summary": "",
       "url": "https://www.eff.org/deeplinks/2026/09/draftkings-using-ai-supercharge-harms-online-behavioral-advertising",
       "hn_url": "https://news.ycombinator.com/item?id=49896050",
-      "points": 542,
-      "comments": 402,
+      "points": 564,
+      "comments": 427,
       "author": "paimapi",
       "source": "hackernews",
       "created_at": "2026-09-29T16:30:48Z"
@@ -309,8 +421,8 @@
       "summary": "",
       "url": "https://thecivilian.co.nz/2026/09/27/ai-companies-in-fierce-arms-race-to-demonstrate-their-model-is-the-most-existentially-threatening-to-humanity/",
       "hn_url": "https://news.ycombinator.com/item?id=49875148",
-      "points": 438,
-      "comments": 393,
+      "points": 440,
+      "comments": 397,
       "author": "ljewalsh",
       "source": "hackernews",
       "created_at": "2026-09-28T08:35:40Z"
@@ -321,8 +433,8 @@
       "summary": "",
       "url": "https://jorgegarciaherrero.com/wp-content/interactivos/20260916-Prompt-like-a-butterfly-sting-like-a-tracker-(clean).pdf",
       "hn_url": "https://news.ycombinator.com/item?id=49890226",
-      "points": 417,
-      "comments": 133,
+      "points": 422,
+      "comments": 137,
       "author": "damaru2",
       "source": "hackernews",
       "created_at": "2026-09-29T09:03:41Z"
@@ -334,22 +446,34 @@
       "url": "https://eoinhiggins.substack.com/p/there-are-no-rogue-ai-agents",
       "hn_url": "https://news.ycombinator.com/item?id=49868083",
       "points": 395,
-      "comments": 268,
+      "comments": 269,
       "author": "zzzeek",
       "source": "hackernews",
       "created_at": "2026-09-27T16:19:46Z"
     },
     {
-      "id": "49824686",
-      "title": "Feds Target AI Critics as \"Foreign Agents\"",
+      "id": "49880312",
+      "title": "The problem is not AI code, but not knowing about system architecture or intent",
       "summary": "",
-      "url": "https://www.kenklippenstein.com/p/feds-think-ai-critics-are-foreign",
-      "hn_url": "https://news.ycombinator.com/item?id=49824686",
-      "points": 394,
-      "comments": 456,
-      "author": "nmeagent",
+      "url": "https://www.ssp.sh/brain/the-problem-is-not-the-ai-code-but-nobody-knows-anything-anymore/",
+      "hn_url": "https://news.ycombinator.com/item?id=49880312",
+      "points": 386,
+      "comments": 239,
+      "author": "zazuke",
       "source": "hackernews",
-      "created_at": "2026-09-24T00:41:31Z"
+      "created_at": "2026-09-28T16:11:42Z"
+    },
+    {
+      "id": "49910553",
+      "title": "The AI Race Just Got Awkward",
+      "summary": "",
+      "url": "https://insufferable.dev/posts/the-ai-race-just-got-awkward/",
+      "hn_url": "https://news.ycombinator.com/item?id=49910553",
+      "points": 385,
+      "comments": 430,
+      "author": "allisdust",
+      "source": "hackernews",
+      "created_at": "2026-09-30T15:50:11Z"
     }
   ],
   "implementation_gaps": []
