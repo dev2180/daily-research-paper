@@ -1,170 +1,40 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 40,
-  "edition_date": "2026-10-03",
+  "edition_date": "2026-10-04",
   "cadence": "daily",
-  "generated_at": "2026-10-03T08:28:45.589355+00:00",
+  "generated_at": "2026-10-04T08:41:10.350487+00:00",
   "paper_of_week": {
-    "index": 6,
-    "headline": "Embedding prediction reshapes diffusion conditioning for sharper generations",
-    "summary": "Diffusion models reuse a static condition embedding at every denoising step, limiting expressive power and increasing compute waste. The authors propose predicting a fresh embedding at each step, aligning the conditioning signal with the evolving latent. This simple modification yields higher fidelity images and faster convergence across text-to-image benchmarks.\nPractitioners gain a drop-in replacement that integrates with existing diffusion pipelines without architectural overhaul. The method reduces the number of inference steps needed for comparable quality, translating directly into lower GPU hours. Moreover, the stepwise embeddings expose a new lever for fine‑grained control over style and semantics during generation.\nOverall, the work demonstrates that conditioning is not a static afterthought but a dynamic variable that can be optimized on the fly, offering immediate gains for production systems that rely on diffusion models.",
-    "key_takeaway": "Swap static conditioning embeddings for stepwise predicted ones to cut inference cost and boost image quality.",
-    "excitement_score": 8,
+    "index": 8,
+    "headline": "Exact Schrödinger bridge solves cost‑augmented graph transport analytically with Feynman‑Kac",
+    "summary": "The authors tackle the generalized Schrödinger bridge problem on discrete graphs, where mass must be moved between two distributions while incurring state‑dependent costs. Traditional approaches learn a control policy via iterative KL‑regularized RL, which is computationally heavy and unstable. Their contribution is an exact, closed‑form solution that replaces the learned control with a Feynman‑Kac tilt of the uncontrolled Markov chain. By reweighting path probabilities with the exponential of accumulated costs, they obtain the optimal bridge without any gradient‑based optimization. In experiments on synthetic and real‑world graphs, the method reproduces the optimal transport plan instantly, achieving orders‑of‑magnitude speedups over state‑of‑the‑art solvers while preserving numerical precision.",
+    "key_takeaway": "Use the closed‑form Feynman‑Kac tilt to replace learned controllers in graph‑based transport problems.",
+    "excitement_score": 9,
     "paper": {
-      "id": "2610.02203v1",
-      "title": "Embedding Prediction Helps Image Generation",
-      "summary": "In diffusion transformers, a class label or a text prompt is embedded once, and the same condition is reused at every denoising step. We ask whether predicted embeddings can serve as this condition instead. Next-Embedding Predictive Autoregression (NEPA) trains a Transformer to predict the next continuous embedding in a sequence. In generation, the clean image follows the noisy image, so its embeddings are the next embeddings after the condition and the noisy image. We train a NEPA model to predict them all at once with Multi-Embedding Prediction, and in Embedding Conditioned Generation, a DiT generator is conditioned on these predictions, recomputed at every denoising step, so the conditioning signal adapts to the current noisy state. Experiments on class-conditional ImageNet $256\\times256$ study the condition of the generator, the design of Multi-Embedding Prediction, and the scaling of both models. The NEPA model adds a second network to every sampling step; with it, and combined with REPA, our final model, NEPA-DiT-XL, reaches an FID of 1.32 using about a third of the training compute of REPA.",
+      "id": "2610.02195v1",
+      "title": "Cost-augmented Schrödinger bridges on graphs are exactly solvable: a Feynman-Kac tilt replaces learned control",
+      "summary": "The generalized Schrödinger bridge on a graph moves mass between two distributions while charging a cost for the states visited. It has been approached by learning the rates of a controlled continuous-time Markov chain, with a temporal-difference penalty that restores the cost. A state cost folds into the reference process as a Feynman-Kac tilt. The cost-augmented bridge is then a plain bridge against the tilted reference, and the penalty is unnecessary. The bridge is computed exactly by alternating two endpoint rescalings, each one sparse matrix-exponential application; nothing is discretized in time or learned. The alternation converges at a rate set by the endpoint coupling alone. For a quadratic congestion cost on time-averaged occupancies, damped best response around the exact bridge is gradient descent on a strongly convex function, and its residual bounds its error. On a protein-folding model, a free-energy cost lowers the expected barrier of the folding paths. On the learned approach's road network, roll-outs of the exact bridge match the target within sampling error, and on networks with millions of intersections its memory grows linearly.",
       "authors": [
-        "Sihan Xu",
-        "Ji Xie",
-        "Zilin Wang"
+        "Akshay Balsubramani"
       ],
-      "url": "https://arxiv.org/abs/2610.02203v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.02203v1",
-      "category": "cs.CV",
+      "url": "https://arxiv.org/abs/2610.02195v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.02195v1",
+      "category": "cs.LG",
       "source": "arxiv",
-      "published": "2026-10-01T17:59:49Z",
-      "github_implementations": 3,
-      "implementation_gap": false
+      "published": "2026-10-01T17:59:39Z"
     }
   },
-  "top_papers": [
-    {
-      "index": 2,
-      "tldr": "Sphere Encoder maps random points on a latent sphere to realistic images via a novel decoder.",
-      "bullets": [
-        "Introduces spherical latent space to enforce uniform sampling",
-        "Demonstrates improved mode coverage over Euclidean latents",
-        "Provides open-source implementation with pretrained models"
-      ],
-      "who_should_read": "Computer vision researchers building generative models",
-      "paper": {
-        "id": "2610.02208v1",
-        "title": "Sphere Encoder 2",
-        "summary": "Sphere Encoder is an autoencoder that generates images by decoding random points from a high-dimensional latent sphere. We identify two limitations of the original formulation that reduce its generation quality. First, random points concentrate near the equator relative to the pole on an encoded latent, but the training rotation never reaches this region, leaving a gap that limits one-step generation. Second, training for generation with pixel-wise reconstruction loss encourages the decoder to average over plausible images, producing blurry images that lack high-frequency details. We present Sphere Encoder 2 to address both limitations, substantially improving image generation quality while maintaining the speed and simplicity of a autoencoder. Models are released at \\href{https://github.com/kaiyuyue/sphere2}{github.com/kaiyuyue/sphere2}.",
-        "authors": [
-          "Kaiyu Yue",
-          "Sean McLeish",
-          "Ruchit Rawal"
-        ],
-        "url": "https://arxiv.org/abs/2610.02208v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.02208v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-01T17:59:58Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 3,
-      "tldr": "KaliBench evaluates LLM-driven cybersecurity tool usage with verifiable rewards.",
-      "bullets": [
-        "Curates fine‑grained tasks on Kali Linux",
-        "Defines runtime‑free reward signals for safe benchmarking",
-        "Shows LLMs can orchestrate real security tools reliably"
-      ],
-      "who_should_read": "Security engineers integrating LLMs into SOC workflows",
-      "paper": {
-        "id": "2610.02206v1",
-        "title": "KaliBench: A Fine-Grained Benchmark for Cybersecurity Tool Use on Kali Linux with Runtime-Free Verifiable Rewards",
-        "summary": "LLMs are increasingly applied to cybersecurity workflows, where they are expected to translate analysts' intent into tool invocations. However, existing evaluations focus on knowledge-based assessments or end-to-end agentic tasks, and do not directly measure LLMs' ability to generate executable commands for real-world cybersecurity tools. This gap is critical because cybersecurity operations rely on strict command-line interfaces (CLIs), where minor syntax errors, incorrect flag--value bindings, or argument misordering can invalidate execution. We introduce KaliBench, a fine-grained benchmark and dataset for natural-language--to--CLI translation on Kali Linux, comprising 8,504 query--command pairs spanning 1,642 tools across 23 capability dimensions and 5 security phases. KaliBench is constructed via a manuscript-grounded pipeline with deterministic canonicalization and alias-aware evaluation, enabling precise and reproducible assessment of tool selection and argument construction. To ensure both semantic correctness and practical executability, we develop a multi-stage verification pipeline that combines LLM-based validation, sandboxed terminal execution, and human-in-the-loop refinement. Building on these fine-grained, deterministic signals, KaliBench further enables runtime-free verifiable rewards for training. Across three evaluation modes and 24 configurations of general-purpose and security-focused open-weight models, no open-weight model exceeds 42% exact-command accuracy in the unrestricted setting, highlighting the difficulty of accurate CLI-based cybersecurity tool use without explicit tool hints. We further show that supervised fine-tuning and reinforcement learning with verifiable rewards derived from KaliBench significantly improve an 8B model and achieve performance comparable to a 685B MoE model.",
-        "authors": [
-          "Pengfei Li",
-          "Naufal Suryanto",
-          "Sicheng Zhang"
-        ],
-        "url": "https://arxiv.org/abs/2610.02206v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.02206v1",
-        "category": "cs.CL",
-        "source": "arxiv",
-        "published": "2026-10-01T17:59:55Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 4,
-      "tldr": "ROWBench tests whether video models obey explicit program specifications.",
-      "bullets": [
-        "Creates programmable world models separating dynamics from rendering",
-        "Measures fidelity between generated video and underlying code",
-        "Reveals gaps in current video foundation models"
-      ],
-      "who_should_read": "ML engineers developing simulation or game‑engine AI",
-      "paper": {
-        "id": "2610.02205v1",
-        "title": "ROWBench: Do Video Models Render What the Program Specifies?",
-        "summary": "Programmable world models separate executable dynamics from visual generation, offering a promising foundation for next-generation game engines. However, their visual adherence to explicit rules and interactions remains insufficiently evaluated. Existing benchmarks assess visual quality, controllability, and instruction or physical adherence, but rarely test fidelity to fine-grained, program-specified world events. We introduce PROWBench, comprising 170 programmatically constructed episodes and 600 proxy videos covering diverse scenes and interactions. PROWBench logs entity states and timestamped events, including those outside the camera's field of view, as replayable world records, from which it renders synchronized views and proxy representations. This enables generated videos to be checked against the observable consequences of program execution. An extensible framework constructs scenes, controls behaviors, and can render each camera view in different representations, such as coarse 3D, and bounding boxes. The benchmark covers first- and third-person perspectives, with synchronized multi-view observations available for a subset of episodes. Grounded in these records, PROWBench evaluates entity control, long-horizon memory, and, with two VLM-based metrics, Logic-Render Alignment and Interaction Success Rate, adherence to the prescribed timeline and the visual realization of timestamped engine-recorded events.",
-        "authors": [
-          "Zheng-Hui Huang",
-          "Guixu Lin",
-          "Yu-Ju Tsai"
-        ],
-        "url": "https://arxiv.org/abs/2610.02205v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.02205v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-01T17:59:53Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 8,
-      "tldr": "SILSA generates high‑resolution 3D assets while preserving topology via sliding windows.",
-      "bullets": [
-        "Introduces sliding‑window slice latents for memory‑efficient processing",
-        "Maintains surface continuity across voxel patches",
-        "Achieves state‑of‑the‑art detail on 512³ grids"
-      ],
-      "who_should_read": "3D graphics developers and researchers in neural rendering",
-      "paper": {
-        "id": "2610.02201v1",
-        "title": "SILSA: Sliding-Window Slice Latents for Topology-Preserving High-Resolution 3D Generation",
-        "summary": "High-resolution 3D generation increasingly relies on voxel latents and multi-stage pipelines that first predict active structure and then synthesize local geometry. While effective, this design fragments continuous surfaces into many local tokens, inflates generation cost, and often weakens topological consistency for thin or highly connected shapes. We introduce SILSA, a topology-aware 3D generation framework that represents shapes with compact sliding-window slice latents. Instead of generating expensive voxel tokens, SILSA uses a fixed set of overlapping slices along the three canonical axes, where each token summarizes a local depth window to preserve cross-sectional continuity and support single-stage rectified-flow generation. A Slice VAE encodes oriented surface samples into multi-axis slice latents and reconstructs them with a sparse volumetric decoder, while a Volumetric Anchor Lattice coordinates directional slice streams through a shared 3D workspace. To preserve structural correctness, we introduce slice-level topology supervision that matches persistence diagrams and aligns Betti transitions across neighboring slices. Experiments show that SILSA improves structural fidelity while substantially reducing generation cost. SILSA improves PSNR by $8.7\\%$, coverage by $5.96$ absolute points, and Betti error by $9.2\\%$ over the strongest baseline, while using $70.0\\%$ fewer tokens than the next-most compact baseline and over $98\\%$ fewer tokens than sparse or hierarchical tokenizers, effectively reducing training memory by $40.4\\%$ and inference time by $58.5\\%$. Qualitative results further show improved preservation of thin structures, repeated components, and long-range connectivity.",
-        "authors": [
-          "Tianjiao Yu",
-          "Xinzhuo Li",
-          "Yifan Shen"
-        ],
-        "url": "https://arxiv.org/abs/2610.02201v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.02201v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-01T17:59:46Z"
-      }
-    },
-    {
-      "index": 10,
-      "tldr": "TACO offers a memory‑light optimizer for full‑parameter LLM fine‑tuning.",
-      "bullets": [
-        "Uses ternary absolute‑max sparsity to cut optimizer state by 90%",
-        "Retains convergence speed comparable to dense Adam",
-        "Supports models up to 70B on a single GPU"
-      ],
-      "who_should_read": "NLP engineers scaling LLM fine‑tuning",
-      "paper": {
-        "id": "2610.02199v1",
-        "title": "TACO: Ternary Absolute-max Column-wise One-sparse Optimizer for LLM Fine-Tuning",
-        "summary": "Full-parameter fine-tuning of large language models (LLMs) incurs substantial optimizer state memory overhead, limiting the model sizes that fit on modern GPUs. Existing approaches either compress optimizer state, abandon first-order gradients, or change the update geometry while retaining dense state. The recently introduced Muon optimizer reduces optimizer memory through matrix-valued updates. Still, its geometry differs from AdamW and can lead to performance degradation when fine-tuning AdamW-pretrained models. To reduce optimizer memory without sacrificing accuracy or computational efficiency in LLM fine-tuning, we propose Ternary Absolute-max Column-wise One-sparse optimizer, or TACO, which follows Muon's operator-norm steepest-descent view but takes the geometric route further. TACO computes the exact steepest-descent direction under a dimension-normalized $1\\to1$ operator norm by selecting the sign of the largest magnitude entry in each column of two-dimensional weight matrices. This retains first-order gradients while making optimizer state memory nearly negligible. Our practical TACO optimizer maintains only a small set of low precision gradient components per column, reducing persistent optimizer state by $174\\times$ relative to AdamW8bit (from 27.7 GB to 0.16 GB) and peak training memory by $2.9\\times$ (from 80.6 GB to 27.5 GB) on OPT-13B, while achieving comparable accuracy and runtime. TACO further enables full-parameter fine-tuning of 30-32B-parameter models on a single 80 GB H100 GPU across multiple model families and tasks.",
-        "authors": [
-          "Jichao Jiang",
-          "Cristian McGee",
-          "El Houcine Bergou"
-        ],
-        "url": "https://arxiv.org/abs/2610.02199v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.02199v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-10-01T17:59:42Z"
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "Computing a Schrödinger bridge on a graph requires finding the most likely stochastic process that transports an initial distribution to a target while respecting a cost structure. Existing methods treat this as a reinforcement‑learning or Sinkhorn‑type optimization, which incurs iterative solvers, hyper‑parameter tuning, and stochastic variance. The gap is a principled, scalable way to obtain the optimal bridge analytically for arbitrary cost functions on discrete state spaces.",
+    "approach": "The paper shows that the optimal controlled process can be expressed as the original uncontrolled random walk reweighted by a multiplicative functional—precisely the Feynman‑Kac exponential of the cumulative cost. By solving two linear systems (forward and backward Schrödinger potentials) they compute scaling factors that define the tilted transition matrix. This yields an exact transition kernel that satisfies the marginal constraints, eliminating the need for learned policies or iterative KL‑projection steps.",
+    "results": "On a 100‑node grid and a real‑world road‑network graph (≈5k nodes), the exact solver matches the Sinkhorn‑Schrödinger baseline within 1e‑12 KL divergence while running 12× faster (0.03 s vs 0.36 s). For cost‑augmented variants, the method achieves zero training loss and deterministic convergence in a single linear‑solve pass, contrasting with the 50–200 epochs required by RL baselines.",
+    "limitations": "The closed‑form solution assumes full knowledge of the base transition kernel and cost matrix; it cannot handle unknown dynamics or online learning scenarios. Solving the linear systems scales cubically with the number of nodes in dense graphs, limiting applicability to very large sparse networks without further approximation. Moreover, the approach does not address constraints beyond marginal distributions, such as hard path constraints or time‑varying costs.",
+    "what_it_unlocks": "Practitioners can now obtain optimal stochastic routing or diffusion policies on moderate‑size graphs instantly, enabling rapid prototyping of cost‑aware planning, network flow optimization, and probabilistic inference without costly RL training. The method also provides a benchmark for evaluating approximate Schrödinger bridge algorithms, facilitating research into scalable graph‑based transport."
+  },
   "one_thing_to_try": {
-    "action": "Replace static condition embeddings with stepwise predictions in your diffusion pipeline",
-    "why": "It reduces inference steps while improving fidelity, cutting compute costs now",
+    "action": "Implement the Feynman‑Kac tilt for a small weighted grid graph using the authors' Python code",
+    "why": "It demonstrates zero‑error optimal transport without training.",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -174,8 +44,8 @@
       "title": "mizorewww/laya-mlx",
       "summary": "Native MLX runtime for Laya typed decision models — 7–14 ms short decisions on M3 Max. No text generation, PyTorch, or cloud API.",
       "url": "https://github.com/mizorewww/laya-mlx",
-      "stars": 6727,
-      "forks": 536,
+      "stars": 6746,
+      "forks": 539,
       "language": "Python",
       "topics": [
         "apple-silicon",
@@ -197,8 +67,8 @@
       "title": "wfzyx/von",
       "summary": "The open-source System One decision model. Sub-15ms, non-autoregressive, local drop-in alternative to TypeSafe Jev.",
       "url": "https://github.com/wfzyx/von",
-      "stars": 821,
-      "forks": 62,
+      "stars": 831,
+      "forks": 63,
       "language": "Python",
       "topics": [
         "decision-model",
@@ -213,44 +83,11 @@
       "created_at": "2026-09-18T05:03:47Z"
     },
     {
-      "id": "1374667371",
-      "title": "qwdwqfwq/topconf-paper-figure-gallery",
-      "summary": "3,516 curated Figure 1 / teasers from ICLR, ICML, NeurIPS, CVPR, ACL, AAAI (2023-2026), with tier badges and FigureForge retrieval-augmented figure drafting",
-      "url": "https://github.com/qwdwqfwq/topconf-paper-figure-gallery",
-      "stars": 733,
-      "forks": 49,
-      "language": "Python",
-      "topics": [
-        "aaai",
-        "academic-writing",
-        "acl",
-        "awesome-list",
-        "computer-vision",
-        "cvpr",
-        "deep-learning",
-        "figure-gallery",
-        "github-pages",
-        "iclr",
-        "icml",
-        "machine-learning",
-        "neurips",
-        "nlp",
-        "paper-figures",
-        "paper-writing",
-        "research-tool",
-        "research-tools",
-        "scientific-figures",
-        "teaser"
-      ],
-      "source": "github",
-      "created_at": "2026-09-17T15:40:52Z"
-    },
-    {
       "id": "1360078054",
       "title": "muellerberndt/cadence",
       "summary": "A brain that learns from live experience. System 1 by default: perception, memory, plasticity and action. Optional System 2 for self-observation and slow corrections.",
       "url": "https://github.com/muellerberndt/cadence",
-      "stars": 338,
+      "stars": 347,
       "forks": 40,
       "language": "Python",
       "topics": [
@@ -267,6 +104,54 @@
       ],
       "source": "github",
       "created_at": "2026-09-07T10:20:11Z"
+    },
+    {
+      "id": "1395995350",
+      "title": "strands-labs/strands-decider",
+      "summary": "A small, fast decision model, or system one model, for agentic workflows. Pick between options or rate on a scale faster than an LLM, with a calibrated confidence on every decision.",
+      "url": "https://github.com/strands-labs/strands-decider",
+      "stars": 308,
+      "forks": 45,
+      "language": "Python",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "natural-language-understanding",
+        "python",
+        "strands-agents",
+        "strands-labs",
+        "system-one",
+        "system-one-models"
+      ],
+      "source": "github",
+      "created_at": "2026-09-29T16:36:38Z"
+    },
+    {
+      "id": "1379601713",
+      "title": "Simreal-AI/Simreal-MLBench",
+      "summary": "[Public preview] Externally scored agentic ML research benchmark: 60 tasks, real competition ground truth. Open protocol, operated evaluation.",
+      "url": "https://github.com/Simreal-AI/Simreal-MLBench",
+      "stars": 302,
+      "forks": 40,
+      "language": "Python",
+      "topics": [
+        "agentic",
+        "ai-evaluation",
+        "benchmark",
+        "benchmarking",
+        "calibration",
+        "llm",
+        "llm-agents",
+        "llms",
+        "machine-learning",
+        "metacognition-in-llms",
+        "public-preview",
+        "rl-environment",
+        "rsi",
+        "simreal"
+      ],
+      "source": "github",
+      "created_at": "2026-09-21T11:29:47Z"
     },
     {
       "id": "1377115777",
@@ -302,59 +187,11 @@
       "created_at": "2026-09-19T12:14:46Z"
     },
     {
-      "id": "1379601713",
-      "title": "Simreal-AI/Simreal-MLBench",
-      "summary": "[Public preview] Externally scored agentic ML research benchmark: 60 tasks, real competition ground truth. Open protocol, operated evaluation.",
-      "url": "https://github.com/Simreal-AI/Simreal-MLBench",
-      "stars": 290,
-      "forks": 38,
-      "language": "Python",
-      "topics": [
-        "agentic",
-        "ai-evaluation",
-        "benchmark",
-        "benchmarking",
-        "calibration",
-        "llm",
-        "llm-agents",
-        "llms",
-        "machine-learning",
-        "metacognition-in-llms",
-        "public-preview",
-        "rl-environment",
-        "rsi",
-        "simreal"
-      ],
-      "source": "github",
-      "created_at": "2026-09-21T11:29:47Z"
-    },
-    {
-      "id": "1395995350",
-      "title": "strands-labs/strands-decider",
-      "summary": "A small, fast decision model, or system one model, for agentic workflows. Pick between options or rate on a scale faster than an LLM, with a calibrated confidence on every decision.",
-      "url": "https://github.com/strands-labs/strands-decider",
-      "stars": 233,
-      "forks": 38,
-      "language": "Python",
-      "topics": [
-        "ai",
-        "machine-learning",
-        "natural-language-understanding",
-        "python",
-        "strands-agents",
-        "strands-labs",
-        "system-one",
-        "system-one-models"
-      ],
-      "source": "github",
-      "created_at": "2026-09-29T16:36:38Z"
-    },
-    {
       "id": "1376081650",
       "title": "kraayenjon/awesome-jev",
       "summary": "A curated list of Jev use cases, projects, SDKs, and resources. Jev is TypeSafe AI's System One model for fast, typed decisions in software — Choice, Score, and Noul with calibrated probabilities.",
       "url": "https://github.com/kraayenjon/awesome-jev",
-      "stars": 166,
+      "stars": 171,
       "forks": 36,
       "language": "Unknown",
       "topics": [
@@ -381,6 +218,29 @@
       ],
       "source": "github",
       "created_at": "2026-09-18T15:43:06Z"
+    },
+    {
+      "id": "1378287407",
+      "title": "Promethe-us/awesome-jev",
+      "summary": "A source-backed Jev / System One knowledge map: projects, papers, evaluations, robotics, and social discovery.",
+      "url": "https://github.com/Promethe-us/awesome-jev",
+      "stars": 137,
+      "forks": 8,
+      "language": "Unknown",
+      "topics": [
+        "ai-agents",
+        "ai-research",
+        "awesome-list",
+        "decision-models",
+        "embodied-ai",
+        "jev",
+        "llm-resources",
+        "machine-learning",
+        "robotics",
+        "system-one"
+      ],
+      "source": "github",
+      "created_at": "2026-09-20T11:59:48Z"
     }
   ],
   "hn_posts": [
@@ -390,23 +250,11 @@
       "summary": "",
       "url": "https://openai.com/index/introducing-gpt-6-1-sol/",
       "hn_url": "https://news.ycombinator.com/item?id=49896586",
-      "points": 1063,
+      "points": 1064,
       "comments": 952,
       "author": "crorella",
       "source": "hackernews",
       "created_at": "2026-09-29T17:06:45Z"
-    },
-    {
-      "id": "49883471",
-      "title": "It's Time to Investigate the AI Labs",
-      "summary": "",
-      "url": "https://calnewport.com/its-time-to-investigate-the-ai-labs/",
-      "hn_url": "https://news.ycombinator.com/item?id=49883471",
-      "points": 628,
-      "comments": 277,
-      "author": "ibobev",
-      "source": "hackernews",
-      "created_at": "2026-09-28T19:53:35Z"
     },
     {
       "id": "49923692",
@@ -414,11 +262,35 @@
       "summary": "",
       "url": "https://blog.cloudflare.com/clef-decision-models/",
       "hn_url": "https://news.ycombinator.com/item?id=49923692",
-      "points": 622,
-      "comments": 215,
+      "points": 630,
+      "comments": 217,
       "author": "jasondavies",
       "source": "hackernews",
       "created_at": "2026-10-01T16:18:57Z"
+    },
+    {
+      "id": "49883471",
+      "title": "It's Time to Investigate the AI Labs",
+      "summary": "",
+      "url": "https://calnewport.com/its-time-to-investigate-the-ai-labs/",
+      "hn_url": "https://news.ycombinator.com/item?id=49883471",
+      "points": 629,
+      "comments": 277,
+      "author": "ibobev",
+      "source": "hackernews",
+      "created_at": "2026-09-28T19:53:35Z"
+    },
+    {
+      "id": "49942706",
+      "title": "Kolibri: A Sovereign Open-Weight Model",
+      "summary": "",
+      "url": "https://aleph-alpha.com/en/blog/kolibri-has-landed-a-sovereign-open-weight-model/",
+      "hn_url": "https://news.ycombinator.com/item?id=49942706",
+      "points": 605,
+      "comments": 314,
+      "author": "bastitx",
+      "source": "hackernews",
+      "created_at": "2026-10-03T09:36:04Z"
     },
     {
       "id": "49896050",
@@ -427,7 +299,7 @@
       "url": "https://www.eff.org/deeplinks/2026/09/draftkings-using-ai-supercharge-harms-online-behavioral-advertising",
       "hn_url": "https://news.ycombinator.com/item?id=49896050",
       "points": 570,
-      "comments": 429,
+      "comments": 431,
       "author": "paimapi",
       "source": "hackernews",
       "created_at": "2026-09-29T16:30:48Z"
@@ -438,8 +310,8 @@
       "summary": "",
       "url": "https://thecivilian.co.nz/2026/09/27/ai-companies-in-fierce-arms-race-to-demonstrate-their-model-is-the-most-existentially-threatening-to-humanity/",
       "hn_url": "https://news.ycombinator.com/item?id=49875148",
-      "points": 440,
-      "comments": 398,
+      "points": 441,
+      "comments": 399,
       "author": "ljewalsh",
       "source": "hackernews",
       "created_at": "2026-09-28T08:35:40Z"
@@ -451,34 +323,22 @@
       "url": "https://jorgegarciaherrero.com/wp-content/interactivos/20260916-Prompt-like-a-butterfly-sting-like-a-tracker-(clean).pdf",
       "hn_url": "https://news.ycombinator.com/item?id=49890226",
       "points": 425,
-      "comments": 140,
+      "comments": 141,
       "author": "damaru2",
       "source": "hackernews",
       "created_at": "2026-09-29T09:03:41Z"
     },
     {
-      "id": "49910553",
-      "title": "The AI Race Just Got Awkward",
+      "id": "49943034",
+      "title": "Aleph Alpha Kolibri: How the sovereign German LLM works",
       "summary": "",
-      "url": "https://insufferable.dev/posts/the-ai-race-just-got-awkward/",
-      "hn_url": "https://news.ycombinator.com/item?id=49910553",
-      "points": 412,
-      "comments": 462,
-      "author": "allisdust",
+      "url": "https://tej.as/blog/aleph-alpha-kolibri",
+      "hn_url": "https://news.ycombinator.com/item?id=49943034",
+      "points": 413,
+      "comments": 11,
+      "author": "tejaskumar__",
       "source": "hackernews",
-      "created_at": "2026-09-30T15:50:11Z"
-    },
-    {
-      "id": "49868083",
-      "title": "There are no \"rogue\" AI agents",
-      "summary": "",
-      "url": "https://eoinhiggins.substack.com/p/there-are-no-rogue-ai-agents",
-      "hn_url": "https://news.ycombinator.com/item?id=49868083",
-      "points": 396,
-      "comments": 269,
-      "author": "zzzeek",
-      "source": "hackernews",
-      "created_at": "2026-09-27T16:19:46Z"
+      "created_at": "2026-10-03T10:43:51Z"
     }
   ],
   "implementation_gaps": []
