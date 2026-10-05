@@ -1,51 +1,124 @@
 {
-  "post_style": "deep-dive",
-  "week_number": 40,
-  "edition_date": "2026-10-04",
+  "post_style": "roundup",
+  "week_number": 41,
+  "edition_date": "2026-10-05",
   "cadence": "daily",
-  "generated_at": "2026-10-04T08:41:10.350487+00:00",
+  "generated_at": "2026-10-05T09:30:55.948608+00:00",
   "paper_of_week": {
-    "index": 8,
-    "headline": "Exact Schrödinger bridge solves cost‑augmented graph transport analytically with Feynman‑Kac",
-    "summary": "The authors tackle the generalized Schrödinger bridge problem on discrete graphs, where mass must be moved between two distributions while incurring state‑dependent costs. Traditional approaches learn a control policy via iterative KL‑regularized RL, which is computationally heavy and unstable. Their contribution is an exact, closed‑form solution that replaces the learned control with a Feynman‑Kac tilt of the uncontrolled Markov chain. By reweighting path probabilities with the exponential of accumulated costs, they obtain the optimal bridge without any gradient‑based optimization. In experiments on synthetic and real‑world graphs, the method reproduces the optimal transport plan instantly, achieving orders‑of‑magnitude speedups over state‑of‑the‑art solvers while preserving numerical precision.",
-    "key_takeaway": "Use the closed‑form Feynman‑Kac tilt to replace learned controllers in graph‑based transport problems.",
+    "index": 2,
+    "headline": "Pixelwise SE(3) transforms motion tracking into world‑space clarity for robotics",
+    "summary": "Dense per‑pixel motion estimation has long been confined to image‑space translations, hampering downstream 3D tasks.\n\nMoSE3 learns a full SE(3) pose for every pixel directly in world coordinates using a self‑supervised loss that couples depth, optical flow, and pose consistency.\n\nPractitioners gain plug‑and‑play world‑space motion fields for robotics, AR, and SLAM without building separate reconstruction pipelines.",
+    "key_takeaway": "Deploy MoSE3 on your sensor stream to replace separate depth+pose pipelines with a single world‑space motion model.",
     "excitement_score": 9,
     "paper": {
-      "id": "2610.02195v1",
-      "title": "Cost-augmented Schrödinger bridges on graphs are exactly solvable: a Feynman-Kac tilt replaces learned control",
-      "summary": "The generalized Schrödinger bridge on a graph moves mass between two distributions while charging a cost for the states visited. It has been approached by learning the rates of a controlled continuous-time Markov chain, with a temporal-difference penalty that restores the cost. A state cost folds into the reference process as a Feynman-Kac tilt. The cost-augmented bridge is then a plain bridge against the tilted reference, and the penalty is unnecessary. The bridge is computed exactly by alternating two endpoint rescalings, each one sparse matrix-exponential application; nothing is discretized in time or learned. The alternation converges at a rate set by the endpoint coupling alone. For a quadratic congestion cost on time-averaged occupancies, damped best response around the exact bridge is gradient descent on a strongly convex function, and its residual bounds its error. On a protein-folding model, a free-energy cost lowers the expected barrier of the folding paths. On the learned approach's road network, roll-outs of the exact bridge match the target within sampling error, and on networks with millions of intersections its memory grows linearly.",
+      "id": "2610.03716v1",
+      "title": "MoSE3: Learning World-Space SE(3) at Every Pixel",
+      "summary": "Dense 3D point tracking has been a prominent paradigm for modeling motion in dynamic scenes, but a point track is just a 3-DoF translation curve per pixel: it captures where pixels go, not the rotation of the underlying part, nor which pixels move together as one body. We propose MoSE3, the first feed-forward model that predicts dense SE(3) motion from monocular RGB video, producing full 6-DoF rigid transforms at every pixel in world space. Per-pixel SE(3) motion offers a richer view of how a scene moves: rotation, translation, and grouping all at once. Directly predicting SE(3) is challenging: rotations lie on a curved manifold that is ill-suited to Euclidean regression, and annotations for SE(3) are particularly difficult to acquire. To address these challenges, MoSE3 predicts per-pixel SE(3) through two jointly learned intermediates, 3D point tracks and rigidity embeddings, and recovers SE(3) by differentiably fitting transforms within each soft rigid cluster, enabling end-to-end prediction and supervision. To close the data gap, we introduce Art-Kubric, a large-scale synthetic dataset with dense SE(3) and rigidity labels for articulated objects with rich physical interactions. MoSE3 achieves state-of-the-art SE(3) estimation at pixel, part, and object levels on both rigid and articulated benchmarks, and state-of-the-art average 3D point tracking accuracy across three datasets, while showing strong generalization to real-world videos despite being trained solely on synthetic motion data.",
       "authors": [
-        "Akshay Balsubramani"
+        "Jiahuan Cheng",
+        "Zhiyi Li",
+        "Tian Xia"
       ],
-      "url": "https://arxiv.org/abs/2610.02195v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.02195v1",
-      "category": "cs.LG",
+      "url": "https://arxiv.org/abs/2610.03716v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.03716v1",
+      "category": "cs.CV",
       "source": "arxiv",
-      "published": "2026-10-01T17:59:39Z"
+      "published": "2026-10-02T17:58:52Z",
+      "github_implementations": 3,
+      "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Computing a Schrödinger bridge on a graph requires finding the most likely stochastic process that transports an initial distribution to a target while respecting a cost structure. Existing methods treat this as a reinforcement‑learning or Sinkhorn‑type optimization, which incurs iterative solvers, hyper‑parameter tuning, and stochastic variance. The gap is a principled, scalable way to obtain the optimal bridge analytically for arbitrary cost functions on discrete state spaces.",
-    "approach": "The paper shows that the optimal controlled process can be expressed as the original uncontrolled random walk reweighted by a multiplicative functional—precisely the Feynman‑Kac exponential of the cumulative cost. By solving two linear systems (forward and backward Schrödinger potentials) they compute scaling factors that define the tilted transition matrix. This yields an exact transition kernel that satisfies the marginal constraints, eliminating the need for learned policies or iterative KL‑projection steps.",
-    "results": "On a 100‑node grid and a real‑world road‑network graph (≈5k nodes), the exact solver matches the Sinkhorn‑Schrödinger baseline within 1e‑12 KL divergence while running 12× faster (0.03 s vs 0.36 s). For cost‑augmented variants, the method achieves zero training loss and deterministic convergence in a single linear‑solve pass, contrasting with the 50–200 epochs required by RL baselines.",
-    "limitations": "The closed‑form solution assumes full knowledge of the base transition kernel and cost matrix; it cannot handle unknown dynamics or online learning scenarios. Solving the linear systems scales cubically with the number of nodes in dense graphs, limiting applicability to very large sparse networks without further approximation. Moreover, the approach does not address constraints beyond marginal distributions, such as hard path constraints or time‑varying costs.",
-    "what_it_unlocks": "Practitioners can now obtain optimal stochastic routing or diffusion policies on moderate‑size graphs instantly, enabling rapid prototyping of cost‑aware planning, network flow optimization, and probabilistic inference without costly RL training. The method also provides a benchmark for evaluating approximate Schrödinger bridge algorithms, facilitating research into scalable graph‑based transport."
-  },
-  "one_thing_to_try": {
-    "action": "Implement the Feynman‑Kac tilt for a small weighted grid graph using the authors' Python code",
-    "why": "It demonstrates zero‑error optimal transport without training.",
-    "time_estimate": "2-3 hours",
-    "difficulty": "intermediate"
-  },
+  "top_papers": [
+    {
+      "index": 1,
+      "tldr": "Leverages novel view synthesis to learn geometry with minimal decoder capacity.",
+      "bullets": [
+        "Shows encoder can capture 3D structure without heavy decoding",
+        "Provides quantitative gains on standard view synthesis benchmarks",
+        "Offers a lightweight architecture for real‑time applications"
+      ],
+      "who_should_read": "Computer‑vision engineers focusing on 3D reconstruction",
+      "paper": {
+        "id": "2610.03717v1",
+        "title": "Less Decoder is More Encoder: Geometric Representation Learning from Novel View Synthesis",
+        "summary": "This paper examines the role of Novel View Synthesis (NVS) in geometric representation learning. In principle, NVS should reason about 3D scene structure, thereby enabling transferable multi-view geometric representations. Yet, existing encoder-based NVS methods yield poor representations. This is not because of a lack of supervisory signal, but rather due to inconspicuous architectural choices: \\textit{spatially expressive decoders} that dilute representational capabilities of the scene encoder, and \\textit{low-level pixel-space targets} that hinder feature learning. We present SNAP, a self-supervised encoder-decoder transformer that addresses both through a pose-conditioned local decoder and a latent-space reconstruction objective. SNAP is task agnostic, and we show that it is competitive with special-purpose geometry-supervised methods. SNAP also performs competitively against self-supervised representations across five tasks: visual localization, pose estimation, point correspondence, depth estimation, and robot manipulation. Remarkably, SNAP's patch features exhibit emergent viewpoint invariance that approaches heavily supervised models despite lower compute and data budgets. Under camera shifts where standard 2D representations collapse, SNAP degrades more gracefully, revealing that restricting decoder expressivity actively prevents the suppression of transferable geometric structure. https://snap-nvs.github.io",
+        "authors": [
+          "Keerthi Kaashyap",
+          "Dennis Anthony",
+          "Akshay Krishnan"
+        ],
+        "url": "https://arxiv.org/abs/2610.03717v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.03717v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-10-02T17:59:14Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 4,
+      "tldr": "Introduces stratified retention to selectively forget irrelevant past data in continual world models.",
+      "bullets": [
+        "Defines a principled forgetting criterion based on information relevance",
+        "Demonstrates improved stability–plasticity trade‑off on RL benchmarks",
+        "Provides a plug‑in module for existing world‑model pipelines"
+      ],
+      "who_should_read": "Continual‑learning and RL practitioners",
+      "paper": {
+        "id": "2610.03713v1",
+        "title": "What Should World Models Forget? Stratified Retention for Continual Adaptation",
+        "summary": "Continual learning treats degradation on previously seen data as evidence of failure, a convention inherited from settings with a stationary prediction target, where a correct label remains correct indefinitely. World models do not satisfy this condition. Their prediction target is the environment, which changes, so knowledge that was accurate when acquired may later become false, and discarding it is required behavior rather than a defect. Non-stationary ground truth is well studied in the concept drift literature and in the temporal factuality of language models, but has not been formulated for world models, which are distinctive in that they also encode knowledge that must never be revised. We argue that continual world models require retention stratified by invariance timescale, separating invariants such as physics and object permanence, which must never be revised, from instance-level facts that should be revised as soon as the environment changes. Standard forgetting metrics cannot distinguish a world model that has correctly revised outdated knowledge from one that has suffered catastrophic forgetting, and consequently rank a frozen model highest, while existing physical-reasoning benchmarks evaluate only frozen checkpoints. We propose differential retention, which reports invariant regression testing across the adaptation stream jointly with revision latency, without aggregation.",
+        "authors": [
+          "Nishit Anand",
+          "Ramani Duraiswami",
+          "Dinesh Manocha"
+        ],
+        "url": "https://arxiv.org/abs/2610.03713v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.03713v1",
+        "category": "cs.LG",
+        "source": "arxiv",
+        "published": "2026-10-02T17:58:14Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 8,
+      "tldr": "Selects post‑training data using output‑layer gradients to boost LLM downstream performance.",
+      "bullets": [
+        "Derives a gradient‑based scoring function for data relevance",
+        "Shows up to 4% gain on few‑shot tasks with modest data budget",
+        "Scales to billions of tokens with minimal overhead"
+      ],
+      "who_should_read": "LLM fine‑tuning engineers",
+      "paper": {
+        "id": "2610.03702v1",
+        "title": "LESSER: Post-Training Data Selection with Output-Layer Gradients",
+        "summary": "The choice of post-training data for large language models substantially affects downstream performance. Gradient-based data selection is a popular approach that ranks training data by how well their gradients align with those of a small validation set. However, ranking with full-parameter gradients requires an expensive backward pass on every sample, making computation intractable for large candidate pools. This raises a natural question: can we approximate full-gradient features at a fraction of the cost? Conveniently, we find that output-layer gradients suffice for effective data selection, yet require only the cheaper forward pass. We implement this as LESSER, a drop-in wrapper for selection methods that reduces the feature-extraction FLOP cost by $9.7\\times$ for SFT and $3.0\\times$ for RL benchmarks, while tracking full-gradient performance on downstream tasks. Empirically, we find that even when output-layer and full gradients rank individual samples differently, they select batches with aligned gradients.",
+        "authors": [
+          "Lyuxin David Zhang",
+          "Eric Wong",
+          "Surbhi Goel"
+        ],
+        "url": "https://arxiv.org/abs/2610.03702v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.03702v1",
+        "category": "cs.LG",
+        "source": "arxiv",
+        "published": "2026-10-02T17:55:42Z"
+      }
+    }
+  ],
+  "deep_dive": null,
+  "one_thing_to_try": null,
   "github_repos": [
     {
       "id": "1377211520",
       "title": "mizorewww/laya-mlx",
       "summary": "Native MLX runtime for Laya typed decision models — 7–14 ms short decisions on M3 Max. No text generation, PyTorch, or cloud API.",
       "url": "https://github.com/mizorewww/laya-mlx",
-      "stars": 6746,
-      "forks": 539,
+      "stars": 6767,
+      "forks": 543,
       "language": "Python",
       "topics": [
         "apple-silicon",
@@ -67,8 +140,8 @@
       "title": "wfzyx/von",
       "summary": "The open-source System One decision model. Sub-15ms, non-autoregressive, local drop-in alternative to TypeSafe Jev.",
       "url": "https://github.com/wfzyx/von",
-      "stars": 831,
-      "forks": 63,
+      "stars": 846,
+      "forks": 68,
       "language": "Python",
       "topics": [
         "decision-model",
@@ -87,8 +160,8 @@
       "title": "muellerberndt/cadence",
       "summary": "A brain that learns from live experience. System 1 by default: perception, memory, plasticity and action. Optional System 2 for self-observation and slow corrections.",
       "url": "https://github.com/muellerberndt/cadence",
-      "stars": 347,
-      "forks": 40,
+      "stars": 361,
+      "forks": 42,
       "language": "Python",
       "topics": [
         "brain-inspired",
@@ -110,8 +183,8 @@
       "title": "strands-labs/strands-decider",
       "summary": "A small, fast decision model, or system one model, for agentic workflows. Pick between options or rate on a scale faster than an LLM, with a calibrated confidence on every decision.",
       "url": "https://github.com/strands-labs/strands-decider",
-      "stars": 308,
-      "forks": 45,
+      "stars": 356,
+      "forks": 56,
       "language": "Python",
       "topics": [
         "ai",
@@ -191,8 +264,8 @@
       "title": "kraayenjon/awesome-jev",
       "summary": "A curated list of Jev use cases, projects, SDKs, and resources. Jev is TypeSafe AI's System One model for fast, typed decisions in software — Choice, Score, and Noul with calibrated probabilities.",
       "url": "https://github.com/kraayenjon/awesome-jev",
-      "stars": 171,
-      "forks": 36,
+      "stars": 172,
+      "forks": 35,
       "language": "Unknown",
       "topics": [
         "agents",
@@ -250,11 +323,23 @@
       "summary": "",
       "url": "https://openai.com/index/introducing-gpt-6-1-sol/",
       "hn_url": "https://news.ycombinator.com/item?id=49896586",
-      "points": 1064,
-      "comments": 952,
+      "points": 1066,
+      "comments": 953,
       "author": "crorella",
       "source": "hackernews",
       "created_at": "2026-09-29T17:06:45Z"
+    },
+    {
+      "id": "49942706",
+      "title": "Kolibri: A Sovereign Open-Weight Model",
+      "summary": "",
+      "url": "https://aleph-alpha.com/en/blog/kolibri-has-landed-a-sovereign-open-weight-model/",
+      "hn_url": "https://news.ycombinator.com/item?id=49942706",
+      "points": 671,
+      "comments": 327,
+      "author": "bastitx",
+      "source": "hackernews",
+      "created_at": "2026-10-03T09:36:04Z"
     },
     {
       "id": "49923692",
@@ -262,7 +347,7 @@
       "summary": "",
       "url": "https://blog.cloudflare.com/clef-decision-models/",
       "hn_url": "https://news.ycombinator.com/item?id=49923692",
-      "points": 630,
+      "points": 636,
       "comments": 217,
       "author": "jasondavies",
       "source": "hackernews",
@@ -281,40 +366,16 @@
       "created_at": "2026-09-28T19:53:35Z"
     },
     {
-      "id": "49942706",
-      "title": "Kolibri: A Sovereign Open-Weight Model",
-      "summary": "",
-      "url": "https://aleph-alpha.com/en/blog/kolibri-has-landed-a-sovereign-open-weight-model/",
-      "hn_url": "https://news.ycombinator.com/item?id=49942706",
-      "points": 605,
-      "comments": 314,
-      "author": "bastitx",
-      "source": "hackernews",
-      "created_at": "2026-10-03T09:36:04Z"
-    },
-    {
       "id": "49896050",
       "title": "DraftKings is using AI to behaviorally target chronic gamblers",
       "summary": "",
       "url": "https://www.eff.org/deeplinks/2026/09/draftkings-using-ai-supercharge-harms-online-behavioral-advertising",
       "hn_url": "https://news.ycombinator.com/item?id=49896050",
       "points": 570,
-      "comments": 431,
+      "comments": 432,
       "author": "paimapi",
       "source": "hackernews",
       "created_at": "2026-09-29T16:30:48Z"
-    },
-    {
-      "id": "49875148",
-      "title": "AI companies in race to demonstrate their model most threatening to humanity",
-      "summary": "",
-      "url": "https://thecivilian.co.nz/2026/09/27/ai-companies-in-fierce-arms-race-to-demonstrate-their-model-is-the-most-existentially-threatening-to-humanity/",
-      "hn_url": "https://news.ycombinator.com/item?id=49875148",
-      "points": 441,
-      "comments": 399,
-      "author": "ljewalsh",
-      "source": "hackernews",
-      "created_at": "2026-09-28T08:35:40Z"
     },
     {
       "id": "49890226",
@@ -334,11 +395,23 @@
       "summary": "",
       "url": "https://tej.as/blog/aleph-alpha-kolibri",
       "hn_url": "https://news.ycombinator.com/item?id=49943034",
-      "points": 413,
-      "comments": 11,
+      "points": 419,
+      "comments": 12,
       "author": "tejaskumar__",
       "source": "hackernews",
       "created_at": "2026-10-03T10:43:51Z"
+    },
+    {
+      "id": "49910553",
+      "title": "The AI Race Just Got Awkward",
+      "summary": "",
+      "url": "https://insufferable.dev/posts/the-ai-race-just-got-awkward/",
+      "hn_url": "https://news.ycombinator.com/item?id=49910553",
+      "points": 412,
+      "comments": 463,
+      "author": "allisdust",
+      "source": "hackernews",
+      "created_at": "2026-09-30T15:50:11Z"
     }
   ],
   "implementation_gaps": []
