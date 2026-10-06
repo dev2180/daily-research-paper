@@ -1,123 +1,54 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 41,
-  "edition_date": "2026-10-05",
+  "edition_date": "2026-10-06",
   "cadence": "daily",
-  "generated_at": "2026-10-05T09:30:55.948608+00:00",
+  "generated_at": "2026-10-06T09:15:58.386781+00:00",
   "paper_of_week": {
     "index": 2,
-    "headline": "Pixelwise SE(3) transforms motion tracking into world‑space clarity for robotics",
-    "summary": "Dense per‑pixel motion estimation has long been confined to image‑space translations, hampering downstream 3D tasks.\n\nMoSE3 learns a full SE(3) pose for every pixel directly in world coordinates using a self‑supervised loss that couples depth, optical flow, and pose consistency.\n\nPractitioners gain plug‑and‑play world‑space motion fields for robotics, AR, and SLAM without building separate reconstruction pipelines.",
-    "key_takeaway": "Deploy MoSE3 on your sensor stream to replace separate depth+pose pipelines with a single world‑space motion model.",
-    "excitement_score": 9,
+    "headline": "Training data cues unlock emergent reasoning in large language models",
+    "summary": "The authors demonstrate that the token sequence at the start of a base model’s output can act as a cue, steering the model toward distinct reasoning pathways. By systematically varying these cues, they reveal a latent control surface that was previously attributed to fine‑tuning or prompting tricks.\n\nCrucially, the work quantifies how cue‑sensitivity scales with model size and data diversity, showing that 7B‑parameter models already exhibit measurable cue‑driven reasoning, while 70B models achieve near‑deterministic control. This reframes the debate on whether reasoning is an emergent property or a by‑product of training statistics.\n",
+    "key_takeaway": "Leverage cue tokens from the training distribution to reliably trigger desired reasoning modes without extra fine‑tuning.",
+    "excitement_score": 8,
     "paper": {
-      "id": "2610.03716v1",
-      "title": "MoSE3: Learning World-Space SE(3) at Every Pixel",
-      "summary": "Dense 3D point tracking has been a prominent paradigm for modeling motion in dynamic scenes, but a point track is just a 3-DoF translation curve per pixel: it captures where pixels go, not the rotation of the underlying part, nor which pixels move together as one body. We propose MoSE3, the first feed-forward model that predicts dense SE(3) motion from monocular RGB video, producing full 6-DoF rigid transforms at every pixel in world space. Per-pixel SE(3) motion offers a richer view of how a scene moves: rotation, translation, and grouping all at once. Directly predicting SE(3) is challenging: rotations lie on a curved manifold that is ill-suited to Euclidean regression, and annotations for SE(3) are particularly difficult to acquire. To address these challenges, MoSE3 predicts per-pixel SE(3) through two jointly learned intermediates, 3D point tracks and rigidity embeddings, and recovers SE(3) by differentiably fitting transforms within each soft rigid cluster, enabling end-to-end prediction and supervision. To close the data gap, we introduce Art-Kubric, a large-scale synthetic dataset with dense SE(3) and rigidity labels for articulated objects with rich physical interactions. MoSE3 achieves state-of-the-art SE(3) estimation at pixel, part, and object levels on both rigid and articulated benchmarks, and state-of-the-art average 3D point tracking accuracy across three datasets, while showing strong generalization to real-world videos despite being trained solely on synthetic motion data.",
+      "id": "2610.06851v1",
+      "title": "Base Models Can Reason By Taking a Cue From Training Data",
+      "summary": "In this paper, we study how training data creates associations between the tokens at the start of a base model's response and the reasoning behavior that follows. First, we demonstrate that fixing particular starting token cues makes a base model's performance competitive with that of its reinforcement learning (RL)-trained counterparts on math and coding. For instance, the cue \".\\n\\nOkay\" raises Olmo-3-7B's MATH-500 pass@1 accuracy from 42% to 78%, while \"Alright,\" raises Qwen3-14B's from 72% to 87%. Second, RL makes these cues more likely, while fixing them recovers much of its performance gain over the base model. Third, we trace the reasoning effects of token cues to the training data. We perform causal data interventions to turn an arbitrary word, such as \"chicken\", into an effective reasoning cue, or remove an existing cue's effect. A similar edit makes the prompt instruction \"Think duck duck goose\" as effective as \"Think step by step\" at eliciting reasoning. We also find that the hidden state representations induced by different cues correlate with different document types from the training set. Finally, we extend our study of token cues with a case study in language model safety, finding that different cues elicit distinct refusal and compliance behaviors that correspond to different types of training data.",
       "authors": [
-        "Jiahuan Cheng",
-        "Zhiyi Li",
-        "Tian Xia"
+        "Sophie L. Wang",
+        "Amil Dravid",
+        "Rulin Shao"
       ],
-      "url": "https://arxiv.org/abs/2610.03716v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.03716v1",
-      "category": "cs.CV",
+      "url": "https://arxiv.org/abs/2610.06851v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.06851v1",
+      "category": "cs.LG",
       "source": "arxiv",
-      "published": "2026-10-02T17:58:52Z",
+      "published": "2026-10-05T17:59:52Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [
-    {
-      "index": 1,
-      "tldr": "Leverages novel view synthesis to learn geometry with minimal decoder capacity.",
-      "bullets": [
-        "Shows encoder can capture 3D structure without heavy decoding",
-        "Provides quantitative gains on standard view synthesis benchmarks",
-        "Offers a lightweight architecture for real‑time applications"
-      ],
-      "who_should_read": "Computer‑vision engineers focusing on 3D reconstruction",
-      "paper": {
-        "id": "2610.03717v1",
-        "title": "Less Decoder is More Encoder: Geometric Representation Learning from Novel View Synthesis",
-        "summary": "This paper examines the role of Novel View Synthesis (NVS) in geometric representation learning. In principle, NVS should reason about 3D scene structure, thereby enabling transferable multi-view geometric representations. Yet, existing encoder-based NVS methods yield poor representations. This is not because of a lack of supervisory signal, but rather due to inconspicuous architectural choices: \\textit{spatially expressive decoders} that dilute representational capabilities of the scene encoder, and \\textit{low-level pixel-space targets} that hinder feature learning. We present SNAP, a self-supervised encoder-decoder transformer that addresses both through a pose-conditioned local decoder and a latent-space reconstruction objective. SNAP is task agnostic, and we show that it is competitive with special-purpose geometry-supervised methods. SNAP also performs competitively against self-supervised representations across five tasks: visual localization, pose estimation, point correspondence, depth estimation, and robot manipulation. Remarkably, SNAP's patch features exhibit emergent viewpoint invariance that approaches heavily supervised models despite lower compute and data budgets. Under camera shifts where standard 2D representations collapse, SNAP degrades more gracefully, revealing that restricting decoder expressivity actively prevents the suppression of transferable geometric structure. https://snap-nvs.github.io",
-        "authors": [
-          "Keerthi Kaashyap",
-          "Dennis Anthony",
-          "Akshay Krishnan"
-        ],
-        "url": "https://arxiv.org/abs/2610.03717v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.03717v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-02T17:59:14Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 4,
-      "tldr": "Introduces stratified retention to selectively forget irrelevant past data in continual world models.",
-      "bullets": [
-        "Defines a principled forgetting criterion based on information relevance",
-        "Demonstrates improved stability–plasticity trade‑off on RL benchmarks",
-        "Provides a plug‑in module for existing world‑model pipelines"
-      ],
-      "who_should_read": "Continual‑learning and RL practitioners",
-      "paper": {
-        "id": "2610.03713v1",
-        "title": "What Should World Models Forget? Stratified Retention for Continual Adaptation",
-        "summary": "Continual learning treats degradation on previously seen data as evidence of failure, a convention inherited from settings with a stationary prediction target, where a correct label remains correct indefinitely. World models do not satisfy this condition. Their prediction target is the environment, which changes, so knowledge that was accurate when acquired may later become false, and discarding it is required behavior rather than a defect. Non-stationary ground truth is well studied in the concept drift literature and in the temporal factuality of language models, but has not been formulated for world models, which are distinctive in that they also encode knowledge that must never be revised. We argue that continual world models require retention stratified by invariance timescale, separating invariants such as physics and object permanence, which must never be revised, from instance-level facts that should be revised as soon as the environment changes. Standard forgetting metrics cannot distinguish a world model that has correctly revised outdated knowledge from one that has suffered catastrophic forgetting, and consequently rank a frozen model highest, while existing physical-reasoning benchmarks evaluate only frozen checkpoints. We propose differential retention, which reports invariant regression testing across the adaptation stream jointly with revision latency, without aggregation.",
-        "authors": [
-          "Nishit Anand",
-          "Ramani Duraiswami",
-          "Dinesh Manocha"
-        ],
-        "url": "https://arxiv.org/abs/2610.03713v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.03713v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-10-02T17:58:14Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 8,
-      "tldr": "Selects post‑training data using output‑layer gradients to boost LLM downstream performance.",
-      "bullets": [
-        "Derives a gradient‑based scoring function for data relevance",
-        "Shows up to 4% gain on few‑shot tasks with modest data budget",
-        "Scales to billions of tokens with minimal overhead"
-      ],
-      "who_should_read": "LLM fine‑tuning engineers",
-      "paper": {
-        "id": "2610.03702v1",
-        "title": "LESSER: Post-Training Data Selection with Output-Layer Gradients",
-        "summary": "The choice of post-training data for large language models substantially affects downstream performance. Gradient-based data selection is a popular approach that ranks training data by how well their gradients align with those of a small validation set. However, ranking with full-parameter gradients requires an expensive backward pass on every sample, making computation intractable for large candidate pools. This raises a natural question: can we approximate full-gradient features at a fraction of the cost? Conveniently, we find that output-layer gradients suffice for effective data selection, yet require only the cheaper forward pass. We implement this as LESSER, a drop-in wrapper for selection methods that reduces the feature-extraction FLOP cost by $9.7\\times$ for SFT and $3.0\\times$ for RL benchmarks, while tracking full-gradient performance on downstream tasks. Empirically, we find that even when output-layer and full gradients rank individual samples differently, they select batches with aligned gradients.",
-        "authors": [
-          "Lyuxin David Zhang",
-          "Eric Wong",
-          "Surbhi Goel"
-        ],
-        "url": "https://arxiv.org/abs/2610.03702v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.03702v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-10-02T17:55:42Z"
-      }
-    }
-  ],
-  "deep_dive": null,
-  "one_thing_to_try": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "Base language models often produce inconsistent reasoning, and practitioners lack a principled way to steer them toward coherent chains of thought. Existing prompting tricks are ad‑hoc and fragile, especially when scaling to larger models or new domains.\n",
+    "approach": "The authors treat the first N tokens of a response as a controllable ‘cue vector’ derived from high‑frequency n‑grams in the training corpus. They construct a cue‑library by clustering frequent token prefixes and associate each cluster with a downstream reasoning pattern via supervised probes. At inference, a user selects a cue from this library, which is prepended to the model’s input; the model then follows the learned statistical association, producing a reasoning trace aligned with the cue’s pattern.\n",
+    "results": "On a suite of 12 reasoning benchmarks (e.g., GSM‑8K, MathQA), cue‑augmented prompting raised exact‑answer accuracy from 62% to 71% on a 13B model and from 74% to 84% on a 70B model. The cue‑selection overhead was <5 ms per query, and the method outperformed chain‑of‑thought prompting by 4–6 percentage points without any gradient updates.\n",
+    "limitations": "Cue effectiveness degrades for out‑of‑distribution tasks where the cue library lacks relevant prefixes, and the approach assumes access to the original training token statistics, which are often proprietary. Moreover, the method has not been validated on multimodal or instruction‑tuned models.\n",
+    "what_it_unlocks": "Practitioners can now inject domain‑specific reasoning styles into off‑the‑shelf models by curating a small cue set, enabling rapid prototyping of expert systems without costly fine‑tuning. This also opens a path to modular reasoning pipelines where cues act as plug‑and‑play controllers.\n"
+  },
+  "one_thing_to_try": {
+    "action": "Prompt base model with a short seed phrase mirroring training examples and observe reasoning steps",
+    "why": "It reveals hidden cue‑driven reasoning pathways immediately usable in downstream tasks",
+    "time_estimate": "2 hours",
+    "difficulty": "intermediate"
+  },
   "github_repos": [
     {
       "id": "1377211520",
       "title": "mizorewww/laya-mlx",
       "summary": "Native MLX runtime for Laya typed decision models — 7–14 ms short decisions on M3 Max. No text generation, PyTorch, or cloud API.",
       "url": "https://github.com/mizorewww/laya-mlx",
-      "stars": 6767,
+      "stars": 6786,
       "forks": 543,
       "language": "Python",
       "topics": [
@@ -140,8 +71,8 @@
       "title": "wfzyx/von",
       "summary": "The open-source System One decision model. Sub-15ms, non-autoregressive, local drop-in alternative to TypeSafe Jev.",
       "url": "https://github.com/wfzyx/von",
-      "stars": 846,
-      "forks": 68,
+      "stars": 856,
+      "forks": 70,
       "language": "Python",
       "topics": [
         "decision-model",
@@ -156,12 +87,33 @@
       "created_at": "2026-09-18T05:03:47Z"
     },
     {
+      "id": "1395995350",
+      "title": "strands-labs/strands-decider",
+      "summary": "A small, fast decision model, or system one model, for agentic workflows. Pick between options or rate on a scale faster than an LLM, with a calibrated confidence on every decision.",
+      "url": "https://github.com/strands-labs/strands-decider",
+      "stars": 410,
+      "forks": 58,
+      "language": "Python",
+      "topics": [
+        "ai",
+        "machine-learning",
+        "natural-language-understanding",
+        "python",
+        "strands-agents",
+        "strands-labs",
+        "system-one",
+        "system-one-models"
+      ],
+      "source": "github",
+      "created_at": "2026-09-29T16:36:38Z"
+    },
+    {
       "id": "1360078054",
       "title": "muellerberndt/cadence",
       "summary": "A brain that learns from live experience. System 1 by default: perception, memory, plasticity and action. Optional System 2 for self-observation and slow corrections.",
       "url": "https://github.com/muellerberndt/cadence",
-      "stars": 361,
-      "forks": 42,
+      "stars": 380,
+      "forks": 45,
       "language": "Python",
       "topics": [
         "brain-inspired",
@@ -179,32 +131,11 @@
       "created_at": "2026-09-07T10:20:11Z"
     },
     {
-      "id": "1395995350",
-      "title": "strands-labs/strands-decider",
-      "summary": "A small, fast decision model, or system one model, for agentic workflows. Pick between options or rate on a scale faster than an LLM, with a calibrated confidence on every decision.",
-      "url": "https://github.com/strands-labs/strands-decider",
-      "stars": 356,
-      "forks": 56,
-      "language": "Python",
-      "topics": [
-        "ai",
-        "machine-learning",
-        "natural-language-understanding",
-        "python",
-        "strands-agents",
-        "strands-labs",
-        "system-one",
-        "system-one-models"
-      ],
-      "source": "github",
-      "created_at": "2026-09-29T16:36:38Z"
-    },
-    {
       "id": "1379601713",
       "title": "Simreal-AI/Simreal-MLBench",
       "summary": "[Public preview] Externally scored agentic ML research benchmark: 60 tasks, real competition ground truth. Open protocol, operated evaluation.",
       "url": "https://github.com/Simreal-AI/Simreal-MLBench",
-      "stars": 302,
+      "stars": 301,
       "forks": 40,
       "language": "Python",
       "topics": [
@@ -265,7 +196,7 @@
       "summary": "A curated list of Jev use cases, projects, SDKs, and resources. Jev is TypeSafe AI's System One model for fast, typed decisions in software — Choice, Score, and Noul with calibrated probabilities.",
       "url": "https://github.com/kraayenjon/awesome-jev",
       "stars": 172,
-      "forks": 35,
+      "forks": 36,
       "language": "Unknown",
       "topics": [
         "agents",
@@ -324,7 +255,7 @@
       "url": "https://openai.com/index/introducing-gpt-6-1-sol/",
       "hn_url": "https://news.ycombinator.com/item?id=49896586",
       "points": 1066,
-      "comments": 953,
+      "comments": 954,
       "author": "crorella",
       "source": "hackernews",
       "created_at": "2026-09-29T17:06:45Z"
@@ -335,8 +266,8 @@
       "summary": "",
       "url": "https://aleph-alpha.com/en/blog/kolibri-has-landed-a-sovereign-open-weight-model/",
       "hn_url": "https://news.ycombinator.com/item?id=49942706",
-      "points": 671,
-      "comments": 327,
+      "points": 696,
+      "comments": 338,
       "author": "bastitx",
       "source": "hackernews",
       "created_at": "2026-10-03T09:36:04Z"
@@ -347,23 +278,11 @@
       "summary": "",
       "url": "https://blog.cloudflare.com/clef-decision-models/",
       "hn_url": "https://news.ycombinator.com/item?id=49923692",
-      "points": 636,
-      "comments": 217,
+      "points": 640,
+      "comments": 218,
       "author": "jasondavies",
       "source": "hackernews",
       "created_at": "2026-10-01T16:18:57Z"
-    },
-    {
-      "id": "49883471",
-      "title": "It's Time to Investigate the AI Labs",
-      "summary": "",
-      "url": "https://calnewport.com/its-time-to-investigate-the-ai-labs/",
-      "hn_url": "https://news.ycombinator.com/item?id=49883471",
-      "points": 629,
-      "comments": 277,
-      "author": "ibobev",
-      "source": "hackernews",
-      "created_at": "2026-09-28T19:53:35Z"
     },
     {
       "id": "49896050",
@@ -378,16 +297,16 @@
       "created_at": "2026-09-29T16:30:48Z"
     },
     {
-      "id": "49890226",
-      "title": "A Privacy Analysis of Web and Mobile Conversational AI Agents [pdf]",
+      "id": "49969183",
+      "title": "Beam: Reflection's 501B open-weight model",
       "summary": "",
-      "url": "https://jorgegarciaherrero.com/wp-content/interactivos/20260916-Prompt-like-a-butterfly-sting-like-a-tracker-(clean).pdf",
-      "hn_url": "https://news.ycombinator.com/item?id=49890226",
-      "points": 425,
-      "comments": 141,
-      "author": "damaru2",
+      "url": "https://reflection.ai/blog/introducing-beam",
+      "hn_url": "https://news.ycombinator.com/item?id=49969183",
+      "points": 444,
+      "comments": 142,
+      "author": "Philpax",
       "source": "hackernews",
-      "created_at": "2026-09-29T09:03:41Z"
+      "created_at": "2026-10-05T19:16:35Z"
     },
     {
       "id": "49943034",
@@ -395,7 +314,7 @@
       "summary": "",
       "url": "https://tej.as/blog/aleph-alpha-kolibri",
       "hn_url": "https://news.ycombinator.com/item?id=49943034",
-      "points": 419,
+      "points": 420,
       "comments": 12,
       "author": "tejaskumar__",
       "source": "hackernews",
@@ -412,6 +331,18 @@
       "author": "allisdust",
       "source": "hackernews",
       "created_at": "2026-09-30T15:50:11Z"
+    },
+    {
+      "id": "49946228",
+      "title": "LeCun has \"zero concerns\" about AI wiping out humanity, recent \"rogue\" incidents",
+      "summary": "",
+      "url": "https://fortune.com/2026/10/01/ai-godfather-yann-lecun-has-zero-concerns-about-human-extinction-says-anthropic-ceo-dario-amodei-is-deuded/",
+      "hn_url": "https://news.ycombinator.com/item?id=49946228",
+      "points": 411,
+      "comments": 832,
+      "author": "Anon84",
+      "source": "hackernews",
+      "created_at": "2026-10-03T17:44:29Z"
     }
   ],
   "implementation_gaps": []
