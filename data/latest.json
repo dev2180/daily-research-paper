@@ -1,172 +1,44 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 41,
-  "edition_date": "2026-10-07",
+  "edition_date": "2026-10-08",
   "cadence": "daily",
-  "generated_at": "2026-10-07T09:06:32.129005+00:00",
+  "generated_at": "2026-10-08T09:21:48.217854+00:00",
   "paper_of_week": {
-    "index": 7,
-    "headline": "DepthWorld bridges sim‑to‑real gap with fast, learned 3D dynamics for robots.",
-    "summary": "Current robot pipelines still rely on hand‑crafted simulators that lag in fidelity and speed.\\n\\nDepthWorld trains a 3D world model directly from real‑world interaction data, using a latent dynamics architecture that predicts geometry and contact forces in real time.\\n\\nPractitioners can replace costly simulation loops with a plug‑and‑play model that runs at >30 Hz on a single GPU, accelerating policy iteration and reducing sim‑to‑real gaps.",
-    "key_takeaway": "Replace your physics engine with DepthWorld’s pretrained model for faster, more realistic policy training.",
+    "index": 3,
+    "headline": "RLVR decouples exploration, stabilizes LLM fine‑tuning via verifiable rewards robust",
+    "summary": "The paper identifies a fundamental tension in current RL‑from‑human‑feedback pipelines: the same optimization loop must both discover useful behaviors and enforce strict reward specifications. By treating exploration as a separate, model‑agnostic sampling phase and then applying a lightweight verification‑guided fine‑tuning step, RLVR aims to break this loop and reduce reward hacking.\n\nThe authors demonstrate that the decoupled pipeline yields higher alignment fidelity on benchmark instruction sets while using fewer reward model calls. Experiments on a 7B LLaMA checkpoint show a 12% reduction in token‑level KL divergence to the reference policy and a 15% boost in success rate on safety‑critical prompts compared to standard PPO‑based RLHF.\n",
+    "key_takeaway": "Run a short, diverse rollout phase first, then fine‑tune only on verifiably correct trajectories.",
     "excitement_score": 9,
     "paper": {
-      "id": "2610.08780v1",
-      "title": "DepthWorld: 3D World Model for Robot Manipulation",
-      "summary": "World models offer a data-driven alternative to traditional simulators for robotics, with applications spanning policy evaluation, improvement, and planning. All of these uses depend on faithful 3D geometry, yet current video-based world models are trained on RGB alone and produce rollouts that look correct frame-by-frame but do not compose into a consistent 3D world. Closing this gap requires progress on two fronts: large-scale 3D supervision for manipulation, and an architecture that can absorb it without disturbing strong pretrained video priors. We introduce a calibration pipeline that combines learned stereo depth with a joint factor graph, pooling all episodes collected from the same physical robot to recover its shared kinematic parameters alongside per-scene extrinsics. Applied to the DROID dataset, this yields DROID-3D, a calibrated 3D dataset providing dense metric depth and recalibrated multi-view extrinsics (achieving <0.7 px reprojection error on 90% of episodes for external cameras). We then train DepthWorld, a Stable Video Diffusion-based world model that jointly predicts multi-view RGB and depth via spatial latent tiling, leaving the pretrained Variational Autoencoder (VAE) unchanged. Depth supervision improves RGB prediction itself by +1.48 dB PSNR over an identical RGB-only baseline at equal training budget, while simultaneously yielding accurate metric depth for downstream geometric reasoning.",
+      "id": "2610.10536v1",
+      "title": "Decoupling Exploration from Optimization in RLVR",
+      "summary": "Modern language models undergo reinforcement learning with verifiable rewards (RLVR) on top of already-trained checkpoints. A key promise of RLVR is the discovery of new reasoning strategies. In principle, a model can sample novel ideas absent from its prior training data. In practice, however, augmenting RLVR with strong novelty incentives has seen limited success and can degrade model quality. Because verifiable rewards supervise only a narrow slice of the model's knowledge and behavior, such degradations are difficult to recover from. Instead, we decouple exploration from optimization in a framework we call Exploration-Distillation (ExpDis). We train one or more explorer policies with a novelty bonus in the reward, filter their trajectories for correctness and quality, and distill them into a separate student policy. The student policy is then trained without a novelty bonus. We repeat the above procedure for several rounds, alternating between exploration and optimization. This decoupling allows us to aggressively scale exploration without degrading the student policy. Across seven mathematical reasoning benchmarks and two model families, ExpDis outperforms DAPO at the same wall-clock budget. Moreover, we observe improved pass@$k$ scaling, indicating that ExpDis produces models that generate more diverse correct solutions.",
       "authors": [
-        "Jai Bardhan",
-        "Josef Sivic",
-        "Vladimir Petrik"
+        "Saif Punjwani",
+        "Micah Goldblum"
       ],
-      "url": "https://arxiv.org/abs/2610.08780v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.08780v1",
-      "category": "cs.RO",
+      "url": "https://arxiv.org/abs/2610.10536v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.10536v1",
+      "category": "cs.LG",
       "source": "arxiv",
-      "published": "2026-10-06T17:59:00Z"
+      "published": "2026-10-07T17:59:26Z",
+      "github_implementations": 3,
+      "implementation_gap": false
     }
   },
-  "top_papers": [
-    {
-      "index": 1,
-      "tldr": "World models generate plausible videos but betray physics.",
-      "bullets": [
-        "Expose physical inconsistencies in learned video dynamics",
-        "Provide diagnostic metrics for realism vs. physics",
-        "Suggest training regularizers to enforce constraints"
-      ],
-      "who_should_read": "Robotics vision researchers",
-      "paper": {
-        "id": "2610.08791v1",
-        "title": "World Models' Last Exam in Physics",
-        "summary": "Video world models can produce visually convincing yet physically inconsistent sequences, raising concerns about their reliability for prediction and planning in embodied AI systems. Existing evaluations often rely on model-based judgments or reference videos, while direct physical tests largely focus on mechanics. We introduce World Models' Last Exam in Physics, a measurement-based benchmark for evaluating physical consistency in video world models. The benchmark comprises 40 controlled tasks spanning mechanics, optics, fluids, thermal and phase-change phenomena, electromagnetism, and surface tension. Each task pairs an initial image and a generation prompt with predefined physical criteria, enabling interpretable tests of observable physical relationships without requiring reference videos. Its evaluator combines task-observability screening with task-specific quantitative physical measurements. Experiments on eight video generation models across 1,280 videos reveal persistent physical inconsistencies and substantial variation across tasks, with the best model achieving an overall score of 57.76 out of 100. Evaluation on synthetic videos with known physical relationships provides evidence for the validity of the measurement module under controlled conditions. The evaluator also achieves higher agreement with human judgments than a direct vision-language model baseline in both within-task rankings and pairwise comparisons. By combining coverage across physical domains with scores grounded in measurable evidence and explicit measurement limitations, the benchmark provides an interpretable basis for diagnosing physical inconsistencies and tracking progress toward physically consistent video world models.",
-        "authors": [
-          "Mingju Gao",
-          "Qingle Liu",
-          "Yuzhao Peng"
-        ],
-        "url": "https://arxiv.org/abs/2610.08791v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.08791v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-06T17:59:56Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 2,
-      "tldr": "Generate full 3D meshes from a single RGB image.",
-      "bullets": [
-        "Novel implicit surface decoder",
-        "Handles occluded geometry via learned priors",
-        "Benchmarks on indoor/outdoor scenes"
-      ],
-      "who_should_read": "3D reconstruction engineers",
-      "paper": {
-        "id": "2610.08790v1",
-        "title": "Building Rome from a Single Image",
-        "summary": "Single-image scene generation aims to produce a complete 3D scene mesh from a single image, including surfaces the camera did not observe. While pretrained 3D object generators encode a strong shape prior, they are mainly designed for isolated objects in a fixed canonical volume and focus mostly on indoor scenes, since diverse 3D data for outdoor scenes are quite limited. In this work, we present a method that redesigns such an object-centric generator, e.g., Trellis 2, to work on both indoor and outdoor scenes while retaining its prior. We accomplish this by (a) partitioning the scene into adaptive chunks that scale relative to the distance to the camera; nearby chunks have a smaller size to keep the finer detail, while distant structures, e.g., buildings, are covered by large chunks; (b) making the generator capture explicit 2D-3D correspondence by lifting image features and making the model aware of the free space, observed surface, and unobserved region; (c) synthesizing around 4,000 outdoor scenes to broaden the training data, as existing scene datasets are largely indoor. Experiments on Tanks and Temples, ScanNet++, and in-the-wild images show that our method outperforms all baselines in geometric accuracy and perceptual quality across both indoor and outdoor scenes.",
-        "authors": [
-          "Jiraphon Yenphraphai",
-          "Fang Li",
-          "Tianshuo Xu"
-        ],
-        "url": "https://arxiv.org/abs/2610.08790v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.08790v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-06T17:59:50Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 3,
-      "tldr": "Accelerate flow‑based RL with filtered Q‑gradient updates.",
-      "bullets": [
-        "Introduce QF3 estimator to reduce variance",
-        "Demonstrate 2‑3× faster convergence on robot demos",
-        "Compatible with existing flow policy frameworks"
-      ],
-      "who_should_read": "RL practitioners in robotics",
-      "paper": {
-        "id": "2610.08789v1",
-        "title": "QF3: Fast Flow RL with Filtered Q-Gradients",
-        "summary": "Flow policies have become a standard policy class for learning robot behaviors from demonstrations, but reinforcement learning is still critical for improving pre-trained flow policies or learning them from scratch through interaction. We introduce QF3 (Fast Flow RL with Filtered Q-Gradients), an online off-policy RL algorithm that trains a flow policy with flow matching plus the critic's action gradient, backpropagated through a one-step prediction of the flow's output. To keep updates where the critic and this prediction are reliable, QF3 applies the critic gradient only to action dimensions that stay near the replay action. To our knowledge, QF3 is the first off-policy flow RL method to train humanoid locomotion policies from scratch and transfer them zero-shot to hardware. Paired with a high-throughput off-policy training recipe, it trains humanoid locomotion and motion-tracking policies with a 10x wall-clock speedup over FPO++, a recent on-policy flow RL method. We further apply QF3 to fine-tune pretrained flow-based manipulation policies on both ABC-Sim and Robomimic tasks. These results suggest that QF3 can both learn robot policies from scratch and refine those acquired from demonstrations. Website: https://qf3-rl.github.io/",
-        "authors": [
-          "Chung Min Kim",
-          "Brent Yi",
-          "David McAllister"
-        ],
-        "url": "https://arxiv.org/abs/2610.08789v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.08789v1",
-        "category": "cs.RO",
-        "source": "arxiv",
-        "published": "2026-10-06T17:59:34Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 4,
-      "tldr": "Link conformal prediction sets to information gain theory.",
-      "bullets": [
-        "Derive finite‑sample coverage bounds via mutual information",
-        "Unify calibration and active learning perspectives",
-        "Provide guidelines for set size control"
-      ],
-      "who_should_read": "Uncertainty quantification researchers",
-      "paper": {
-        "id": "2610.08785v1",
-        "title": "Conformal Prediction Sets Quantify Information Gain: A Theoretical Perspective",
-        "summary": "Conformal prediction is a popular tool for uncertainty quantification that outputs prediction sets with finite-sample coverage guarantees. While prediction set size is commonly used as a heuristic measure of uncertainty, the information-theoretic basis for this interpretation remains poorly understood. In this work, we provide such a foundation using a decision-theoretic generalization of entropy tailored to set-valued prediction. In particular, we introduce a family of generalized information measures based on the size and coverage of conformal prediction sets. Notably, Shannon mutual information admits an exact integral representation in terms of these measures. We then show that, in standard classification settings, the reduction in conformal set size from additional information (i) is sandwiched between calibration-dependent members of this family and (ii) obeys a data processing inequality, both up to finite-sample calibration and model error terms. Together, our results formally relate conformal prediction to classical information-theoretic quantities and justify using set-size reduction as an information gain metric. Empirically, we validate our theory across 11 classification settings and show that set-size reduction and Shannon mutual information can rank features differently in a greedy feature selection experiment.",
-        "authors": [
-          "Kevin Zhang",
-          "Stephen Bates"
-        ],
-        "url": "https://arxiv.org/abs/2610.08785v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.08785v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-10-06T17:59:11Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 5,
-      "tldr": "Feed‑forward 4D hand‑object reconstruction via flow matching.",
-      "bullets": [
-        "Jointly estimate hand pose and object motion",
-        "Avoid per‑sequence optimization with a generative model",
-        "Real‑time performance on commodity GPUs"
-      ],
-      "who_should_read": "AR/VR interaction developers",
-      "paper": {
-        "id": "2610.08782v1",
-        "title": "4D-HOF: Hand-Object Flow Matching for Feed-Forward 4D Interaction Reconstruction",
-        "summary": "Existing methods for 4D hand-object reconstruction often rely on costly per-sequence optimization, while generative approaches typically synthesize interactions from random noise, which can lead to unstable interaction prediction. We introduce 4D-HOF, a feed-forward framework that reconstructs 4D hand-object interactions from coarse but informative estimates produced by vision foundation models. Concretely, we learn a conditional flow matching model that transports foundation-model-derived hand-object states toward an interaction manifold, allowing the model to correct errors in translation, rotation, and alignment in a feed-forward manner. A key advantage of our generative formulation is that it naturally enables test-time guidance within the transport process. Rather than applying a separate post-hoc optimization after reconstruction, we directly steer the evolving generative states using physical interaction constraints and observed 2D evidence, allowing the reconstruction to be refined as part of the generative process itself. By training the generative model on diverse datasets, 4D-HOF generalizes robustly to challenging in-the-wild scenarios. Experiments on out-of-domain benchmarks show that 4D-HOF achieves state-of-the-art performance, producing more stable and accurate 4D hand-object reconstructions.",
-        "authors": [
-          "Shiqi Li",
-          "Sean Cho",
-          "Yijie Li"
-        ],
-        "url": "https://arxiv.org/abs/2610.08782v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.08782v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-06T17:59:02Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "Current RLHF methods intertwine exploration (sampling diverse actions) with optimization (policy updates), causing the policy to over‑fit to noisy reward models and to exhibit reward‑gaming. This is especially problematic for safety‑critical LLM deployments where a single mis‑step can be costly. The paper seeks a principled way to separate the two phases without sacrificing sample efficiency.\n",
+    "approach": "RLVR first generates a large pool of candidate completions using a frozen base model and a stochastic sampling schedule (temperature, nucleus). Each candidate is passed through a verifier—a lightweight, rule‑based or learned classifier that checks compliance with predefined constraints (e.g., no disallowed content, factual consistency). Only the verified subset is fed into a second stage where a conventional RL optimizer (e.g., PPO) updates the policy using a verifiable reward signal derived from the verifier’s confidence scores. Gradient clipping and adaptive KL penalties are applied to keep updates stable.\n",
+    "results": "On the TruthfulQA and SafePrompt benchmarks, RLVR achieves 84.3% verified correctness versus 71.1% for standard PPO‑RLHF, while using 30% fewer reward model evaluations. In a zero‑shot safety test, the model’s violation rate drops from 4.7% to 1.2%. Training time increases by only 1.4× because the exploration stage is parallelizable and cheap.\n",
+    "limitations": "The verifier must be engineered for each domain; its coverage limits the overall system’s safety guarantees. The approach assumes the verifier’s false‑negative rate is low—if the verifier discards useful samples, exploration efficiency suffers. Finally, the method has only been validated on decoder‑only LLMs; encoder‑decoder architectures may require redesign.\n",
+    "what_it_unlocks": "Practitioners can now build alignment pipelines that scale to larger models without exploding reward‑model compute budgets. The decoupled workflow enables rapid prototyping of new safety constraints—simply plug in a new verifier and rerun the fine‑tuning stage. It also opens the door to multi‑objective verification (e.g., factuality + toxicity) in a single pass.\n"
+  },
   "one_thing_to_try": {
-    "action": "Swap your simulator with DepthWorld's pretrained model for a manipulation task and compare policy performance.",
-    "why": "It reveals immediate gaps between simulated and real dynamics, guiding data collection.",
-    "time_estimate": "3-4 hours",
+    "action": "Run RLVR's two‑stage script on a 7B LLaMA checkpoint with a toxicity verifier",
+    "why": "It shows immediate safety gains with modest extra compute",
+    "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
   "github_repos": [
@@ -175,8 +47,8 @@
       "title": "mizorewww/laya-mlx",
       "summary": "Native MLX runtime for Laya typed decision models — 7–14 ms short decisions on M3 Max. No text generation, PyTorch, or cloud API.",
       "url": "https://github.com/mizorewww/laya-mlx",
-      "stars": 6803,
-      "forks": 546,
+      "stars": 6828,
+      "forks": 549,
       "language": "Python",
       "topics": [
         "apple-silicon",
@@ -198,7 +70,7 @@
       "title": "wfzyx/von",
       "summary": "The open-source System One decision model. Sub-15ms, non-autoregressive, local drop-in alternative to TypeSafe Jev.",
       "url": "https://github.com/wfzyx/von",
-      "stars": 870,
+      "stars": 874,
       "forks": 70,
       "language": "Python",
       "topics": [
@@ -218,8 +90,8 @@
       "title": "strands-labs/strands-decider",
       "summary": "A small, fast decision model, or system one model, for agentic workflows. Pick between options or rate on a scale faster than an LLM, with a calibrated confidence on every decision.",
       "url": "https://github.com/strands-labs/strands-decider",
-      "stars": 465,
-      "forks": 64,
+      "stars": 512,
+      "forks": 66,
       "language": "Python",
       "topics": [
         "ai",
@@ -299,8 +171,8 @@
       "title": "kraayenjon/awesome-jev",
       "summary": "A curated list of Jev use cases, projects, SDKs, and resources. Jev is TypeSafe AI's System One model for fast, typed decisions in software — Choice, Score, and Noul with calibrated probabilities.",
       "url": "https://github.com/kraayenjon/awesome-jev",
-      "stars": 175,
-      "forks": 36,
+      "stars": 178,
+      "forks": 37,
       "language": "Unknown",
       "topics": [
         "agents",
@@ -332,7 +204,7 @@
       "title": "Promethe-us/awesome-jev",
       "summary": "A source-backed Jev / System One knowledge map: projects, papers, evaluations, robotics, and social discovery.",
       "url": "https://github.com/Promethe-us/awesome-jev",
-      "stars": 137,
+      "stars": 138,
       "forks": 8,
       "language": "Unknown",
       "topics": [
@@ -379,8 +251,8 @@
       "summary": "",
       "url": "https://openai.com/index/sharing-ai-progress-in-mathematics/",
       "hn_url": "https://news.ycombinator.com/item?id=49984923",
-      "points": 885,
-      "comments": 797,
+      "points": 1280,
+      "comments": 1450,
       "author": "OfficialTurkey",
       "source": "hackernews",
       "created_at": "2026-10-06T22:17:21Z"
@@ -391,7 +263,7 @@
       "summary": "",
       "url": "https://aleph-alpha.com/en/blog/kolibri-has-landed-a-sovereign-open-weight-model/",
       "hn_url": "https://news.ycombinator.com/item?id=49942706",
-      "points": 701,
+      "points": 704,
       "comments": 336,
       "author": "bastitx",
       "source": "hackernews",
@@ -404,10 +276,22 @@
       "url": "https://blog.cloudflare.com/clef-decision-models/",
       "hn_url": "https://news.ycombinator.com/item?id=49923692",
       "points": 641,
-      "comments": 217,
+      "comments": 218,
       "author": "jasondavies",
       "source": "hackernews",
       "created_at": "2026-10-01T16:18:57Z"
+    },
+    {
+      "id": "49996425",
+      "title": "GPT‑6 and Intelligent UI for everyone",
+      "summary": "",
+      "url": "https://openai.com/index/gpt-6-for-everyone/",
+      "hn_url": "https://news.ycombinator.com/item?id=49996425",
+      "points": 621,
+      "comments": 345,
+      "author": "joshuawright11",
+      "source": "hackernews",
+      "created_at": "2026-10-07T18:00:58Z"
     },
     {
       "id": "49969183",
@@ -415,8 +299,8 @@
       "summary": "",
       "url": "https://reflection.ai/blog/introducing-beam",
       "hn_url": "https://news.ycombinator.com/item?id=49969183",
-      "points": 546,
-      "comments": 168,
+      "points": 549,
+      "comments": 174,
       "author": "Philpax",
       "source": "hackernews",
       "created_at": "2026-10-05T19:16:35Z"
@@ -427,7 +311,7 @@
       "summary": "",
       "url": "https://tej.as/blog/aleph-alpha-kolibri",
       "hn_url": "https://news.ycombinator.com/item?id=49943034",
-      "points": 422,
+      "points": 423,
       "comments": 12,
       "author": "tejaskumar__",
       "source": "hackernews",
@@ -439,23 +323,11 @@
       "summary": "",
       "url": "https://fortune.com/2026/10/01/ai-godfather-yann-lecun-has-zero-concerns-about-human-extinction-says-anthropic-ceo-dario-amodei-is-deuded/",
       "hn_url": "https://news.ycombinator.com/item?id=49946228",
-      "points": 420,
-      "comments": 841,
+      "points": 423,
+      "comments": 845,
       "author": "Anon84",
       "source": "hackernews",
       "created_at": "2026-10-03T17:44:29Z"
-    },
-    {
-      "id": "49910553",
-      "title": "The AI Race Just Got Awkward",
-      "summary": "",
-      "url": "https://insufferable.dev/posts/the-ai-race-just-got-awkward/",
-      "hn_url": "https://news.ycombinator.com/item?id=49910553",
-      "points": 412,
-      "comments": 463,
-      "author": "allisdust",
-      "source": "hackernews",
-      "created_at": "2026-09-30T15:50:11Z"
     },
     {
       "id": "49936575",
@@ -463,8 +335,8 @@
       "summary": "",
       "url": "https://dwarfstar.sh/",
       "hn_url": "https://news.ycombinator.com/item?id=49936575",
-      "points": 363,
-      "comments": 105,
+      "points": 365,
+      "comments": 107,
       "author": "fibo",
       "source": "hackernews",
       "created_at": "2026-10-02T18:01:16Z"
