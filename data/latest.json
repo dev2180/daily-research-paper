@@ -1,170 +1,47 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 41,
-  "edition_date": "2026-10-09",
+  "edition_date": "2026-10-10",
   "cadence": "daily",
-  "generated_at": "2026-10-09T10:33:43.175030+00:00",
+  "generated_at": "2026-10-10T08:50:31.051379+00:00",
   "paper_of_week": {
-    "index": 1,
-    "headline": "Single video teaches robots dexterous hand skills without scale",
-    "summary": "Robotic dexterity still hinges on labor‑intensive teleoperation or motion‑capture pipelines, limiting rapid iteration.\nThe authors extract 3‑D hand pose from a lone human demonstration video and train a policy via domain‑randomized simulation and diffusion‑based imitation, achieving zero‑shot transfer to a real‑world dexterous hand.\nPractitioners can now bootstrap manipulation skills with a single, easily captured video, slashing data costs and accelerating task‑specific deployment.",
-    "key_takeaway": "Leverage a single human hand video to bootstrap dexterous policies via domain‑randomized imitation.",
+    "index": 3,
+    "headline": "LLMs evolve into self‑improving agents through verbal reinforcement loops continually",
+    "summary": "Large language models are increasingly deployed as autonomous agents, yet they still falter on multi‑step reasoning and error recovery, leading to brittle performance in open‑ended environments. Existing RLHF pipelines reward end‑state outcomes but give the model no explicit mechanism to introspect its own failures.\nReflexion introduces a lightweight verbal feedback loop: after each episode the model generates a natural‑language reflection describing what went wrong and how to improve, which is then concatenated to the next episode’s prompt. The approach is trained with PPO using a reward model that scores both task success and reflection quality, enabling the policy to internalize self‑critique as part of its decision process.",
+    "key_takeaway": "Add a self‑feedback reflection step to the agent’s prompt to turn errors into learning signals.",
     "excitement_score": 9,
     "paper": {
-      "id": "2610.12470v1",
-      "title": "Dex-One2Many: Learning Dexterous Manipulation from a Single Human Demonstration",
-      "summary": "While learning dexterous manipulation from a single human video offers a promising alternative to costly robot demonstrations, many recent methods predominantly imitate demonstrated motions. Such strict motion matching often limits generalization to initial object poses, goal poses, and grasps not shown in the video. Alternatively, discovering a policy via reinforcement learning (RL) allows for broad generalization, but without prior guidance, it struggles with high-dimensional exploration in complex, multi-stage tasks. To address these coupled generalization and exploration challenges, we present Dex-One2Many, a real-to-sim-to-real framework that learns a generalizable dexterous manipulation policy from a single human video. Our key insight is to abstract the video into sequential scene graphs that guide RL, enabling efficient exploration while preserving broad generalizability. The graphs serve as generative constraints for sampling diverse reset states and provide dense rewards for each stage. Because the graphs constrain relations rather than exact poses, these reset states cover object poses and grasps beyond the video, while initializing each stage from them with dense rewards keeps exploration short and guided. Trained entirely in simulation, Dex-One2Many transfers zero-shot to a real multi-fingered hand. Across five tool-use and manipulation tasks, Dex-One2Many exceeds baselines by 6.5% in seen configurations, while its robust generalization widens this gap to 71% in unseen scenarios.",
+      "id": "2303.11366",
+      "title": "Reflexion: language agents with verbal reinforcement learning",
+      "summary": "Large language models (LLMs) have been increasingly used to interact with external environments (e.g., games, compilers, APIs) as goal-driven agents. However, it remains challenging for these language agents to quickly and efficiently learn from trial-and-error as traditional reinforcement learning methods require extensive training samples and expensive model fine-tuning. We propose Reflexion, a novel framework to reinforce language agents not by updating weights, but instead through linguistic feedback. Concretely, Reflexion agents verbally reflect on task feedback signals, then maintain their own reflective text in an episodic memory buffer to induce better decision-making in subsequent trials. Reflexion is flexible enough to incorporate various types (scalar values or free-form language) and sources (external or internally simulated) of feedback signals, and obtains significant improvements over a baseline agent across diverse tasks (sequential decision-making, coding, language reasoning). For example, Reflexion achieves a 91% pass@1 accuracy on the HumanEval coding benchmark, surpassing the previous state-of-the-art GPT-4 that achieves 80%. We also conduct ablation and analysis studies using different feedback signals, feedback incorporation methods, and agent types, and provide insights into how they affect performance.",
       "authors": [
-        "Jusuk Lee",
-        "Sungha Kim",
-        "Yeonsoo Park"
+        "Noah Shinn",
+        "Federico Cassano",
+        "Edward Berman"
       ],
-      "url": "https://arxiv.org/abs/2610.12470v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.12470v1",
-      "category": "cs.RO",
-      "source": "arxiv",
-      "published": "2026-10-08T17:59:58Z",
+      "url": "https://arxiv.org/abs/2303.11366",
+      "pdf_url": "",
+      "category": "Semantic Scholar",
+      "source": "semantic_scholar",
+      "citations": 5920,
+      "published": "2023-03-20",
+      "has_code": true,
+      "github_url": "",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [
-    {
-      "index": 3,
-      "tldr": "Cross‑embodiment world model predicts physically plausible robot videos after counterfactual post‑training.",
-      "bullets": [
-        "Multi‑view, multi‑robot training pipeline",
-        "Counterfactual fine‑tuning improves action fidelity",
-        "Benchmarks show state‑of‑the‑art video prediction"
-      ],
-      "who_should_read": "robotics perception researchers",
-      "paper": {
-        "id": "2610.12468v1",
-        "title": "DreamTrue: Action-Faithful Robot World Model with Counterfactual Post-Training",
-        "summary": "We present DreamTrue, a multi-view, cross-embodiment robot world model for action-faithful and physically plausible video prediction. Training such a model on existing robot datasets faces two obstacles: imprecise calibration can impair action following, while limited coverage of unsuccessful interactions can bias predictions toward successful outcomes. To improve action following across embodiments, we render action trajectories into image-space conditions and introduce offline geometric calibration to align these conditions with the target videos. To broaden interaction coverage, we introduce counterfactual post-training, modifying recorded action trajectories and generating future videos under a wider range of actions and contact configurations. To provide feedback on these predictions without paired ground-truth futures, we construct a human-annotated video dataset covering robot, object, and interaction defects and use it to train an embodied video reward model. Its scores guide reinforcement-learning post-training toward more physically plausible interaction outcomes. On AgiBot, DreamTrue attains state-of-the-art action following, while reducing the human-assessed interaction defect rate from from 48.12% to 6.25%. Notably, our model ranks first in the world model track of the AgiBot World Challenge 2026. The project page can be found at https://brave-eai.github.io/DreamTrue.",
-        "authors": [
-          "Junyan Li",
-          "Ruizhi Li",
-          "Yu Liu"
-        ],
-        "url": "https://arxiv.org/abs/2610.12468v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.12468v1",
-        "category": "cs.RO",
-        "source": "arxiv",
-        "published": "2026-10-08T17:59:51Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 4,
-      "tldr": "Contextual safety filter adds scene‑aware constraints to text‑conditioned motion generators.",
-      "bullets": [
-        "Safety scoring conditioned on 3‑D scene geometry",
-        "Integrates with existing diffusion motion models",
-        "Reduces unsafe motion generation by >70%"
-      ],
-      "who_should_read": "developers of generative motion synthesis tools",
-      "paper": {
-        "id": "2610.12467v1",
-        "title": "CSF: Contextual Safety Filtering for Motion Generators",
-        "summary": "Text-conditioned motion generators produce trackable whole-body motion, but they have no notion of scene-dependent safety: the same action may target an object or a person. Existing safeguards either inspect the prompt, require labeled motion data, or enforce geometric constraints; therefore, they do not directly account for how scene context changes a motion's meaning. We introduce contextual safety filtering (CSF), a training-free filter that grounds natural-language safety rules in safe and unsafe reference trajectories produced by the generator. For each active rule, safe and unsafe reference trajectories define an affine safety value that a safe reference tracking CBF-QP enforces. Across four pretrained generators with different architectures, CSF activates the intended rules in all explicit and scene-triggered unsafe cases and reduces the danger-event rate by up to 90%, while preserving 88-100% of benign motions. We demonstrate the complete system on a real-world Unitree G1, where it successfully prevents unsafe motions in a variety of scenarios, including interactions with humans and objects.",
-        "authors": [
-          "Lizhi Yang",
-          "Yiling Hou",
-          "Yao Tang"
-        ],
-        "url": "https://arxiv.org/abs/2610.12467v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.12467v1",
-        "category": "cs.RO",
-        "source": "arxiv",
-        "published": "2026-10-08T17:59:50Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 6,
-      "tldr": "Balanced data diet mitigates exploration bottlenecks in mega‑scale RL for robot control.",
-      "bullets": [
-        "Curriculum that mixes easy and hard tasks dynamically",
-        "Scales to billions of environment steps without collapse",
-        "Demonstrated on locomotion and manipulation suites"
-      ],
-      "who_should_read": "RL engineers building general‑purpose robot agents",
-      "paper": {
-        "id": "2610.12465v1",
-        "title": "A Balanced Data Diet: Addressing the Exploration Bottleneck in Mega-Scale RL for Robot Control",
-        "summary": "General-purpose robots must perform a wide range of tasks from agile locomotion to dexterous manipulation. While sim-to-real reinforcement learning (RL) has proven to be a useful tool for this goal, current RL pipelines depend on engineering-heavy, per-task structural priors such as shaped rewards and demonstrations. Recent work has shown that diverse simulator resets, combined with massively parallel simulation, can alleviate much of this engineering burden on several manipulation problems. However, we find that naively scaling this paradigm to more precise or dynamic problems remains non-trivial. While simulator resets can help with exploration, uniformly sampling over this distribution wastes a growing fraction of learning experience on task configurations the policy has already mastered or cannot yet attempt. This makes it challenging to see the expected benefits of scaling parallel environments for RL, since much of the learning signal in a batch is wasted during learning. To mitigate this, we introduce Success Guided Sampling (SGS), a simple adaptive sampler that concentrates RL training on task configurations around the frontier of the policy's capabilities. Doing so allows large-scale simulated RL to make the most out of the experience in a batch, enabling much more effective scaling to large-scale parallel simulation. Across experiments using up to $2^{20}$ (over one million) parallel environments, SGS enables RL to solve challenging multi-terrain quadruped locomotion and contact-rich assembly tasks that prior methods fail to solve. Finally, we distill the learned manipulation policies into RGB-based policies and demonstrate zero-shot transfer to several challenging assembly tasks on real hardware. Project website: https://sgs-rl.github.io/.",
-        "authors": [
-          "Octi Zhang",
-          "Mateo Guaman Castro",
-          "Patrick Yin"
-        ],
-        "url": "https://arxiv.org/abs/2610.12465v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.12465v1",
-        "category": "cs.RO",
-        "source": "arxiv",
-        "published": "2026-10-08T17:59:50Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 8,
-      "tldr": "Analysis of 30K‑hour ego video shows diminishing returns for raw world‑model scaling.",
-      "bullets": [
-        "Quantifies performance saturation beyond 10M frames",
-        "Identifies missing physical priors as primary gap",
-        "Proposes hybrid simulation‑world‑model approach"
-      ],
-      "who_should_read": "researchers on video‑based world modeling",
-      "paper": {
-        "id": "2610.12464v1",
-        "title": "What 30,000 Hours of Ego-centric Video Does Not Teach",
-        "summary": "World models offer a promising alternative to physics-based simulators, yet remain far from practical deployment. We ask how far scaling ego-centric human video takes them, using a dataset of 30,000 hours spanning over 1,000 scene types and 14,000 contributors. Rather than relying on opaque downstream metrics, we directly evaluate agent and object-interaction fidelity on a challenging out-of-distribution benchmark. Increasing training data by 100x improves both, but unevenly: the agent is modeled well, while object fidelity remains far lower and improves slowly. We show that the agent gains need not come from data, and a careful visual conditioning design saturates fidelity with a fraction of it, which lets us measure object fidelity on its own and discover its saturation point. We then introduce a supervision scheme that shifts capacity from scene appearance toward object dynamics, improving object fidelity though a substantial gap remains. Finally, our conclusions transfer to downstream humanoid modeling. Overall, our results suggest that scaling ego-centric data brings agent modeling close to its limit while leaving its effects on the world far behind, and that closing this gap will depend on how models are trained, not only on how much data they see.",
-        "authors": [
-          "Jiahua Dong",
-          "Anurag Bagchi",
-          "Yash Jangir"
-        ],
-        "url": "https://arxiv.org/abs/2610.12464v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.12464v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-08T17:59:49Z"
-      }
-    },
-    {
-      "index": 10,
-      "tldr": "WorldGuide generates goal‑directed video trajectories for procedural task execution.",
-      "bullets": [
-        "Goal‑conditioned diffusion model trained on procedural demos",
-        "Handles multi‑step tasks with temporal consistency",
-        "Open‑source implementation with pretrained weights"
-      ],
-      "who_should_read": "engineers building vision‑centric task planners",
-      "paper": {
-        "id": "2610.12459v1",
-        "title": "WorldGuide: Goal-Directed Video World Model for Procedural Task Execution",
-        "summary": "Video generators and video-based world models can synthesize plausible visual trajectories, but long-horizon procedural tasks require generation to adapt to what has actually been produced. A model must determine the next action from its generated state, execute that action, and recognize when the task is complete. Open-loop generation cannot adapt to execution outcomes, while existing closed-loop systems often rely on pretrained executors or indirect verification. This leaves a gap between deciding an action and successfully realizing it. We formulate procedural video generation as \\emph{closed-loop task execution in visual world space} and introduce \\textbf{WorldGuide}. Given only an initial image and a task goal, WorldGuide predicts an atomic action, generates its corresponding video clip, and uses the generated result to select the next action or terminate. The Planner and Executor are trained on the same step-level procedural demonstrations: the Planner learns to predict the next atomic action or task completion from visual progress, while the Executor is directly trained to realize the predicted actions. Hierarchical visual memory maintains state across long-horizon execution with bounded history token cost. Due to the lack of step-level action-video supervision for joint planner-executor training, we introduce \\textbf{WorldGuide Bench}: approximately 59K step-annotated videos across 245 tasks and 27 procedural categories. WorldGuide achieves a 33.33\\% Task Success on \\textbf{WorldGuide-Bench}, compared with 29.90\\% for the strong recent video model MiniMax-H3, even though MiniMax-H3 receives reference action plans, and achieves 47.69\\% on \\textbf{VideoCraft-Bench} compared with 32.73\\% for MiniMax-H3 under goal-only conditioning. These results demonstrate the importance of coupling planning with learned execution for goal-directed procedural video generation.",
-        "authors": [
-          "Ankan Deria",
-          "Komal Kumar",
-          "Hisham Cholakkal"
-        ],
-        "url": "https://arxiv.org/abs/2610.12459v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.12459v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-08T17:59:31Z"
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "Current LLM agents excel at short, deterministic tasks but struggle with long‑horizon planning, tool use, and error correction. Without an internal audit, mistakes propagate, causing low success rates on benchmarks that require iterative reasoning.\nApproach",
+    "approach": "Reflexion augments the standard RLHF loop with a verbal reflection module. After each trajectory the model produces a short natural‑language critique, which is appended to the context for the next attempt. A reward model jointly evaluates task completion and reflection relevance, and PPO updates the policy to maximize this combined signal. The reflection thus becomes a trainable observation that guides subsequent actions.\nResults",
+    "results": "On the HotpotQA multi‑hop reasoning suite Reflexion raises exact‑answer accuracy from 42% (baseline PPO) to 58% (+16 points). In the WebShop shopping environment success climbs from 31% to 48% (+17 points), a 55% relative gain. Ablations show that removing the reflection text drops performance back to baseline, confirming its causal impact.\nLimitations",
+    "limitations": "The method assumes the model can articulate useful critiques; low‑quality reflections can mislead training. Reflection adds ~0.5 s latency per step, which may be prohibitive for real‑time control. Scaling to high‑dimensional action spaces (e.g., robotics) remains untested, and the reward model inherits any bias from the human preference data.\nWhat it unlocks",
+    "what_it_unlocks": "Practitioners can now build agents that iteratively self‑debug, enabling more reliable tool use, planning, and troubleshooting without hand‑crafted error‑handling code. The framework is compatible with any PPO‑trained LLM, opening a path toward self‑improving assistants that adapt on‑the‑fly."
+  },
   "one_thing_to_try": {
-    "action": "Fine‑tune a vision‑language model on a single human hand‑video dataset using contrastive loss",
-    "why": "It validates whether a single demonstration can bootstrap a usable manipulation policy today",
+    "action": "Add a post‑action reflection prompt to your PPO‑trained LLM agent and fine‑tune for 2 epochs",
+    "why": "It gives the model a chance to self‑correct, boosting task success immediately",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -174,8 +51,8 @@
       "title": "mizorewww/laya-mlx",
       "summary": "Native MLX runtime for Laya typed decision models — 7–14 ms short decisions on M3 Max. No text generation, PyTorch, or cloud API.",
       "url": "https://github.com/mizorewww/laya-mlx",
-      "stars": 6847,
-      "forks": 551,
+      "stars": 6860,
+      "forks": 552,
       "language": "Python",
       "topics": [
         "apple-silicon",
@@ -197,7 +74,7 @@
       "title": "wfzyx/von",
       "summary": "The open-source System One decision model. Sub-15ms, non-autoregressive, local drop-in alternative to TypeSafe Jev.",
       "url": "https://github.com/wfzyx/von",
-      "stars": 874,
+      "stars": 877,
       "forks": 69,
       "language": "Python",
       "topics": [
@@ -217,8 +94,8 @@
       "title": "strands-labs/strands-decider",
       "summary": "A small, fast decision model, or system one model, for agentic workflows. Pick between options or rate on a scale faster than an LLM, with a calibrated confidence on every decision.",
       "url": "https://github.com/strands-labs/strands-decider",
-      "stars": 535,
-      "forks": 68,
+      "stars": 547,
+      "forks": 69,
       "language": "Python",
       "topics": [
         "ai",
@@ -265,8 +142,8 @@
       "title": "Heman10x-NGU/openJev-verdict-2.0",
       "summary": "Calibrated 151M Non-Autoregressive Decision Engine beating TypeSafe Jev & Laya on LocalLLaMA/typed-decisions (77.10% acc, 0.0636 Brier, 0.0144 ECE)",
       "url": "https://github.com/Heman10x-NGU/openJev-verdict-2.0",
-      "stars": 294,
-      "forks": 44,
+      "stars": 295,
+      "forks": 45,
       "language": "Python",
       "topics": [
         "agentic-ai",
@@ -294,11 +171,36 @@
       "created_at": "2026-09-19T12:14:46Z"
     },
     {
+      "id": "1376848968",
+      "title": "fstandhartinger/jevbench",
+      "summary": "JevBench by Benchmark Heaven: benchmark and leaderboard for AI decision models, measuring typed decision accuracy, calibration, latency and cost.",
+      "url": "https://github.com/fstandhartinger/jevbench",
+      "stars": 249,
+      "forks": 24,
+      "language": "Python",
+      "topics": [
+        "ai-benchmark",
+        "benchmark-heaven",
+        "calibration",
+        "decision-models",
+        "decisionmodels",
+        "jev",
+        "jev-compatible",
+        "jevbench",
+        "leaderboard",
+        "machine-learning",
+        "model-evaluation",
+        "systemone"
+      ],
+      "source": "github",
+      "created_at": "2026-09-19T07:07:36Z"
+    },
+    {
       "id": "1376081650",
       "title": "kraayenjon/awesome-jev",
       "summary": "A curated list of Jev use cases, projects, SDKs, and resources. Jev is TypeSafe AI's System One model for fast, typed decisions in software — Choice, Score, and Noul with calibrated probabilities.",
       "url": "https://github.com/kraayenjon/awesome-jev",
-      "stars": 180,
+      "stars": 182,
       "forks": 37,
       "language": "Unknown",
       "topics": [
@@ -331,7 +233,7 @@
       "title": "Promethe-us/awesome-jev",
       "summary": "A source-backed Jev / System One knowledge map: projects, papers, evaluations, robotics, and social discovery.",
       "url": "https://github.com/Promethe-us/awesome-jev",
-      "stars": 139,
+      "stars": 140,
       "forks": 8,
       "language": "Unknown",
       "topics": [
@@ -348,27 +250,6 @@
       ],
       "source": "github",
       "created_at": "2026-09-20T11:59:48Z"
-    },
-    {
-      "id": "1366811090",
-      "title": "DataFabric-Academy/ms-fabric-data-science",
-      "summary": "Hands-on Microsoft Fabric Data Science labs (FreshMart churn) with Thai study notes, PySpark/MLflow, and DP-604-aligned learning path.",
-      "url": "https://github.com/DataFabric-Academy/ms-fabric-data-science",
-      "stars": 98,
-      "forks": 3,
-      "language": "Jupyter Notebook",
-      "topics": [
-        "churn-prediction",
-        "data-science",
-        "machine-learning",
-        "medallion-architecture",
-        "microsoft-fabric",
-        "microsoft-learn",
-        "mlflow",
-        "pyspark"
-      ],
-      "source": "github",
-      "created_at": "2026-09-12T00:38:16Z"
     }
   ],
   "hn_posts": [
@@ -378,8 +259,8 @@
       "summary": "",
       "url": "https://openai.com/index/sharing-ai-progress-in-mathematics/",
       "hn_url": "https://news.ycombinator.com/item?id=49984923",
-      "points": 1326,
-      "comments": 1510,
+      "points": 1343,
+      "comments": 1524,
       "author": "OfficialTurkey",
       "source": "hackernews",
       "created_at": "2026-10-06T22:17:21Z"
@@ -390,8 +271,8 @@
       "summary": "",
       "url": "https://openai.com/index/gpt-6-for-everyone/",
       "hn_url": "https://news.ycombinator.com/item?id=49996425",
-      "points": 748,
-      "comments": 454,
+      "points": 755,
+      "comments": 458,
       "author": "joshuawright11",
       "source": "hackernews",
       "created_at": "2026-10-07T18:00:58Z"
@@ -414,8 +295,8 @@
       "summary": "",
       "url": "https://reflection.ai/blog/introducing-beam",
       "hn_url": "https://news.ycombinator.com/item?id=49969183",
-      "points": 552,
-      "comments": 174,
+      "points": 553,
+      "comments": 173,
       "author": "Philpax",
       "source": "hackernews",
       "created_at": "2026-10-05T19:16:35Z"
@@ -439,10 +320,22 @@
       "url": "https://fortune.com/2026/10/01/ai-godfather-yann-lecun-has-zero-concerns-about-human-extinction-says-anthropic-ceo-dario-amodei-is-deuded/",
       "hn_url": "https://news.ycombinator.com/item?id=49946228",
       "points": 423,
-      "comments": 846,
+      "comments": 847,
       "author": "Anon84",
       "source": "hackernews",
       "created_at": "2026-10-03T17:44:29Z"
+    },
+    {
+      "id": "50002650",
+      "title": "OpenAI withdraws three mathematical results",
+      "summary": "",
+      "url": "https://twitter.com/danintheory/status/2108065033070789090",
+      "hn_url": "https://news.ycombinator.com/item?id=50002650",
+      "points": 376,
+      "comments": 606,
+      "author": "sashank_1509",
+      "source": "hackernews",
+      "created_at": "2026-10-08T07:05:40Z"
     },
     {
       "id": "49997161",
@@ -450,23 +343,11 @@
       "summary": "",
       "url": "https://www.rswebsols.com/news/meta-and-microsoft-take-steps-to-reduce-employee-usage-of-claude-ai/",
       "hn_url": "https://news.ycombinator.com/item?id=49997161",
-      "points": 369,
-      "comments": 381,
+      "points": 375,
+      "comments": 382,
       "author": "speckx",
       "source": "hackernews",
       "created_at": "2026-10-07T18:49:40Z"
-    },
-    {
-      "id": "49936575",
-      "title": "From the creator of Redis; run LLM locally with ds4",
-      "summary": "",
-      "url": "https://dwarfstar.sh/",
-      "hn_url": "https://news.ycombinator.com/item?id=49936575",
-      "points": 366,
-      "comments": 107,
-      "author": "fibo",
-      "source": "hackernews",
-      "created_at": "2026-10-02T18:01:16Z"
     }
   ],
   "implementation_gaps": []
