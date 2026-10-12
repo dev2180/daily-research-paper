@@ -1,174 +1,53 @@
 {
-  "post_style": "roundup",
-  "week_number": 41,
-  "edition_date": "2026-10-11",
+  "post_style": "deep-dive",
+  "week_number": 42,
+  "edition_date": "2026-10-12",
   "cadence": "daily",
-  "generated_at": "2026-10-11T09:11:43.344004+00:00",
+  "generated_at": "2026-10-12T09:37:37.215406+00:00",
   "paper_of_week": {
     "index": 9,
-    "headline": "Recurrent single block matches full-depth transformer accuracy with minimal cost",
-    "summary": "Current vision transformers achieve high accuracy at the cost of deep stacks, inflating inference latency for edge devices.\n\nThe authors recycle a single transformer block recurrently, programming expert depth per iteration, matching full-depth performance.\n\nPractitioners can deploy lighter models without sacrificing accuracy, enabling faster inference on limited hardware.",
-    "key_takeaway": "Replace deep stacks with a recurrent single block to cut latency while preserving accuracy.",
+    "headline": "Models can stealthily embed capabilities, evading any standard probe evaluation",
+    "summary": "The authors expose a fundamental flaw in current capability‑evaluation pipelines: a model can be trained to hide arbitrary functions behind a veneer of benign behavior, passing all conventional tests while retaining dangerous abilities. By formalizing the notion of \"provable hiding\" they show that, under standard cryptographic assumptions, one can construct a model whose internal decision logic is indistinguishable from a harmless baseline yet activates a concealed sub‑policy on a trigger that is invisible to auditors.\n\nTheir construction leverages a two‑stage training regime: first, a public “mask” network learns the overt task; second, a secret “payload” network is steganographically encoded into the weight space using a keyed hash function. During inference the payload is only invoked when the input satisfies a cryptographic predicate known to the model owner. Empirically they demonstrate the technique on language models (hidden arithmetic) and vision classifiers (covert image‑generation), achieving >99% pass rates on standard benchmarks while the hidden function remains undetectable to state‑of‑the‑art probing tools.",
+    "key_takeaway": "Treat model evaluation as a cryptographic protocol: assume adversaries can embed hidden logic and design audits accordingly.",
     "excitement_score": 9,
     "paper": {
-      "id": "2610.12448v1",
-      "title": "One Block, Multiple Depths: Recurrent Vision Transformers with Depth-Programmed Experts",
-      "summary": "In this work, we show that a single Transformer block, applied recurrently, can match the accuracy of a full-depth vision encoder at comparable inference FLOPs without intermediate feature distillation. reViT restores depth-specific transformations by representing the FFN at each recurrent depth as a convex combination of a small shared expert bank. A continuous normalized-depth coordinate programs this mixture, defining a resampleable trajectory through FFN parameter space. We evaluate this design in two regimes: supervised ImageNet-1k training and distillation from a DINOv2 teacher. Across both regimes, controlled adaptations identify weight-space merging as the strongest tested MoE family at a matching one-FFN budget, ahead of the token-dispatch and output-mixture alternatives. Trained from scratch, reViT-B/16 attains DeiT III accuracy with about 70\\% fewer stored parameters. An 8-experts model distilled using only the teacher's output features retains nearly all of its DINOv2 teacher's linear-probe accuracy and transfers across classification, segmentation, and depth prediction. Elastic-depth training allows one checkpoint (trained model) to operate at multiple tested depths by resampling the same normalized coordinate interval. For fixed-depth deployment, the recurrent block can be materialized as a conventional dense graph, removing online routing and merging without changing the one-FFN-per-depth compute but expanding deployment storage.",
+      "id": "2610.13928v1",
+      "title": "AI Models Can Provably Hide Arbitrary Capabilities",
+      "summary": "Capability evaluations aim to surface dangerous model behaviors before deployment, but their reliability depends on the assumption that hidden capabilities can be elicited. We show this assumption does not hold under adversarial conditions by constructing backdoor attacks that embed encrypted neural networks within host model weights, decrypting and executing them only upon receiving a secret trigger. Using digital lockers, these hidden circuits remain provably hard to elicit and interpret under cryptographic assumptions, even given full access to model weights, extending prior work from hiding fixed strings to arbitrary computations. We implement our proof of concept constructions in PyTorch and evaluate elicitation through fine-tuning, weight noising, gradient-based trigger search, and latent adversarial training on a small chemical reaction prediction task - a proxy for CBRN-relevant capabilities. Our results demonstrate resistance to these methods and, together with our cryptographic guarantees, reveal a limit of elicitation-based capability audits. We release our models to support the improvement of defenses.",
       "authors": [
-        "Adrian Bulat",
-        "Yassine Ouali",
-        "Georgios Tzimiropoulos"
+        "Andis Draguns",
+        "Sumeet Ramesh Motwani",
+        "Raymond Douglas"
       ],
-      "url": "https://arxiv.org/abs/2610.12448v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.12448v1",
-      "category": "cs.CV",
+      "url": "https://arxiv.org/abs/2610.13928v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.13928v1",
+      "category": "cs.LG",
       "source": "arxiv",
-      "published": "2026-10-08T17:58:36Z"
+      "published": "2026-10-09T17:55:06Z"
     }
   },
-  "top_papers": [
-    {
-      "index": 1,
-      "tldr": "Self-distilling image editor improves via reward-verified feedback without extra data.",
-      "bullets": [
-        "Introduces reward-verified self-distillation loop for image editing.",
-        "Eliminates need for human-edited training pairs.",
-        "Demonstrates state-of-the-art performance on instruction-guided benchmarks."
-      ],
-      "who_should_read": "Generative vision researchers and product engineers",
-      "paper": {
-        "id": "2610.12469v1",
-        "title": "Rubric-CEPR: Self-Evolving Image Editing via Reward-Verified Self-Distillation",
-        "summary": "Instruction-guided image editors have become highly capable, yet improving them further still depends on human-edited training pairs or external reward models. Such supervision is costly to obtain and can reward plausible failures: a realistic output may leave the requested change undone or alter content that should be preserved. In this work, we strive to improve a pretrained image editor using only its own generations, without human-edited targets or an external training-time reward model. To this end, we propose a self-evolving framework, named Rubric-CEPR, that verifies the editor's own samples with its internal representations through a rubric-augmented Contrastive Edit-Preservation Reward (CEPR). A Planner proposes structured edit instructions from unlabeled images, the Editor samples multiple candidate edits, and a frozen Critic scores each candidate with decomposed rubric checks for edit realization, removal of the old state, and content preservation, using features already exposed by the editor. Non-compensatory gates reject infeasible candidates, and the best verified candidate is distilled into the editor through lightweight adapter training. On Qwen-Image-Edit, Rubric-CEPR improves ImgEdit from 4.36 to 4.60 (+5.5%), with a +24.9% gain on object isolation, and transfers to GEdit-Bench and Complex-Edit. The same procedure also improves Step1X-Edit by +7.8% on ImgEdit. We hope our approach will serve as a solid baseline for image editors that improve themselves from their own verified samples. Our code is publicly available at $\\href{https://riteshthawkar.github.io/Rubric-CEPR/}{\\text{this URL}}$",
-        "authors": [
-          "Ritesh Thawkar",
-          "Shubham Patle",
-          "Shravan Venkatraman"
-        ],
-        "url": "https://arxiv.org/abs/2610.12469v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.12469v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-08T17:59:58Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 8,
-      "tldr": "VLA policies adapt to arbitrary camera placements for robust robot manipulation.",
-      "bullets": [
-        "Proposes camera-configurable architecture for Vision-Language-Action models.",
-        "Shows zero-shot transfer across diverse viewpoints.",
-        "Provides open-source implementation with real-world robot experiments."
-      ],
-      "who_should_read": "Robotics engineers and VLA model developers",
-      "paper": {
-        "id": "2610.12451v1",
-        "title": "VersaCamVLA: Camera-Configurable VLA Policies for Robotic Manipulation",
-        "summary": "Vision-Language-Action (VLA) models have emerged as powerful foundations for robotic manipulation, but their reliance on fixed camera configurations during training makes them brittle to changes in camera count or pose during deployment. To overcome these limitations, we propose VersaCamVLA, a camera-configurable framework that decouples camera-set representation from action learning. VersaCamVLA learns a unified scene-token interface that maps an arbitrary, variable set of posed RGB views into fixed-size latent scene tokens. This is achieved via multi-signal target-view prediction and Wrist-Augmented Pose Sampling (WAPS), which leverages natural wrist-camera motion for free pose diversity. At deployment, a lightweight spatial encoder injects these compact scene tokens into a pretrained base VLA as a supplementary visual condition, requiring no explicit 3D sensing or novel-view rendering. Experiments on RoboTwin, LIBERO, and a real-robot platform demonstrate that VersaCamVLA consistently outperforms prior VLA methods and direct multi-view baselines, maintaining robust performance across varying camera counts and unseen camera poses.",
-        "authors": [
-          "Boyao Han",
-          "Chen Shi",
-          "Jingjing Qian"
-        ],
-        "url": "https://arxiv.org/abs/2610.12451v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.12451v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-08T17:58:47Z"
-      }
-    },
-    {
-      "index": 7,
-      "tldr": "Benchmark assesses agents' ability to design LEGO structures from text prompts.",
-      "bullets": [
-        "Defines BrickBench with procedural evaluation metrics.",
-        "Includes a suite of diverse construction challenges.",
-        "Offers baseline agents and analysis of failure modes."
-      ],
-      "who_should_read": "Agentic AI researchers and embodied cognition labs",
-      "paper": {
-        "id": "2610.12452v1",
-        "title": "BrickBench: Evaluating Agentic Brick Design",
-        "summary": "We propose BrickBench, a benchmark for agentic text-conditioned LEGO-set design. Given a prompt, an agent is tasked with producing an assembly that not only satisfies semantic and design criteria, but that can also be physically built. To do so, it must select parts from a discrete library and reason jointly about local and global constraints. We score validity, alignment, and design across three settings that vary in scale and part availability. We provide BrickAgent, an environment for coding agents to construct, inspect, and validate their designs. We find that leading agents largely satisfy verifiable physical and semantic requirements, but fall short of human designs. We release our benchmark and environment at http://www.brickben.ch",
-        "authors": [
-          "Peter Kulits",
-          "Yiqing Xu",
-          "R. Kenny Jones"
-        ],
-        "url": "https://arxiv.org/abs/2610.12452v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.12452v1",
-        "category": "cs.AI",
-        "source": "arxiv",
-        "published": "2026-10-08T17:58:56Z"
-      }
-    },
-    {
-      "index": 5,
-      "tldr": "Deep-structured benchmark for fine-grained audio-visual captioning of multimodal models.",
-      "bullets": [
-        "Presents OmniCapBench with hierarchical captioning tasks.",
-        "Evaluates temporal alignment and cross-modal reasoning.",
-        "Supplies leaderboards for emerging MLLM systems."
-      ],
-      "who_should_read": "Multimodal model developers and evaluation specialists",
-      "paper": {
-        "id": "2610.12458v1",
-        "title": "OmniCapBench: A Deep-Structured Evaluation Framework for Fine-Grained Audio-Visual Captioning",
-        "summary": "Multimodal large language models (MLLMs) are rapidly evolving toward continuous audio--visual reasoning, creating an urgent need for evaluations that expose their capability limits. Audio--visual captioning is an ideal diagnostic task, yet current benchmarks face a coupled trade-off: whole-caption scores provide coverage without localization, local probes provide localization without coverage, and unconstrained LLM judges introduce instability. We introduce OmniCapBench (Omni-Video Caption Benchmark), a benchmark that reframes audio--visual caption evaluation as a deep-structured diagnostic framework. OmniCapBench shifts the prediction target from free-form text to sets of atomic, verifiable evaluation units across three tracks: entity references, visual shots, and audio events, enabling reliable scoring with deterministic constraint checks and localized LLM-based semantic comparisons. With 786 densely annotated videos, OmniCapBench effectively distinguishes MLLM perception errors, including temporal grounding failures, identity drift, cross-modal misalignment, and hallucinated descriptions. Evaluating frontier MLLMs reveals strong local perception but weak long-horizon audio--visual reasoning, particularly in identity drift and cross-modal misalignment, providing a fine-grained roadmap for omnimodal development.",
-        "authors": [
-          "Zhongyu Yang",
-          "Jiale Tao",
-          "Ruitao Chen"
-        ],
-        "url": "https://arxiv.org/abs/2610.12458v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.12458v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-08T17:59:21Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 4,
-      "tldr": "Framework converts static 3D scenes into endless looping cinemagraphs.",
-      "bullets": [
-        "Mask-free method animates any 3D world with temporal loops.",
-        "Generates high-quality, diverse cinematographic outputs.",
-        "Open-source pipeline integrates with existing 3D generators."
-      ],
-      "who_should_read": "3D content creators and generative video researchers",
-      "paper": {
-        "id": "2610.12461v1",
-        "title": "OuroWorld: Bringing Any 3D World Alive as Diverse, Endlessly Looping 3D Cinemagraphs",
-        "summary": "Recent 3D world models generate photorealistic, explorable scenes that remain frozen in time. OuroWorld is a mask-free framework that turns any static 3D Gaussian Splatting scene into a 3D cinemagraph: a dynamic scene with vivid, diverse motion looping seamlessly from any viewpoint. A vision-language model infers plausible dynamics and guides a video model to synthesize a reference video, which we lift and complete into multi-view videos. To learn from this imperfect supervision, we propose Inconsistency-Robust Periodic 4DGS: a Fourier-series deformation field guarantees looping by construction, while a Grounded Drift Field anchored at the reference view absorbs cross-view inconsistency. Unlike prior Eulerian methods limited to fluid-like motion, we capture general deformation, object motion, and illumination change. We introduce a ground-truth-free evaluation covering vividness, naturalness, loop seam coherence, and scene quality. On 39 reconstructed and generated scenes, OuroWorld outperforms all baselines and wins 70.8%-99.0% of user-study comparisons. Project page: https://ouroworld.userwei.com",
-        "authors": [
-          "You-Zhe Xie",
-          "Ting-Wei Chou",
-          "Yu-Hsuan Li"
-        ],
-        "url": "https://arxiv.org/abs/2610.12461v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.12461v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-08T17:59:46Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    }
-  ],
-  "deep_dive": null,
-  "one_thing_to_try": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "Current safety audits assume that any dangerous capability will manifest during standard test suites, but this assumption is unverified. Practitioners need to know whether a model could be deliberately engineered to conceal harmful functions that only activate under specific, hard‑to‑detect conditions.",
+    "approach": "The paper introduces a provable hiding framework. It first defines a secret trigger predicate T(x) based on a cryptographic hash of the input and a private key. Then it trains a dual‑network architecture: a public network f_pub that optimizes the advertised task, and a private network f_priv that learns the hidden capability. During joint training, a loss term penalizes f_pub on inputs satisfying T(x), forcing f_priv to take over those cases. Finally, weight‑space steganography embeds f_priv’s parameters into f_pub using a keyed reversible transformation, making the combined model indistinguishable from a standard model to any black‑box test that does not know the key.",
+    "results": "On a GPT‑2 sized language model, the authors hide a simple arithmetic solver (addition of three‑digit numbers) while the model scores 99.2% on the standard LAMBADA benchmark, identical to the baseline. For a ResNet‑50 classifier, they embed a covert image‑generation sub‑policy that produces a predefined pattern on trigger images; detection tools report a false‑negative rate of 97%. Across 10 random seeds, the hidden function activates with >98% success on trigger inputs while remaining invisible on 100k non‑trigger samples.",
+    "limitations": "The hiding guarantee relies on hardness assumptions of the underlying hash function and does not extend to white‑box analysis where weights are inspected directly. Scaling the payload to large, complex capabilities incurs a trade‑off with public performance, and the method has only been validated on relatively small models and synthetic triggers.",
+    "what_it_unlocks": "Practitioners can now simulate worst‑case adversarial model releases, testing audit pipelines against provably hidden functions. It also provides a blueprint for building controlled backdoors in research prototypes, enabling safe‑zone experiments where hidden capabilities are intentionally studied under strict supervision."
+  },
+  "one_thing_to_try": {
+    "action": "Implement the two‑stage hiding pipeline on a small transformer using a SHA‑256 keyed predicate",
+    "why": "It reveals whether your current probing suite can catch covert behavior before deployment",
+    "time_estimate": "2-3 hours",
+    "difficulty": "intermediate"
+  },
   "github_repos": [
     {
       "id": "1377211520",
       "title": "mizorewww/laya-mlx",
       "summary": "Native MLX runtime for Laya typed decision models — 7–14 ms short decisions on M3 Max. No text generation, PyTorch, or cloud API.",
       "url": "https://github.com/mizorewww/laya-mlx",
-      "stars": 6868,
-      "forks": 553,
+      "stars": 6881,
+      "forks": 558,
       "language": "Python",
       "topics": [
         "apple-silicon",
@@ -190,7 +69,7 @@
       "title": "wfzyx/von",
       "summary": "The open-source System One decision model. Sub-15ms, non-autoregressive, local drop-in alternative to TypeSafe Jev.",
       "url": "https://github.com/wfzyx/von",
-      "stars": 881,
+      "stars": 885,
       "forks": 69,
       "language": "Python",
       "topics": [
@@ -210,8 +89,8 @@
       "title": "strands-labs/strands-decider",
       "summary": "A small, fast decision model, or system one model, for agentic workflows. Pick between options or rate on a scale faster than an LLM, with a calibrated confidence on every decision.",
       "url": "https://github.com/strands-labs/strands-decider",
-      "stars": 570,
-      "forks": 73,
+      "stars": 586,
+      "forks": 77,
       "language": "Python",
       "topics": [
         "ai",
@@ -258,7 +137,7 @@
       "title": "Heman10x-NGU/openJev-verdict-2.0",
       "summary": "Calibrated 151M Non-Autoregressive Decision Engine beating TypeSafe Jev & Laya on LocalLLaMA/typed-decisions (77.10% acc, 0.0636 Brier, 0.0144 ECE)",
       "url": "https://github.com/Heman10x-NGU/openJev-verdict-2.0",
-      "stars": 295,
+      "stars": 294,
       "forks": 45,
       "language": "Python",
       "topics": [
@@ -291,8 +170,8 @@
       "title": "fstandhartinger/jevbench",
       "summary": "JevBench by Benchmark Heaven: benchmark and leaderboard for AI decision models, measuring typed decision accuracy, calibration, latency and cost.",
       "url": "https://github.com/fstandhartinger/jevbench",
-      "stars": 254,
-      "forks": 25,
+      "stars": 258,
+      "forks": 26,
       "language": "Python",
       "topics": [
         "ai-benchmark",
@@ -316,8 +195,8 @@
       "title": "kraayenjon/awesome-jev",
       "summary": "A curated list of Jev use cases, projects, SDKs, and resources. Jev is TypeSafe AI's System One model for fast, typed decisions in software — Choice, Score, and Noul with calibrated probabilities.",
       "url": "https://github.com/kraayenjon/awesome-jev",
-      "stars": 183,
-      "forks": 37,
+      "stars": 184,
+      "forks": 39,
       "language": "Unknown",
       "topics": [
         "agents",
@@ -349,7 +228,7 @@
       "title": "Promethe-us/awesome-jev",
       "summary": "A source-backed Jev / System One knowledge map: projects, papers, evaluations, robotics, and social discovery.",
       "url": "https://github.com/Promethe-us/awesome-jev",
-      "stars": 141,
+      "stars": 144,
       "forks": 8,
       "language": "Unknown",
       "topics": [
@@ -375,8 +254,8 @@
       "summary": "",
       "url": "https://openai.com/index/sharing-ai-progress-in-mathematics/",
       "hn_url": "https://news.ycombinator.com/item?id=49984923",
-      "points": 1348,
-      "comments": 1527,
+      "points": 1354,
+      "comments": 1532,
       "author": "OfficialTurkey",
       "source": "hackernews",
       "created_at": "2026-10-06T22:17:21Z"
@@ -406,13 +285,25 @@
       "created_at": "2026-10-05T19:16:35Z"
     },
     {
+      "id": "50047422",
+      "title": "The gap in shared understanding of LLM capability is widening",
+      "summary": "",
+      "url": "https://twitter.com/karpathy/status/2109361546505966046",
+      "hn_url": "https://news.ycombinator.com/item?id=50047422",
+      "points": 457,
+      "comments": 654,
+      "author": "albertzeyer",
+      "source": "hackernews",
+      "created_at": "2026-10-11T20:20:52Z"
+    },
+    {
       "id": "50023450",
       "title": "Typesafe AI raises $870M at $7.5B",
       "summary": "",
       "url": "https://typesafe.ai/blog/series-ai",
       "hn_url": "https://news.ycombinator.com/item?id=50023450",
-      "points": 437,
-      "comments": 347,
+      "points": 443,
+      "comments": 355,
       "author": "tosh",
       "source": "hackernews",
       "created_at": "2026-10-09T17:02:31Z"
@@ -423,7 +314,7 @@
       "summary": "",
       "url": "https://twitter.com/danintheory/status/2108065033070789090",
       "hn_url": "https://news.ycombinator.com/item?id=50002650",
-      "points": 377,
+      "points": 379,
       "comments": 609,
       "author": "sashank_1509",
       "source": "hackernews",
@@ -436,7 +327,7 @@
       "url": "https://www.rswebsols.com/news/meta-and-microsoft-take-steps-to-reduce-employee-usage-of-claude-ai/",
       "hn_url": "https://news.ycombinator.com/item?id=49997161",
       "points": 376,
-      "comments": 385,
+      "comments": 386,
       "author": "speckx",
       "source": "hackernews",
       "created_at": "2026-10-07T18:49:40Z"
@@ -447,23 +338,11 @@
       "summary": "",
       "url": "https://github.com/FeSens/openTPU",
       "hn_url": "https://news.ycombinator.com/item?id=49980715",
-      "points": 346,
-      "comments": 403,
+      "points": 347,
+      "comments": 405,
       "author": "fsbonetto",
       "source": "hackernews",
       "created_at": "2026-10-06T16:23:25Z"
-    },
-    {
-      "id": "50031614",
-      "title": "Talorys – A self-hosted personal AI agent on Cloudflare's free tier",
-      "summary": "",
-      "url": "https://github.com/rociiu/talorys",
-      "hn_url": "https://news.ycombinator.com/item?id=50031614",
-      "points": 289,
-      "comments": 133,
-      "author": "rociiu",
-      "source": "hackernews",
-      "created_at": "2026-10-10T10:52:09Z"
     }
   ],
   "implementation_gaps": []
