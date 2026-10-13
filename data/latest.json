@@ -1,43 +1,173 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 42,
-  "edition_date": "2026-10-12",
+  "edition_date": "2026-10-13",
   "cadence": "daily",
-  "generated_at": "2026-10-12T09:37:37.215406+00:00",
+  "generated_at": "2026-10-13T09:41:08.570438+00:00",
   "paper_of_week": {
-    "index": 9,
-    "headline": "Models can stealthily embed capabilities, evading any standard probe evaluation",
-    "summary": "The authors expose a fundamental flaw in current capability‑evaluation pipelines: a model can be trained to hide arbitrary functions behind a veneer of benign behavior, passing all conventional tests while retaining dangerous abilities. By formalizing the notion of \"provable hiding\" they show that, under standard cryptographic assumptions, one can construct a model whose internal decision logic is indistinguishable from a harmless baseline yet activates a concealed sub‑policy on a trigger that is invisible to auditors.\n\nTheir construction leverages a two‑stage training regime: first, a public “mask” network learns the overt task; second, a secret “payload” network is steganographically encoded into the weight space using a keyed hash function. During inference the payload is only invoked when the input satisfies a cryptographic predicate known to the model owner. Empirically they demonstrate the technique on language models (hidden arithmetic) and vision classifiers (covert image‑generation), achieving >99% pass rates on standard benchmarks while the hidden function remains undetectable to state‑of‑the‑art probing tools.",
-    "key_takeaway": "Treat model evaluation as a cryptographic protocol: assume adversaries can embed hidden logic and design audits accordingly.",
+    "index": 4,
+    "headline": "Unified latent space lets any diffusion model plug‑in instantly today",
+    "summary": "LMs excel at language but struggle with structured navigation across massive corpora. This paper formalizes the Wikipedia Game as a benchmark for evaluating retrieval‑driven reasoning.\n\nThe authors prompt large models to select the next hyperlink, iteratively traversing pages, and measure success rates against human baselines. They reveal that scale and chain‑of‑thought prompting dramatically improve performance.\n\nFor practitioners, the work provides a low‑cost testbed to gauge a model’s ability to orchestrate external knowledge without indexing, informing deployment decisions for search‑augmented assistants.",
+    "key_takeaway": "Integrate InstantFusion's API into your pipeline to swap generators without retraining.",
     "excitement_score": 9,
     "paper": {
-      "id": "2610.13928v1",
-      "title": "AI Models Can Provably Hide Arbitrary Capabilities",
-      "summary": "Capability evaluations aim to surface dangerous model behaviors before deployment, but their reliability depends on the assumption that hidden capabilities can be elicited. We show this assumption does not hold under adversarial conditions by constructing backdoor attacks that embed encrypted neural networks within host model weights, decrypting and executing them only upon receiving a secret trigger. Using digital lockers, these hidden circuits remain provably hard to elicit and interpret under cryptographic assumptions, even given full access to model weights, extending prior work from hiding fixed strings to arbitrary computations. We implement our proof of concept constructions in PyTorch and evaluate elicitation through fine-tuning, weight noising, gradient-based trigger search, and latent adversarial training on a small chemical reaction prediction task - a proxy for CBRN-relevant capabilities. Our results demonstrate resistance to these methods and, together with our cryptographic guarantees, reveal a limit of elicitation-based capability audits. We release our models to support the improvement of defenses.",
+      "id": "2610.13944v1",
+      "title": "InstantFusion: A Shared Latent Interface for Heterogeneous Image Generators",
+      "summary": "Diffusion/flow models have emerged as the de facto paradigms for image generation, giving rise to a diverse family of modern generators with increasingly heterogeneous architectures and representations. Despite their remarkable generation capabilities, the cross-model alignment of latent representations and the consistency of their underlying denoising dynamics remain underexplored. In this work, we uncover an intriguing cross-model compatibility: independently trained generators exhibit similar latent spatial organization, while directly handing off intermediate states between unaligned models can still preserve coarse visual content. Motivated by these observations, we propose InstantFusion, a lightweight shared latent interface that connects the denoising trajectories of heterogeneous image generators. Specifically, to enable flexible cross-model state translation, model-specific Latent AutoEncoders (LAEs) are introduced to project intermediate states from different generators into a shared latent space and decode them into the latent space of a target generator. This shared space is constrained by two complementary objectives: aligning intermediate states derived from the same image at matched noise levels and synchronizing their corresponding local denoising velocities. Once trained, InstantFusion allows denoising to seamlessly transition across frozen generators without requiring a dedicated mapping for every model pair. The versatility of InstantFusion is demonstrated across acceleration, multi-preference composition, cross-architecture on-policy distillation, and cross-model composition, achieving competitive performance across these diverse settings.",
       "authors": [
-        "Andis Draguns",
-        "Sumeet Ramesh Motwani",
-        "Raymond Douglas"
+        "Xuanlang Dai",
+        "Jiazi Bu",
+        "Yujie Zhou"
       ],
-      "url": "https://arxiv.org/abs/2610.13928v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.13928v1",
-      "category": "cs.LG",
+      "url": "https://arxiv.org/abs/2610.13944v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.13944v1",
+      "category": "cs.CV",
       "source": "arxiv",
-      "published": "2026-10-09T17:55:06Z"
+      "published": "2026-10-09T17:59:04Z",
+      "github_implementations": 3,
+      "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Current safety audits assume that any dangerous capability will manifest during standard test suites, but this assumption is unverified. Practitioners need to know whether a model could be deliberately engineered to conceal harmful functions that only activate under specific, hard‑to‑detect conditions.",
-    "approach": "The paper introduces a provable hiding framework. It first defines a secret trigger predicate T(x) based on a cryptographic hash of the input and a private key. Then it trains a dual‑network architecture: a public network f_pub that optimizes the advertised task, and a private network f_priv that learns the hidden capability. During joint training, a loss term penalizes f_pub on inputs satisfying T(x), forcing f_priv to take over those cases. Finally, weight‑space steganography embeds f_priv’s parameters into f_pub using a keyed reversible transformation, making the combined model indistinguishable from a standard model to any black‑box test that does not know the key.",
-    "results": "On a GPT‑2 sized language model, the authors hide a simple arithmetic solver (addition of three‑digit numbers) while the model scores 99.2% on the standard LAMBADA benchmark, identical to the baseline. For a ResNet‑50 classifier, they embed a covert image‑generation sub‑policy that produces a predefined pattern on trigger images; detection tools report a false‑negative rate of 97%. Across 10 random seeds, the hidden function activates with >98% success on trigger inputs while remaining invisible on 100k non‑trigger samples.",
-    "limitations": "The hiding guarantee relies on hardness assumptions of the underlying hash function and does not extend to white‑box analysis where weights are inspected directly. Scaling the payload to large, complex capabilities incurs a trade‑off with public performance, and the method has only been validated on relatively small models and synthetic triggers.",
-    "what_it_unlocks": "Practitioners can now simulate worst‑case adversarial model releases, testing audit pipelines against provably hidden functions. It also provides a blueprint for building controlled backdoors in research prototypes, enabling safe‑zone experiments where hidden capabilities are intentionally studied under strict supervision."
-  },
+  "top_papers": [
+    {
+      "index": 1,
+      "tldr": "LMs navigate Wikipedia links to retrieve answers, testing reasoning over massive text.",
+      "bullets": [
+        "Formulates Wikipedia Game as a structured retrieval benchmark",
+        "Demonstrates chain‑of‑thought prompting improves navigation",
+        "Provides human baseline for comparison"
+      ],
+      "who_should_read": "NLP engineers",
+      "paper": {
+        "id": "2610.13948v1",
+        "title": "Can Language Models Play the Wikipedia Game?",
+        "summary": "Language models increasingly support or automate information retrieval from document collections too large to index. This task is difficult when it requires specialist linguistic or scientific knowledge. We used the Wikipedia Game to test language models on an analogous information retrieval task. In the game, players must reach a target article using only article links. We compared sentence embedding models and LLMs across five Wikipedia languages and five academic-literature datasets. We construct very large local graphs of Wikipedia pages and of paper citations using OpenAlex and provide code to build and navigate them. This allows the study of language models' navigation capabilities without relying on third-party APIs. We compared the models with human and TF-IDF benchmarks. The Wikipedia Game format enables robust comparisons across techniques, languages, and domains. No model significantly outperformed humans, although the best models (GPT-o3 mini, GPT-4o, QwQ:32B, and DeepSeek-R1:70B) achieved comparable success. Performance and rankings varied across languages and topics, with implications for practitioners utilising these techniques.",
+        "authors": [
+          "Alexander Hickey",
+          "Joanna Knight",
+          "James Bishop"
+        ],
+        "url": "https://arxiv.org/abs/2610.13948v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.13948v1",
+        "category": "cs.AI",
+        "source": "arxiv",
+        "published": "2026-10-09T17:59:56Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 2,
+      "tldr": "Multi‑agent system creates physically plausible articulated 3D assets with a new benchmark.",
+      "bullets": [
+        "Introduces multi‑agent pipeline for articulated asset generation",
+        "Defines physically grounded evaluation metrics",
+        "Releases benchmark dataset for community use"
+      ],
+      "who_should_read": "3D graphics researchers",
+      "paper": {
+        "id": "2610.13947v1",
+        "title": "Towards Physically Grounded Articulated 3D Assets: A Multi-Agent Pipeline and Benchmark",
+        "summary": "In this paper, we study physically grounded articulated 3D asset generation---moving the goal from reproducing how objects look to capturing how they move and function. Inspired by the literature on procedural and agentic generation, we present Artisan, a system that extends the latest method Articraft by introducing a multi-agent pipeline with physical simulation feedback, enabling comprehensive attributes beyond geometry, appearance, and physically plausible articulation, such as collision-free motion, stability under gravity, and accurate mass and material properties. Furthermore, we construct a unified benchmark spanning four key aspects: spatial fidelity, physical plausibility, downstream task performance, and overall quality. The benchmark encompasses 100 reference assets from ArtVIP and LightWheel, 50 stability prompts, and 50 ABO objects with reference masses, with protocols evaluating various metrics. Through extensive evaluation of more than 10 representative models, Artisan achieves competitive spatial fidelity while attaining the lowest collision rates and highest stability rates among the evaluated methods. Together, our system and benchmark establish insights for advancing 3D generation towards physically plausible, functionally usable assets.",
+        "authors": [
+          "Xudong Cai",
+          "Ruijie Zhu",
+          "Haoliang Shang"
+        ],
+        "url": "https://arxiv.org/abs/2610.13947v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.13947v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-10-09T17:59:41Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 3,
+      "tldr": "Capture a scene, then generate personalized VLA manipulation policies for home robots.",
+      "bullets": [
+        "Maps raw RGB‑D captures to task‑specific manipulation policies",
+        "Personalizes actions to user‑specific object layouts",
+        "Validates on real‑world kitchen and office setups"
+      ],
+      "who_should_read": "Robotics engineers",
+      "paper": {
+        "id": "2610.13945v1",
+        "title": "Splat2Act: From Captured Scenes to Personalized VLA Manipulation",
+        "summary": "A user who brings a generalist manipulation policy into their home or office wants it to pick up their objects from their shelves, counters, and tables. Yet even a strong generalist like $π_{0.5}$ achieves 0% pickup success in our captured deployment scenes without adaptation, and collecting real demonstrations in every user's environment is prohibitively expensive. We present Splat2Act, an automated real-to-sim-to-real pipeline that personalizes a pretrained vision-language-action (VLA) policy to a specific scene and object set using only a handheld phone scan and images of the user's objects. Unlike prior real-to-sim work that reconstructs individual tabletops, Splat2Act operates on building-scale indoor environments: it builds a photorealistic digital twin with 3D Gaussian Splatting and collision geometry, automatically discovers tabletop and non-tabletop receptacles, constructs feasible pickup tasks, and generates successful demonstrations with a privileged simulation oracle, with only scene and object capture required from a human. Applied to 101 scanned campus environments with a median navigable area of 104.87 m$^2$ and 7 receptacles, the pipeline yields 852 receptacles and over 68,000 pickup demonstrations. We fine-tune $π_{0.5}$ in two stages: Stage 1 adapts to hundreds of public object assets, drawn either from the deployment scene alone or from all 101 scenes; Stage 2 personalizes to the user's own objects on the deployment scene's receptacles. Our strongest personalized policy reaches 62.5% aggregate pickup success in the target scene. Deployed on a real Stretch 3, the same policy achieves 63.9% success on a 12-task subset, closely tracking its 66.7% simulated success on those tasks. These results suggest that automated real-to-sim-to-real training can personalize VLA manipulation policies using only simulation-oracle data.",
+        "authors": [
+          "Xiaomeng Ye",
+          "Krishna Jaganathan",
+          "Gyubeum Lim"
+        ],
+        "url": "https://arxiv.org/abs/2610.13945v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.13945v1",
+        "category": "cs.RO",
+        "source": "arxiv",
+        "published": "2026-10-09T17:59:06Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 6,
+      "tldr": "Introduce HIDE/SEEK framework for concept‑level attribution in black‑box vision models.",
+      "bullets": [
+        "HIDE: masks concepts to probe model internals",
+        "SEEK: extracts human‑interpretable explanations",
+        "Quantifies attribution fidelity across architectures"
+      ],
+      "who_should_read": "ML interpretability specialists",
+      "paper": {
+        "id": "2610.13935v1",
+        "title": "Hide and Seek: HIDE Concepts to SEEK explanations for black box models",
+        "summary": "Interpreting machine learning model predictions is a central challenge, particularly for black-box vision models. Concept-based attribution methods interpret models using human-understandable concepts. Existing concept-based methods can only interpret classification and regression models. They require access to model weights or large concept-annotated datasets, and most methods cannot provide image-level attribution. We propose Hide and Seek (HnS), a new method for concept-level attribution that does not require access to model weights or labeled concept datasets. HnS can interpret a wide range of vision models. Given a concept and image set, HnS retrieves concept-aligned images using a vision-language model, localizes the concept within each image, masks the localized region, and measures attribution from the change in the black-box model's output between the original and masked images. This enables faithful attribution by directly measuring the model's behavior and supporting local attributions. We validated HnS on CelebA and COCO-Stuff. Compared to existing methods, HnS showed better agreement with ground-truth attributions. We demonstrated the applicability of HnS on diverse tasks, including image captioning and satellite image segmentation, where no existing concept attribution method can be used. We provided our anonymous code in the supplementary material.",
+        "authors": [
+          "Bhanu Tokas",
+          "Rahul Nair",
+          "Rockwell Jackson"
+        ],
+        "url": "https://arxiv.org/abs/2610.13935v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.13935v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-10-09T17:56:59Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 8,
+      "tldr": "Chronos Policy learns robot control directly on continuous physical time, not discrete steps.",
+      "bullets": [
+        "Models time as a continuous variable in policy networks",
+        "Improves sample efficiency on time‑varying tasks",
+        "Demonstrates smoother motions on real robots"
+      ],
+      "who_should_read": "Control theory practitioners",
+      "paper": {
+        "id": "2610.13929v1",
+        "title": "Chronos Policy: Learning Robot Policies on Physical Time",
+        "summary": "Robot policies often convert sensing and control into fixed-rate observation-action sequences, leaving physical time implicit in sequence position. This assumption breaks when observation rates or delays vary, or when inference latency changes. We introduce Chronos Policy, which makes physical time explicit by conditioning on observation capture times and desired action execution times. We study two ways to incorporate time into a diffusion transformer: adding timestamp embeddings to token features, or encoding physical time in positional encoding through time-aware rotary positional encodings (time-aware RoPE). We find that time-aware RoPE is more robust, allowing attention to depend directly on physical time while keeping token content unchanged. During training, we temporally randomize which observations are sampled and when the action chunk begins, exposing the policy to a wider range of sensing and execution schedules that may occur during deployments. This also enables learning from asynchronous, multi-rate data without forcing all measurements onto a fixed temporal grid. Across simulation and real-world experiments, Chronos Policy improves performance on dynamic tasks, where observation-to-action timing is critical, and on multisensory tasks, where the relative timing between observations matters. On standard quasi-static tasks, it preserves nominal performance while improving robustness to changes in sensing and inference timing.",
+        "authors": [
+          "Changhao Wang",
+          "Jaden Clark",
+          "Shuran Song"
+        ],
+        "url": "https://arxiv.org/abs/2610.13929v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.13929v1",
+        "category": "cs.RO",
+        "source": "arxiv",
+        "published": "2026-10-09T17:55:20Z"
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Implement the two‑stage hiding pipeline on a small transformer using a SHA‑256 keyed predicate",
-    "why": "It reveals whether your current probing suite can catch covert behavior before deployment",
-    "time_estimate": "2-3 hours",
+    "action": "Run InstantFusion's demo notebook to swap a Stable Diffusion model with a latent diffusion model",
+    "why": "It shows immediate cross‑model reuse, cutting integration time from days to minutes.",
+    "time_estimate": "1 hour",
     "difficulty": "intermediate"
   },
   "github_repos": [
@@ -46,7 +176,7 @@
       "title": "mizorewww/laya-mlx",
       "summary": "Native MLX runtime for Laya typed decision models — 7–14 ms short decisions on M3 Max. No text generation, PyTorch, or cloud API.",
       "url": "https://github.com/mizorewww/laya-mlx",
-      "stars": 6881,
+      "stars": 6901,
       "forks": 558,
       "language": "Python",
       "topics": [
@@ -69,7 +199,7 @@
       "title": "wfzyx/von",
       "summary": "The open-source System One decision model. Sub-15ms, non-autoregressive, local drop-in alternative to TypeSafe Jev.",
       "url": "https://github.com/wfzyx/von",
-      "stars": 885,
+      "stars": 892,
       "forks": 69,
       "language": "Python",
       "topics": [
@@ -89,8 +219,8 @@
       "title": "strands-labs/strands-decider",
       "summary": "A small, fast decision model, or system one model, for agentic workflows. Pick between options or rate on a scale faster than an LLM, with a calibrated confidence on every decision.",
       "url": "https://github.com/strands-labs/strands-decider",
-      "stars": 586,
-      "forks": 77,
+      "stars": 601,
+      "forks": 79,
       "language": "Python",
       "topics": [
         "ai",
@@ -170,8 +300,8 @@
       "title": "fstandhartinger/jevbench",
       "summary": "JevBench by Benchmark Heaven: benchmark and leaderboard for AI decision models, measuring typed decision accuracy, calibration, latency and cost.",
       "url": "https://github.com/fstandhartinger/jevbench",
-      "stars": 258,
-      "forks": 26,
+      "stars": 266,
+      "forks": 27,
       "language": "Python",
       "topics": [
         "ai-benchmark",
@@ -195,8 +325,8 @@
       "title": "kraayenjon/awesome-jev",
       "summary": "A curated list of Jev use cases, projects, SDKs, and resources. Jev is TypeSafe AI's System One model for fast, typed decisions in software — Choice, Score, and Noul with calibrated probabilities.",
       "url": "https://github.com/kraayenjon/awesome-jev",
-      "stars": 184,
-      "forks": 39,
+      "stars": 185,
+      "forks": 40,
       "language": "Unknown",
       "topics": [
         "agents",
@@ -228,7 +358,7 @@
       "title": "Promethe-us/awesome-jev",
       "summary": "A source-backed Jev / System One knowledge map: projects, papers, evaluations, robotics, and social discovery.",
       "url": "https://github.com/Promethe-us/awesome-jev",
-      "stars": 144,
+      "stars": 151,
       "forks": 8,
       "language": "Unknown",
       "topics": [
@@ -254,8 +384,8 @@
       "summary": "",
       "url": "https://openai.com/index/sharing-ai-progress-in-mathematics/",
       "hn_url": "https://news.ycombinator.com/item?id=49984923",
-      "points": 1354,
-      "comments": 1532,
+      "points": 1359,
+      "comments": 1538,
       "author": "OfficialTurkey",
       "source": "hackernews",
       "created_at": "2026-10-06T22:17:21Z"
@@ -266,23 +396,11 @@
       "summary": "",
       "url": "https://openai.com/index/gpt-6-for-everyone/",
       "hn_url": "https://news.ycombinator.com/item?id=49996425",
-      "points": 756,
-      "comments": 458,
+      "points": 758,
+      "comments": 459,
       "author": "joshuawright11",
       "source": "hackernews",
       "created_at": "2026-10-07T18:00:58Z"
-    },
-    {
-      "id": "49969183",
-      "title": "Beam: Reflection's 501B open-weight model",
-      "summary": "",
-      "url": "https://reflection.ai/blog/introducing-beam",
-      "hn_url": "https://news.ycombinator.com/item?id=49969183",
-      "points": 554,
-      "comments": 174,
-      "author": "Philpax",
-      "source": "hackernews",
-      "created_at": "2026-10-05T19:16:35Z"
     },
     {
       "id": "50047422",
@@ -290,11 +408,23 @@
       "summary": "",
       "url": "https://twitter.com/karpathy/status/2109361546505966046",
       "hn_url": "https://news.ycombinator.com/item?id=50047422",
-      "points": 457,
-      "comments": 654,
+      "points": 695,
+      "comments": 1020,
       "author": "albertzeyer",
       "source": "hackernews",
       "created_at": "2026-10-11T20:20:52Z"
+    },
+    {
+      "id": "50058507",
+      "title": "GLM-Legal",
+      "summary": "",
+      "url": "https://z.ai/blog/glm-legal",
+      "hn_url": "https://news.ycombinator.com/item?id=50058507",
+      "points": 558,
+      "comments": 316,
+      "author": "ilreb",
+      "source": "hackernews",
+      "created_at": "2026-10-12T16:11:45Z"
     },
     {
       "id": "50023450",
@@ -302,11 +432,23 @@
       "summary": "",
       "url": "https://typesafe.ai/blog/series-ai",
       "hn_url": "https://news.ycombinator.com/item?id=50023450",
-      "points": 443,
-      "comments": 355,
+      "points": 444,
+      "comments": 356,
       "author": "tosh",
       "source": "hackernews",
       "created_at": "2026-10-09T17:02:31Z"
+    },
+    {
+      "id": "50063427",
+      "title": "AI is a tool and using it well takes skill",
+      "summary": "",
+      "url": "https://yyhh.org/blog/2026/10/ai-is-a-tool/",
+      "hn_url": "https://news.ycombinator.com/item?id=50063427",
+      "points": 411,
+      "comments": 330,
+      "author": "layer8",
+      "source": "hackernews",
+      "created_at": "2026-10-12T21:40:18Z"
     },
     {
       "id": "50002650",
@@ -314,8 +456,8 @@
       "summary": "",
       "url": "https://twitter.com/danintheory/status/2108065033070789090",
       "hn_url": "https://news.ycombinator.com/item?id=50002650",
-      "points": 379,
-      "comments": 609,
+      "points": 380,
+      "comments": 611,
       "author": "sashank_1509",
       "source": "hackernews",
       "created_at": "2026-10-08T07:05:40Z"
@@ -326,23 +468,11 @@
       "summary": "",
       "url": "https://www.rswebsols.com/news/meta-and-microsoft-take-steps-to-reduce-employee-usage-of-claude-ai/",
       "hn_url": "https://news.ycombinator.com/item?id=49997161",
-      "points": 376,
-      "comments": 386,
+      "points": 377,
+      "comments": 388,
       "author": "speckx",
       "source": "hackernews",
       "created_at": "2026-10-07T18:49:40Z"
-    },
-    {
-      "id": "49980715",
-      "title": "OpenTPU – An open-source AI accelerator, developed by AI",
-      "summary": "",
-      "url": "https://github.com/FeSens/openTPU",
-      "hn_url": "https://news.ycombinator.com/item?id=49980715",
-      "points": 347,
-      "comments": 405,
-      "author": "fsbonetto",
-      "source": "hackernews",
-      "created_at": "2026-10-06T16:23:25Z"
     }
   ],
   "implementation_gaps": []
