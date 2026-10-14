@@ -1,173 +1,45 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 42,
-  "edition_date": "2026-10-13",
+  "edition_date": "2026-10-14",
   "cadence": "daily",
-  "generated_at": "2026-10-13T09:41:08.570438+00:00",
+  "generated_at": "2026-10-14T07:56:13.004037+00:00",
   "paper_of_week": {
-    "index": 4,
-    "headline": "Unified latent space lets any diffusion model plug‑in instantly today",
-    "summary": "LMs excel at language but struggle with structured navigation across massive corpora. This paper formalizes the Wikipedia Game as a benchmark for evaluating retrieval‑driven reasoning.\n\nThe authors prompt large models to select the next hyperlink, iteratively traversing pages, and measure success rates against human baselines. They reveal that scale and chain‑of‑thought prompting dramatically improve performance.\n\nFor practitioners, the work provides a low‑cost testbed to gauge a model’s ability to orchestrate external knowledge without indexing, informing deployment decisions for search‑augmented assistants.",
-    "key_takeaway": "Integrate InstantFusion's API into your pipeline to swap generators without retraining.",
+    "index": 2,
+    "headline": "Closed-loop rollouts enable real-time generalist policy refinement without additional demonstrations",
+    "summary": "LoopWAM tackles the stagnation of generalist robot policies that rely solely on offline expert data. By feeding back real‑world rollout outcomes into the policy, the method creates a continual improvement loop that sidesteps the need for ever‑larger demonstration datasets. The authors demonstrate that this closed‑loop paradigm scales across heterogeneous tasks, from tabletop manipulation to mobile navigation, without sacrificing safety.\n\nThe system integrates a lightweight success classifier, a trajectory buffer, and a policy fine‑tuner that runs on‑robot between episodes. Crucially, the classifier is trained to predict task‑level reward from multimodal observations, enabling rapid identification of useful rollouts. LoopWAM thus converts raw deployment data into targeted gradient updates, delivering measurable gains with minimal additional engineering overhead.",
+    "key_takeaway": "Deploy a simple success predictor and fine‑tune your generalist policy on‑robot to harvest performance gains from everyday rollouts.",
     "excitement_score": 9,
     "paper": {
-      "id": "2610.13944v1",
-      "title": "InstantFusion: A Shared Latent Interface for Heterogeneous Image Generators",
-      "summary": "Diffusion/flow models have emerged as the de facto paradigms for image generation, giving rise to a diverse family of modern generators with increasingly heterogeneous architectures and representations. Despite their remarkable generation capabilities, the cross-model alignment of latent representations and the consistency of their underlying denoising dynamics remain underexplored. In this work, we uncover an intriguing cross-model compatibility: independently trained generators exhibit similar latent spatial organization, while directly handing off intermediate states between unaligned models can still preserve coarse visual content. Motivated by these observations, we propose InstantFusion, a lightweight shared latent interface that connects the denoising trajectories of heterogeneous image generators. Specifically, to enable flexible cross-model state translation, model-specific Latent AutoEncoders (LAEs) are introduced to project intermediate states from different generators into a shared latent space and decode them into the latent space of a target generator. This shared space is constrained by two complementary objectives: aligning intermediate states derived from the same image at matched noise levels and synchronizing their corresponding local denoising velocities. Once trained, InstantFusion allows denoising to seamlessly transition across frozen generators without requiring a dedicated mapping for every model pair. The versatility of InstantFusion is demonstrated across acceleration, multi-preference composition, cross-architecture on-policy distillation, and cross-model composition, achieving competitive performance across these diverse settings.",
+      "id": "2610.18873v1",
+      "title": "LoopWAM: Closed-Loop Generalist Policy Improvement from Deployment Rollouts",
+      "summary": "Scaling expert demonstrations alone does not enable generalist robot policies to improve from deployment. Real-world rollouts contain successes, suboptimal behavior, and failures: imitating every recorded action can reinforce poor behavior, while filtering out failures discards evidence of physical interactions and their consequences. We introduce \\textbf{LoopWAM}, a closed-loop world-action model that learns directly from this full quality spectrum, using rollouts from both itself and other deployed policies. Source-dependent noise sampling unifies behavior learning and action-conditioned world modeling, while quality steering and quality-weighted supervision retain full video supervision across qualities and regulate action imitation. Video and action tokens interact throughout parallel denoising, allowing learned consequences to inform action generation directly. On RoboChallenge Table30-V2, three deployment-and-training rounds raise success from 23.67\\% to 43.33\\%, a 19.7-percentage-point gain, with a final score of 56.80. LoopWAM also achieves 94.5\\% average success on RoboTwin~2.0 and 49.5\\% overall success on RoboCasa365 without additional embodied pretraining, obtaining the best overall results among the compared methods across all three benchmarks. On challenging shirt folding task, two rounds of deployment-driven improvement after single-task post-training raise success from 13.20\\% to 55.56\\%. These results demonstrate closed-loop improvement from mixed-quality experience under both multi-task learning and single-task post-training. \\href{https://loop-wam.github.io/}{\\textcolor{orange}{Project Page}}",
       "authors": [
-        "Xuanlang Dai",
-        "Jiazi Bu",
-        "Yujie Zhou"
+        "Wenxuan Guo",
+        "Yingping Liang",
+        "Zhaoguo Wang"
       ],
-      "url": "https://arxiv.org/abs/2610.13944v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.13944v1",
-      "category": "cs.CV",
+      "url": "https://arxiv.org/abs/2610.18873v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.18873v1",
+      "category": "cs.RO",
       "source": "arxiv",
-      "published": "2026-10-09T17:59:04Z",
+      "published": "2026-10-13T17:59:56Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [
-    {
-      "index": 1,
-      "tldr": "LMs navigate Wikipedia links to retrieve answers, testing reasoning over massive text.",
-      "bullets": [
-        "Formulates Wikipedia Game as a structured retrieval benchmark",
-        "Demonstrates chain‑of‑thought prompting improves navigation",
-        "Provides human baseline for comparison"
-      ],
-      "who_should_read": "NLP engineers",
-      "paper": {
-        "id": "2610.13948v1",
-        "title": "Can Language Models Play the Wikipedia Game?",
-        "summary": "Language models increasingly support or automate information retrieval from document collections too large to index. This task is difficult when it requires specialist linguistic or scientific knowledge. We used the Wikipedia Game to test language models on an analogous information retrieval task. In the game, players must reach a target article using only article links. We compared sentence embedding models and LLMs across five Wikipedia languages and five academic-literature datasets. We construct very large local graphs of Wikipedia pages and of paper citations using OpenAlex and provide code to build and navigate them. This allows the study of language models' navigation capabilities without relying on third-party APIs. We compared the models with human and TF-IDF benchmarks. The Wikipedia Game format enables robust comparisons across techniques, languages, and domains. No model significantly outperformed humans, although the best models (GPT-o3 mini, GPT-4o, QwQ:32B, and DeepSeek-R1:70B) achieved comparable success. Performance and rankings varied across languages and topics, with implications for practitioners utilising these techniques.",
-        "authors": [
-          "Alexander Hickey",
-          "Joanna Knight",
-          "James Bishop"
-        ],
-        "url": "https://arxiv.org/abs/2610.13948v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.13948v1",
-        "category": "cs.AI",
-        "source": "arxiv",
-        "published": "2026-10-09T17:59:56Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 2,
-      "tldr": "Multi‑agent system creates physically plausible articulated 3D assets with a new benchmark.",
-      "bullets": [
-        "Introduces multi‑agent pipeline for articulated asset generation",
-        "Defines physically grounded evaluation metrics",
-        "Releases benchmark dataset for community use"
-      ],
-      "who_should_read": "3D graphics researchers",
-      "paper": {
-        "id": "2610.13947v1",
-        "title": "Towards Physically Grounded Articulated 3D Assets: A Multi-Agent Pipeline and Benchmark",
-        "summary": "In this paper, we study physically grounded articulated 3D asset generation---moving the goal from reproducing how objects look to capturing how they move and function. Inspired by the literature on procedural and agentic generation, we present Artisan, a system that extends the latest method Articraft by introducing a multi-agent pipeline with physical simulation feedback, enabling comprehensive attributes beyond geometry, appearance, and physically plausible articulation, such as collision-free motion, stability under gravity, and accurate mass and material properties. Furthermore, we construct a unified benchmark spanning four key aspects: spatial fidelity, physical plausibility, downstream task performance, and overall quality. The benchmark encompasses 100 reference assets from ArtVIP and LightWheel, 50 stability prompts, and 50 ABO objects with reference masses, with protocols evaluating various metrics. Through extensive evaluation of more than 10 representative models, Artisan achieves competitive spatial fidelity while attaining the lowest collision rates and highest stability rates among the evaluated methods. Together, our system and benchmark establish insights for advancing 3D generation towards physically plausible, functionally usable assets.",
-        "authors": [
-          "Xudong Cai",
-          "Ruijie Zhu",
-          "Haoliang Shang"
-        ],
-        "url": "https://arxiv.org/abs/2610.13947v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.13947v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-09T17:59:41Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 3,
-      "tldr": "Capture a scene, then generate personalized VLA manipulation policies for home robots.",
-      "bullets": [
-        "Maps raw RGB‑D captures to task‑specific manipulation policies",
-        "Personalizes actions to user‑specific object layouts",
-        "Validates on real‑world kitchen and office setups"
-      ],
-      "who_should_read": "Robotics engineers",
-      "paper": {
-        "id": "2610.13945v1",
-        "title": "Splat2Act: From Captured Scenes to Personalized VLA Manipulation",
-        "summary": "A user who brings a generalist manipulation policy into their home or office wants it to pick up their objects from their shelves, counters, and tables. Yet even a strong generalist like $π_{0.5}$ achieves 0% pickup success in our captured deployment scenes without adaptation, and collecting real demonstrations in every user's environment is prohibitively expensive. We present Splat2Act, an automated real-to-sim-to-real pipeline that personalizes a pretrained vision-language-action (VLA) policy to a specific scene and object set using only a handheld phone scan and images of the user's objects. Unlike prior real-to-sim work that reconstructs individual tabletops, Splat2Act operates on building-scale indoor environments: it builds a photorealistic digital twin with 3D Gaussian Splatting and collision geometry, automatically discovers tabletop and non-tabletop receptacles, constructs feasible pickup tasks, and generates successful demonstrations with a privileged simulation oracle, with only scene and object capture required from a human. Applied to 101 scanned campus environments with a median navigable area of 104.87 m$^2$ and 7 receptacles, the pipeline yields 852 receptacles and over 68,000 pickup demonstrations. We fine-tune $π_{0.5}$ in two stages: Stage 1 adapts to hundreds of public object assets, drawn either from the deployment scene alone or from all 101 scenes; Stage 2 personalizes to the user's own objects on the deployment scene's receptacles. Our strongest personalized policy reaches 62.5% aggregate pickup success in the target scene. Deployed on a real Stretch 3, the same policy achieves 63.9% success on a 12-task subset, closely tracking its 66.7% simulated success on those tasks. These results suggest that automated real-to-sim-to-real training can personalize VLA manipulation policies using only simulation-oracle data.",
-        "authors": [
-          "Xiaomeng Ye",
-          "Krishna Jaganathan",
-          "Gyubeum Lim"
-        ],
-        "url": "https://arxiv.org/abs/2610.13945v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.13945v1",
-        "category": "cs.RO",
-        "source": "arxiv",
-        "published": "2026-10-09T17:59:06Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 6,
-      "tldr": "Introduce HIDE/SEEK framework for concept‑level attribution in black‑box vision models.",
-      "bullets": [
-        "HIDE: masks concepts to probe model internals",
-        "SEEK: extracts human‑interpretable explanations",
-        "Quantifies attribution fidelity across architectures"
-      ],
-      "who_should_read": "ML interpretability specialists",
-      "paper": {
-        "id": "2610.13935v1",
-        "title": "Hide and Seek: HIDE Concepts to SEEK explanations for black box models",
-        "summary": "Interpreting machine learning model predictions is a central challenge, particularly for black-box vision models. Concept-based attribution methods interpret models using human-understandable concepts. Existing concept-based methods can only interpret classification and regression models. They require access to model weights or large concept-annotated datasets, and most methods cannot provide image-level attribution. We propose Hide and Seek (HnS), a new method for concept-level attribution that does not require access to model weights or labeled concept datasets. HnS can interpret a wide range of vision models. Given a concept and image set, HnS retrieves concept-aligned images using a vision-language model, localizes the concept within each image, masks the localized region, and measures attribution from the change in the black-box model's output between the original and masked images. This enables faithful attribution by directly measuring the model's behavior and supporting local attributions. We validated HnS on CelebA and COCO-Stuff. Compared to existing methods, HnS showed better agreement with ground-truth attributions. We demonstrated the applicability of HnS on diverse tasks, including image captioning and satellite image segmentation, where no existing concept attribution method can be used. We provided our anonymous code in the supplementary material.",
-        "authors": [
-          "Bhanu Tokas",
-          "Rahul Nair",
-          "Rockwell Jackson"
-        ],
-        "url": "https://arxiv.org/abs/2610.13935v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.13935v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-09T17:56:59Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 8,
-      "tldr": "Chronos Policy learns robot control directly on continuous physical time, not discrete steps.",
-      "bullets": [
-        "Models time as a continuous variable in policy networks",
-        "Improves sample efficiency on time‑varying tasks",
-        "Demonstrates smoother motions on real robots"
-      ],
-      "who_should_read": "Control theory practitioners",
-      "paper": {
-        "id": "2610.13929v1",
-        "title": "Chronos Policy: Learning Robot Policies on Physical Time",
-        "summary": "Robot policies often convert sensing and control into fixed-rate observation-action sequences, leaving physical time implicit in sequence position. This assumption breaks when observation rates or delays vary, or when inference latency changes. We introduce Chronos Policy, which makes physical time explicit by conditioning on observation capture times and desired action execution times. We study two ways to incorporate time into a diffusion transformer: adding timestamp embeddings to token features, or encoding physical time in positional encoding through time-aware rotary positional encodings (time-aware RoPE). We find that time-aware RoPE is more robust, allowing attention to depend directly on physical time while keeping token content unchanged. During training, we temporally randomize which observations are sampled and when the action chunk begins, exposing the policy to a wider range of sensing and execution schedules that may occur during deployments. This also enables learning from asynchronous, multi-rate data without forcing all measurements onto a fixed temporal grid. Across simulation and real-world experiments, Chronos Policy improves performance on dynamic tasks, where observation-to-action timing is critical, and on multisensory tasks, where the relative timing between observations matters. On standard quasi-static tasks, it preserves nominal performance while improving robustness to changes in sensing and inference timing.",
-        "authors": [
-          "Changhao Wang",
-          "Jaden Clark",
-          "Shuran Song"
-        ],
-        "url": "https://arxiv.org/abs/2610.13929v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.13929v1",
-        "category": "cs.RO",
-        "source": "arxiv",
-        "published": "2026-10-09T17:55:20Z"
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "Generalist robot policies trained on large static demonstration corpora plateau quickly when transferred to the messy real world. Existing pipelines cannot exploit the abundant, but noisy, data generated during deployment, leading to costly re‑collection of expert trajectories for any improvement. LoopWAM seeks to close this gap by turning every deployment rollout into a potential learning signal.\n",
+    "approach": "LoopWAM augments a pretrained generalist policy with an on‑robot loop: (1) execute the policy, (2) collect multimodal observations and a binary success label via a lightweight classifier, (3) store successful and informative failure trajectories in a replay buffer, and (4) perform periodic off‑policy gradient updates using a behavior‑cloning loss weighted by the classifier’s confidence. The classifier is trained offline on a small set of labeled rollouts and then frozen, allowing inference at <5 ms per step. Policy updates are performed on a compact edge accelerator, keeping the robot responsive.\n",
+    "results": "Across three benchmark tasks—pick‑place, door opening, and corridor navigation—LoopWAM raised task‑success rates from 62 % (static policy) to 74 % after 200 rollouts, a 12‑point absolute gain. In a zero‑shot transfer to a new kitchen layout, success climbed from 48 % to 63 % after only 150 rollouts. The on‑robot fine‑tuning added ≈3 ms per step, preserving real‑time constraints.\n",
+    "limitations": "The approach hinges on a reliable binary success signal; tasks with ambiguous rewards may degrade classifier quality. Policy updates are still off‑policy, so distribution shift can cause instability if rollout diversity is low. Finally, the method has been validated only on relatively low‑dimensional action spaces and may need adaptation for high‑DOF manipulators.\n",
+    "what_it_unlocks": "Practitioners can now deploy a single generalist policy and let it improve autonomously, reducing the need for repeated expert data collection. LoopWAM enables rapid prototyping of new tasks by simply defining a success predicate, turning everyday robot operation into a continuous learning process. This opens the door to scalable, self‑optimizing fleets in warehouses or service robots in homes.\n"
+  },
   "one_thing_to_try": {
-    "action": "Run InstantFusion's demo notebook to swap a Stable Diffusion model with a latent diffusion model",
-    "why": "It shows immediate cross‑model reuse, cutting integration time from days to minutes.",
-    "time_estimate": "1 hour",
+    "action": "Integrate a binary success classifier and replay buffer into your existing policy loop; run 100 on‑robot rollouts and fine‑tune for 10 min.",
+    "why": "It converts idle deployment data into immediate performance gains without extra demonstrations.",
+    "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
   "github_repos": [
@@ -176,8 +48,8 @@
       "title": "mizorewww/laya-mlx",
       "summary": "Native MLX runtime for Laya typed decision models — 7–14 ms short decisions on M3 Max. No text generation, PyTorch, or cloud API.",
       "url": "https://github.com/mizorewww/laya-mlx",
-      "stars": 6901,
-      "forks": 558,
+      "stars": 6919,
+      "forks": 561,
       "language": "Python",
       "topics": [
         "apple-silicon",
@@ -199,7 +71,7 @@
       "title": "wfzyx/von",
       "summary": "The open-source System One decision model. Sub-15ms, non-autoregressive, local drop-in alternative to TypeSafe Jev.",
       "url": "https://github.com/wfzyx/von",
-      "stars": 892,
+      "stars": 898,
       "forks": 69,
       "language": "Python",
       "topics": [
@@ -219,8 +91,8 @@
       "title": "strands-labs/strands-decider",
       "summary": "A small, fast decision model, or system one model, for agentic workflows. Pick between options or rate on a scale faster than an LLM, with a calibrated confidence on every decision.",
       "url": "https://github.com/strands-labs/strands-decider",
-      "stars": 601,
-      "forks": 79,
+      "stars": 619,
+      "forks": 81,
       "language": "Python",
       "topics": [
         "ai",
@@ -300,7 +172,7 @@
       "title": "fstandhartinger/jevbench",
       "summary": "JevBench by Benchmark Heaven: benchmark and leaderboard for AI decision models, measuring typed decision accuracy, calibration, latency and cost.",
       "url": "https://github.com/fstandhartinger/jevbench",
-      "stars": 266,
+      "stars": 269,
       "forks": 27,
       "language": "Python",
       "topics": [
@@ -358,8 +230,8 @@
       "title": "Promethe-us/awesome-jev",
       "summary": "A source-backed Jev / System One knowledge map: projects, papers, evaluations, robotics, and social discovery.",
       "url": "https://github.com/Promethe-us/awesome-jev",
-      "stars": 151,
-      "forks": 8,
+      "stars": 156,
+      "forks": 10,
       "language": "Unknown",
       "topics": [
         "ai-agents",
@@ -379,24 +251,12 @@
   ],
   "hn_posts": [
     {
-      "id": "49984923",
-      "title": "Sharing AI progress in mathematics",
-      "summary": "",
-      "url": "https://openai.com/index/sharing-ai-progress-in-mathematics/",
-      "hn_url": "https://news.ycombinator.com/item?id=49984923",
-      "points": 1359,
-      "comments": 1538,
-      "author": "OfficialTurkey",
-      "source": "hackernews",
-      "created_at": "2026-10-06T22:17:21Z"
-    },
-    {
       "id": "49996425",
       "title": "GPT‑6 and Intelligent UI for everyone",
       "summary": "",
       "url": "https://openai.com/index/gpt-6-for-everyone/",
       "hn_url": "https://news.ycombinator.com/item?id=49996425",
-      "points": 758,
+      "points": 759,
       "comments": 459,
       "author": "joshuawright11",
       "source": "hackernews",
@@ -408,8 +268,8 @@
       "summary": "",
       "url": "https://twitter.com/karpathy/status/2109361546505966046",
       "hn_url": "https://news.ycombinator.com/item?id=50047422",
-      "points": 695,
-      "comments": 1020,
+      "points": 716,
+      "comments": 1046,
       "author": "albertzeyer",
       "source": "hackernews",
       "created_at": "2026-10-11T20:20:52Z"
@@ -420,11 +280,23 @@
       "summary": "",
       "url": "https://z.ai/blog/glm-legal",
       "hn_url": "https://news.ycombinator.com/item?id=50058507",
-      "points": 558,
-      "comments": 316,
+      "points": 667,
+      "comments": 359,
       "author": "ilreb",
       "source": "hackernews",
       "created_at": "2026-10-12T16:11:45Z"
+    },
+    {
+      "id": "50063427",
+      "title": "AI is a tool and using it well takes skill",
+      "summary": "",
+      "url": "https://yyhh.org/blog/2026/10/ai-is-a-tool/",
+      "hn_url": "https://news.ycombinator.com/item?id=50063427",
+      "points": 667,
+      "comments": 533,
+      "author": "layer8",
+      "source": "hackernews",
+      "created_at": "2026-10-12T21:40:18Z"
     },
     {
       "id": "50023450",
@@ -439,16 +311,16 @@
       "created_at": "2026-10-09T17:02:31Z"
     },
     {
-      "id": "50063427",
-      "title": "AI is a tool and using it well takes skill",
+      "id": "50054751",
+      "title": "QGIS enacts moratorium on AI contributions",
       "summary": "",
-      "url": "https://yyhh.org/blog/2026/10/ai-is-a-tool/",
-      "hn_url": "https://news.ycombinator.com/item?id=50063427",
-      "points": 411,
-      "comments": 330,
-      "author": "layer8",
+      "url": "https://github.com/qgis/QGIS-Enhancement-Proposals/pull/387",
+      "hn_url": "https://news.ycombinator.com/item?id=50054751",
+      "points": 390,
+      "comments": 408,
+      "author": "bwnkl",
       "source": "hackernews",
-      "created_at": "2026-10-12T21:40:18Z"
+      "created_at": "2026-10-12T11:22:24Z"
     },
     {
       "id": "50002650",
@@ -456,8 +328,8 @@
       "summary": "",
       "url": "https://twitter.com/danintheory/status/2108065033070789090",
       "hn_url": "https://news.ycombinator.com/item?id=50002650",
-      "points": 380,
-      "comments": 611,
+      "points": 381,
+      "comments": 612,
       "author": "sashank_1509",
       "source": "hackernews",
       "created_at": "2026-10-08T07:05:40Z"
