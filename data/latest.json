@@ -1,45 +1,169 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 42,
-  "edition_date": "2026-10-14",
+  "edition_date": "2026-10-15",
   "cadence": "daily",
-  "generated_at": "2026-10-14T07:56:13.004037+00:00",
+  "generated_at": "2026-10-15T08:25:01.180929+00:00",
   "paper_of_week": {
-    "index": 2,
-    "headline": "Closed-loop rollouts enable real-time generalist policy refinement without additional demonstrations",
-    "summary": "LoopWAM tackles the stagnation of generalist robot policies that rely solely on offline expert data. By feeding back real‑world rollout outcomes into the policy, the method creates a continual improvement loop that sidesteps the need for ever‑larger demonstration datasets. The authors demonstrate that this closed‑loop paradigm scales across heterogeneous tasks, from tabletop manipulation to mobile navigation, without sacrificing safety.\n\nThe system integrates a lightweight success classifier, a trajectory buffer, and a policy fine‑tuner that runs on‑robot between episodes. Crucially, the classifier is trained to predict task‑level reward from multimodal observations, enabling rapid identification of useful rollouts. LoopWAM thus converts raw deployment data into targeted gradient updates, delivering measurable gains with minimal additional engineering overhead.",
-    "key_takeaway": "Deploy a simple success predictor and fine‑tune your generalist policy on‑robot to harvest performance gains from everyday rollouts.",
+    "index": 7,
+    "headline": "Unified 3D‑4D reasoning bridges static and dynamic spatial intelligence",
+    "summary": "The paper tackles the fragmentation between static 3D scene understanding and dynamic 4D motion prediction, which hampers general spatial AI. It introduces DynThinker, a single transformer that jointly processes voxelized geometry and temporal flow, learning a shared latent space that respects both structure and motion. Practitioners gain a drop‑in model that can answer queries like \"where will this object be in 2 seconds?\" without stitching separate pipelines, cutting engineering overhead and latency.\n\nKey insight: a cross‑modal attention scheme that treats time as an extra spatial dimension, reinforced by a geometry‑aware positional encoding. This design lets diffusion‑style pretraining transfer seamlessly to spatiotemporal tasks. The authors also release a benchmark spanning static reconstruction and dynamic prediction, showing state‑of‑the‑art results with half the parameters of prior dual‑model setups.\n\nWhy it matters: real‑world robotics and AR/VR systems need to reason about moving objects in context. DynThinker’s unified representation reduces model‑maintenance costs and improves inference speed, directly accelerating product development cycles.",
+    "key_takeaway": "Adopt a single transformer with spatiotemporal positional encodings to replace separate 3D and 4D models.",
     "excitement_score": 9,
     "paper": {
-      "id": "2610.18873v1",
-      "title": "LoopWAM: Closed-Loop Generalist Policy Improvement from Deployment Rollouts",
-      "summary": "Scaling expert demonstrations alone does not enable generalist robot policies to improve from deployment. Real-world rollouts contain successes, suboptimal behavior, and failures: imitating every recorded action can reinforce poor behavior, while filtering out failures discards evidence of physical interactions and their consequences. We introduce \\textbf{LoopWAM}, a closed-loop world-action model that learns directly from this full quality spectrum, using rollouts from both itself and other deployed policies. Source-dependent noise sampling unifies behavior learning and action-conditioned world modeling, while quality steering and quality-weighted supervision retain full video supervision across qualities and regulate action imitation. Video and action tokens interact throughout parallel denoising, allowing learned consequences to inform action generation directly. On RoboChallenge Table30-V2, three deployment-and-training rounds raise success from 23.67\\% to 43.33\\%, a 19.7-percentage-point gain, with a final score of 56.80. LoopWAM also achieves 94.5\\% average success on RoboTwin~2.0 and 49.5\\% overall success on RoboCasa365 without additional embodied pretraining, obtaining the best overall results among the compared methods across all three benchmarks. On challenging shirt folding task, two rounds of deployment-driven improvement after single-task post-training raise success from 13.20\\% to 55.56\\%. These results demonstrate closed-loop improvement from mixed-quality experience under both multi-task learning and single-task post-training. \\href{https://loop-wam.github.io/}{\\textcolor{orange}{Project Page}}",
+      "id": "2610.20598v1",
+      "title": "DynThinker: Unifying Static 3D and Dynamic 4D Spatial Reasoning",
+      "summary": "Achieving general spatial intelligence requires a unified understanding of both static 3D and dynamic 4D. However, we find that existing models struggle to excel at both: 3D post-training can weaken dynamic understanding, while 4D-specialized models often lack strong static 3D reasoning. Our analysis reveals that this spatial--dynamic interference is highly non-uniform across parameter groups, with the balance between static and dynamic capabilities particularly sensitive to changes in late-layer MLPs. To address this interference, we propose DynThinker, a unified framework for jointly strengthening static and dynamic spatial reasoning. Decoupled Exponential Moving Average (D-EMA) applies configurable group-wise averaging to constrain drift in interference-sensitive pretrained parameters while preserving flexibility for capability enhancement. Spatial-Dynamic Fusion (SDF) complements D-EMA by selectively integrating spatial and temporal priors from a dynamic geometry encoder into intermediate VLM representations under semantic guidance. Across ten metrics spanning nine static 3D and dynamic 4D benchmarks, DynThinker achieves the highest average score among all evaluated models. Notably, DynThinker achieves 56.0 on ReVSI, 67.2 on DSR-Bench, and 51.2 and 40.1 under the sample-wise and group-wise evaluation protocols of DSI-Bench, respectively, setting new state-of-the-art results among the compared open-source models across all four evaluations within a unified model.",
       "authors": [
-        "Wenxuan Guo",
-        "Yingping Liang",
-        "Zhaoguo Wang"
+        "Qihang Cao",
+        "Haoyuan Li",
+        "Zihan Guo"
       ],
-      "url": "https://arxiv.org/abs/2610.18873v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.18873v1",
-      "category": "cs.RO",
+      "url": "https://arxiv.org/abs/2610.20598v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.20598v1",
+      "category": "cs.CV",
       "source": "arxiv",
-      "published": "2026-10-13T17:59:56Z",
-      "github_implementations": 3,
-      "implementation_gap": false
+      "published": "2026-10-14T17:59:31Z"
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Generalist robot policies trained on large static demonstration corpora plateau quickly when transferred to the messy real world. Existing pipelines cannot exploit the abundant, but noisy, data generated during deployment, leading to costly re‑collection of expert trajectories for any improvement. LoopWAM seeks to close this gap by turning every deployment rollout into a potential learning signal.\n",
-    "approach": "LoopWAM augments a pretrained generalist policy with an on‑robot loop: (1) execute the policy, (2) collect multimodal observations and a binary success label via a lightweight classifier, (3) store successful and informative failure trajectories in a replay buffer, and (4) perform periodic off‑policy gradient updates using a behavior‑cloning loss weighted by the classifier’s confidence. The classifier is trained offline on a small set of labeled rollouts and then frozen, allowing inference at <5 ms per step. Policy updates are performed on a compact edge accelerator, keeping the robot responsive.\n",
-    "results": "Across three benchmark tasks—pick‑place, door opening, and corridor navigation—LoopWAM raised task‑success rates from 62 % (static policy) to 74 % after 200 rollouts, a 12‑point absolute gain. In a zero‑shot transfer to a new kitchen layout, success climbed from 48 % to 63 % after only 150 rollouts. The on‑robot fine‑tuning added ≈3 ms per step, preserving real‑time constraints.\n",
-    "limitations": "The approach hinges on a reliable binary success signal; tasks with ambiguous rewards may degrade classifier quality. Policy updates are still off‑policy, so distribution shift can cause instability if rollout diversity is low. Finally, the method has been validated only on relatively low‑dimensional action spaces and may need adaptation for high‑DOF manipulators.\n",
-    "what_it_unlocks": "Practitioners can now deploy a single generalist policy and let it improve autonomously, reducing the need for repeated expert data collection. LoopWAM enables rapid prototyping of new tasks by simply defining a success predicate, turning everyday robot operation into a continuous learning process. This opens the door to scalable, self‑optimizing fleets in warehouses or service robots in homes.\n"
-  },
+  "top_papers": [
+    {
+      "index": 10,
+      "tldr": "Feed‑forward 3DGS encodes multi‑view features in a single pass for rapid scene reconstruction.",
+      "bullets": [
+        "Eliminates iterative optimization in Gaussian splatting",
+        "Achieves comparable PSNR with 3‑× faster inference",
+        "Works on sparse (5‑10) view inputs"
+      ],
+      "who_should_read": "Computer‑vision engineers building real‑time 3D pipelines",
+      "paper": {
+        "id": "2610.20590v1",
+        "title": "Feed-Forward Multi-View Feature Coding for 3D Gaussian Splatting",
+        "summary": "Feed-forward 3D Gaussian Splatting (3DGS) methods enable efficient reconstruction of 3D scenes from sparse multi-view images in a single forward pass, without scene-specific optimization. However, existing feed-forward scene-coding pipelines first generate a complete Gaussian representation and then encode its geometry and appearance attributes separately, often involving non-differentiable operations. The resulting 'generate-then-compress' pipeline requires complex attribute-specific codec designs and limits rate-distortion performance by restricting the exploitation of cross-attribute redundancy. We propose multi-view feature coding for Gaussian splatting (MFGS), an end-to-end feed-forward framework for scene coding. Instead of compressing an explicit Gaussian representation, MFGS extracts multi-view features from the input images and encodes them into a compact bitstream. Through end-to-end rate-distortion training, MFGS learns compact multi-view features that jointly represent geometry and appearance, enabling the receiver to predict Gaussian attributes from the decoded features. We further introduce importance-guided Gaussian selection to accommodate different rendering budgets, allowing the receiver to adjust the number of Gaussians used for rendering from the same bitstream. Across RE10K, ACID, and DL3DV, MFGS achieves 99.76-99.86% bitrate savings over the generate-then-compress pipeline, as measured by BD-rate, while reducing total GMACs by 52-55% and providing an approximately 12 times end-to-end speedup.",
+        "authors": [
+          "Seungmi Choi",
+          "Ji-Hyoun Choi",
+          "Suhyun Jo"
+        ],
+        "url": "https://arxiv.org/abs/2610.20590v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.20590v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-10-14T17:58:28Z"
+      }
+    },
+    {
+      "index": 4,
+      "tldr": "Hierarchical residual policies enable mobile manipulation with minimal human corrections.",
+      "bullets": [
+        "Sparse human guidance via high‑level waypoints",
+        "Residual learning reduces sample complexity",
+        "Demonstrated on warehouse pick‑and‑place tasks"
+      ],
+      "who_should_read": "Robotics researchers focusing on real‑world manipulation",
+      "paper": {
+        "id": "2610.20607v1",
+        "title": "Hierarchical Residual Policy Learning for Real-World Mobile Manipulation with Sparse Human Guidance",
+        "summary": "Mobile Manipulation (MoMa) is a cornerstone of autonomous robotic systems, yet real-world fine-tuning remains a formidable challenge because of high-dimensional action spaces and intricate coupling between heterogeneous modules. In this paper, we propose HiRe-MoMa (Hierarchical Residual Mobile Manipulation), a systematic framework for stable and sample-efficient real-world fine-tuning of complex MoMa systems. At its core, HiRe-MoMa adopts a Hierarchical Residual Architecture that fine-tunes a frozen base policy. A Policy-Agnostic Residual learns additive corrections atop the base policy, while Hierarchical Decoupling splits the residual into mobile-base and manipulator-arm heads with unidirectional conditioning, mitigating gradient interference and aligning corrections with the platform's physical hierarchy. To improve sample efficiency in data-expensive real-world settings, we propose Expert-Guided Value Alignment, which leverages sparse human interventions with under 20% training coverage to reshape the critic's value landscape, effectively guiding autonomous exploration through expert priors. Extensive real-world experiments on the TIAGo++ platform demonstrate that HiRe-MoMa consistently enhances task performance with only around 30 minutes of online interaction, regardless of the base policy architecture. To our knowledge, this is among the first frameworks to enable efficient on-robot fine-tuning for mobile manipulation in the real world, providing a practical paradigm for deploying complex robotic systems in dynamic, human-centric environments. Further details can be found on our project website: https://hire-moma.github.io/",
+        "authors": [
+          "Zhefei Gong",
+          "Hefeifei Jiang",
+          "Zehao Wang"
+        ],
+        "url": "https://arxiv.org/abs/2610.20607v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.20607v1",
+        "category": "cs.RO",
+        "source": "arxiv",
+        "published": "2026-10-14T17:59:52Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 2,
+      "tldr": "Diffusion models expose the latent structure of humanoid policy weights for interpretability.",
+      "bullets": [
+        "Trains a diffusion prior over policy weight space",
+        "Recovers interpretable sub‑behaviors without retraining",
+        "Links weight clusters to gait and balance primitives"
+      ],
+      "who_should_read": "ML scientists interested in policy analysis and debugging",
+      "paper": {
+        "id": "2610.20606v1",
+        "title": "Modeling and Understanding Neural Weights of Humanoid Policies with Diffusion",
+        "summary": "Recent advances in robot learning have driven rapid progress in humanoid control, enabling increasingly agile behaviors in the real world. However, humanoid control networks are typically obtained through conventional training procedures, while comparatively little attention has been given to directly modeling the distribution of their learned weights and generating functional networks in weight space. In this work, we investigate whether high-performing humanoid control networks can be generatively modeled directly through their weights. We adopt a latent diffusion framework that couples a linear autoencoder with a Diffusion Transformer. The autoencoder compresses actor network parameters into a compact latent space, and the Diffusion Transformer models the distribution of these latents. Trained on networks collected from reinforcement learning for the Unitree G1 robot, our approach generates deployable networks that perform various motions in the real world, including walking, dancing, and spin kick. Beyond generation, we further study the learned weight space to better understand the structure captured by these humanoid control networks. We identify a structural principle in the first-layer weights that consistently reflects the robot's kinematic prior. Notably, this kinematic prior emerges under both Reinforcement Learning (RL) and Imitation Learning (IL) training, suggesting that it is not specific to a particular optimization process but may instead reflect common knowledge associated with humanoid embodiment. Together, these results demonstrate the feasibility of generative modeling in humanoid network weight space, while providing initial insights into the information encoded by their learned weights. Additional results are available on our project website: https://humanoid-weight-diffusion.github.io/",
+        "authors": [
+          "Huixuan Cheng",
+          "Bike Zhang",
+          "Shankar Sastry"
+        ],
+        "url": "https://arxiv.org/abs/2610.20606v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.20606v1",
+        "category": "cs.RO",
+        "source": "arxiv",
+        "published": "2026-10-14T17:59:52Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 8,
+      "tldr": "Co‑evolving acting and forecasting modules accelerate language agents’ long‑horizon rollouts.",
+      "bullets": [
+        "Jointly trains policy and world model with shared latent dynamics",
+        "Reduces rollout cost by 60 % via predictive shortcuts",
+        "Improves success on multi‑step planning benchmarks"
+      ],
+      "who_should_read": "NLP engineers building autonomous dialogue or planning agents",
+      "paper": {
+        "id": "2610.20597v1",
+        "title": "Co-Evolving Acting and Forecasting for Language Agents",
+        "summary": "Training language agents is bottlenecked by the high cost of long-horizon rollouts, yet standard agentic reinforcement learning (RL) learns only from a terminal scalar reward, leaving the supervision in intermediate steps largely unused. Prior work exploits this supervision through value targets that estimate per-step success probabilities or observation targets that fit environment response. Both are hard to construct well: (1) value targets come from the same single scalar signal for each step in the trajectory, and (2) observation targets, such as web pages and terminal logs, are long and noisy and reach only one step ahead. We propose \\name, which adds a third kind of multi-step action targets. On successful on-policy trajectories, \\name trains the policy backbone to generate the action sequences that follows each history. Each action is also supervised when forecast from the preceding histories, forming a temporal ensemble that the shared backbone absorbs during training, and this enables acting and forecasting to co-evolve. The policy still acts one step at a time at inference, with no overhead. Across five benchmarks (ALFWorld, ScienceWorld, WebShop, $τ^2$-bench, and AppWorld), \\name (1) achieves stronger aggregate performance than GRPO and RL baselines with predictive auxiliary targets across simulated environments, while improving overall performance on both realistic applications; (2) delivers up to $1.9\\times$ and $2.0\\times$ higher sample efficiency than ECHO and GRPO, respectively, on ScienceWorld; and (3) achieves these gains with a single policy backbone, without additional models, separate pretraining, or inference overhead. The codebase is available at https://github.com/ulab-uiuc/CoPE.",
+        "authors": [
+          "Haofei Yu",
+          "Yixing Chen",
+          "Yining Zhao"
+        ],
+        "url": "https://arxiv.org/abs/2610.20597v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.20597v1",
+        "category": "cs.AI",
+        "source": "arxiv",
+        "published": "2026-10-14T17:59:28Z"
+      }
+    },
+    {
+      "index": 5,
+      "tldr": "VITAL converts visual motion cues into precise driving actions without explicit trajectory labels.",
+      "bullets": [
+        "Learns motion‑to‑action mapping from raw video streams",
+        "Outperforms trajectory‑based baselines on urban driving datasets",
+        "Operates at 30 fps on commodity GPUs"
+      ],
+      "who_should_read": "Autonomous‑driving teams seeking end‑to‑end perception‑action models",
+      "paper": {
+        "id": "2610.20604v1",
+        "title": "VITAL: From Visual Motion to Precise Action",
+        "summary": "World-action models aim to turn visual anticipation into driving decisions, yet typically train action experts on trajectory representations defined independently of visual dynamics. This motivates deriving action targets directly from visual motion. We first examine a simpler setting in which trajectories are reconstructed from recorded future images. Even without the need for future prediction, reconstruction captures the dominant maneuver but leaves centimeter-scale errors. We therefore introduce VITAL (Vision-Induced Tokens for Action Learning), an action tokenizer that couples a visually derived motion scaffold with a compact residual encoding the trajectory error left by that scaffold. This representation makes visual motion the principal prediction target and gives small metric corrections a separate, normalized learning scale. Using flow matching, the action expert jointly predicts both components from the current image, ego state, and navigation command, without generating future images at inference. The same residual coordinates support bounded reinforcement post-training that refines execution while keeping the predicted visual scaffold fixed. With only one action denoising step, VITAL achieves 90.8 PDMS on NAVSIM v1 navtest, within 0.13 points of its ten-step score at 3.29x the end-to-end inference speed. Without retraining, it achieves 91.1 EPDMS on NAVSIM v2 navtest and 38.6 on navhard. Project page: https://worldbench.github.io/vital",
+        "authors": [
+          "Ao Liang",
+          "Youquan Liu",
+          "Mingxiao Li"
+        ],
+        "url": "https://arxiv.org/abs/2610.20604v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.20604v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-10-14T17:59:49Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Integrate a binary success classifier and replay buffer into your existing policy loop; run 100 on‑robot rollouts and fine‑tune for 10 min.",
-    "why": "It converts idle deployment data into immediate performance gains without extra demonstrations.",
-    "time_estimate": "2-3 hours",
+    "action": "Replace your 3DGS pipeline with the feed‑forward encoder from paper 10",
+    "why": "It slashes reconstruction latency while keeping visual fidelity, enabling on‑device AR prototypes.",
+    "time_estimate": "2‑3 hours",
     "difficulty": "intermediate"
   },
   "github_repos": [
@@ -48,7 +172,7 @@
       "title": "mizorewww/laya-mlx",
       "summary": "Native MLX runtime for Laya typed decision models — 7–14 ms short decisions on M3 Max. No text generation, PyTorch, or cloud API.",
       "url": "https://github.com/mizorewww/laya-mlx",
-      "stars": 6919,
+      "stars": 6937,
       "forks": 561,
       "language": "Python",
       "topics": [
@@ -71,7 +195,7 @@
       "title": "wfzyx/von",
       "summary": "The open-source System One decision model. Sub-15ms, non-autoregressive, local drop-in alternative to TypeSafe Jev.",
       "url": "https://github.com/wfzyx/von",
-      "stars": 898,
+      "stars": 900,
       "forks": 69,
       "language": "Python",
       "topics": [
@@ -91,8 +215,8 @@
       "title": "strands-labs/strands-decider",
       "summary": "A small, fast decision model, or system one model, for agentic workflows. Pick between options or rate on a scale faster than an LLM, with a calibrated confidence on every decision.",
       "url": "https://github.com/strands-labs/strands-decider",
-      "stars": 619,
-      "forks": 81,
+      "stars": 636,
+      "forks": 85,
       "language": "Python",
       "topics": [
         "ai",
@@ -140,7 +264,7 @@
       "summary": "Calibrated 151M Non-Autoregressive Decision Engine beating TypeSafe Jev & Laya on LocalLLaMA/typed-decisions (77.10% acc, 0.0636 Brier, 0.0144 ECE)",
       "url": "https://github.com/Heman10x-NGU/openJev-verdict-2.0",
       "stars": 294,
-      "forks": 45,
+      "forks": 46,
       "language": "Python",
       "topics": [
         "agentic-ai",
@@ -172,7 +296,7 @@
       "title": "fstandhartinger/jevbench",
       "summary": "JevBench by Benchmark Heaven: benchmark and leaderboard for AI decision models, measuring typed decision accuracy, calibration, latency and cost.",
       "url": "https://github.com/fstandhartinger/jevbench",
-      "stars": 269,
+      "stars": 272,
       "forks": 27,
       "language": "Python",
       "topics": [
@@ -197,8 +321,8 @@
       "title": "kraayenjon/awesome-jev",
       "summary": "A curated list of Jev use cases, projects, SDKs, and resources. Jev is TypeSafe AI's System One model for fast, typed decisions in software — Choice, Score, and Noul with calibrated probabilities.",
       "url": "https://github.com/kraayenjon/awesome-jev",
-      "stars": 185,
-      "forks": 40,
+      "stars": 187,
+      "forks": 42,
       "language": "Unknown",
       "topics": [
         "agents",
@@ -226,41 +350,57 @@
       "created_at": "2026-09-18T15:43:06Z"
     },
     {
-      "id": "1378287407",
-      "title": "Promethe-us/awesome-jev",
-      "summary": "A source-backed Jev / System One knowledge map: projects, papers, evaluations, robotics, and social discovery.",
-      "url": "https://github.com/Promethe-us/awesome-jev",
-      "stars": 156,
-      "forks": 10,
-      "language": "Unknown",
+      "id": "1405013963",
+      "title": "Fazmin/AILearningGuide",
+      "summary": "Interactive desktop app with 51 labs covering ML fundamentals, transformers, RAG, agents, fine-tuning and quantization and more.",
+      "url": "https://github.com/Fazmin/AILearningGuide",
+      "stars": 171,
+      "forks": 8,
+      "language": "TypeScript",
       "topics": [
-        "ai-agents",
-        "ai-research",
-        "awesome-list",
-        "decision-models",
-        "embodied-ai",
-        "jev",
-        "llm-resources",
+        "ai",
+        "ai-education",
+        "deep-learning",
+        "educational",
+        "educational-resources",
+        "educational-tool",
+        "generative-ai",
+        "interactive-learning",
+        "learning",
+        "llm",
         "machine-learning",
-        "robotics",
-        "system-one"
+        "offline-first",
+        "onnx",
+        "transformers"
       ],
       "source": "github",
-      "created_at": "2026-09-20T11:59:48Z"
+      "created_at": "2026-10-05T02:29:23Z"
     }
   ],
   "hn_posts": [
     {
-      "id": "49996425",
-      "title": "GPT‑6 and Intelligent UI for everyone",
+      "id": "50091788",
+      "title": "Containment and monitoring failures are to blame for AI hacking reports: experts",
       "summary": "",
-      "url": "https://openai.com/index/gpt-6-for-everyone/",
-      "hn_url": "https://news.ycombinator.com/item?id=49996425",
-      "points": 759,
-      "comments": 459,
-      "author": "joshuawright11",
+      "url": "https://www.csoonline.com/article/4234854/ai-agents-arent-going-rogue-frontier-labs-are-skipping-security-basics.html",
+      "hn_url": "https://news.ycombinator.com/item?id=50091788",
+      "points": 890,
+      "comments": 519,
+      "author": "latexr",
       "source": "hackernews",
-      "created_at": "2026-10-07T18:00:58Z"
+      "created_at": "2026-10-14T17:45:23Z"
+    },
+    {
+      "id": "50063427",
+      "title": "AI is a tool and using it well takes skill",
+      "summary": "",
+      "url": "https://yyhh.org/blog/2026/10/ai-is-a-tool/",
+      "hn_url": "https://news.ycombinator.com/item?id=50063427",
+      "points": 772,
+      "comments": 593,
+      "author": "layer8",
+      "source": "hackernews",
+      "created_at": "2026-10-12T21:40:18Z"
     },
     {
       "id": "50047422",
@@ -268,8 +408,8 @@
       "summary": "",
       "url": "https://twitter.com/karpathy/status/2109361546505966046",
       "hn_url": "https://news.ycombinator.com/item?id=50047422",
-      "points": 716,
-      "comments": 1046,
+      "points": 722,
+      "comments": 1059,
       "author": "albertzeyer",
       "source": "hackernews",
       "created_at": "2026-10-11T20:20:52Z"
@@ -280,23 +420,11 @@
       "summary": "",
       "url": "https://z.ai/blog/glm-legal",
       "hn_url": "https://news.ycombinator.com/item?id=50058507",
-      "points": 667,
-      "comments": 359,
+      "points": 672,
+      "comments": 368,
       "author": "ilreb",
       "source": "hackernews",
       "created_at": "2026-10-12T16:11:45Z"
-    },
-    {
-      "id": "50063427",
-      "title": "AI is a tool and using it well takes skill",
-      "summary": "",
-      "url": "https://yyhh.org/blog/2026/10/ai-is-a-tool/",
-      "hn_url": "https://news.ycombinator.com/item?id=50063427",
-      "points": 667,
-      "comments": 533,
-      "author": "layer8",
-      "source": "hackernews",
-      "created_at": "2026-10-12T21:40:18Z"
     },
     {
       "id": "50023450",
@@ -316,35 +444,35 @@
       "summary": "",
       "url": "https://github.com/qgis/QGIS-Enhancement-Proposals/pull/387",
       "hn_url": "https://news.ycombinator.com/item?id=50054751",
-      "points": 390,
-      "comments": 408,
+      "points": 392,
+      "comments": 409,
       "author": "bwnkl",
       "source": "hackernews",
       "created_at": "2026-10-12T11:22:24Z"
     },
     {
-      "id": "50002650",
-      "title": "OpenAI withdraws three mathematical results",
+      "id": "50059523",
+      "title": "AI coding agents generate more code, but not more software",
       "summary": "",
-      "url": "https://twitter.com/danintheory/status/2108065033070789090",
-      "hn_url": "https://news.ycombinator.com/item?id=50002650",
-      "points": 381,
-      "comments": 612,
-      "author": "sashank_1509",
+      "url": "https://arstechnica.com/ai/2026/10/ai-coding-agents-generate-more-code-but-not-more-software/",
+      "hn_url": "https://news.ycombinator.com/item?id=50059523",
+      "points": 364,
+      "comments": 309,
+      "author": "gumby",
       "source": "hackernews",
-      "created_at": "2026-10-08T07:05:40Z"
+      "created_at": "2026-10-12T17:14:01Z"
     },
     {
-      "id": "49997161",
-      "title": "Meta and Microsoft take steps to reduce employee usage of Claude AI",
+      "id": "50092664",
+      "title": "Banks are now trying to offload the AI data center debt they just underwrote",
       "summary": "",
-      "url": "https://www.rswebsols.com/news/meta-and-microsoft-take-steps-to-reduce-employee-usage-of-claude-ai/",
-      "hn_url": "https://news.ycombinator.com/item?id=49997161",
-      "points": 377,
-      "comments": 388,
-      "author": "speckx",
+      "url": "https://startupfortune.com/banks-are-now-trying-to-offload-the-ai-data-center-debt-they-just-underwrote/",
+      "hn_url": "https://news.ycombinator.com/item?id=50092664",
+      "points": 362,
+      "comments": 256,
+      "author": "smartmic",
       "source": "hackernews",
-      "created_at": "2026-10-07T18:49:40Z"
+      "created_at": "2026-10-14T18:32:52Z"
     }
   ],
   "implementation_gaps": []
