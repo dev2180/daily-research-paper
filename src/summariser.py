@@ -21,19 +21,35 @@ def _client() -> Groq:
 
 
 def _call(client: Groq, prompt: str, retries: int = 3) -> str:
+    # GPT-OSS is a reasoning model: its hidden reasoning counts against the
+    # completion budget. At 2048 tokens a long roundup could spend the whole
+    # budget thinking and return no content, which Groq reports as
+    # json_validate_failed with an empty failed_generation (2026-10-15 failure).
+    # So: low reasoning effort, a budget that fits the full JSON, and a retry
+    # at a lower temperature when a generation comes back empty or invalid.
+    # prompt (~2k tokens) + 5000 stays under the free tier's 8k tokens/minute.
+    temperature = 0.7
     for attempt in range(retries):
         try:
             response = client.chat.completions.create(
                 model=MODEL,
                 messages=[{"role": "user", "content": prompt}],
-                temperature=0.7,
-                max_tokens=2048,
+                temperature=temperature,
+                max_completion_tokens=5000,
+                reasoning_effort="low",
                 response_format={"type": "json_object"},
             )
-            return response.choices[0].message.content.strip()
+            content = (response.choices[0].message.content or "").strip()
+            if content:
+                return content
+            print(f"[summariser] Empty response (finish_reason={response.choices[0].finish_reason}) "
+                  f"— retrying ({attempt+1}/{retries})...")
         except Exception as e:
             msg = str(e)
-            if "429" in msg or "rate" in msg.lower():
+            if "json_validate_failed" in msg:
+                print(f"[summariser] Model returned invalid JSON — retrying cooler ({attempt+1}/{retries})...")
+                temperature = 0.3
+            elif "429" in msg or "rate" in msg.lower():
                 wait = 10 * (attempt + 1)
                 print(f"[summariser] Rate limited — waiting {wait}s (attempt {attempt+1}/{retries})...")
                 time.sleep(wait)
