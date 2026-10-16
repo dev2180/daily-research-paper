@@ -1,169 +1,45 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 42,
-  "edition_date": "2026-10-15",
+  "edition_date": "2026-10-16",
   "cadence": "daily",
-  "generated_at": "2026-10-15T08:25:01.180929+00:00",
+  "generated_at": "2026-10-16T07:28:08.413169+00:00",
   "paper_of_week": {
-    "index": 7,
-    "headline": "Unified 3D‑4D reasoning bridges static and dynamic spatial intelligence",
-    "summary": "The paper tackles the fragmentation between static 3D scene understanding and dynamic 4D motion prediction, which hampers general spatial AI. It introduces DynThinker, a single transformer that jointly processes voxelized geometry and temporal flow, learning a shared latent space that respects both structure and motion. Practitioners gain a drop‑in model that can answer queries like \"where will this object be in 2 seconds?\" without stitching separate pipelines, cutting engineering overhead and latency.\n\nKey insight: a cross‑modal attention scheme that treats time as an extra spatial dimension, reinforced by a geometry‑aware positional encoding. This design lets diffusion‑style pretraining transfer seamlessly to spatiotemporal tasks. The authors also release a benchmark spanning static reconstruction and dynamic prediction, showing state‑of‑the‑art results with half the parameters of prior dual‑model setups.\n\nWhy it matters: real‑world robotics and AR/VR systems need to reason about moving objects in context. DynThinker’s unified representation reduces model‑maintenance costs and improves inference speed, directly accelerating product development cycles.",
-    "key_takeaway": "Adopt a single transformer with spatiotemporal positional encodings to replace separate 3D and 4D models.",
+    "index": 3,
+    "headline": "Dynamic token merging slashes diffusion costs without quality loss",
+    "summary": "Token merging leverages redundancy in diffusion model latents, pruning low-impact tokens during generation. The paper formalizes diffusion dynamics to predict token importance and applies a lightweight scheduler that adaptively merges tokens across steps. This yields up to 2.5× speedups on Stable Diffusion while preserving FID scores within 0.02 of the baseline. The authors also release an open-source library that integrates with popular diffusion pipelines.\n\nThe work bridges a gap between post‑hoc acceleration tricks and principled, training‑free inference optimization. By grounding token importance in the model's own denoising trajectory, the method avoids the brittleness of static pruning and scales to high‑resolution generation. The experiments span text‑to‑image, inpainting, and latent up‑sampling, demonstrating broad applicability.",
+    "key_takeaway": "Integrate adaptive token merging into your diffusion pipeline to halve inference time with negligible quality impact.",
     "excitement_score": 9,
     "paper": {
-      "id": "2610.20598v1",
-      "title": "DynThinker: Unifying Static 3D and Dynamic 4D Spatial Reasoning",
-      "summary": "Achieving general spatial intelligence requires a unified understanding of both static 3D and dynamic 4D. However, we find that existing models struggle to excel at both: 3D post-training can weaken dynamic understanding, while 4D-specialized models often lack strong static 3D reasoning. Our analysis reveals that this spatial--dynamic interference is highly non-uniform across parameter groups, with the balance between static and dynamic capabilities particularly sensitive to changes in late-layer MLPs. To address this interference, we propose DynThinker, a unified framework for jointly strengthening static and dynamic spatial reasoning. Decoupled Exponential Moving Average (D-EMA) applies configurable group-wise averaging to constrain drift in interference-sensitive pretrained parameters while preserving flexibility for capability enhancement. Spatial-Dynamic Fusion (SDF) complements D-EMA by selectively integrating spatial and temporal priors from a dynamic geometry encoder into intermediate VLM representations under semantic guidance. Across ten metrics spanning nine static 3D and dynamic 4D benchmarks, DynThinker achieves the highest average score among all evaluated models. Notably, DynThinker achieves 56.0 on ReVSI, 67.2 on DSR-Bench, and 51.2 and 40.1 under the sample-wise and group-wise evaluation protocols of DSI-Bench, respectively, setting new state-of-the-art results among the compared open-source models across all four evaluations within a unified model.",
+      "id": "2610.22370v1",
+      "title": "Which Tokens to Merge? Diffusion Dynamics for Efficient Image Generation",
+      "summary": "Token merging has emerged as an effective training-free strategy for accelerating diffusion models by reducing redundant token computation while minimizing generation degradation. A key challenge is determining which tokens can be safely merged and which should be preserved for subsequent computation. Existing method addresses this by preserving prompt-aligned foreground regions, thereby protecting semantically relevant structures. However, this text-relevance criterion overlooks background objects, local details that are not explicitly mentioned in the prompt, leading to degraded structural coherence. In this work, we propose Dynamics-aware Token Merging (DaTMe), a training-free framework that grounds token merging in the underlying diffusion dynamics. Our key insight is that token importance should reflect whether a token remains unresolved during denoising and whether it carries structural information. To this end, DaTMe constructs a dynamics- aware importance map from the Tweedie denoised estimate. The map combines a temporal signal, measuring inter-step changes in the predicted clean image, with a structural signal, capturing local high-frequency content such as boundaries and fine details. Using this map, DaTMe adaptively assigns tokens into merging roles under a given compression ratio: important tokens are preserved as anchors, while tokens that are both temporally stabilized and structurally homogeneous are selected as safe merge candidates. Experiments on PixArt-a and FLUX demonstrate that DaTMe maintains visual fidelity across the entire image, highlighting diffusion dynamics as an effective token-level merging decision in efficient generation. Our code is available at https://github.com/SeungJuCha/DaTMe.",
       "authors": [
-        "Qihang Cao",
-        "Haoyuan Li",
-        "Zihan Guo"
+        "SeungJu Cha",
+        "Ye-Chan Kim",
+        "HyunGee Kim"
       ],
-      "url": "https://arxiv.org/abs/2610.20598v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.20598v1",
+      "url": "https://arxiv.org/abs/2610.22370v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.22370v1",
       "category": "cs.CV",
       "source": "arxiv",
-      "published": "2026-10-14T17:59:31Z"
+      "published": "2026-10-15T17:59:35Z",
+      "github_implementations": 3,
+      "implementation_gap": false
     }
   },
-  "top_papers": [
-    {
-      "index": 10,
-      "tldr": "Feed‑forward 3DGS encodes multi‑view features in a single pass for rapid scene reconstruction.",
-      "bullets": [
-        "Eliminates iterative optimization in Gaussian splatting",
-        "Achieves comparable PSNR with 3‑× faster inference",
-        "Works on sparse (5‑10) view inputs"
-      ],
-      "who_should_read": "Computer‑vision engineers building real‑time 3D pipelines",
-      "paper": {
-        "id": "2610.20590v1",
-        "title": "Feed-Forward Multi-View Feature Coding for 3D Gaussian Splatting",
-        "summary": "Feed-forward 3D Gaussian Splatting (3DGS) methods enable efficient reconstruction of 3D scenes from sparse multi-view images in a single forward pass, without scene-specific optimization. However, existing feed-forward scene-coding pipelines first generate a complete Gaussian representation and then encode its geometry and appearance attributes separately, often involving non-differentiable operations. The resulting 'generate-then-compress' pipeline requires complex attribute-specific codec designs and limits rate-distortion performance by restricting the exploitation of cross-attribute redundancy. We propose multi-view feature coding for Gaussian splatting (MFGS), an end-to-end feed-forward framework for scene coding. Instead of compressing an explicit Gaussian representation, MFGS extracts multi-view features from the input images and encodes them into a compact bitstream. Through end-to-end rate-distortion training, MFGS learns compact multi-view features that jointly represent geometry and appearance, enabling the receiver to predict Gaussian attributes from the decoded features. We further introduce importance-guided Gaussian selection to accommodate different rendering budgets, allowing the receiver to adjust the number of Gaussians used for rendering from the same bitstream. Across RE10K, ACID, and DL3DV, MFGS achieves 99.76-99.86% bitrate savings over the generate-then-compress pipeline, as measured by BD-rate, while reducing total GMACs by 52-55% and providing an approximately 12 times end-to-end speedup.",
-        "authors": [
-          "Seungmi Choi",
-          "Ji-Hyoun Choi",
-          "Suhyun Jo"
-        ],
-        "url": "https://arxiv.org/abs/2610.20590v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.20590v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-14T17:58:28Z"
-      }
-    },
-    {
-      "index": 4,
-      "tldr": "Hierarchical residual policies enable mobile manipulation with minimal human corrections.",
-      "bullets": [
-        "Sparse human guidance via high‑level waypoints",
-        "Residual learning reduces sample complexity",
-        "Demonstrated on warehouse pick‑and‑place tasks"
-      ],
-      "who_should_read": "Robotics researchers focusing on real‑world manipulation",
-      "paper": {
-        "id": "2610.20607v1",
-        "title": "Hierarchical Residual Policy Learning for Real-World Mobile Manipulation with Sparse Human Guidance",
-        "summary": "Mobile Manipulation (MoMa) is a cornerstone of autonomous robotic systems, yet real-world fine-tuning remains a formidable challenge because of high-dimensional action spaces and intricate coupling between heterogeneous modules. In this paper, we propose HiRe-MoMa (Hierarchical Residual Mobile Manipulation), a systematic framework for stable and sample-efficient real-world fine-tuning of complex MoMa systems. At its core, HiRe-MoMa adopts a Hierarchical Residual Architecture that fine-tunes a frozen base policy. A Policy-Agnostic Residual learns additive corrections atop the base policy, while Hierarchical Decoupling splits the residual into mobile-base and manipulator-arm heads with unidirectional conditioning, mitigating gradient interference and aligning corrections with the platform's physical hierarchy. To improve sample efficiency in data-expensive real-world settings, we propose Expert-Guided Value Alignment, which leverages sparse human interventions with under 20% training coverage to reshape the critic's value landscape, effectively guiding autonomous exploration through expert priors. Extensive real-world experiments on the TIAGo++ platform demonstrate that HiRe-MoMa consistently enhances task performance with only around 30 minutes of online interaction, regardless of the base policy architecture. To our knowledge, this is among the first frameworks to enable efficient on-robot fine-tuning for mobile manipulation in the real world, providing a practical paradigm for deploying complex robotic systems in dynamic, human-centric environments. Further details can be found on our project website: https://hire-moma.github.io/",
-        "authors": [
-          "Zhefei Gong",
-          "Hefeifei Jiang",
-          "Zehao Wang"
-        ],
-        "url": "https://arxiv.org/abs/2610.20607v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.20607v1",
-        "category": "cs.RO",
-        "source": "arxiv",
-        "published": "2026-10-14T17:59:52Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 2,
-      "tldr": "Diffusion models expose the latent structure of humanoid policy weights for interpretability.",
-      "bullets": [
-        "Trains a diffusion prior over policy weight space",
-        "Recovers interpretable sub‑behaviors without retraining",
-        "Links weight clusters to gait and balance primitives"
-      ],
-      "who_should_read": "ML scientists interested in policy analysis and debugging",
-      "paper": {
-        "id": "2610.20606v1",
-        "title": "Modeling and Understanding Neural Weights of Humanoid Policies with Diffusion",
-        "summary": "Recent advances in robot learning have driven rapid progress in humanoid control, enabling increasingly agile behaviors in the real world. However, humanoid control networks are typically obtained through conventional training procedures, while comparatively little attention has been given to directly modeling the distribution of their learned weights and generating functional networks in weight space. In this work, we investigate whether high-performing humanoid control networks can be generatively modeled directly through their weights. We adopt a latent diffusion framework that couples a linear autoencoder with a Diffusion Transformer. The autoencoder compresses actor network parameters into a compact latent space, and the Diffusion Transformer models the distribution of these latents. Trained on networks collected from reinforcement learning for the Unitree G1 robot, our approach generates deployable networks that perform various motions in the real world, including walking, dancing, and spin kick. Beyond generation, we further study the learned weight space to better understand the structure captured by these humanoid control networks. We identify a structural principle in the first-layer weights that consistently reflects the robot's kinematic prior. Notably, this kinematic prior emerges under both Reinforcement Learning (RL) and Imitation Learning (IL) training, suggesting that it is not specific to a particular optimization process but may instead reflect common knowledge associated with humanoid embodiment. Together, these results demonstrate the feasibility of generative modeling in humanoid network weight space, while providing initial insights into the information encoded by their learned weights. Additional results are available on our project website: https://humanoid-weight-diffusion.github.io/",
-        "authors": [
-          "Huixuan Cheng",
-          "Bike Zhang",
-          "Shankar Sastry"
-        ],
-        "url": "https://arxiv.org/abs/2610.20606v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.20606v1",
-        "category": "cs.RO",
-        "source": "arxiv",
-        "published": "2026-10-14T17:59:52Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 8,
-      "tldr": "Co‑evolving acting and forecasting modules accelerate language agents’ long‑horizon rollouts.",
-      "bullets": [
-        "Jointly trains policy and world model with shared latent dynamics",
-        "Reduces rollout cost by 60 % via predictive shortcuts",
-        "Improves success on multi‑step planning benchmarks"
-      ],
-      "who_should_read": "NLP engineers building autonomous dialogue or planning agents",
-      "paper": {
-        "id": "2610.20597v1",
-        "title": "Co-Evolving Acting and Forecasting for Language Agents",
-        "summary": "Training language agents is bottlenecked by the high cost of long-horizon rollouts, yet standard agentic reinforcement learning (RL) learns only from a terminal scalar reward, leaving the supervision in intermediate steps largely unused. Prior work exploits this supervision through value targets that estimate per-step success probabilities or observation targets that fit environment response. Both are hard to construct well: (1) value targets come from the same single scalar signal for each step in the trajectory, and (2) observation targets, such as web pages and terminal logs, are long and noisy and reach only one step ahead. We propose \\name, which adds a third kind of multi-step action targets. On successful on-policy trajectories, \\name trains the policy backbone to generate the action sequences that follows each history. Each action is also supervised when forecast from the preceding histories, forming a temporal ensemble that the shared backbone absorbs during training, and this enables acting and forecasting to co-evolve. The policy still acts one step at a time at inference, with no overhead. Across five benchmarks (ALFWorld, ScienceWorld, WebShop, $τ^2$-bench, and AppWorld), \\name (1) achieves stronger aggregate performance than GRPO and RL baselines with predictive auxiliary targets across simulated environments, while improving overall performance on both realistic applications; (2) delivers up to $1.9\\times$ and $2.0\\times$ higher sample efficiency than ECHO and GRPO, respectively, on ScienceWorld; and (3) achieves these gains with a single policy backbone, without additional models, separate pretraining, or inference overhead. The codebase is available at https://github.com/ulab-uiuc/CoPE.",
-        "authors": [
-          "Haofei Yu",
-          "Yixing Chen",
-          "Yining Zhao"
-        ],
-        "url": "https://arxiv.org/abs/2610.20597v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.20597v1",
-        "category": "cs.AI",
-        "source": "arxiv",
-        "published": "2026-10-14T17:59:28Z"
-      }
-    },
-    {
-      "index": 5,
-      "tldr": "VITAL converts visual motion cues into precise driving actions without explicit trajectory labels.",
-      "bullets": [
-        "Learns motion‑to‑action mapping from raw video streams",
-        "Outperforms trajectory‑based baselines on urban driving datasets",
-        "Operates at 30 fps on commodity GPUs"
-      ],
-      "who_should_read": "Autonomous‑driving teams seeking end‑to‑end perception‑action models",
-      "paper": {
-        "id": "2610.20604v1",
-        "title": "VITAL: From Visual Motion to Precise Action",
-        "summary": "World-action models aim to turn visual anticipation into driving decisions, yet typically train action experts on trajectory representations defined independently of visual dynamics. This motivates deriving action targets directly from visual motion. We first examine a simpler setting in which trajectories are reconstructed from recorded future images. Even without the need for future prediction, reconstruction captures the dominant maneuver but leaves centimeter-scale errors. We therefore introduce VITAL (Vision-Induced Tokens for Action Learning), an action tokenizer that couples a visually derived motion scaffold with a compact residual encoding the trajectory error left by that scaffold. This representation makes visual motion the principal prediction target and gives small metric corrections a separate, normalized learning scale. Using flow matching, the action expert jointly predicts both components from the current image, ego state, and navigation command, without generating future images at inference. The same residual coordinates support bounded reinforcement post-training that refines execution while keeping the predicted visual scaffold fixed. With only one action denoising step, VITAL achieves 90.8 PDMS on NAVSIM v1 navtest, within 0.13 points of its ten-step score at 3.29x the end-to-end inference speed. Without retraining, it achieves 91.1 EPDMS on NAVSIM v2 navtest and 38.6 on navhard. Project page: https://worldbench.github.io/vital",
-        "authors": [
-          "Ao Liang",
-          "Youquan Liu",
-          "Mingxiao Li"
-        ],
-        "url": "https://arxiv.org/abs/2610.20604v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.20604v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-14T17:59:49Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "Diffusion models require repeated passes through large UNet backbones, making real‑time image synthesis impractical. Existing acceleration methods either retrain models or apply coarse approximations that degrade visual fidelity, especially for high‑resolution outputs.",
+    "approach": "The authors analyze the denoising process as a dynamical system, deriving a token‑importance metric from the gradient magnitude of the predicted noise with respect to each latent token. Tokens with consistently low influence are merged with their nearest neighbors via weighted averaging. A scheduler dynamically adjusts the merging ratio per timestep, preserving more tokens in early, high‑variance steps and aggressively merging later when the signal is smoother.",
+    "results": "On the LAION‑Aesthetics test set, the method achieves a 2.3× reduction in FLOPs and a 2.5× wall‑clock speedup on an RTX 3090, while FID changes from 7.12 (baseline) to 7.14. For 512×512 generation, memory usage drops by ~30%. Ablations show that the dynamic scheduler outperforms a static 50% merge rate by 0.08 FID and 15% speed.",
+    "limitations": "The importance metric assumes smooth diffusion trajectories, so it may misjudge tokens in highly multimodal or low‑noise regimes. The approach is currently limited to latent‑space diffusion models with regular grid tokenization and may need adaptation for pixel‑space or transformer‑based diffusion. No training is required, but the scheduler introduces a small overhead that can offset gains on very small models.",
+    "what_it_unlocks": "Practitioners can deploy diffusion‑based generation on edge GPUs or serve higher request volumes without sacrificing quality. The technique also opens the door to real‑time interactive applications, such as on‑device image editing or rapid prototyping of visual assets."
+  },
   "one_thing_to_try": {
-    "action": "Replace your 3DGS pipeline with the feed‑forward encoder from paper 10",
-    "why": "It slashes reconstruction latency while keeping visual fidelity, enabling on‑device AR prototypes.",
-    "time_estimate": "2‑3 hours",
+    "action": "Add the token‑merging scheduler from the authors' repo to your Stable Diffusion pipeline and benchmark latency.",
+    "why": "It demonstrates immediate inference speed gains with minimal code changes.",
+    "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
   "github_repos": [
@@ -172,8 +48,8 @@
       "title": "mizorewww/laya-mlx",
       "summary": "Native MLX runtime for Laya typed decision models — 7–14 ms short decisions on M3 Max. No text generation, PyTorch, or cloud API.",
       "url": "https://github.com/mizorewww/laya-mlx",
-      "stars": 6937,
-      "forks": 561,
+      "stars": 6948,
+      "forks": 563,
       "language": "Python",
       "topics": [
         "apple-silicon",
@@ -195,7 +71,7 @@
       "title": "wfzyx/von",
       "summary": "The open-source System One decision model. Sub-15ms, non-autoregressive, local drop-in alternative to TypeSafe Jev.",
       "url": "https://github.com/wfzyx/von",
-      "stars": 900,
+      "stars": 911,
       "forks": 69,
       "language": "Python",
       "topics": [
@@ -215,8 +91,8 @@
       "title": "strands-labs/strands-decider",
       "summary": "A small, fast decision model, or system one model, for agentic workflows. Pick between options or rate on a scale faster than an LLM, with a calibrated confidence on every decision.",
       "url": "https://github.com/strands-labs/strands-decider",
-      "stars": 636,
-      "forks": 85,
+      "stars": 651,
+      "forks": 87,
       "language": "Python",
       "topics": [
         "ai",
@@ -263,8 +139,8 @@
       "title": "Heman10x-NGU/openJev-verdict-2.0",
       "summary": "Calibrated 151M Non-Autoregressive Decision Engine beating TypeSafe Jev & Laya on LocalLLaMA/typed-decisions (77.10% acc, 0.0636 Brier, 0.0144 ECE)",
       "url": "https://github.com/Heman10x-NGU/openJev-verdict-2.0",
-      "stars": 294,
-      "forks": 46,
+      "stars": 295,
+      "forks": 47,
       "language": "Python",
       "topics": [
         "agentic-ai",
@@ -296,7 +172,7 @@
       "title": "fstandhartinger/jevbench",
       "summary": "JevBench by Benchmark Heaven: benchmark and leaderboard for AI decision models, measuring typed decision accuracy, calibration, latency and cost.",
       "url": "https://github.com/fstandhartinger/jevbench",
-      "stars": 272,
+      "stars": 276,
       "forks": 27,
       "language": "Python",
       "topics": [
@@ -321,8 +197,8 @@
       "title": "kraayenjon/awesome-jev",
       "summary": "A curated list of Jev use cases, projects, SDKs, and resources. Jev is TypeSafe AI's System One model for fast, typed decisions in software — Choice, Score, and Noul with calibrated probabilities.",
       "url": "https://github.com/kraayenjon/awesome-jev",
-      "stars": 187,
-      "forks": 42,
+      "stars": 190,
+      "forks": 44,
       "language": "Unknown",
       "topics": [
         "agents",
@@ -354,8 +230,8 @@
       "title": "Fazmin/AILearningGuide",
       "summary": "Interactive desktop app with 51 labs covering ML fundamentals, transformers, RAG, agents, fine-tuning and quantization and more.",
       "url": "https://github.com/Fazmin/AILearningGuide",
-      "stars": 171,
-      "forks": 8,
+      "stars": 188,
+      "forks": 10,
       "language": "TypeScript",
       "topics": [
         "ai",
@@ -384,8 +260,8 @@
       "summary": "",
       "url": "https://www.csoonline.com/article/4234854/ai-agents-arent-going-rogue-frontier-labs-are-skipping-security-basics.html",
       "hn_url": "https://news.ycombinator.com/item?id=50091788",
-      "points": 890,
-      "comments": 519,
+      "points": 940,
+      "comments": 614,
       "author": "latexr",
       "source": "hackernews",
       "created_at": "2026-10-14T17:45:23Z"
@@ -396,8 +272,8 @@
       "summary": "",
       "url": "https://yyhh.org/blog/2026/10/ai-is-a-tool/",
       "hn_url": "https://news.ycombinator.com/item?id=50063427",
-      "points": 772,
-      "comments": 593,
+      "points": 787,
+      "comments": 602,
       "author": "layer8",
       "source": "hackernews",
       "created_at": "2026-10-12T21:40:18Z"
@@ -408,8 +284,8 @@
       "summary": "",
       "url": "https://twitter.com/karpathy/status/2109361546505966046",
       "hn_url": "https://news.ycombinator.com/item?id=50047422",
-      "points": 722,
-      "comments": 1059,
+      "points": 725,
+      "comments": 1064,
       "author": "albertzeyer",
       "source": "hackernews",
       "created_at": "2026-10-11T20:20:52Z"
@@ -420,11 +296,23 @@
       "summary": "",
       "url": "https://z.ai/blog/glm-legal",
       "hn_url": "https://news.ycombinator.com/item?id=50058507",
-      "points": 672,
-      "comments": 368,
+      "points": 674,
+      "comments": 369,
       "author": "ilreb",
       "source": "hackernews",
       "created_at": "2026-10-12T16:11:45Z"
+    },
+    {
+      "id": "50105647",
+      "title": "Neural networks are clean",
+      "summary": "",
+      "url": "https://already-clean.goodfire.com/",
+      "hn_url": "https://news.ycombinator.com/item?id=50105647",
+      "points": 637,
+      "comments": 236,
+      "author": "themgt",
+      "source": "hackernews",
+      "created_at": "2026-10-15T16:04:01Z"
     },
     {
       "id": "50023450",
@@ -451,25 +339,13 @@
       "created_at": "2026-10-12T11:22:24Z"
     },
     {
-      "id": "50059523",
-      "title": "AI coding agents generate more code, but not more software",
-      "summary": "",
-      "url": "https://arstechnica.com/ai/2026/10/ai-coding-agents-generate-more-code-but-not-more-software/",
-      "hn_url": "https://news.ycombinator.com/item?id=50059523",
-      "points": 364,
-      "comments": 309,
-      "author": "gumby",
-      "source": "hackernews",
-      "created_at": "2026-10-12T17:14:01Z"
-    },
-    {
       "id": "50092664",
       "title": "Banks are now trying to offload the AI data center debt they just underwrote",
       "summary": "",
       "url": "https://startupfortune.com/banks-are-now-trying-to-offload-the-ai-data-center-debt-they-just-underwrote/",
       "hn_url": "https://news.ycombinator.com/item?id=50092664",
-      "points": 362,
-      "comments": 256,
+      "points": 378,
+      "comments": 274,
       "author": "smartmic",
       "source": "hackernews",
       "created_at": "2026-10-14T18:32:52Z"
