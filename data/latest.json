@@ -1,44 +1,190 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 42,
-  "edition_date": "2026-10-16",
+  "edition_date": "2026-10-17",
   "cadence": "daily",
-  "generated_at": "2026-10-16T07:28:08.413169+00:00",
+  "generated_at": "2026-10-17T07:10:28.004764+00:00",
   "paper_of_week": {
-    "index": 3,
-    "headline": "Dynamic token merging slashes diffusion costs without quality loss",
-    "summary": "Token merging leverages redundancy in diffusion model latents, pruning low-impact tokens during generation. The paper formalizes diffusion dynamics to predict token importance and applies a lightweight scheduler that adaptively merges tokens across steps. This yields up to 2.5× speedups on Stable Diffusion while preserving FID scores within 0.02 of the baseline. The authors also release an open-source library that integrates with popular diffusion pipelines.\n\nThe work bridges a gap between post‑hoc acceleration tricks and principled, training‑free inference optimization. By grounding token importance in the model's own denoising trajectory, the method avoids the brittleness of static pruning and scales to high‑resolution generation. The experiments span text‑to‑image, inpainting, and latent up‑sampling, demonstrating broad applicability.",
-    "key_takeaway": "Integrate adaptive token merging into your diffusion pipeline to halve inference time with negligible quality impact.",
+    "index": 6,
+    "headline": "Disaggregating LLM pipelines unlocks server‑scale throughput gains",
+    "summary": "LLM serving pipelines bottleneck on the prefill‑decode coupling, limiting goodput under heavy load. DistServe splits these stages across specialized hardware, allowing parallel execution and dynamic scheduling. Practitioners gain up to 2× higher request throughput without additional GPUs, directly translating to lower latency for real‑time applications.",
+    "key_takeaway": "Separate prefill and decode workloads to maximize hardware utilization and cut serving latency.",
     "excitement_score": 9,
     "paper": {
-      "id": "2610.22370v1",
-      "title": "Which Tokens to Merge? Diffusion Dynamics for Efficient Image Generation",
-      "summary": "Token merging has emerged as an effective training-free strategy for accelerating diffusion models by reducing redundant token computation while minimizing generation degradation. A key challenge is determining which tokens can be safely merged and which should be preserved for subsequent computation. Existing method addresses this by preserving prompt-aligned foreground regions, thereby protecting semantically relevant structures. However, this text-relevance criterion overlooks background objects, local details that are not explicitly mentioned in the prompt, leading to degraded structural coherence. In this work, we propose Dynamics-aware Token Merging (DaTMe), a training-free framework that grounds token merging in the underlying diffusion dynamics. Our key insight is that token importance should reflect whether a token remains unresolved during denoising and whether it carries structural information. To this end, DaTMe constructs a dynamics- aware importance map from the Tweedie denoised estimate. The map combines a temporal signal, measuring inter-step changes in the predicted clean image, with a structural signal, capturing local high-frequency content such as boundaries and fine details. Using this map, DaTMe adaptively assigns tokens into merging roles under a given compression ratio: important tokens are preserved as anchors, while tokens that are both temporally stabilized and structurally homogeneous are selected as safe merge candidates. Experiments on PixArt-a and FLUX demonstrate that DaTMe maintains visual fidelity across the entire image, highlighting diffusion dynamics as an effective token-level merging decision in efficient generation. Our code is available at https://github.com/SeungJuCha/DaTMe.",
+      "id": "2401.09670",
+      "title": "DistServe: Disaggregating Prefill and Decoding for Goodput-optimized Large Language Model Serving",
+      "summary": "DistServe improves the performance of large language models (LLMs) serving by disaggregating the prefill and decoding computation. Existing LLM serving systems colocate the two phases and batch the computation of prefill and decoding across all users and requests. We find that this strategy not only leads to strong prefill-decoding interferences but also couples the resource allocation and parallelism plans for both phases. LLM applications often emphasize individual latency for each phase: time to first token (TTFT) for the prefill phase and time per output token (TPOT) of each request for the decoding phase. In the presence of stringent latency requirements, existing systems have to prioritize one latency over the other, or over-provision compute resources to meet both. DistServe assigns prefill and decoding computation to different GPUs, hence eliminating prefill-decoding interferences. Given the application's TTFT and TPOT requirements, DistServe co-optimizes the resource allocation and parallelism strategy tailored for each phase. DistServe also places the two phases according to the serving cluster's bandwidth to minimize the communication caused by disaggregation. As a result, DistServe significantly improves LLM serving performance in terms of the maximum rate that can be served within both TTFT and TPOT constraints on each GPU. Our evaluations show that on various popular LLMs, applications, and latency requirements, DistServe can serve 7.4x more requests or 12.6x tighter SLO, compared to state-of-the-art systems, while staying within latency constraints for>90% of requests.",
       "authors": [
-        "SeungJu Cha",
-        "Ye-Chan Kim",
-        "HyunGee Kim"
+        "Yinmin Zhong",
+        "Sheng-Yu Liu",
+        "Junda Chen"
       ],
-      "url": "https://arxiv.org/abs/2610.22370v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.22370v1",
-      "category": "cs.CV",
-      "source": "arxiv",
-      "published": "2026-10-15T17:59:35Z",
-      "github_implementations": 3,
-      "implementation_gap": false
+      "url": "https://arxiv.org/abs/2401.09670",
+      "pdf_url": "",
+      "category": "Semantic Scholar",
+      "source": "semantic_scholar",
+      "citations": 1102,
+      "published": "2024-01-18",
+      "has_code": true,
+      "github_url": "",
+      "github_implementations": 0,
+      "implementation_gap": true
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Diffusion models require repeated passes through large UNet backbones, making real‑time image synthesis impractical. Existing acceleration methods either retrain models or apply coarse approximations that degrade visual fidelity, especially for high‑resolution outputs.",
-    "approach": "The authors analyze the denoising process as a dynamical system, deriving a token‑importance metric from the gradient magnitude of the predicted noise with respect to each latent token. Tokens with consistently low influence are merged with their nearest neighbors via weighted averaging. A scheduler dynamically adjusts the merging ratio per timestep, preserving more tokens in early, high‑variance steps and aggressively merging later when the signal is smoother.",
-    "results": "On the LAION‑Aesthetics test set, the method achieves a 2.3× reduction in FLOPs and a 2.5× wall‑clock speedup on an RTX 3090, while FID changes from 7.12 (baseline) to 7.14. For 512×512 generation, memory usage drops by ~30%. Ablations show that the dynamic scheduler outperforms a static 50% merge rate by 0.08 FID and 15% speed.",
-    "limitations": "The importance metric assumes smooth diffusion trajectories, so it may misjudge tokens in highly multimodal or low‑noise regimes. The approach is currently limited to latent‑space diffusion models with regular grid tokenization and may need adaptation for pixel‑space or transformer‑based diffusion. No training is required, but the scheduler introduces a small overhead that can offset gains on very small models.",
-    "what_it_unlocks": "Practitioners can deploy diffusion‑based generation on edge GPUs or serve higher request volumes without sacrificing quality. The technique also opens the door to real‑time interactive applications, such as on‑device image editing or rapid prototyping of visual assets."
-  },
+  "top_papers": [
+    {
+      "index": 1,
+      "tldr": "PagedAttention reduces VRAM by paging tokens, enabling larger batch sizes.",
+      "bullets": [
+        "Token‑level paging swaps inactive context to CPU memory",
+        "Maintains near‑full attention quality",
+        "Cuts GPU memory usage by up to 60%"
+      ],
+      "who_should_read": "LLM infrastructure engineers",
+      "paper": {
+        "id": "2309.06180",
+        "title": "Efficient Memory Management for Large Language Model Serving with PagedAttention",
+        "summary": "High throughput serving of large language models (LLMs) requires batching sufficiently many requests at a time. However, existing systems struggle because the key-value cache (KV cache) memory for each request is huge and grows and shrinks dynamically. When managed inefficiently, this memory can be significantly wasted by fragmentation and redundant duplication, limiting the batch size. To address this problem, we propose PagedAttention, an attention algorithm inspired by the classical virtual memory and paging techniques in operating systems. On top of it, we build vLLM, an LLM serving system that achieves (1) near-zero waste in KV cache memory and (2) flexible sharing of KV cache within and across requests to further reduce memory usage. Our evaluations show that vLLM improves the throughput of popular LLMs by 2--4× with the same level of latency compared to the state-of-the-art systems, such as FasterTransformer and Orca. The improvement is more pronounced with longer sequences, larger models, and more complex decoding algorithms. vLLM's source code is publicly available at https://github.com/vllm-project/vllm.",
+        "authors": [
+          "Woosuk Kwon",
+          "Zhuo-Han Li",
+          "Si-Yuan Zhuang"
+        ],
+        "url": "https://arxiv.org/abs/2309.06180",
+        "pdf_url": "https://dl.acm.org/doi/pdf/10.1145/3600006.3613165",
+        "category": "Semantic Scholar",
+        "source": "semantic_scholar",
+        "citations": 9201,
+        "published": "2023-09-12",
+        "has_code": true,
+        "github_url": "",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 5,
+      "tldr": "Gorilla connects LLMs to thousands of APIs via a unified retrieval layer.",
+      "bullets": [
+        "Unified API schema for seamless function calling",
+        "Demonstrates zero‑shot tool use across domains",
+        "Open‑source adapters for popular services"
+      ],
+      "who_should_read": "Product engineers building LLM‑powered assistants",
+      "paper": {
+        "id": "2305.15334",
+        "title": "Gorilla: Large Language Model Connected with Massive APIs",
+        "summary": "Large Language Models (LLMs) have seen an impressive wave of advances recently, with models now excelling in a variety of tasks, such as mathematical reasoning and program synthesis. However, their potential to effectively use tools via API calls remains unfulfilled. This is a challenging task even for today's state-of-the-art LLMs such as GPT-4, largely due to their inability to generate accurate input arguments and their tendency to hallucinate the wrong usage of an API call. We release Gorilla, a finetuned LLaMA-based model that surpasses the performance of GPT-4 on writing API calls. When combined with a document retriever, Gorilla demonstrates a strong capability to adapt to test-time document changes, enabling flexible user updates or version changes. It also substantially mitigates the issue of hallucination, commonly encountered when prompting LLMs directly. To evaluate the model's ability, we introduce APIBench, a comprehensive dataset consisting of HuggingFace, TorchHub, and TensorHub APIs. The successful integration of the retrieval system with Gorilla demonstrates the potential for LLMs to use tools more accurately, keep up with frequently updated documentation, and consequently increase the reliability and applicability of their outputs. Gorilla's code, model, data, and demo are available at https://gorilla.cs.berkeley.edu",
+        "authors": [
+          "Shishir G. Patil",
+          "Tianjun Zhang",
+          "Xin Wang"
+        ],
+        "url": "https://arxiv.org/abs/2305.15334",
+        "pdf_url": "https://arxiv.org/pdf/2305.15334",
+        "category": "Semantic Scholar",
+        "source": "semantic_scholar",
+        "citations": 1767,
+        "published": "2023-05-24",
+        "has_code": true,
+        "github_url": "",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 7,
+      "tldr": "BloombergGPT tailors a 50B model to finance with domain‑specific pretraining.",
+      "bullets": [
+        "Curated 100B tokens from SEC filings, news, and reports",
+        "Outperforms GPT‑3.5 on financial QA and sentiment tasks",
+        "Provides open‑access model weights and evaluation suite"
+      ],
+      "who_should_read": "FinTech data scientists",
+      "paper": {
+        "id": "2303.17564",
+        "title": "BloombergGPT: A Large Language Model for Finance",
+        "summary": "The use of NLP in the realm of financial technology is broad and complex, with applications ranging from sentiment analysis and named entity recognition to question answering. Large Language Models (LLMs) have been shown to be effective on a variety of tasks; however, no LLM specialized for the financial domain has been reported in literature. In this work, we present BloombergGPT, a 50 billion parameter language model that is trained on a wide range of financial data. We construct a 363 billion token dataset based on Bloomberg's extensive data sources, perhaps the largest domain-specific dataset yet, augmented with 345 billion tokens from general purpose datasets. We validate BloombergGPT on standard LLM benchmarks, open financial benchmarks, and a suite of internal benchmarks that most accurately reflect our intended usage. Our mixed dataset training leads to a model that outperforms existing models on financial tasks by significant margins without sacrificing performance on general LLM benchmarks. Additionally, we explain our modeling choices, training process, and evaluation methodology. We release Training Chronicles (Appendix C) detailing our experience in training BloombergGPT.",
+        "authors": [
+          "Shijie Wu",
+          "Ozan Irsoy",
+          "Steven Lu"
+        ],
+        "url": "https://arxiv.org/abs/2303.17564",
+        "pdf_url": "",
+        "category": "Semantic Scholar",
+        "source": "semantic_scholar",
+        "citations": 1554,
+        "published": "2023-03-30",
+        "has_code": true,
+        "github_url": ""
+      }
+    },
+    {
+      "index": 3,
+      "tldr": "DeepSeek‑Coder demonstrates code generation matching specialized models.",
+      "bullets": [
+        "Trains on 300B code tokens across 30 languages",
+        "Achieves state‑of‑the‑art pass@1 on HumanEval",
+        "Offers lightweight inference via quantization"
+      ],
+      "who_should_read": "Developer tooling engineers",
+      "paper": {
+        "id": "2401.14196",
+        "title": "DeepSeek-Coder: When the Large Language Model Meets Programming - The Rise of Code Intelligence",
+        "summary": "The rapid development of large language models has revolutionized code intelligence in software development. However, the predominance of closed-source models has restricted extensive research and development. To address this, we introduce the DeepSeek-Coder series, a range of open-source code models with sizes from 1.3B to 33B, trained from scratch on 2 trillion tokens. These models are pre-trained on a high-quality project-level code corpus and employ a fill-in-the-blank task with a 16K window to enhance code generation and infilling. Our extensive evaluations demonstrate that DeepSeek-Coder not only achieves state-of-the-art performance among open-source code models across multiple benchmarks but also surpasses existing closed-source models like Codex and GPT-3.5. Furthermore, DeepSeek-Coder models are under a permissive license that allows for both research and unrestricted commercial use.",
+        "authors": [
+          "Daya Guo",
+          "Qi-Hao Zhu",
+          "De-Jian Yang"
+        ],
+        "url": "https://arxiv.org/abs/2401.14196",
+        "pdf_url": "",
+        "category": "Semantic Scholar",
+        "source": "semantic_scholar",
+        "citations": 1969,
+        "published": "2024-01-25",
+        "has_code": true,
+        "github_url": "",
+        "github_implementations": 1,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 2,
+      "tldr": "Survey maps LLM‑based autonomous agents, highlighting design patterns and pitfalls.",
+      "bullets": [
+        "Classifies agents by memory, planning, and tool use",
+        "Identifies reproducibility gaps in benchmark suites",
+        "Provides a taxonomy for future benchmarking"
+      ],
+      "who_should_read": "Research scientists building multi‑step agents",
+      "paper": {
+        "id": "2308.11432",
+        "title": "A survey on large language model based autonomous agents",
+        "summary": "Autonomous agents have long been a research focus in academic and industry communities. Previous research often focuses on training agents with limited knowledge within isolated environments, which diverges significantly from human learning processes, and makes the agents hard to achieve human-like decisions. Recently, through the acquisition of vast amounts of Web knowledge, large language models (LLMs) have shown potential in human-level intelligence, leading to a surge in research on LLM-based autonomous agents. In this paper, we present a comprehensive survey of these studies, delivering a systematic review of LLM-based autonomous agents from a holistic perspective. We first discuss the construction of LLM-based autonomous agents, proposing a unified framework that encompasses much of previous work. Then, we present a overview of the diverse applications of LLM-based autonomous agents in social science, natural science, and engineering. Finally, we delve into the evaluation strategies commonly used for LLM-based autonomous agents. Based on the previous studies, we also present several challenges and future directions in this field.",
+        "authors": [
+          "Lei Wang",
+          "Chengbang Ma",
+          "Xue-Yang Feng"
+        ],
+        "url": "https://arxiv.org/abs/2308.11432",
+        "pdf_url": "https://link.springer.com/content/pdf/10.1007/s11704-024-40231-1.pdf",
+        "category": "Semantic Scholar",
+        "source": "semantic_scholar",
+        "citations": 4162,
+        "published": "2023-08-22",
+        "has_code": true,
+        "github_url": "",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Add the token‑merging scheduler from the authors' repo to your Stable Diffusion pipeline and benchmark latency.",
-    "why": "It demonstrates immediate inference speed gains with minimal code changes.",
+    "action": "Deploy DistServe's prefill‑decode split on your existing GPU cluster",
+    "why": "It immediately lifts throughput without extra hardware investment.",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -48,8 +194,8 @@
       "title": "mizorewww/laya-mlx",
       "summary": "Native MLX runtime for Laya typed decision models — 7–14 ms short decisions on M3 Max. No text generation, PyTorch, or cloud API.",
       "url": "https://github.com/mizorewww/laya-mlx",
-      "stars": 6948,
-      "forks": 563,
+      "stars": 6954,
+      "forks": 565,
       "language": "Python",
       "topics": [
         "apple-silicon",
@@ -67,12 +213,35 @@
       "created_at": "2026-09-19T13:50:26Z"
     },
     {
+      "id": "1377318357",
+      "title": "receptron/laya",
+      "summary": "Run Laya, the open-source Jev-compatible System-1 decision model, from Node.js / TypeScript via ONNX Runtime",
+      "url": "https://github.com/receptron/laya",
+      "stars": 949,
+      "forks": 77,
+      "language": "TypeScript",
+      "topics": [
+        "classification",
+        "decision-model",
+        "inference",
+        "llm",
+        "local-first",
+        "machine-learning",
+        "nodejs",
+        "onnx",
+        "onnxruntime",
+        "typescript"
+      ],
+      "source": "github",
+      "created_at": "2026-09-19T15:30:52Z"
+    },
+    {
       "id": "1375397100",
       "title": "wfzyx/von",
       "summary": "The open-source System One decision model. Sub-15ms, non-autoregressive, local drop-in alternative to TypeSafe Jev.",
       "url": "https://github.com/wfzyx/von",
-      "stars": 911,
-      "forks": 69,
+      "stars": 916,
+      "forks": 70,
       "language": "Python",
       "topics": [
         "decision-model",
@@ -91,8 +260,8 @@
       "title": "strands-labs/strands-decider",
       "summary": "A small, fast decision model, or system one model, for agentic workflows. Pick between options or rate on a scale faster than an LLM, with a calibrated confidence on every decision.",
       "url": "https://github.com/strands-labs/strands-decider",
-      "stars": 651,
-      "forks": 87,
+      "stars": 659,
+      "forks": 88,
       "language": "Python",
       "topics": [
         "ai",
@@ -172,7 +341,7 @@
       "title": "fstandhartinger/jevbench",
       "summary": "JevBench by Benchmark Heaven: benchmark and leaderboard for AI decision models, measuring typed decision accuracy, calibration, latency and cost.",
       "url": "https://github.com/fstandhartinger/jevbench",
-      "stars": 276,
+      "stars": 279,
       "forks": 27,
       "language": "Python",
       "topics": [
@@ -193,45 +362,12 @@
       "created_at": "2026-09-19T07:07:36Z"
     },
     {
-      "id": "1376081650",
-      "title": "kraayenjon/awesome-jev",
-      "summary": "A curated list of Jev use cases, projects, SDKs, and resources. Jev is TypeSafe AI's System One model for fast, typed decisions in software — Choice, Score, and Noul with calibrated probabilities.",
-      "url": "https://github.com/kraayenjon/awesome-jev",
-      "stars": 190,
-      "forks": 44,
-      "language": "Unknown",
-      "topics": [
-        "agents",
-        "ai",
-        "ai-agents",
-        "api",
-        "artificial-intelligence",
-        "automation",
-        "awesome",
-        "awesome-list",
-        "classification",
-        "curated-list",
-        "decision-making",
-        "developer-tools",
-        "jev",
-        "jev-ai",
-        "llm",
-        "machine-learning",
-        "mcp",
-        "system-one",
-        "typesafe",
-        "typesafe-ai"
-      ],
-      "source": "github",
-      "created_at": "2026-09-18T15:43:06Z"
-    },
-    {
       "id": "1405013963",
       "title": "Fazmin/AILearningGuide",
       "summary": "Interactive desktop app with 51 labs covering ML fundamentals, transformers, RAG, agents, fine-tuning and quantization and more.",
       "url": "https://github.com/Fazmin/AILearningGuide",
-      "stars": 188,
-      "forks": 10,
+      "stars": 194,
+      "forks": 12,
       "language": "TypeScript",
       "topics": [
         "ai",
@@ -260,11 +396,23 @@
       "summary": "",
       "url": "https://www.csoonline.com/article/4234854/ai-agents-arent-going-rogue-frontier-labs-are-skipping-security-basics.html",
       "hn_url": "https://news.ycombinator.com/item?id=50091788",
-      "points": 940,
-      "comments": 614,
+      "points": 946,
+      "comments": 619,
       "author": "latexr",
       "source": "hackernews",
       "created_at": "2026-10-14T17:45:23Z"
+    },
+    {
+      "id": "50105647",
+      "title": "Neural networks are clean",
+      "summary": "",
+      "url": "https://already-clean.goodfire.com/",
+      "hn_url": "https://news.ycombinator.com/item?id=50105647",
+      "points": 804,
+      "comments": 326,
+      "author": "themgt",
+      "source": "hackernews",
+      "created_at": "2026-10-15T16:04:01Z"
     },
     {
       "id": "50063427",
@@ -272,8 +420,8 @@
       "summary": "",
       "url": "https://yyhh.org/blog/2026/10/ai-is-a-tool/",
       "hn_url": "https://news.ycombinator.com/item?id=50063427",
-      "points": 787,
-      "comments": 602,
+      "points": 801,
+      "comments": 607,
       "author": "layer8",
       "source": "hackernews",
       "created_at": "2026-10-12T21:40:18Z"
@@ -285,7 +433,7 @@
       "url": "https://twitter.com/karpathy/status/2109361546505966046",
       "hn_url": "https://news.ycombinator.com/item?id=50047422",
       "points": 725,
-      "comments": 1064,
+      "comments": 1072,
       "author": "albertzeyer",
       "source": "hackernews",
       "created_at": "2026-10-11T20:20:52Z"
@@ -297,34 +445,22 @@
       "url": "https://z.ai/blog/glm-legal",
       "hn_url": "https://news.ycombinator.com/item?id=50058507",
       "points": 674,
-      "comments": 369,
+      "comments": 370,
       "author": "ilreb",
       "source": "hackernews",
       "created_at": "2026-10-12T16:11:45Z"
     },
     {
-      "id": "50105647",
-      "title": "Neural networks are clean",
+      "id": "50121179",
+      "title": "90% of US working hours are spent on tasks not covered well by AI benchmarks",
       "summary": "",
-      "url": "https://already-clean.goodfire.com/",
-      "hn_url": "https://news.ycombinator.com/item?id=50105647",
-      "points": 637,
-      "comments": 236,
-      "author": "themgt",
+      "url": "https://www.mercor.com/research/labor-index/benchmark-map/",
+      "hn_url": "https://news.ycombinator.com/item?id=50121179",
+      "points": 470,
+      "comments": 405,
+      "author": "speckx",
       "source": "hackernews",
-      "created_at": "2026-10-15T16:04:01Z"
-    },
-    {
-      "id": "50023450",
-      "title": "Typesafe AI raises $870M at $7.5B",
-      "summary": "",
-      "url": "https://typesafe.ai/blog/series-ai",
-      "hn_url": "https://news.ycombinator.com/item?id=50023450",
-      "points": 444,
-      "comments": 356,
-      "author": "tosh",
-      "source": "hackernews",
-      "created_at": "2026-10-09T17:02:31Z"
+      "created_at": "2026-10-16T17:08:38Z"
     },
     {
       "id": "50054751",
@@ -333,7 +469,7 @@
       "url": "https://github.com/qgis/QGIS-Enhancement-Proposals/pull/387",
       "hn_url": "https://news.ycombinator.com/item?id=50054751",
       "points": 392,
-      "comments": 409,
+      "comments": 410,
       "author": "bwnkl",
       "source": "hackernews",
       "created_at": "2026-10-12T11:22:24Z"
@@ -344,12 +480,33 @@
       "summary": "",
       "url": "https://startupfortune.com/banks-are-now-trying-to-offload-the-ai-data-center-debt-they-just-underwrote/",
       "hn_url": "https://news.ycombinator.com/item?id=50092664",
-      "points": 378,
-      "comments": 274,
+      "points": 383,
+      "comments": 277,
       "author": "smartmic",
       "source": "hackernews",
       "created_at": "2026-10-14T18:32:52Z"
     }
   ],
-  "implementation_gaps": []
+  "implementation_gaps": [
+    {
+      "id": "2401.09670",
+      "title": "DistServe: Disaggregating Prefill and Decoding for Goodput-optimized Large Language Model Serving",
+      "summary": "DistServe improves the performance of large language models (LLMs) serving by disaggregating the prefill and decoding computation. Existing LLM serving systems colocate the two phases and batch the computation of prefill and decoding across all users and requests. We find that this strategy not only leads to strong prefill-decoding interferences but also couples the resource allocation and parallelism plans for both phases. LLM applications often emphasize individual latency for each phase: time to first token (TTFT) for the prefill phase and time per output token (TPOT) of each request for the decoding phase. In the presence of stringent latency requirements, existing systems have to prioritize one latency over the other, or over-provision compute resources to meet both. DistServe assigns prefill and decoding computation to different GPUs, hence eliminating prefill-decoding interferences. Given the application's TTFT and TPOT requirements, DistServe co-optimizes the resource allocation and parallelism strategy tailored for each phase. DistServe also places the two phases according to the serving cluster's bandwidth to minimize the communication caused by disaggregation. As a result, DistServe significantly improves LLM serving performance in terms of the maximum rate that can be served within both TTFT and TPOT constraints on each GPU. Our evaluations show that on various popular LLMs, applications, and latency requirements, DistServe can serve 7.4x more requests or 12.6x tighter SLO, compared to state-of-the-art systems, while staying within latency constraints for>90% of requests.",
+      "authors": [
+        "Yinmin Zhong",
+        "Sheng-Yu Liu",
+        "Junda Chen"
+      ],
+      "url": "https://arxiv.org/abs/2401.09670",
+      "pdf_url": "",
+      "category": "Semantic Scholar",
+      "source": "semantic_scholar",
+      "citations": 1102,
+      "published": "2024-01-18",
+      "has_code": true,
+      "github_url": "",
+      "github_implementations": 0,
+      "implementation_gap": true
+    }
+  ]
 }
