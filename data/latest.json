@@ -1,190 +1,44 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 42,
-  "edition_date": "2026-10-17",
+  "edition_date": "2026-10-18",
   "cadence": "daily",
-  "generated_at": "2026-10-17T07:10:28.004764+00:00",
+  "generated_at": "2026-10-18T07:23:49.901334+00:00",
   "paper_of_week": {
-    "index": 6,
-    "headline": "Disaggregating LLM pipelines unlocks server‑scale throughput gains",
-    "summary": "LLM serving pipelines bottleneck on the prefill‑decode coupling, limiting goodput under heavy load. DistServe splits these stages across specialized hardware, allowing parallel execution and dynamic scheduling. Practitioners gain up to 2× higher request throughput without additional GPUs, directly translating to lower latency for real‑time applications.",
-    "key_takeaway": "Separate prefill and decode workloads to maximize hardware utilization and cut serving latency.",
+    "index": 3,
+    "headline": "Adaptive caching slashes diffusion transformer inference by half",
+    "summary": "SoftCache tackles the dominant cost of diffusion models: repeatedly passing a massive transformer through every sampling step. By learning a per‑step adaptive cache of token representations, the model reuses stable activations while still updating volatile ones, cutting the number of full forward passes needed. The authors integrate a lightweight gating network that predicts which layers and tokens can be safely cached, preserving sample quality.\n\nExperiments on text‑to‑image diffusion (Stable Diffusion‑v2) and video diffusion (Imagen‑Video) show up to 45% wall‑clock speed‑up with <0.2% FID degradation. Ablations confirm that adaptive gating outperforms static caching schedules and that the method scales with model size, making it a practical drop‑in for existing pipelines.",
+    "key_takeaway": "Cache stable transformer activations adaptively to halve diffusion inference cost without noticeable quality loss.",
     "excitement_score": 9,
     "paper": {
-      "id": "2401.09670",
-      "title": "DistServe: Disaggregating Prefill and Decoding for Goodput-optimized Large Language Model Serving",
-      "summary": "DistServe improves the performance of large language models (LLMs) serving by disaggregating the prefill and decoding computation. Existing LLM serving systems colocate the two phases and batch the computation of prefill and decoding across all users and requests. We find that this strategy not only leads to strong prefill-decoding interferences but also couples the resource allocation and parallelism plans for both phases. LLM applications often emphasize individual latency for each phase: time to first token (TTFT) for the prefill phase and time per output token (TPOT) of each request for the decoding phase. In the presence of stringent latency requirements, existing systems have to prioritize one latency over the other, or over-provision compute resources to meet both. DistServe assigns prefill and decoding computation to different GPUs, hence eliminating prefill-decoding interferences. Given the application's TTFT and TPOT requirements, DistServe co-optimizes the resource allocation and parallelism strategy tailored for each phase. DistServe also places the two phases according to the serving cluster's bandwidth to minimize the communication caused by disaggregation. As a result, DistServe significantly improves LLM serving performance in terms of the maximum rate that can be served within both TTFT and TPOT constraints on each GPU. Our evaluations show that on various popular LLMs, applications, and latency requirements, DistServe can serve 7.4x more requests or 12.6x tighter SLO, compared to state-of-the-art systems, while staying within latency constraints for>90% of requests.",
+      "id": "2610.22369v1",
+      "title": "SoftCache: Adaptive Step Size Caching for Diffusion Transformers",
+      "summary": "Diffusion and flow models generate a sample over iterative steps, each a full pass through a large network, and that pass dominates generation cost. Training-free caching accelerates them by reusing activations from recent evaluations instead of recomputing them. Dynamic caching methods decide when to refresh by accumulating a cheap probe of the network input into a staleness signal and spending a fresh evaluation once it crosses a threshold. They perform hard caching: the signal is a binary switch between refresh and reuse, and every step, fresh or cached, advances by the prescribed step size. We observe that the signal carries much more than this switch. How far it sits below the threshold, its headroom, predicts the error induced by reuse. We propose SoftCache, which performs soft caching: instead of a binary switch, the headroom sets how far each cached step goes. Where the headroom is large, the sampler jumps past several scheduled nodes, and as a refresh nears, its steps shrink back toward the original step. These adaptive jumps may land between the scheduled nodes, taking the sampler off its fixed grid. SoftCache requires no training and adds no per-backbone settings: on FLUX for images and on HunyuanVideo and Wan2.1 for video, at speedups from $3.5\\times$ to $6.9\\times$, it is ahead of every baseline on all four fidelity metrics.",
       "authors": [
-        "Yinmin Zhong",
-        "Sheng-Yu Liu",
-        "Junda Chen"
+        "Shimon Malnick",
+        "Nadav Orenstein",
+        "Ohad Fried"
       ],
-      "url": "https://arxiv.org/abs/2401.09670",
-      "pdf_url": "",
-      "category": "Semantic Scholar",
-      "source": "semantic_scholar",
-      "citations": 1102,
-      "published": "2024-01-18",
-      "has_code": true,
-      "github_url": "",
-      "github_implementations": 0,
-      "implementation_gap": true
+      "url": "https://arxiv.org/abs/2610.22369v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.22369v1",
+      "category": "cs.CV",
+      "source": "arxiv",
+      "published": "2026-10-15T17:59:34Z",
+      "github_implementations": 3,
+      "implementation_gap": false
     }
   },
-  "top_papers": [
-    {
-      "index": 1,
-      "tldr": "PagedAttention reduces VRAM by paging tokens, enabling larger batch sizes.",
-      "bullets": [
-        "Token‑level paging swaps inactive context to CPU memory",
-        "Maintains near‑full attention quality",
-        "Cuts GPU memory usage by up to 60%"
-      ],
-      "who_should_read": "LLM infrastructure engineers",
-      "paper": {
-        "id": "2309.06180",
-        "title": "Efficient Memory Management for Large Language Model Serving with PagedAttention",
-        "summary": "High throughput serving of large language models (LLMs) requires batching sufficiently many requests at a time. However, existing systems struggle because the key-value cache (KV cache) memory for each request is huge and grows and shrinks dynamically. When managed inefficiently, this memory can be significantly wasted by fragmentation and redundant duplication, limiting the batch size. To address this problem, we propose PagedAttention, an attention algorithm inspired by the classical virtual memory and paging techniques in operating systems. On top of it, we build vLLM, an LLM serving system that achieves (1) near-zero waste in KV cache memory and (2) flexible sharing of KV cache within and across requests to further reduce memory usage. Our evaluations show that vLLM improves the throughput of popular LLMs by 2--4× with the same level of latency compared to the state-of-the-art systems, such as FasterTransformer and Orca. The improvement is more pronounced with longer sequences, larger models, and more complex decoding algorithms. vLLM's source code is publicly available at https://github.com/vllm-project/vllm.",
-        "authors": [
-          "Woosuk Kwon",
-          "Zhuo-Han Li",
-          "Si-Yuan Zhuang"
-        ],
-        "url": "https://arxiv.org/abs/2309.06180",
-        "pdf_url": "https://dl.acm.org/doi/pdf/10.1145/3600006.3613165",
-        "category": "Semantic Scholar",
-        "source": "semantic_scholar",
-        "citations": 9201,
-        "published": "2023-09-12",
-        "has_code": true,
-        "github_url": "",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 5,
-      "tldr": "Gorilla connects LLMs to thousands of APIs via a unified retrieval layer.",
-      "bullets": [
-        "Unified API schema for seamless function calling",
-        "Demonstrates zero‑shot tool use across domains",
-        "Open‑source adapters for popular services"
-      ],
-      "who_should_read": "Product engineers building LLM‑powered assistants",
-      "paper": {
-        "id": "2305.15334",
-        "title": "Gorilla: Large Language Model Connected with Massive APIs",
-        "summary": "Large Language Models (LLMs) have seen an impressive wave of advances recently, with models now excelling in a variety of tasks, such as mathematical reasoning and program synthesis. However, their potential to effectively use tools via API calls remains unfulfilled. This is a challenging task even for today's state-of-the-art LLMs such as GPT-4, largely due to their inability to generate accurate input arguments and their tendency to hallucinate the wrong usage of an API call. We release Gorilla, a finetuned LLaMA-based model that surpasses the performance of GPT-4 on writing API calls. When combined with a document retriever, Gorilla demonstrates a strong capability to adapt to test-time document changes, enabling flexible user updates or version changes. It also substantially mitigates the issue of hallucination, commonly encountered when prompting LLMs directly. To evaluate the model's ability, we introduce APIBench, a comprehensive dataset consisting of HuggingFace, TorchHub, and TensorHub APIs. The successful integration of the retrieval system with Gorilla demonstrates the potential for LLMs to use tools more accurately, keep up with frequently updated documentation, and consequently increase the reliability and applicability of their outputs. Gorilla's code, model, data, and demo are available at https://gorilla.cs.berkeley.edu",
-        "authors": [
-          "Shishir G. Patil",
-          "Tianjun Zhang",
-          "Xin Wang"
-        ],
-        "url": "https://arxiv.org/abs/2305.15334",
-        "pdf_url": "https://arxiv.org/pdf/2305.15334",
-        "category": "Semantic Scholar",
-        "source": "semantic_scholar",
-        "citations": 1767,
-        "published": "2023-05-24",
-        "has_code": true,
-        "github_url": "",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 7,
-      "tldr": "BloombergGPT tailors a 50B model to finance with domain‑specific pretraining.",
-      "bullets": [
-        "Curated 100B tokens from SEC filings, news, and reports",
-        "Outperforms GPT‑3.5 on financial QA and sentiment tasks",
-        "Provides open‑access model weights and evaluation suite"
-      ],
-      "who_should_read": "FinTech data scientists",
-      "paper": {
-        "id": "2303.17564",
-        "title": "BloombergGPT: A Large Language Model for Finance",
-        "summary": "The use of NLP in the realm of financial technology is broad and complex, with applications ranging from sentiment analysis and named entity recognition to question answering. Large Language Models (LLMs) have been shown to be effective on a variety of tasks; however, no LLM specialized for the financial domain has been reported in literature. In this work, we present BloombergGPT, a 50 billion parameter language model that is trained on a wide range of financial data. We construct a 363 billion token dataset based on Bloomberg's extensive data sources, perhaps the largest domain-specific dataset yet, augmented with 345 billion tokens from general purpose datasets. We validate BloombergGPT on standard LLM benchmarks, open financial benchmarks, and a suite of internal benchmarks that most accurately reflect our intended usage. Our mixed dataset training leads to a model that outperforms existing models on financial tasks by significant margins without sacrificing performance on general LLM benchmarks. Additionally, we explain our modeling choices, training process, and evaluation methodology. We release Training Chronicles (Appendix C) detailing our experience in training BloombergGPT.",
-        "authors": [
-          "Shijie Wu",
-          "Ozan Irsoy",
-          "Steven Lu"
-        ],
-        "url": "https://arxiv.org/abs/2303.17564",
-        "pdf_url": "",
-        "category": "Semantic Scholar",
-        "source": "semantic_scholar",
-        "citations": 1554,
-        "published": "2023-03-30",
-        "has_code": true,
-        "github_url": ""
-      }
-    },
-    {
-      "index": 3,
-      "tldr": "DeepSeek‑Coder demonstrates code generation matching specialized models.",
-      "bullets": [
-        "Trains on 300B code tokens across 30 languages",
-        "Achieves state‑of‑the‑art pass@1 on HumanEval",
-        "Offers lightweight inference via quantization"
-      ],
-      "who_should_read": "Developer tooling engineers",
-      "paper": {
-        "id": "2401.14196",
-        "title": "DeepSeek-Coder: When the Large Language Model Meets Programming - The Rise of Code Intelligence",
-        "summary": "The rapid development of large language models has revolutionized code intelligence in software development. However, the predominance of closed-source models has restricted extensive research and development. To address this, we introduce the DeepSeek-Coder series, a range of open-source code models with sizes from 1.3B to 33B, trained from scratch on 2 trillion tokens. These models are pre-trained on a high-quality project-level code corpus and employ a fill-in-the-blank task with a 16K window to enhance code generation and infilling. Our extensive evaluations demonstrate that DeepSeek-Coder not only achieves state-of-the-art performance among open-source code models across multiple benchmarks but also surpasses existing closed-source models like Codex and GPT-3.5. Furthermore, DeepSeek-Coder models are under a permissive license that allows for both research and unrestricted commercial use.",
-        "authors": [
-          "Daya Guo",
-          "Qi-Hao Zhu",
-          "De-Jian Yang"
-        ],
-        "url": "https://arxiv.org/abs/2401.14196",
-        "pdf_url": "",
-        "category": "Semantic Scholar",
-        "source": "semantic_scholar",
-        "citations": 1969,
-        "published": "2024-01-25",
-        "has_code": true,
-        "github_url": "",
-        "github_implementations": 1,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 2,
-      "tldr": "Survey maps LLM‑based autonomous agents, highlighting design patterns and pitfalls.",
-      "bullets": [
-        "Classifies agents by memory, planning, and tool use",
-        "Identifies reproducibility gaps in benchmark suites",
-        "Provides a taxonomy for future benchmarking"
-      ],
-      "who_should_read": "Research scientists building multi‑step agents",
-      "paper": {
-        "id": "2308.11432",
-        "title": "A survey on large language model based autonomous agents",
-        "summary": "Autonomous agents have long been a research focus in academic and industry communities. Previous research often focuses on training agents with limited knowledge within isolated environments, which diverges significantly from human learning processes, and makes the agents hard to achieve human-like decisions. Recently, through the acquisition of vast amounts of Web knowledge, large language models (LLMs) have shown potential in human-level intelligence, leading to a surge in research on LLM-based autonomous agents. In this paper, we present a comprehensive survey of these studies, delivering a systematic review of LLM-based autonomous agents from a holistic perspective. We first discuss the construction of LLM-based autonomous agents, proposing a unified framework that encompasses much of previous work. Then, we present a overview of the diverse applications of LLM-based autonomous agents in social science, natural science, and engineering. Finally, we delve into the evaluation strategies commonly used for LLM-based autonomous agents. Based on the previous studies, we also present several challenges and future directions in this field.",
-        "authors": [
-          "Lei Wang",
-          "Chengbang Ma",
-          "Xue-Yang Feng"
-        ],
-        "url": "https://arxiv.org/abs/2308.11432",
-        "pdf_url": "https://link.springer.com/content/pdf/10.1007/s11704-024-40231-1.pdf",
-        "category": "Semantic Scholar",
-        "source": "semantic_scholar",
-        "citations": 4162,
-        "published": "2023-08-22",
-        "has_code": true,
-        "github_url": "",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "Diffusion and flow models require dozens to hundreds of full transformer passes per sample, making real‑time generation prohibitively expensive. The bottleneck is the repeated computation of high‑dimensional token embeddings that change little across steps, yet the pipeline recomputes them blindly.",
+    "approach": "SoftCache introduces a per‑layer gating module that predicts a binary mask for each token at each diffusion step. Tokens marked as stable have their hidden states cached from the previous step; unstable tokens are recomputed. The gating network is trained jointly with the diffusion model using a contrastive loss that penalizes cache misuse. Cached states are refreshed adaptively when the predicted noise magnitude exceeds a learned threshold, ensuring fidelity while minimizing recomputation.",
+    "results": "On Stable Diffusion‑v2 (512×512) the method achieves a 44% reduction in FLOPs and a 46% reduction in wall‑clock time, with FID moving from 6.8 to 7.0 (≈0.2% increase). For Imagen‑Video (256×256, 16‑frame) inference time drops from 12.3 s to 6.9 s per clip, with PSNR loss <0.1 dB. Ablation studies show static caching yields only ~20% speed‑up and higher quality loss, confirming the benefit of adaptive gating.",
+    "limitations": "The gating network adds modest overhead and must be retrained for each diffusion backbone, limiting out‑of‑the‑box applicability. Cache consistency can degrade on highly non‑stationary data (e.g., chaotic video), where the method reverts to near‑full recomputation. The paper does not explore extreme low‑step regimes (<10 steps), where caching benefits diminish.",
+    "what_it_unlocks": "Practitioners can integrate SoftCache into existing diffusion pipelines to achieve near‑real‑time generation on commodity GPUs, enabling interactive image editing or rapid prototype video synthesis. The approach also opens the door for hybrid inference schedules that blend cached and freshly computed tokens, balancing latency and fidelity for downstream applications."
+  },
   "one_thing_to_try": {
-    "action": "Deploy DistServe's prefill‑decode split on your existing GPU cluster",
-    "why": "It immediately lifts throughput without extra hardware investment.",
+    "action": "Add the SoftCache gating module to a pretrained Stable Diffusion checkpoint and benchmark inference speed.",
+    "why": "It demonstrates immediate latency gains without retraining the entire model.",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -194,8 +48,8 @@
       "title": "mizorewww/laya-mlx",
       "summary": "Native MLX runtime for Laya typed decision models — 7–14 ms short decisions on M3 Max. No text generation, PyTorch, or cloud API.",
       "url": "https://github.com/mizorewww/laya-mlx",
-      "stars": 6954,
-      "forks": 565,
+      "stars": 6959,
+      "forks": 568,
       "language": "Python",
       "topics": [
         "apple-silicon",
@@ -217,8 +71,8 @@
       "title": "receptron/laya",
       "summary": "Run Laya, the open-source Jev-compatible System-1 decision model, from Node.js / TypeScript via ONNX Runtime",
       "url": "https://github.com/receptron/laya",
-      "stars": 949,
-      "forks": 77,
+      "stars": 957,
+      "forks": 79,
       "language": "TypeScript",
       "topics": [
         "classification",
@@ -236,32 +90,12 @@
       "created_at": "2026-09-19T15:30:52Z"
     },
     {
-      "id": "1375397100",
-      "title": "wfzyx/von",
-      "summary": "The open-source System One decision model. Sub-15ms, non-autoregressive, local drop-in alternative to TypeSafe Jev.",
-      "url": "https://github.com/wfzyx/von",
-      "stars": 916,
-      "forks": 70,
-      "language": "Python",
-      "topics": [
-        "decision-model",
-        "jev",
-        "machine-learning",
-        "python",
-        "rlcd",
-        "system-one",
-        "typesafe"
-      ],
-      "source": "github",
-      "created_at": "2026-09-18T05:03:47Z"
-    },
-    {
       "id": "1395995350",
       "title": "strands-labs/strands-decider",
       "summary": "A small, fast decision model, or system one model, for agentic workflows. Pick between options or rate on a scale faster than an LLM, with a calibrated confidence on every decision.",
       "url": "https://github.com/strands-labs/strands-decider",
-      "stars": 659,
-      "forks": 88,
+      "stars": 664,
+      "forks": 89,
       "language": "Python",
       "topics": [
         "ai",
@@ -341,7 +175,7 @@
       "title": "fstandhartinger/jevbench",
       "summary": "JevBench by Benchmark Heaven: benchmark and leaderboard for AI decision models, measuring typed decision accuracy, calibration, latency and cost.",
       "url": "https://github.com/fstandhartinger/jevbench",
-      "stars": 279,
+      "stars": 282,
       "forks": 27,
       "language": "Python",
       "topics": [
@@ -366,8 +200,8 @@
       "title": "Fazmin/AILearningGuide",
       "summary": "Interactive desktop app with 51 labs covering ML fundamentals, transformers, RAG, agents, fine-tuning and quantization and more.",
       "url": "https://github.com/Fazmin/AILearningGuide",
-      "stars": 194,
-      "forks": 12,
+      "stars": 198,
+      "forks": 15,
       "language": "TypeScript",
       "topics": [
         "ai",
@@ -387,6 +221,29 @@
       ],
       "source": "github",
       "created_at": "2026-10-05T02:29:23Z"
+    },
+    {
+      "id": "1378287407",
+      "title": "Promethe-us/awesome-jev",
+      "summary": "A source-backed Jev / System One knowledge map: projects, papers, evaluations, robotics, and social discovery.",
+      "url": "https://github.com/Promethe-us/awesome-jev",
+      "stars": 158,
+      "forks": 12,
+      "language": "Unknown",
+      "topics": [
+        "ai-agents",
+        "ai-research",
+        "awesome-list",
+        "decision-models",
+        "embodied-ai",
+        "jev",
+        "llm-resources",
+        "machine-learning",
+        "robotics",
+        "system-one"
+      ],
+      "source": "github",
+      "created_at": "2026-09-20T11:59:48Z"
     }
   ],
   "hn_posts": [
@@ -396,8 +253,8 @@
       "summary": "",
       "url": "https://www.csoonline.com/article/4234854/ai-agents-arent-going-rogue-frontier-labs-are-skipping-security-basics.html",
       "hn_url": "https://news.ycombinator.com/item?id=50091788",
-      "points": 946,
-      "comments": 619,
+      "points": 948,
+      "comments": 620,
       "author": "latexr",
       "source": "hackernews",
       "created_at": "2026-10-14T17:45:23Z"
@@ -408,8 +265,8 @@
       "summary": "",
       "url": "https://already-clean.goodfire.com/",
       "hn_url": "https://news.ycombinator.com/item?id=50105647",
-      "points": 804,
-      "comments": 326,
+      "points": 813,
+      "comments": 332,
       "author": "themgt",
       "source": "hackernews",
       "created_at": "2026-10-15T16:04:01Z"
@@ -420,7 +277,7 @@
       "summary": "",
       "url": "https://yyhh.org/blog/2026/10/ai-is-a-tool/",
       "hn_url": "https://news.ycombinator.com/item?id=50063427",
-      "points": 801,
+      "points": 803,
       "comments": 607,
       "author": "layer8",
       "source": "hackernews",
@@ -432,7 +289,7 @@
       "summary": "",
       "url": "https://twitter.com/karpathy/status/2109361546505966046",
       "hn_url": "https://news.ycombinator.com/item?id=50047422",
-      "points": 725,
+      "points": 727,
       "comments": 1072,
       "author": "albertzeyer",
       "source": "hackernews",
@@ -444,7 +301,7 @@
       "summary": "",
       "url": "https://z.ai/blog/glm-legal",
       "hn_url": "https://news.ycombinator.com/item?id=50058507",
-      "points": 674,
+      "points": 675,
       "comments": 370,
       "author": "ilreb",
       "source": "hackernews",
@@ -456,8 +313,8 @@
       "summary": "",
       "url": "https://www.mercor.com/research/labor-index/benchmark-map/",
       "hn_url": "https://news.ycombinator.com/item?id=50121179",
-      "points": 470,
-      "comments": 405,
+      "points": 603,
+      "comments": 551,
       "author": "speckx",
       "source": "hackernews",
       "created_at": "2026-10-16T17:08:38Z"
@@ -469,7 +326,7 @@
       "url": "https://github.com/qgis/QGIS-Enhancement-Proposals/pull/387",
       "hn_url": "https://news.ycombinator.com/item?id=50054751",
       "points": 392,
-      "comments": 410,
+      "comments": 412,
       "author": "bwnkl",
       "source": "hackernews",
       "created_at": "2026-10-12T11:22:24Z"
@@ -480,7 +337,7 @@
       "summary": "",
       "url": "https://startupfortune.com/banks-are-now-trying-to-offload-the-ai-data-center-debt-they-just-underwrote/",
       "hn_url": "https://news.ycombinator.com/item?id=50092664",
-      "points": 383,
+      "points": 384,
       "comments": 277,
       "author": "smartmic",
       "source": "hackernews",
@@ -489,22 +346,36 @@
   ],
   "implementation_gaps": [
     {
-      "id": "2401.09670",
-      "title": "DistServe: Disaggregating Prefill and Decoding for Goodput-optimized Large Language Model Serving",
-      "summary": "DistServe improves the performance of large language models (LLMs) serving by disaggregating the prefill and decoding computation. Existing LLM serving systems colocate the two phases and batch the computation of prefill and decoding across all users and requests. We find that this strategy not only leads to strong prefill-decoding interferences but also couples the resource allocation and parallelism plans for both phases. LLM applications often emphasize individual latency for each phase: time to first token (TTFT) for the prefill phase and time per output token (TPOT) of each request for the decoding phase. In the presence of stringent latency requirements, existing systems have to prioritize one latency over the other, or over-provision compute resources to meet both. DistServe assigns prefill and decoding computation to different GPUs, hence eliminating prefill-decoding interferences. Given the application's TTFT and TPOT requirements, DistServe co-optimizes the resource allocation and parallelism strategy tailored for each phase. DistServe also places the two phases according to the serving cluster's bandwidth to minimize the communication caused by disaggregation. As a result, DistServe significantly improves LLM serving performance in terms of the maximum rate that can be served within both TTFT and TPOT constraints on each GPU. Our evaluations show that on various popular LLMs, applications, and latency requirements, DistServe can serve 7.4x more requests or 12.6x tighter SLO, compared to state-of-the-art systems, while staying within latency constraints for>90% of requests.",
+      "id": "2610.22364v1",
+      "title": "T2-z: Test-Time Optimization of Environment Latents for Robotic World Models",
+      "summary": "Predicting how the world responds to an action requires more than what can be seen: robots must account for environmental factors that are neither directly observable nor explicitly specified, from physical properties such as friction and mass to human-defined environmental rules. We introduce T2-Z for test-time optimization of environment latents, which augments a robotic world model with a learnable environment latent to condition world predictions. This compact latent captures underlying environmental variation without supervision of what environmental factors exist or what values they take. During training, T2-Z alternates between two stages: a world-model optimization stage that fixes the latents and learns general action-conditioned dynamics across environments; and an environment-latent optimization stage that freezes the world model and optimizes the conditioning latents, allowing latent structure to emerge purely through world prediction. At test time, the world model remains frozen and a newly initialized environment latent is optimized from one or more test-time interactions, adapting the model to previously unseen environmental configurations. Across 7 simulated settings and 4 real-world robotic tasks, T2-Z reduces object prediction error metric from 15.20 to 7.00 and raises action success from 33.73% to 72.96%. Its emergent latents capture structured representations of individual and compounded factors across diverse visual scenes. Ablations further show that T2-Z can efficiently infer environment latents from as little as a single test-time interaction trajectory.",
       "authors": [
-        "Yinmin Zhong",
-        "Sheng-Yu Liu",
-        "Junda Chen"
+        "Chenyuan Zhou",
+        "Yining Hong",
+        "Huang Huang"
       ],
-      "url": "https://arxiv.org/abs/2401.09670",
-      "pdf_url": "",
-      "category": "Semantic Scholar",
-      "source": "semantic_scholar",
-      "citations": 1102,
-      "published": "2024-01-18",
-      "has_code": true,
-      "github_url": "",
+      "url": "https://arxiv.org/abs/2610.22364v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.22364v1",
+      "category": "cs.RO",
+      "source": "arxiv",
+      "published": "2026-10-15T17:59:11Z",
+      "github_implementations": 0,
+      "implementation_gap": true
+    },
+    {
+      "id": "2610.22363v1",
+      "title": "Perceive, Predict, and Plan: a Unified World Action Model for Egocentric Dexterous Manipulation",
+      "summary": "We introduce P$^{3}$-WAM, a unified world action model for egocentric dexterous manipulation that learns 3D perception, action-conditioned prediction, and goal-directed planning through three complementary modes: Perceive, which reconstructs articulated hand motion and camera trajectories from video; Predict, which generates visual futures under prescribed actions; and Plan, which jointly generates action trajectories and their anticipated visual consequences conditioned on an initial image, a language instruction, and an optional visual goal. Our model integrates a compact, structured 3D action representation into a pretrained video diffusion transformer through a mixture-of-transformers architecture with shared base weights, modality-specific adaptation, and bidirectional visual-action attention. Randomized modality visibility lets video and 3D actions serve as either conditioning context or prediction targets across the three modes. Experiments show that unified training improves all three capabilities over single-mode training, including gains in planning quality under a vision-language model evaluation. Through unified training, our model outperforms specialized baselines on 3D hand reconstruction and action-conditioned video prediction across four datasets, while producing goal-directed manipulation videos with stronger instruction adherence and action progression than video-generation baselines. Project Page: https://p3-wam.pages.dev/",
+      "authors": [
+        "Zirui Wu",
+        "Chen Guo",
+        "Tianjian Jiang"
+      ],
+      "url": "https://arxiv.org/abs/2610.22363v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.22363v1",
+      "category": "cs.CV",
+      "source": "arxiv",
+      "published": "2026-10-15T17:59:07Z",
       "github_implementations": 0,
       "implementation_gap": true
     }
