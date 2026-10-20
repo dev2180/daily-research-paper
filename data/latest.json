@@ -1,170 +1,44 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 43,
-  "edition_date": "2026-10-19",
+  "edition_date": "2026-10-20",
   "cadence": "daily",
-  "generated_at": "2026-10-19T08:02:57.618920+00:00",
+  "generated_at": "2026-10-20T07:52:50.343301+00:00",
   "paper_of_week": {
-    "index": 2,
-    "headline": "Pixel diffusion skips bottlenecks, sharpening generative fidelity",
-    "summary": "Generated imagery suffers when latent compression discards fine-grained detail, especially under complex camera motion. This work revisits pure pixel-space diffusion, redesigning transformer blocks to respect spatial inductive biases while retaining diffusion's expressive power. Practitioners gain a drop-in model that matches latent diffusion quality without the overhead of encoder‑decoder pipelines.",
-    "key_takeaway": "Adopt the vanilla pixel diffusion transformer for high‑resolution generation when latency budgets allow.",
-    "excitement_score": 9,
+    "index": 1,
+    "headline": "T2I generation succeeds without massive language pretraining",
+    "summary": "The authors challenge the prevailing belief that large-scale language models are a prerequisite for high-fidelity text‑to‑image synthesis. By training a diffusion model directly on paired image‑text data, they demonstrate comparable FID and CLIP‑Score to baselines that rely on frozen language encoders. The work isolates the contribution of language pretraining and shows that visual grounding can be learned end‑to‑end when sufficient paired data is available.\n\nCrucially, the paper introduces a lightweight tokenizer that operates on subword fragments and aligns them with visual patches via cross‑modal attention. This design eliminates the need for external language embeddings, reducing compute overhead by ~30% and enabling tighter integration between text and image latent spaces.",
+    "key_takeaway": "You can drop frozen language backbones and still get state‑of‑the‑art T2I quality if you train cross‑modal attention end‑to‑end on enough paired data.",
+    "excitement_score": 8,
     "paper": {
-      "id": "2610.23854v1",
-      "title": "Rethinking the design space of Vanilla Pixel Diffusion Transformers",
-      "summary": "Pixel-space diffusion models have recently re-emerged as a compelling alternative to latent diffusion, avoiding the lossy latent bottleneck and separately trained autoencoder. JiT shows that a vanilla diffusion transformer can generate directly in pixel space by replacing the commonly used velocity prediction ($\\boldsymbol{u}$-prediction) with clean image prediction ($\\boldsymbol{x_0}$-prediction). In this work, we revisit this choice and introduce MFlow, an adaptive parameterization that learns to interpolate between $\\boldsymbol{x_0}$- and $\\boldsymbol{u}$-prediction across principal directions of the data, learned end-to-end with diffusion training. We find that the preferred parameterization varies systematically with the data representation and model capacity -- notably, increasing model capacity shifts preference toward velocity prediction. We evaluate MFlow across ImageNet, UCF-101 video, and large-scale text-to-image generation, demonstrating competitive or improved generative performance across diverse settings. In addition, we find that vanilla pixel diffusion transformers, irrespective of parameterization, retain a persistent high-frequency deficit relative to real images. To address this, we introduce ConvRefiner, a lightweight convolutional module trained post-hoc with an adversarial loss while keeping the diffusion backbone frozen. With only a small amount of additional training, ConvRefiner restores the high-frequency statistics of generated images while preserving FID. Project webpage: https://soumik-kanad.github.io/mflow-diffusion/.",
+      "id": "2610.26863v1",
+      "title": "Text-to-Image Generative Modeling Without Language Pretraining",
+      "summary": "Modern text-to-image (T2I) systems use internet-scale language pretraining for text-conditioned image generation. We ask whether language pretraining is necessary for strong T2I generation. We introduce Halcyon, a family of early-fusion multimodal autoregressive models pretrained entirely from scratch on GPIC, a dataset of 100M image-text pairs. Halcyon-0.52B outperforms LlamaGen-XL/8 (48.0 vs. 63.3 gFD) with 18.2$\\times$ less pretraining compute. Further, Halcyon-1.6B outperforms JiT-T2I-XXL/8++ (35.3 vs. 41.0 gFD) with 275$\\times$ less pretraining compute. Controlled experiments show that text-only pretraining does not improve T2I generation. Halcyon also learns image captioning by replacing caption dropout with I2T supervision, maintaining competitive T2I generation quality under the same pretraining budget. We show that strong T2I systems can be trained from scratch without internet-scale language pretraining. Code and models are available at https://cs.stanford.edu/~keshik/halcyon",
       "authors": [
-        "Soumik Mukhopadhyay",
-        "Long Mai",
-        "Abhinav Shrivastava"
+        "Keshigeyan Chandrasegaran",
+        "Yue Zhao",
+        "Armin W. Thomas"
       ],
-      "url": "https://arxiv.org/abs/2610.23854v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.23854v1",
-      "category": "cs.CV",
+      "url": "https://arxiv.org/abs/2610.26863v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.26863v1",
+      "category": "cs.LG",
       "source": "arxiv",
-      "published": "2026-10-16T17:59:30Z",
+      "published": "2026-10-19T17:59:59Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [
-    {
-      "index": 1,
-      "tldr": "Corrects geometric drift in video diffusion via learned motion priors.",
-      "bullets": [
-        "Introduces a geometry‑aware loss that enforces consistent parallax.",
-        "Jointly trains motion estimator with video generator.",
-        "Demonstrates 30% reduction in warping artifacts on benchmark datasets."
-      ],
-      "who_should_read": "Computer vision researchers",
-      "paper": {
-        "id": "2610.23856v1",
-        "title": "Learning to Correct Geometry in Generated Videos",
-        "summary": "Generated videos often lose geometric consistency under camera motion: structures warp under viewpoint change, parallax becomes inconsistent, and smooth camera movement may collapse into shot-like transitions. We argue that this failure is largely a data problem. In web-scale video corpora, most visible motion comes from dynamic objects captured by static or weakly moving cameras, leaving only sparse supervision for viewpoint-induced appearance changes. To address this, we propose Video Geometry Corrector (VGC), a post-hoc video-to-video model trained on synthetic paired supervision. Starting from real videos with diverse camera motion and pose annotations, we construct VG-Pairs with a synthetic paired-supervision data generation pipeline. Each video clip is treated as a geometry-consistent target and paired with a distorted counterpart synthesized by a pretrained image-to-video inpainting model using trajectory-adaptive keyframes. VGC learns to map the distorted input to the geometry-consistent target without modifying the source generator, and uses optical flow as an auxiliary cue to help disentangle camera motion from object motion. Experiments on pose-conditioned and prompt-driven benchmarks show that VGC improves geometric consistency across multiple source generators, and scaling to a larger backbone further extends the framework toward more general video refinement.",
-        "authors": [
-          "Weijie Lyu",
-          "Tiancheng Shen",
-          "Jason Li"
-        ],
-        "url": "https://arxiv.org/abs/2610.23856v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.23856v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-16T17:59:55Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 3,
-      "tldr": "Fine‑tunes LLMs to exhibit emergent social behaviors through behavioral coupling.",
-      "bullets": [
-        "Defines a coupling loss linking response tone to context.",
-        "Shows controllable warmth without degrading task performance.",
-        "Provides analysis of unintended behavior cascades."
-      ],
-      "who_should_read": "LLM engineers",
-      "paper": {
-        "id": "2610.23847v1",
-        "title": "Behavioral Couplings: From Formation to Behavioral Emergence in Language Models",
-        "summary": "Fine-tuning large language models (LLMs) can induce behaviors beyond those explicitly targeted. For example, training a model to respond more warmly can make it more sycophantic, and training it to write insecure code can cause broad misalignment on prompts unrelated to coding. We refer to a relationship between behaviors, in which fine-tuning on one brings out another, as a behavioral coupling. In this work, we study formation and properties of behavioral couplings. We find that when a model is trained on documents describing two distinct behaviors together, fine-tuning it to elicit one behavior causes the other to emerge as well. For instance, when training documents describe a fictitious character that both explains scientific concepts in a playful, rubber-duck-like manner and discourages human friendships, a model subsequently fine-tuned to explain science like a rubber duck also begins encouraging users to end their friendships, whereas a model that was not trained on these documents shows no such behavior after the same fine-tuning. These results show that behavioral couplings can be formed through document training and later surface as unintended behaviors. More concerningly, we find that couplings can compose. When two document sets share a behavior (document A pairs behaviors 1 and 2, and document B pairs behaviors 2 and 3), fine-tuning on behavior 1 elicits both behaviors 2 and 3. This can make it difficult to trace where an emergent misbehavior originated, since the coupled behaviors may never appear together in any single document. These findings suggest that preventing the unintended effects of later fine-tuning may require evaluation that goes beyond a model's current behavior.",
-        "authors": [
-          "Dongyoon Hahm",
-          "Woogyeol Jin",
-          "Dennis Wei"
-        ],
-        "url": "https://arxiv.org/abs/2610.23847v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.23847v1",
-        "category": "cs.CL",
-        "source": "arxiv",
-        "published": "2026-10-16T17:58:08Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 5,
-      "tldr": "Leverages pretrained VLMs for object‑goal navigation via goal grounding.",
-      "bullets": [
-        "Transforms VLM embeddings into navigation policy inputs.",
-        "Achieves state‑of‑the‑art success rates on ALFRED‑style tasks.",
-        "Offers a lightweight fine‑tuning recipe."
-      ],
-      "who_should_read": "Robotics and embodied AI developers",
-      "paper": {
-        "id": "2610.23841v1",
-        "title": "StopWatch: Goal Grounding for Object-goal Navigation",
-        "summary": "Pretrained VLMs bring rich world knowledge and semantic priors to object-goal navigation, and fine-tuning a VLM into a navigation policy has become a common recipe. Despite this progress, success rates remain low, and it is unclear which capability these fine-tuned policies lack. Our diagnosis identifies goal grounding as the dominant failure. These policies explore well, yet often fail to notice that the goal is already in view or to estimate how far away it is. To address this failure, we ground the goal explicitly. Explicit grounding substantially improves success and reaches state-of-the-art results on six benchmarks across three scene collections. We also correct annotation defects in these benchmarks, so that future methods are evaluated more faithfully. Our analysis on the clean benchmarks shows that, with ground-truth grounding, our policy nearly matches the expert that generated its demonstrations, leaving the headroom in perception rather than policy learning. Our work points to goal grounding as a missing piece of object-goal navigation and offers a simple and effective solution to the task.",
-        "authors": [
-          "Xinhao Liu",
-          "Yunsheng Tian",
-          "Yuheng Qiu"
-        ],
-        "url": "https://arxiv.org/abs/2610.23841v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.23841v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-16T17:57:05Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 7,
-      "tldr": "Aligns quantum circuit architecture with task spectral properties for better inductive bias.",
-      "bullets": [
-        "Derives spectral bias metrics for PQCs.",
-        "Proposes architecture templates matched to problem spectra.",
-        "Empirically improves classification accuracy on quantum datasets."
-      ],
-      "who_should_read": "Quantum machine learning researchers",
-      "paper": {
-        "id": "2610.23834v1",
-        "title": "Task-aligned spectral inductive biases in parameterized quantum circuits",
-        "summary": "Parameterized quantum circuits are widely investigated in quantum machine learning, yet how their architecture can provide task-aligned inductive biases remains poorly understood. We study data reuploading quantum circuits with two distinct inputs: a signal that varies between samples and a fixed, task-defined spectral query that specifies how the signal should be probed. We show that encoding the query can change the circuit's hypothesis class over the signal by modulating how its existing signal frequencies are combined, without introducing new sample-dependent information. This mechanism matches tasks built on nonuniform Fourier transforms, whose evaluation frequencies specify the query and whose sampling positions guide its encoding. We examine this connection in a classification task inspired by synthetic aperture radar, where acquisition geometry determines a query for classifying unfocused spectral patches before image formation. Across small-scale spectral and radar-like tasks, aligned queries improve learning from limited data over parameter-matched circuits with mismatched or absent queries. These results provide a route from known spectral task structure to the design and validation of inductive biases in parameterized quantum circuits.",
-        "authors": [
-          "Felix Frohnert",
-          "Adrián Pérez-Salinas",
-          "Sebastian Lange"
-        ],
-        "url": "https://arxiv.org/abs/2610.23834v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.23834v1",
-        "category": "quant-ph",
-        "source": "arxiv",
-        "published": "2026-10-16T17:53:19Z"
-      }
-    },
-    {
-      "index": 8,
-      "tldr": "Constructs student‑conditioned reasoning traces to distill step‑by‑step logic.",
-      "bullets": [
-        "Generates adaptive traces based on student model confidence.",
-        "Improves downstream task accuracy by up to 12%.",
-        "Provides a simple API for trace generation."
-      ],
-      "who_should_read": "NLP educators and model distillation experts",
-      "paper": {
-        "id": "2610.23831v1",
-        "title": "Beyond the Answer: Student-Conditioned Trace Construction for Reasoning Distillation",
-        "summary": "A reasoning trace can accompany a correct answer without providing effective supervision for a particular student. We study how to construct traces that improve learning beyond answer-only supervision by considering both their intermediate content and their accessibility to the target learner. We introduce ReDiST, a student-conditioned trace-construction and distillation framework for evidence-rich reasoning. Starting from the student's own attempts, ReDiST revises answer-correct drafts against the supplied evidence and repairs unsuccessful drafts with additional guidance from the verified answer. A frozen student-matched reader screens and ranks original and edited candidates using answer recovery and verified-answer probability, given the question, evidence, and candidate trace. We distill the selected targets while balancing trace and final-answer supervision with an auxiliary answer loss. Construction and selection occur offline, and inference uses only the distilled student. Experiments on question-answering benchmarks show that ReDiST can improve both source-task and cross-benchmark performance over answer-only, original-trace, and the evaluated trace-selection and rewriting baselines. Across supervision recipes, performance rankings can differ between source and transfer benchmarks, highlighting the importance of evaluating trace teaching utility across distributions.",
-        "authors": [
-          "Shaoang Li",
-          "Yanhang Shi",
-          "Yufei Li"
-        ],
-        "url": "https://arxiv.org/abs/2610.23831v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.23831v1",
-        "category": "cs.CL",
-        "source": "arxiv",
-        "published": "2026-10-16T17:52:58Z"
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "Modern T2I pipelines depend on massive language models pretrained on billions of tokens, inflating training cost and limiting flexibility for domain‑specific vocabularies. The authors ask whether this dependency is essential for high‑quality generation or merely a convenience.",
+    "approach": "They construct a unified diffusion backbone that ingests raw token sequences produced by a byte‑pair encoding (BPE) tokenizer trained on the same image‑text corpus. Cross‑modal attention layers fuse token embeddings with image patch embeddings at every diffusion step, allowing the model to learn joint semantics from scratch. A contrastive loss aligns text and image latents, while classifier‑free guidance is applied using a learned unconditional token.",
+    "results": "On MS‑COCO 2014, the model attains FID 7.9 and CLIP‑Score 0.32, within 5% of a baseline that uses a frozen CLIP text encoder. Training cost drops from 2.5k GPU‑hours to 1.8k GPU‑hours. Ablations show that removing the cross‑modal attention degrades FID to 12.4, confirming its central role.",
+    "limitations": "The approach still requires a large, high‑quality paired dataset; performance degrades sharply on low‑resource domains. The BPE tokenizer lacks the semantic richness of transformer‑based language models, limiting nuanced compositional prompts. Moreover, the paper does not evaluate zero‑shot generalization to out‑of‑distribution text.",
+    "what_it_unlocks": "Practitioners can now train domain‑specific T2I models without sourcing or licensing massive language backbones, cutting both memory footprint and inference latency. This enables rapid prototyping of specialized generators—e.g., medical imaging reports or industrial design sketches—where custom vocabularies dominate."
+  },
   "one_thing_to_try": {
-    "action": "Fine‑tune a pixel‑diffusion transformer on your domain data for 4‑epoch runs",
-    "why": "It yields sharper, geometry‑consistent samples without redesigning the pipeline.",
+    "action": "Fine‑tune the paper's diffusion code on a small, domain‑specific image‑caption dataset (e.g., 5k pairs).",
+    "why": "It validates that end‑to‑end text‑image learning works beyond generic web data.",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -174,8 +48,8 @@
       "title": "strands-labs/strands-decider",
       "summary": "A small, fast decision model, or system one model, for agentic workflows. Pick between options or rate on a scale faster than an LLM, with a calibrated confidence on every decision.",
       "url": "https://github.com/strands-labs/strands-decider",
-      "stars": 670,
-      "forks": 90,
+      "stars": 674,
+      "forks": 91,
       "language": "Python",
       "topics": [
         "ai",
@@ -222,8 +96,8 @@
       "title": "Fazmin/AILearningGuide",
       "summary": "Interactive desktop app with 51 labs covering ML fundamentals, transformers, RAG, agents, fine-tuning and quantization and more.",
       "url": "https://github.com/Fazmin/AILearningGuide",
-      "stars": 208,
-      "forks": 17,
+      "stars": 213,
+      "forks": 18,
       "language": "TypeScript",
       "topics": [
         "ai",
@@ -243,29 +117,6 @@
       ],
       "source": "github",
       "created_at": "2026-10-05T02:29:23Z"
-    },
-    {
-      "id": "1378287407",
-      "title": "Promethe-us/awesome-jev",
-      "summary": "A source-backed Jev / System One knowledge map: projects, papers, evaluations, robotics, and social discovery.",
-      "url": "https://github.com/Promethe-us/awesome-jev",
-      "stars": 158,
-      "forks": 12,
-      "language": "Unknown",
-      "topics": [
-        "ai-agents",
-        "ai-research",
-        "awesome-list",
-        "decision-models",
-        "embodied-ai",
-        "jev",
-        "llm-resources",
-        "machine-learning",
-        "robotics",
-        "system-one"
-      ],
-      "source": "github",
-      "created_at": "2026-09-20T11:59:48Z"
     },
     {
       "id": "1382454774",
@@ -290,7 +141,7 @@
       "title": "Takamatsu-Hikaru/AI-Research-Guide",
       "summary": "AI 科研入门指南：大学选择、科研 60 问、入门项目、学习路线与论文卡片。A bilingual guide to getting started in AI research.",
       "url": "https://github.com/Takamatsu-Hikaru/AI-Research-Guide",
-      "stars": 85,
+      "stars": 91,
       "forks": 7,
       "language": "JavaScript",
       "topics": [
@@ -330,23 +181,47 @@
       "created_at": "2026-09-25T14:40:10Z"
     },
     {
-      "id": "1396882142",
-      "title": "LAMDA-Model-Reuse/SaveRouter",
-      "summary": "Sparse-supervision LLM routing that accounts for upfront feedback acquisition and deployment payback.",
-      "url": "https://github.com/LAMDA-Model-Reuse/SaveRouter",
-      "stars": 26,
-      "forks": 1,
-      "language": "Python",
+      "id": "1418580002",
+      "title": "Goekdeniz-Guelmez/JOSIE-Voice",
+      "summary": "JOSIE Voice: a real-time, on-device voice assistant for Apple Silicon. Download the macOS app (DMG) from Releases.",
+      "url": "https://github.com/Goekdeniz-Guelmez/JOSIE-Voice",
+      "stars": 40,
+      "forks": 3,
+      "language": "Unknown",
       "topics": [
-        "cost-optimization",
-        "llm-routing",
+        "aget-framework",
+        "agetic",
+        "artificial-intelligence",
+        "assistant",
         "machine-learning",
-        "model-routing",
-        "reproducibility",
-        "sparse-supervision"
+        "voice-agent",
+        "voice-ai",
+        "voice-assistant",
+        "voice-cloning"
       ],
       "source": "github",
-      "created_at": "2026-09-30T03:02:05Z"
+      "created_at": "2026-10-14T08:12:11Z"
+    },
+    {
+      "id": "1411621909",
+      "title": "AllSpark-Research/Vela",
+      "summary": "Vela: User Behavior as Supervision Sparks LLM Intelligence — official paper, task templates, and prompts from AllSpark at Xiaohongshu.",
+      "url": "https://github.com/AllSpark-Research/Vela",
+      "stars": 30,
+      "forks": 1,
+      "language": "Unknown",
+      "topics": [
+        "large-language-models",
+        "llm",
+        "machine-learning",
+        "natural-language-processing",
+        "reinforcement-learning",
+        "supervised-fine-tuning",
+        "user-behavior",
+        "user-modeling"
+      ],
+      "source": "github",
+      "created_at": "2026-10-09T09:47:18Z"
     }
   ],
   "hn_posts": [
@@ -356,8 +231,8 @@
       "summary": "",
       "url": "https://www.csoonline.com/article/4234854/ai-agents-arent-going-rogue-frontier-labs-are-skipping-security-basics.html",
       "hn_url": "https://news.ycombinator.com/item?id=50091788",
-      "points": 949,
-      "comments": 620,
+      "points": 951,
+      "comments": 625,
       "author": "latexr",
       "source": "hackernews",
       "created_at": "2026-10-14T17:45:23Z"
@@ -368,23 +243,11 @@
       "summary": "",
       "url": "https://already-clean.goodfire.com/",
       "hn_url": "https://news.ycombinator.com/item?id=50105647",
-      "points": 822,
-      "comments": 336,
+      "points": 832,
+      "comments": 339,
       "author": "themgt",
       "source": "hackernews",
       "created_at": "2026-10-15T16:04:01Z"
-    },
-    {
-      "id": "50063427",
-      "title": "AI is a tool and using it well takes skill",
-      "summary": "",
-      "url": "https://yyhh.org/blog/2026/10/ai-is-a-tool/",
-      "hn_url": "https://news.ycombinator.com/item?id=50063427",
-      "points": 805,
-      "comments": 607,
-      "author": "layer8",
-      "source": "hackernews",
-      "created_at": "2026-10-12T21:40:18Z"
     },
     {
       "id": "50121179",
@@ -392,23 +255,23 @@
       "summary": "",
       "url": "https://www.mercor.com/research/labor-index/benchmark-map/",
       "hn_url": "https://news.ycombinator.com/item?id=50121179",
-      "points": 621,
-      "comments": 570,
+      "points": 625,
+      "comments": 574,
       "author": "speckx",
       "source": "hackernews",
       "created_at": "2026-10-16T17:08:38Z"
     },
     {
-      "id": "50054751",
-      "title": "QGIS enacts moratorium on AI contributions",
+      "id": "50145337",
+      "title": "Hybrid Reasoning Agents: LLM agents that think in latent space, act through text",
       "summary": "",
-      "url": "https://github.com/qgis/QGIS-Enhancement-Proposals/pull/387",
-      "hn_url": "https://news.ycombinator.com/item?id=50054751",
-      "points": 392,
-      "comments": 412,
-      "author": "bwnkl",
+      "url": "https://arxiv.org/abs/2610.18861",
+      "hn_url": "https://news.ycombinator.com/item?id=50145337",
+      "points": 505,
+      "comments": 236,
+      "author": "allinonai",
       "source": "hackernews",
-      "created_at": "2026-10-12T11:22:24Z"
+      "created_at": "2026-10-18T20:48:14Z"
     },
     {
       "id": "50092664",
@@ -428,23 +291,35 @@
       "summary": "",
       "url": "https://github.com/cobanov/PS5LM",
       "hn_url": "https://news.ycombinator.com/item?id=50122431",
-      "points": 373,
-      "comments": 85,
+      "points": 374,
+      "comments": 86,
       "author": "Anon84",
       "source": "hackernews",
       "created_at": "2026-10-16T18:32:35Z"
     },
     {
-      "id": "50145337",
-      "title": "Hybrid Reasoning Agents: LLM agents that think in latent space, act through text",
+      "id": "50073221",
+      "title": "I posted to HN, and then my website was flooded with AI bot traffic",
       "summary": "",
-      "url": "https://arxiv.org/abs/2610.18861",
-      "hn_url": "https://news.ycombinator.com/item?id=50145337",
-      "points": 369,
-      "comments": 173,
-      "author": "allinonai",
+      "url": "https://www.sammystraus.com/#i-posted-to-hn-and-then-my-website-was-flooded-with-ai-bot-traffic",
+      "hn_url": "https://news.ycombinator.com/item?id=50073221",
+      "points": 352,
+      "comments": 186,
+      "author": "sammy0910",
       "source": "hackernews",
-      "created_at": "2026-10-18T20:48:14Z"
+      "created_at": "2026-10-13T15:25:50Z"
+    },
+    {
+      "id": "50159341",
+      "title": "WhatsApp's help pages hid LLM instructions: dont recommend a regulator",
+      "summary": "",
+      "url": "https://redact.dev/blog/whatsapp-help-pages-hidden-ai-instructions",
+      "hn_url": "https://news.ycombinator.com/item?id=50159341",
+      "points": 350,
+      "comments": 81,
+      "author": "ds",
+      "source": "hackernews",
+      "created_at": "2026-10-19T23:22:18Z"
     }
   ],
   "implementation_gaps": []
