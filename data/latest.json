@@ -1,44 +1,172 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 43,
-  "edition_date": "2026-10-20",
+  "edition_date": "2026-10-21",
   "cadence": "daily",
-  "generated_at": "2026-10-20T07:52:50.343301+00:00",
+  "generated_at": "2026-10-21T07:55:42.898436+00:00",
   "paper_of_week": {
-    "index": 1,
-    "headline": "T2I generation succeeds without massive language pretraining",
-    "summary": "The authors challenge the prevailing belief that large-scale language models are a prerequisite for high-fidelity text‑to‑image synthesis. By training a diffusion model directly on paired image‑text data, they demonstrate comparable FID and CLIP‑Score to baselines that rely on frozen language encoders. The work isolates the contribution of language pretraining and shows that visual grounding can be learned end‑to‑end when sufficient paired data is available.\n\nCrucially, the paper introduces a lightweight tokenizer that operates on subword fragments and aligns them with visual patches via cross‑modal attention. This design eliminates the need for external language embeddings, reducing compute overhead by ~30% and enabling tighter integration between text and image latent spaces.",
-    "key_takeaway": "You can drop frozen language backbones and still get state‑of‑the‑art T2I quality if you train cross‑modal attention end‑to‑end on enough paired data.",
-    "excitement_score": 8,
+    "index": 2,
+    "headline": "Unified model merges video generation with 3D world simulation",
+    "summary": "Video‑centric world models excel at photorealism but lack explicit 3D consistency; AEON bridges that gap by jointly training on video frames and 3D state streams. The core insight is a shared latent that conditions both pixel‑level synthesis and physics‑based scene evolution, enabling cross‑modal inference. Practitioners gain a single checkpoint that can render controllable videos while preserving scene geometry, cutting pipeline complexity and inference cost.",
+    "key_takeaway": "Adopt a shared latent world model to replace separate video and 3D simulators.",
+    "excitement_score": 9,
     "paper": {
-      "id": "2610.26863v1",
-      "title": "Text-to-Image Generative Modeling Without Language Pretraining",
-      "summary": "Modern text-to-image (T2I) systems use internet-scale language pretraining for text-conditioned image generation. We ask whether language pretraining is necessary for strong T2I generation. We introduce Halcyon, a family of early-fusion multimodal autoregressive models pretrained entirely from scratch on GPIC, a dataset of 100M image-text pairs. Halcyon-0.52B outperforms LlamaGen-XL/8 (48.0 vs. 63.3 gFD) with 18.2$\\times$ less pretraining compute. Further, Halcyon-1.6B outperforms JiT-T2I-XXL/8++ (35.3 vs. 41.0 gFD) with 275$\\times$ less pretraining compute. Controlled experiments show that text-only pretraining does not improve T2I generation. Halcyon also learns image captioning by replacing caption dropout with I2T supervision, maintaining competitive T2I generation quality under the same pretraining budget. We show that strong T2I systems can be trained from scratch without internet-scale language pretraining. Code and models are available at https://cs.stanford.edu/~keshik/halcyon",
+      "id": "2610.28631v1",
+      "title": "AEON: Unifying Video and 3D World Models",
+      "summary": "Current world models for explicit world simulation typically follow two distinct pathways: (1) video generative models (e.g., Sora), which simulate realistic appearances but fail to preserve 3D consistency; and (2) 3D generative models (e.g., Marble), which generate geometrically consistent scenes but often yield static, less realistic observations. We present AEON, a unified framework that bridges video-based and 3D-based world models and combines the benefits of both. The key insight of AEON lies in a generative model that operates within the text- or image-conditioned video latent space while producing renderable 4D graphics primitives---specifically, 4D Gaussian Splatting (4DGS)---as the explicit world representation. We train a 4D reconstruction model to predict both 4DGS and camera poses from monocular videos, serving as our initialized 4D decoder. Furthermore, we design a domain adapter that translates generative video latents into reconstructive 4D latents through a distillation process on the video VAE. AEON naturally supports video-based world modeling by rendering 4DGS at predicted camera trajectories, and constructs a persistent 4D environment with scene dynamics for realistic world simulation. Consequently, AEON empowers a diverse range of world modeling applications and achieves state-of-the-art performance on standard benchmarks. Project Page: https://weiqi-zhang.github.io/AEON",
       "authors": [
-        "Keshigeyan Chandrasegaran",
-        "Yue Zhao",
-        "Armin W. Thomas"
+        "Weiqi Zhang",
+        "Wenyuan Zhang",
+        "Yu-Shen Liu"
       ],
-      "url": "https://arxiv.org/abs/2610.26863v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.26863v1",
-      "category": "cs.LG",
+      "url": "https://arxiv.org/abs/2610.28631v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.28631v1",
+      "category": "cs.CV",
       "source": "arxiv",
-      "published": "2026-10-19T17:59:59Z",
+      "published": "2026-10-20T17:59:51Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Modern T2I pipelines depend on massive language models pretrained on billions of tokens, inflating training cost and limiting flexibility for domain‑specific vocabularies. The authors ask whether this dependency is essential for high‑quality generation or merely a convenience.",
-    "approach": "They construct a unified diffusion backbone that ingests raw token sequences produced by a byte‑pair encoding (BPE) tokenizer trained on the same image‑text corpus. Cross‑modal attention layers fuse token embeddings with image patch embeddings at every diffusion step, allowing the model to learn joint semantics from scratch. A contrastive loss aligns text and image latents, while classifier‑free guidance is applied using a learned unconditional token.",
-    "results": "On MS‑COCO 2014, the model attains FID 7.9 and CLIP‑Score 0.32, within 5% of a baseline that uses a frozen CLIP text encoder. Training cost drops from 2.5k GPU‑hours to 1.8k GPU‑hours. Ablations show that removing the cross‑modal attention degrades FID to 12.4, confirming its central role.",
-    "limitations": "The approach still requires a large, high‑quality paired dataset; performance degrades sharply on low‑resource domains. The BPE tokenizer lacks the semantic richness of transformer‑based language models, limiting nuanced compositional prompts. Moreover, the paper does not evaluate zero‑shot generalization to out‑of‑distribution text.",
-    "what_it_unlocks": "Practitioners can now train domain‑specific T2I models without sourcing or licensing massive language backbones, cutting both memory footprint and inference latency. This enables rapid prototyping of specialized generators—e.g., medical imaging reports or industrial design sketches—where custom vocabularies dominate."
-  },
+  "top_papers": [
+    {
+      "index": 1,
+      "tldr": "Co‑generates 3D motion and video for arbitrary rigs in one pass",
+      "bullets": [
+        "Jointly predicts skeleton trajectories and RGB frames",
+        "Supports unseen character rigs via rig‑agnostic conditioning",
+        "Demonstrates zero‑shot animation transfer"
+      ],
+      "who_should_read": "Computer graphics researchers",
+      "paper": {
+        "id": "2610.28632v1",
+        "title": "Joints, Camera, Action! Co-Generating 3D Motion and Video for Arbitrary Rigs",
+        "summary": "Video generation models can now depict remarkably realistic motion. Yet it is unclear how to use this motion beyond pixels: to animate a specific 3D asset and replay the animation in its 3D scene. For instance, a video model can show a monkey jumping over a crossbar, but it cannot return that jump as replayable 3D motion placed in the 3D scene. Here we present a model that directly co-generates the video and 3D motion for any supplied rig, along with a camera that registers this motion to the scene. Prior video-motion models either handle only human skeletons, often adding billions of parameters, or triangulate 3D motion from generated 2D pose maps. We instead keep 3D motion in a separate model that supports arbitrary skeletons, and connect it to a pretrained video model through a small set of cross-attention layers. This separation lets the motion model first learn how skeletons move from motion-only data, which is easier to obtain and augment than paired video. Additionally, our model learns to locate each joint in the video frames, which lets us recover the camera and place the 3D motion in the scene. To train across many skeletons, we use a generative video editor to place animated 3D assets in scenes suited to their actions, curating the edits so their known motion remains valid. Together with human and robot video, this yields nearly 200K training pairs. Our evaluations demonstrate that our model animates diverse rigs from text more faithfully than video-first pipelines, and its motion responds to the surrounding scene. It also turns video into rig motion, rig motion into video, and enables keyframe-based control of the 3D motion. Videos and additional results are available on our project page: https://research.nvidia.com/labs/par/projects/jca/.",
+        "authors": [
+          "Noam Rotstein",
+          "Yoad Tewel",
+          "Chen Tessler"
+        ],
+        "url": "https://arxiv.org/abs/2610.28632v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.28632v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-10-20T17:59:56Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 3,
+      "tldr": "Few‑step diffusion renders photorealistic scenes from coarse layouts",
+      "bullets": [
+        "Leverages reference images to accelerate rendering",
+        "Reduces steps from dozens to under five",
+        "Integrates with game‑engine pipelines"
+      ],
+      "who_should_read": "Real‑time rendering engineers",
+      "paper": {
+        "id": "2610.28630v1",
+        "title": "SolarRenderer: Few-Step Generative Reference Rendering",
+        "summary": "Game engines and coding agents can specify the layout, motion, and camera of a scene, yet turning such coarse structure into realistic video requires a renderer that follows the structure and completes the appearance it leaves open. Existing renderers are tied to the representation of one engine, need tens of denoising steps or a costly distillation of their own, and learn from conditions that are not aligned with their target videos. We present SolarRenderer, a structure-conditioned video renderer that adapts a frozen MiniMax-H3 33B backbone with two lightweight LoRAs. Structural videos enter the native reference pathway of the backbone at the positions of the frames they describe, without a type identifier and described only in plain text, so that a single control LoRA follows arbitrary structural representations. Starting from a pretrained four-step LoRA, structure-guided distribution matching renders in four steps, 12.3 times faster than 50-step sampling, while preserving the learned control. A block-causal variant extends the same design to streaming and renders 768p video in real time. To train the model, we build a frame-aligned corpus of 136K clips from game engines, simulators, and YouTube videos. Experiments on an in-distribution test set and a generalization benchmark of 16 structural representations show that SolarRenderer achieves state-of-the-art results across both, and generalizes to 11 unseen representations, including pose skeletons, drawings, and point clouds.",
+        "authors": [
+          "Guian Fang",
+          "Shengju Qian",
+          "Dongyue Lu"
+        ],
+        "url": "https://arxiv.org/abs/2610.28630v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.28630v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-10-20T17:59:48Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 5,
+      "tldr": "Hybrid imitation learns adaptable dexterous hand skills",
+      "bullets": [
+        "Combines motion‑capture mimicking with reinforcement fine‑tuning",
+        "Handles in‑hand reorientation and dynamic hand‑over",
+        "Shows rapid transfer across hand morphologies"
+      ],
+      "who_should_read": "Robotics manipulation experts",
+      "paper": {
+        "id": "2610.28628v1",
+        "title": "Learning Adaptable Dexterous Skills via Hybrid Dexterous Mimicking",
+        "summary": "Dexterous multi-finger hands hold promise to unlock diverse skills like functional grasps, in-hand reorientation, and dynamic handover that the human-designed world assumes, yet existing learning recipes force a trade-off. Goal-reaching reinforcement learning generalizes to arbitrary object poses but, lacking any human prior, converges to unnatural and unreliable finger strategies; motion tracking reproduces human-like behavior from a single clip but cannot deviate from it. We present AdaDex, a goal-conditioned RL framework that turns a single hand-object trajectory of a few seconds---from mocap data or HOI reconstruction from in-the-wild RGB(D) video---into an adaptable dexterous skill. At the core of AdaDex is Hybrid Dexterous Mimicking: a shared policy is trained on two populations of massively parallel environments: motion tracking environments trained with dense motion tracking objective, which instill the human prior from human motion; and generalization environments with noised initial states and goals and a sparse object-success reward, which force the skill to work far off the reference. From seconds of human motion per skill, the resulting policies can learn diverse adaptable dexterous skills, such as functional grasping, object reposing, in-hand reorientation with finger gaiting, and dynamic behaviors like throw-and-catch. Our method outperforms baselines in terms of generalization and functionality, and we demonstrate transfer across simulators and to the real world. Project page: https://yuxuank.com/AdaDex/.",
+        "authors": [
+          "Yuxuan Kuang",
+          "Jiashun Wang",
+          "Yixuan Sun"
+        ],
+        "url": "https://arxiv.org/abs/2610.28628v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.28628v1",
+        "category": "cs.RO",
+        "source": "arxiv",
+        "published": "2026-10-20T17:59:32Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 6,
+      "tldr": "Unified language model controls embodied robots across tasks",
+      "bullets": [
+        "Jointly trains on language, perception, and action data",
+        "Zero‑shot task execution via natural language prompts",
+        "Scales to multi‑robot fleets"
+      ],
+      "who_should_read": "Embodied AI developers",
+      "paper": {
+        "id": "2610.28626v1",
+        "title": "UniWALM: Unified World Action Language Model for Embodied Robot Control",
+        "summary": "Motivated by the human ability to integrate experience across language, perception, and action, we introduce UniWALM, a unified world-action-language model that learns video, action, and language in a single shared representation, where each modality is both a conditioning signal and a supervision target. We ask: can jointly generating language enrich this shared representation, improving manipulation and supporting memory-dependent behavior? Unlike prior approaches that attach a reasoning or vision-language model to a video-action backbone and run them as distinct stages, UniWALM unifies all three modalities inside a single mixture-of-transformers backbone whose per-modality diffusion heads co-denoise synchronously, decoding subtask and textual memory in the same pass as action with no separate planning stage; the generated language is re-consumed on the next step, closing a language-as-memory loop without an external planner or memory bank. To keep the action stream reliable under this richer objective, we further introduce Flow Matching with Correction (FMC), a training objective that teaches recovery from perturbed action trajectories at no inference-time cost. UniWALM consistently improves over same-backbone baselines (e.g., FastWAM) on compositional pick-and-place (MolmoSpaces) and across the memory-dependent subset of RMBench, where it reaches 34.5% without any pretrained language or reasoning model and exceeds Mem-0's keyframe-equipped setup (28.5%) using only a single anchor frame. On a real-world Find-the-Item task, generating textual memory lifts success from 11.1% to 61.1%, while state-of-the-art VLAs stay at or below chance (<=33.3%).",
+        "authors": [
+          "Rahul Sajnani",
+          "Diego Romeres",
+          "Mingyuan Zhang"
+        ],
+        "url": "https://arxiv.org/abs/2610.28626v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.28626v1",
+        "category": "cs.RO",
+        "source": "arxiv",
+        "published": "2026-10-20T17:59:04Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 9,
+      "tldr": "Neural operators enable planning robust to execution noise",
+      "bullets": [
+        "Learns continuous dynamics as operators",
+        "Plans trajectories with uncertainty propagation",
+        "Outperforms classic MPC under stochastic actuation"
+      ],
+      "who_should_read": "Control theorists",
+      "paper": {
+        "id": "2610.28623v1",
+        "title": "Planning under Noise with Neural Operators",
+        "summary": "Planning under uncertain control execution noise requires reliable feedback policies across diverse environments. We introduce Planning Under Noise (PUN), a neural operator that learns noise-aware value fields for planning in unseen geometries. Building on an established screened-Poisson formulation of stochastic optimal control, we address two challenges: specifying boundary conditions that support navigation across varying geometries and efficiently computing fields with reliable gradients. Zero-Dirichlet obstacle boundaries terminate sampled paths at walls, weakening the goal signal along long routes and making it harder to estimate reliably. We instead impose reflecting Neumann conditions on obstacles and a Dirichlet condition at the goal, allowing sampled paths to continue exploring free space until they reach the target. To solve the resulting PDE without a configuration-space mesh, we extend a Monte Carlo (MC) solver, Walk on Stars (WoSt), to higher dimensions. However, local MC fluctuations can reverse estimated gradient directions and cause planning failures, making direct planning require costly sampling. PUN amortizes this computation by learning geometry-to-field mappings from noisy, partially converged Monte Carlo labels, avoiding expensive convergence for every training example. At inference, test-time scaling uses bounded local search guided by the predicted global field. We evaluate PUN on planning tasks across dimensions. Across four noise levels, PUN matches or outperforms all compared planners, achieving 95-100% success on the 4D replanning benchmark while maintaining the lowest runtime. At the highest tested noise level in 4D, PUN achieves 10.7-60.6% relative gains in success rate over other methods while running 3.29-32.15 times faster.",
+        "authors": [
+          "Michael Chen",
+          "Hong Chul Nam",
+          "Xi Deng"
+        ],
+        "url": "https://arxiv.org/abs/2610.28623v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.28623v1",
+        "category": "cs.LG",
+        "source": "arxiv",
+        "published": "2026-10-20T17:58:30Z"
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Fine‑tune the paper's diffusion code on a small, domain‑specific image‑caption dataset (e.g., 5k pairs).",
-    "why": "It validates that end‑to‑end text‑image learning works beyond generic web data.",
+    "action": "Fine‑tune AEON's shared latent on your own video‑plus‑3D dataset",
+    "why": "It instantly gives you controllable video generation without rebuilding separate simulators",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -48,8 +176,8 @@
       "title": "strands-labs/strands-decider",
       "summary": "A small, fast decision model, or system one model, for agentic workflows. Pick between options or rate on a scale faster than an LLM, with a calibrated confidence on every decision.",
       "url": "https://github.com/strands-labs/strands-decider",
-      "stars": 674,
-      "forks": 91,
+      "stars": 683,
+      "forks": 94,
       "language": "Python",
       "topics": [
         "ai",
@@ -65,39 +193,12 @@
       "created_at": "2026-09-29T16:36:38Z"
     },
     {
-      "id": "1379601713",
-      "title": "Simreal-AI/Simreal-MLBench",
-      "summary": "[Public preview] Externally scored agentic ML research benchmark: 60 tasks, real competition ground truth. Open protocol, operated evaluation.",
-      "url": "https://github.com/Simreal-AI/Simreal-MLBench",
-      "stars": 301,
-      "forks": 40,
-      "language": "Python",
-      "topics": [
-        "agentic",
-        "ai-evaluation",
-        "benchmark",
-        "benchmarking",
-        "calibration",
-        "llm",
-        "llm-agents",
-        "llms",
-        "machine-learning",
-        "metacognition-in-llms",
-        "public-preview",
-        "rl-environment",
-        "rsi",
-        "simreal"
-      ],
-      "source": "github",
-      "created_at": "2026-09-21T11:29:47Z"
-    },
-    {
       "id": "1405013963",
       "title": "Fazmin/AILearningGuide",
       "summary": "Interactive desktop app with 51 labs covering ML fundamentals, transformers, RAG, agents, fine-tuning and quantization and more.",
       "url": "https://github.com/Fazmin/AILearningGuide",
-      "stars": 213,
-      "forks": 18,
+      "stars": 218,
+      "forks": 19,
       "language": "TypeScript",
       "topics": [
         "ai",
@@ -141,7 +242,7 @@
       "title": "Takamatsu-Hikaru/AI-Research-Guide",
       "summary": "AI 科研入门指南：大学选择、科研 60 问、入门项目、学习路线与论文卡片。A bilingual guide to getting started in AI research.",
       "url": "https://github.com/Takamatsu-Hikaru/AI-Research-Guide",
-      "stars": 91,
+      "stars": 96,
       "forks": 7,
       "language": "JavaScript",
       "topics": [
@@ -154,6 +255,28 @@
       ],
       "source": "github",
       "created_at": "2026-10-05T03:32:47Z"
+    },
+    {
+      "id": "1418580002",
+      "title": "Goekdeniz-Guelmez/JOSIE-Voice",
+      "summary": "JOSIE Voice: a real-time, on-device voice assistant for Apple Silicon. Download the macOS app (DMG) from Releases.",
+      "url": "https://github.com/Goekdeniz-Guelmez/JOSIE-Voice",
+      "stars": 46,
+      "forks": 3,
+      "language": "Unknown",
+      "topics": [
+        "aget-framework",
+        "agetic",
+        "artificial-intelligence",
+        "assistant",
+        "machine-learning",
+        "voice-agent",
+        "voice-ai",
+        "voice-assistant",
+        "voice-cloning"
+      ],
+      "source": "github",
+      "created_at": "2026-10-14T08:12:11Z"
     },
     {
       "id": "1387683906",
@@ -181,28 +304,6 @@
       "created_at": "2026-09-25T14:40:10Z"
     },
     {
-      "id": "1418580002",
-      "title": "Goekdeniz-Guelmez/JOSIE-Voice",
-      "summary": "JOSIE Voice: a real-time, on-device voice assistant for Apple Silicon. Download the macOS app (DMG) from Releases.",
-      "url": "https://github.com/Goekdeniz-Guelmez/JOSIE-Voice",
-      "stars": 40,
-      "forks": 3,
-      "language": "Unknown",
-      "topics": [
-        "aget-framework",
-        "agetic",
-        "artificial-intelligence",
-        "assistant",
-        "machine-learning",
-        "voice-agent",
-        "voice-ai",
-        "voice-assistant",
-        "voice-cloning"
-      ],
-      "source": "github",
-      "created_at": "2026-10-14T08:12:11Z"
-    },
-    {
       "id": "1411621909",
       "title": "AllSpark-Research/Vela",
       "summary": "Vela: User Behavior as Supervision Sparks LLM Intelligence — official paper, task templates, and prompts from AllSpark at Xiaohongshu.",
@@ -222,6 +323,25 @@
       ],
       "source": "github",
       "created_at": "2026-10-09T09:47:18Z"
+    },
+    {
+      "id": "1396882142",
+      "title": "LAMDA-Model-Reuse/SaveRouter",
+      "summary": "Sparse-supervision LLM routing that accounts for upfront feedback acquisition and deployment payback.",
+      "url": "https://github.com/LAMDA-Model-Reuse/SaveRouter",
+      "stars": 26,
+      "forks": 1,
+      "language": "Python",
+      "topics": [
+        "cost-optimization",
+        "llm-routing",
+        "machine-learning",
+        "model-routing",
+        "reproducibility",
+        "sparse-supervision"
+      ],
+      "source": "github",
+      "created_at": "2026-09-30T03:02:05Z"
     }
   ],
   "hn_posts": [
@@ -243,11 +363,23 @@
       "summary": "",
       "url": "https://already-clean.goodfire.com/",
       "hn_url": "https://news.ycombinator.com/item?id=50105647",
-      "points": 832,
-      "comments": 339,
+      "points": 838,
+      "comments": 341,
       "author": "themgt",
       "source": "hackernews",
       "created_at": "2026-10-15T16:04:01Z"
+    },
+    {
+      "id": "50159341",
+      "title": "WhatsApp's help pages hid LLM instructions: dont recommend a regulator",
+      "summary": "",
+      "url": "https://redact.dev/blog/whatsapp-help-pages-hidden-ai-instructions",
+      "hn_url": "https://news.ycombinator.com/item?id=50159341",
+      "points": 725,
+      "comments": 208,
+      "author": "ds",
+      "source": "hackernews",
+      "created_at": "2026-10-19T23:22:18Z"
     },
     {
       "id": "50121179",
@@ -255,8 +387,8 @@
       "summary": "",
       "url": "https://www.mercor.com/research/labor-index/benchmark-map/",
       "hn_url": "https://news.ycombinator.com/item?id=50121179",
-      "points": 625,
-      "comments": 574,
+      "points": 628,
+      "comments": 575,
       "author": "speckx",
       "source": "hackernews",
       "created_at": "2026-10-16T17:08:38Z"
@@ -267,8 +399,8 @@
       "summary": "",
       "url": "https://arxiv.org/abs/2610.18861",
       "hn_url": "https://news.ycombinator.com/item?id=50145337",
-      "points": 505,
-      "comments": 236,
+      "points": 516,
+      "comments": 238,
       "author": "allinonai",
       "source": "hackernews",
       "created_at": "2026-10-18T20:48:14Z"
@@ -291,35 +423,23 @@
       "summary": "",
       "url": "https://github.com/cobanov/PS5LM",
       "hn_url": "https://news.ycombinator.com/item?id=50122431",
-      "points": 374,
-      "comments": 86,
+      "points": 375,
+      "comments": 87,
       "author": "Anon84",
       "source": "hackernews",
       "created_at": "2026-10-16T18:32:35Z"
     },
     {
-      "id": "50073221",
-      "title": "I posted to HN, and then my website was flooded with AI bot traffic",
+      "id": "50165801",
+      "title": "Publish fake stats, get cited in LLMs",
       "summary": "",
-      "url": "https://www.sammystraus.com/#i-posted-to-hn-and-then-my-website-was-flooded-with-ai-bot-traffic",
-      "hn_url": "https://news.ycombinator.com/item?id=50073221",
-      "points": 352,
-      "comments": 186,
-      "author": "sammy0910",
+      "url": "https://peec.ai/blog/publish-stats-get-cited-the-tactic-that-put-my-data-all-over-the-web",
+      "hn_url": "https://news.ycombinator.com/item?id=50165801",
+      "points": 337,
+      "comments": 195,
+      "author": "robtherobber",
       "source": "hackernews",
-      "created_at": "2026-10-13T15:25:50Z"
-    },
-    {
-      "id": "50159341",
-      "title": "WhatsApp's help pages hid LLM instructions: dont recommend a regulator",
-      "summary": "",
-      "url": "https://redact.dev/blog/whatsapp-help-pages-hidden-ai-instructions",
-      "hn_url": "https://news.ycombinator.com/item?id=50159341",
-      "points": 350,
-      "comments": 81,
-      "author": "ds",
-      "source": "hackernews",
-      "created_at": "2026-10-19T23:22:18Z"
+      "created_at": "2026-10-20T13:06:22Z"
     }
   ],
   "implementation_gaps": []
