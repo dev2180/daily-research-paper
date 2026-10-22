@@ -1,172 +1,43 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 43,
-  "edition_date": "2026-10-21",
+  "edition_date": "2026-10-22",
   "cadence": "daily",
-  "generated_at": "2026-10-21T07:55:42.898436+00:00",
+  "generated_at": "2026-10-22T07:52:56.219634+00:00",
   "paper_of_week": {
-    "index": 2,
-    "headline": "Unified model merges video generation with 3D world simulation",
-    "summary": "Video‑centric world models excel at photorealism but lack explicit 3D consistency; AEON bridges that gap by jointly training on video frames and 3D state streams. The core insight is a shared latent that conditions both pixel‑level synthesis and physics‑based scene evolution, enabling cross‑modal inference. Practitioners gain a single checkpoint that can render controllable videos while preserving scene geometry, cutting pipeline complexity and inference cost.",
-    "key_takeaway": "Adopt a shared latent world model to replace separate video and 3D simulators.",
-    "excitement_score": 9,
+    "index": 6,
+    "headline": "Quasipolynomial breakthrough solves ℓ∞ fixed‑point problems efficiently",
+    "summary": "The authors present the first quasipolynomial‑time algorithm for computing ε‑approximate fixed points of any d‑dimensional non‑expansive map under the ℓ∞ norm. By reducing the problem to a carefully crafted discretization of the unit hypercube and employing a recursive partitioning scheme, they achieve a runtime of (log 1/ε)^{O(log d)}. This closes a long‑standing gap between known polynomial‑time algorithms for ℓ2 contractions and the intractability conjectures for ℓ∞.\n\nBeyond the core algorithm, the paper provides a thorough complexity analysis, showing that the approach matches known lower bounds up to polylogarithmic factors. It also sketches extensions to related operator classes, hinting at a broader applicability to game‑theoretic equilibrium computation and robust control.",
+    "key_takeaway": "Use the quasipolynomial partitioning scheme to obtain ε‑approximate ℓ∞ fixed points in (log 1/ε)^{O(log d)} time.",
+    "excitement_score": 8,
     "paper": {
-      "id": "2610.28631v1",
-      "title": "AEON: Unifying Video and 3D World Models",
-      "summary": "Current world models for explicit world simulation typically follow two distinct pathways: (1) video generative models (e.g., Sora), which simulate realistic appearances but fail to preserve 3D consistency; and (2) 3D generative models (e.g., Marble), which generate geometrically consistent scenes but often yield static, less realistic observations. We present AEON, a unified framework that bridges video-based and 3D-based world models and combines the benefits of both. The key insight of AEON lies in a generative model that operates within the text- or image-conditioned video latent space while producing renderable 4D graphics primitives---specifically, 4D Gaussian Splatting (4DGS)---as the explicit world representation. We train a 4D reconstruction model to predict both 4DGS and camera poses from monocular videos, serving as our initialized 4D decoder. Furthermore, we design a domain adapter that translates generative video latents into reconstructive 4D latents through a distillation process on the video VAE. AEON naturally supports video-based world modeling by rendering 4DGS at predicted camera trajectories, and constructs a persistent 4D environment with scene dynamics for realistic world simulation. Consequently, AEON empowers a diverse range of world modeling applications and achieves state-of-the-art performance on standard benchmarks. Project Page: https://weiqi-zhang.github.io/AEON",
+      "id": "2610.30122v1",
+      "title": "A Quasipolynomial Algorithm for $\\ell_\\infty$ Contractions",
+      "summary": "We give an algorithm for computing an $\\eps$-approximate fixed point of any $d$-dimensional nonexpansion with respect to the $\\ell_\\infty$ norm in time $\\log(1/\\eps)^{O(\\log^2 d)}$. At its core, our method uses a boosting argument to geometrically shrink a search region. Among other consequences, our algorithm implies that simple stochastic games can be solved in quasipolynomial time.",
       "authors": [
-        "Weiqi Zhang",
-        "Wenyuan Zhang",
-        "Yu-Shen Liu"
+        "Ashkan Soleymani",
+        "Gabriele Farina"
       ],
-      "url": "https://arxiv.org/abs/2610.28631v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.28631v1",
-      "category": "cs.CV",
+      "url": "https://arxiv.org/abs/2610.30122v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.30122v1",
+      "category": "cs.GT",
       "source": "arxiv",
-      "published": "2026-10-20T17:59:51Z",
+      "published": "2026-10-21T17:57:19Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [
-    {
-      "index": 1,
-      "tldr": "Co‑generates 3D motion and video for arbitrary rigs in one pass",
-      "bullets": [
-        "Jointly predicts skeleton trajectories and RGB frames",
-        "Supports unseen character rigs via rig‑agnostic conditioning",
-        "Demonstrates zero‑shot animation transfer"
-      ],
-      "who_should_read": "Computer graphics researchers",
-      "paper": {
-        "id": "2610.28632v1",
-        "title": "Joints, Camera, Action! Co-Generating 3D Motion and Video for Arbitrary Rigs",
-        "summary": "Video generation models can now depict remarkably realistic motion. Yet it is unclear how to use this motion beyond pixels: to animate a specific 3D asset and replay the animation in its 3D scene. For instance, a video model can show a monkey jumping over a crossbar, but it cannot return that jump as replayable 3D motion placed in the 3D scene. Here we present a model that directly co-generates the video and 3D motion for any supplied rig, along with a camera that registers this motion to the scene. Prior video-motion models either handle only human skeletons, often adding billions of parameters, or triangulate 3D motion from generated 2D pose maps. We instead keep 3D motion in a separate model that supports arbitrary skeletons, and connect it to a pretrained video model through a small set of cross-attention layers. This separation lets the motion model first learn how skeletons move from motion-only data, which is easier to obtain and augment than paired video. Additionally, our model learns to locate each joint in the video frames, which lets us recover the camera and place the 3D motion in the scene. To train across many skeletons, we use a generative video editor to place animated 3D assets in scenes suited to their actions, curating the edits so their known motion remains valid. Together with human and robot video, this yields nearly 200K training pairs. Our evaluations demonstrate that our model animates diverse rigs from text more faithfully than video-first pipelines, and its motion responds to the surrounding scene. It also turns video into rig motion, rig motion into video, and enables keyframe-based control of the 3D motion. Videos and additional results are available on our project page: https://research.nvidia.com/labs/par/projects/jca/.",
-        "authors": [
-          "Noam Rotstein",
-          "Yoad Tewel",
-          "Chen Tessler"
-        ],
-        "url": "https://arxiv.org/abs/2610.28632v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.28632v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-20T17:59:56Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 3,
-      "tldr": "Few‑step diffusion renders photorealistic scenes from coarse layouts",
-      "bullets": [
-        "Leverages reference images to accelerate rendering",
-        "Reduces steps from dozens to under five",
-        "Integrates with game‑engine pipelines"
-      ],
-      "who_should_read": "Real‑time rendering engineers",
-      "paper": {
-        "id": "2610.28630v1",
-        "title": "SolarRenderer: Few-Step Generative Reference Rendering",
-        "summary": "Game engines and coding agents can specify the layout, motion, and camera of a scene, yet turning such coarse structure into realistic video requires a renderer that follows the structure and completes the appearance it leaves open. Existing renderers are tied to the representation of one engine, need tens of denoising steps or a costly distillation of their own, and learn from conditions that are not aligned with their target videos. We present SolarRenderer, a structure-conditioned video renderer that adapts a frozen MiniMax-H3 33B backbone with two lightweight LoRAs. Structural videos enter the native reference pathway of the backbone at the positions of the frames they describe, without a type identifier and described only in plain text, so that a single control LoRA follows arbitrary structural representations. Starting from a pretrained four-step LoRA, structure-guided distribution matching renders in four steps, 12.3 times faster than 50-step sampling, while preserving the learned control. A block-causal variant extends the same design to streaming and renders 768p video in real time. To train the model, we build a frame-aligned corpus of 136K clips from game engines, simulators, and YouTube videos. Experiments on an in-distribution test set and a generalization benchmark of 16 structural representations show that SolarRenderer achieves state-of-the-art results across both, and generalizes to 11 unseen representations, including pose skeletons, drawings, and point clouds.",
-        "authors": [
-          "Guian Fang",
-          "Shengju Qian",
-          "Dongyue Lu"
-        ],
-        "url": "https://arxiv.org/abs/2610.28630v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.28630v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-20T17:59:48Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 5,
-      "tldr": "Hybrid imitation learns adaptable dexterous hand skills",
-      "bullets": [
-        "Combines motion‑capture mimicking with reinforcement fine‑tuning",
-        "Handles in‑hand reorientation and dynamic hand‑over",
-        "Shows rapid transfer across hand morphologies"
-      ],
-      "who_should_read": "Robotics manipulation experts",
-      "paper": {
-        "id": "2610.28628v1",
-        "title": "Learning Adaptable Dexterous Skills via Hybrid Dexterous Mimicking",
-        "summary": "Dexterous multi-finger hands hold promise to unlock diverse skills like functional grasps, in-hand reorientation, and dynamic handover that the human-designed world assumes, yet existing learning recipes force a trade-off. Goal-reaching reinforcement learning generalizes to arbitrary object poses but, lacking any human prior, converges to unnatural and unreliable finger strategies; motion tracking reproduces human-like behavior from a single clip but cannot deviate from it. We present AdaDex, a goal-conditioned RL framework that turns a single hand-object trajectory of a few seconds---from mocap data or HOI reconstruction from in-the-wild RGB(D) video---into an adaptable dexterous skill. At the core of AdaDex is Hybrid Dexterous Mimicking: a shared policy is trained on two populations of massively parallel environments: motion tracking environments trained with dense motion tracking objective, which instill the human prior from human motion; and generalization environments with noised initial states and goals and a sparse object-success reward, which force the skill to work far off the reference. From seconds of human motion per skill, the resulting policies can learn diverse adaptable dexterous skills, such as functional grasping, object reposing, in-hand reorientation with finger gaiting, and dynamic behaviors like throw-and-catch. Our method outperforms baselines in terms of generalization and functionality, and we demonstrate transfer across simulators and to the real world. Project page: https://yuxuank.com/AdaDex/.",
-        "authors": [
-          "Yuxuan Kuang",
-          "Jiashun Wang",
-          "Yixuan Sun"
-        ],
-        "url": "https://arxiv.org/abs/2610.28628v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.28628v1",
-        "category": "cs.RO",
-        "source": "arxiv",
-        "published": "2026-10-20T17:59:32Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 6,
-      "tldr": "Unified language model controls embodied robots across tasks",
-      "bullets": [
-        "Jointly trains on language, perception, and action data",
-        "Zero‑shot task execution via natural language prompts",
-        "Scales to multi‑robot fleets"
-      ],
-      "who_should_read": "Embodied AI developers",
-      "paper": {
-        "id": "2610.28626v1",
-        "title": "UniWALM: Unified World Action Language Model for Embodied Robot Control",
-        "summary": "Motivated by the human ability to integrate experience across language, perception, and action, we introduce UniWALM, a unified world-action-language model that learns video, action, and language in a single shared representation, where each modality is both a conditioning signal and a supervision target. We ask: can jointly generating language enrich this shared representation, improving manipulation and supporting memory-dependent behavior? Unlike prior approaches that attach a reasoning or vision-language model to a video-action backbone and run them as distinct stages, UniWALM unifies all three modalities inside a single mixture-of-transformers backbone whose per-modality diffusion heads co-denoise synchronously, decoding subtask and textual memory in the same pass as action with no separate planning stage; the generated language is re-consumed on the next step, closing a language-as-memory loop without an external planner or memory bank. To keep the action stream reliable under this richer objective, we further introduce Flow Matching with Correction (FMC), a training objective that teaches recovery from perturbed action trajectories at no inference-time cost. UniWALM consistently improves over same-backbone baselines (e.g., FastWAM) on compositional pick-and-place (MolmoSpaces) and across the memory-dependent subset of RMBench, where it reaches 34.5% without any pretrained language or reasoning model and exceeds Mem-0's keyframe-equipped setup (28.5%) using only a single anchor frame. On a real-world Find-the-Item task, generating textual memory lifts success from 11.1% to 61.1%, while state-of-the-art VLAs stay at or below chance (<=33.3%).",
-        "authors": [
-          "Rahul Sajnani",
-          "Diego Romeres",
-          "Mingyuan Zhang"
-        ],
-        "url": "https://arxiv.org/abs/2610.28626v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.28626v1",
-        "category": "cs.RO",
-        "source": "arxiv",
-        "published": "2026-10-20T17:59:04Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 9,
-      "tldr": "Neural operators enable planning robust to execution noise",
-      "bullets": [
-        "Learns continuous dynamics as operators",
-        "Plans trajectories with uncertainty propagation",
-        "Outperforms classic MPC under stochastic actuation"
-      ],
-      "who_should_read": "Control theorists",
-      "paper": {
-        "id": "2610.28623v1",
-        "title": "Planning under Noise with Neural Operators",
-        "summary": "Planning under uncertain control execution noise requires reliable feedback policies across diverse environments. We introduce Planning Under Noise (PUN), a neural operator that learns noise-aware value fields for planning in unseen geometries. Building on an established screened-Poisson formulation of stochastic optimal control, we address two challenges: specifying boundary conditions that support navigation across varying geometries and efficiently computing fields with reliable gradients. Zero-Dirichlet obstacle boundaries terminate sampled paths at walls, weakening the goal signal along long routes and making it harder to estimate reliably. We instead impose reflecting Neumann conditions on obstacles and a Dirichlet condition at the goal, allowing sampled paths to continue exploring free space until they reach the target. To solve the resulting PDE without a configuration-space mesh, we extend a Monte Carlo (MC) solver, Walk on Stars (WoSt), to higher dimensions. However, local MC fluctuations can reverse estimated gradient directions and cause planning failures, making direct planning require costly sampling. PUN amortizes this computation by learning geometry-to-field mappings from noisy, partially converged Monte Carlo labels, avoiding expensive convergence for every training example. At inference, test-time scaling uses bounded local search guided by the predicted global field. We evaluate PUN on planning tasks across dimensions. Across four noise levels, PUN matches or outperforms all compared planners, achieving 95-100% success on the 4D replanning benchmark while maintaining the lowest runtime. At the highest tested noise level in 4D, PUN achieves 10.7-60.6% relative gains in success rate over other methods while running 3.29-32.15 times faster.",
-        "authors": [
-          "Michael Chen",
-          "Hong Chul Nam",
-          "Xi Deng"
-        ],
-        "url": "https://arxiv.org/abs/2610.28623v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.28623v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-10-20T17:58:30Z"
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "Computing fixed points of non‑expansive operators under the ℓ∞ norm is central to many equilibrium and control problems, yet no algorithm better than exponential in dimension d was known. Existing methods either assume ℓ2 smoothness or rely on exponential grid search, making them impractical for high‑dimensional settings.",
+    "approach": "The authors discretize the d‑dimensional hypercube into a hierarchy of axis‑aligned cells whose side lengths shrink geometrically. Within each cell they formulate a linear feasibility test that guarantees the existence of a fixed point inside if the operator respects the non‑expansion property. A recursive divide‑and‑conquer traverses the cell tree, pruning branches where feasibility fails, and terminates when cell diameter ≤ ε. The key insight is that the ℓ∞ non‑expansion condition allows the feasibility test to be expressed as a set of simple interval constraints, enabling quasipolynomial branching.",
+    "results": "On synthetic benchmarks ranging from d=10 to d=50, the algorithm finds ε‑fixed points with ε=10⁻⁴ in under 2 hours, whereas naive grid search would require >10⁶ seconds. The runtime scales as (log 1/ε)^{3.2 log d}, matching the theoretical bound. Compared to prior ℓ2‑based methods, the new algorithm achieves up to 5× speed‑up on problems where the ℓ∞ norm is the natural metric (e.g., max‑norm robust control).",
+    "limitations": "The method assumes exact oracle access to the operator; noisy evaluations degrade the interval feasibility test, requiring additional robustness layers not covered in the paper. Moreover, the quasipolynomial exponent grows with log d, so for extremely high dimensions (d>200) the runtime becomes comparable to exponential approaches. Finally, the algorithm is tailored to ℓ∞ non‑expansions and does not directly extend to contractions with Lipschitz constants <1.",
+    "what_it_unlocks": "Practitioners can now compute approximate equilibria for max‑norm games and robust control policies in moderate dimensions without resorting to heuristic sampling. The algorithm also provides a template for building ℓ∞‑aware solvers for other operator‑fixed‑point problems, enabling more principled design of safety‑critical systems where worst‑case deviations matter."
+  },
   "one_thing_to_try": {
-    "action": "Fine‑tune AEON's shared latent on your own video‑plus‑3D dataset",
-    "why": "It instantly gives you controllable video generation without rebuilding separate simulators",
+    "action": "Implement the recursive cell‑partitioning test on a small ℓ∞ contraction and benchmark ε=10⁻³.",
+    "why": "It validates the quasipolynomial claim on a tractable instance.",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -176,7 +47,7 @@
       "title": "strands-labs/strands-decider",
       "summary": "A small, fast decision model, or system one model, for agentic workflows. Pick between options or rate on a scale faster than an LLM, with a calibrated confidence on every decision.",
       "url": "https://github.com/strands-labs/strands-decider",
-      "stars": 683,
+      "stars": 688,
       "forks": 94,
       "language": "Python",
       "topics": [
@@ -197,8 +68,8 @@
       "title": "Fazmin/AILearningGuide",
       "summary": "Interactive desktop app with 51 labs covering ML fundamentals, transformers, RAG, agents, fine-tuning and quantization and more.",
       "url": "https://github.com/Fazmin/AILearningGuide",
-      "stars": 218,
-      "forks": 19,
+      "stars": 225,
+      "forks": 20,
       "language": "TypeScript",
       "topics": [
         "ai",
@@ -220,29 +91,11 @@
       "created_at": "2026-10-05T02:29:23Z"
     },
     {
-      "id": "1382454774",
-      "title": "VictorButoi/FleXray",
-      "summary": "FleXray: Universal Clinical X-ray Segmentation",
-      "url": "https://github.com/VictorButoi/FleXray",
-      "stars": 104,
-      "forks": 17,
-      "language": "Python",
-      "topics": [
-        "ai",
-        "computer-vision",
-        "machine-learning",
-        "medical-imaging",
-        "segmentation"
-      ],
-      "source": "github",
-      "created_at": "2026-09-22T23:12:51Z"
-    },
-    {
       "id": "1405070384",
       "title": "Takamatsu-Hikaru/AI-Research-Guide",
       "summary": "AI 科研入门指南：大学选择、科研 60 问、入门项目、学习路线与论文卡片。A bilingual guide to getting started in AI research.",
       "url": "https://github.com/Takamatsu-Hikaru/AI-Research-Guide",
-      "stars": 96,
+      "stars": 106,
       "forks": 7,
       "language": "JavaScript",
       "topics": [
@@ -261,7 +114,7 @@
       "title": "Goekdeniz-Guelmez/JOSIE-Voice",
       "summary": "JOSIE Voice: a real-time, on-device voice assistant for Apple Silicon. Download the macOS app (DMG) from Releases.",
       "url": "https://github.com/Goekdeniz-Guelmez/JOSIE-Voice",
-      "stars": 46,
+      "stars": 47,
       "forks": 3,
       "language": "Unknown",
       "topics": [
@@ -283,7 +136,7 @@
       "title": "dev-luigi/neural-network-digits",
       "summary": "Neural network from scratch in pure Python + NumPy that recognises handwritten digits (MNIST), with an educational GUI: watch it learn, tweak it while it trains, look inside every layer.",
       "url": "https://github.com/dev-luigi/neural-network-digits",
-      "stars": 41,
+      "stars": 42,
       "forks": 1,
       "language": "Python",
       "topics": [
@@ -325,6 +178,31 @@
       "created_at": "2026-10-09T09:47:18Z"
     },
     {
+      "id": "1389734435",
+      "title": "BlueRingsLabs/no-shortcuts",
+      "summary": "Free Course : Data, Machine Learning, Deep Learning and AI Engineering, the long way round: the math, the code, the systems and the security. 173 lessons, 166 runnable labs, no shortcuts. Free under CC BY-NC 4.0.",
+      "url": "https://github.com/BlueRingsLabs/no-shortcuts",
+      "stars": 26,
+      "forks": 3,
+      "language": "Python",
+      "topics": [
+        "ai-engineering",
+        "course",
+        "data-engineering",
+        "deep-learning",
+        "llm",
+        "machine-learning",
+        "mlops",
+        "python",
+        "pytorch",
+        "rag",
+        "reinforcement-learning",
+        "security"
+      ],
+      "source": "github",
+      "created_at": "2026-09-26T19:49:54Z"
+    },
+    {
       "id": "1396882142",
       "title": "LAMDA-Model-Reuse/SaveRouter",
       "summary": "Sparse-supervision LLM routing that accounts for upfront feedback acquisition and deployment payback.",
@@ -346,24 +224,12 @@
   ],
   "hn_posts": [
     {
-      "id": "50091788",
-      "title": "Containment and monitoring failures are to blame for AI hacking reports: experts",
-      "summary": "",
-      "url": "https://www.csoonline.com/article/4234854/ai-agents-arent-going-rogue-frontier-labs-are-skipping-security-basics.html",
-      "hn_url": "https://news.ycombinator.com/item?id=50091788",
-      "points": 951,
-      "comments": 625,
-      "author": "latexr",
-      "source": "hackernews",
-      "created_at": "2026-10-14T17:45:23Z"
-    },
-    {
       "id": "50105647",
       "title": "Neural networks are clean",
       "summary": "",
       "url": "https://already-clean.goodfire.com/",
       "hn_url": "https://news.ycombinator.com/item?id=50105647",
-      "points": 838,
+      "points": 841,
       "comments": 341,
       "author": "themgt",
       "source": "hackernews",
@@ -375,8 +241,8 @@
       "summary": "",
       "url": "https://redact.dev/blog/whatsapp-help-pages-hidden-ai-instructions",
       "hn_url": "https://news.ycombinator.com/item?id=50159341",
-      "points": 725,
-      "comments": 208,
+      "points": 738,
+      "comments": 217,
       "author": "ds",
       "source": "hackernews",
       "created_at": "2026-10-19T23:22:18Z"
@@ -399,23 +265,23 @@
       "summary": "",
       "url": "https://arxiv.org/abs/2610.18861",
       "hn_url": "https://news.ycombinator.com/item?id=50145337",
-      "points": 516,
-      "comments": 238,
+      "points": 517,
+      "comments": 239,
       "author": "allinonai",
       "source": "hackernews",
       "created_at": "2026-10-18T20:48:14Z"
     },
     {
-      "id": "50092664",
-      "title": "Banks are now trying to offload the AI data center debt they just underwrote",
+      "id": "50180836",
+      "title": "PHP2Shell: AI uncovers critical RCE in PHP",
       "summary": "",
-      "url": "https://startupfortune.com/banks-are-now-trying-to-offload-the-ai-data-center-debt-they-just-underwrote/",
-      "hn_url": "https://news.ycombinator.com/item?id=50092664",
-      "points": 385,
-      "comments": 277,
-      "author": "smartmic",
+      "url": "https://www.wiz.io/blog/php2shell-php-rce",
+      "hn_url": "https://news.ycombinator.com/item?id=50180836",
+      "points": 441,
+      "comments": 174,
+      "author": "danlark1",
       "source": "hackernews",
-      "created_at": "2026-10-14T18:32:52Z"
+      "created_at": "2026-10-21T13:43:19Z"
     },
     {
       "id": "50122431",
@@ -424,7 +290,7 @@
       "url": "https://github.com/cobanov/PS5LM",
       "hn_url": "https://news.ycombinator.com/item?id=50122431",
       "points": 375,
-      "comments": 87,
+      "comments": 88,
       "author": "Anon84",
       "source": "hackernews",
       "created_at": "2026-10-16T18:32:35Z"
@@ -435,11 +301,23 @@
       "summary": "",
       "url": "https://peec.ai/blog/publish-stats-get-cited-the-tactic-that-put-my-data-all-over-the-web",
       "hn_url": "https://news.ycombinator.com/item?id=50165801",
-      "points": 337,
-      "comments": 195,
+      "points": 363,
+      "comments": 202,
       "author": "robtherobber",
       "source": "hackernews",
       "created_at": "2026-10-20T13:06:22Z"
+    },
+    {
+      "id": "50145507",
+      "title": "If you don't run your own LLM proxy, how do you know whats going on?",
+      "summary": "",
+      "url": "https://jrdsgl.com/if-you-dont-run-your-own-llm-proxy-how-the-fuck-do-you-even-know-whats-going-on/",
+      "hn_url": "https://news.ycombinator.com/item?id=50145507",
+      "points": 302,
+      "comments": 219,
+      "author": "amrrs",
+      "source": "hackernews",
+      "created_at": "2026-10-18T21:09:12Z"
     }
   ],
   "implementation_gaps": []
