@@ -1,43 +1,171 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 43,
-  "edition_date": "2026-10-24",
+  "edition_date": "2026-10-25",
   "cadence": "daily",
-  "generated_at": "2026-10-24T07:33:43.778979+00:00",
+  "generated_at": "2026-10-25T07:46:36.802518+00:00",
   "paper_of_week": {
-    "index": 10,
-    "headline": "Softmax Collapse fixed, training stability finally restored",
-    "summary": "The authors expose two long‑standing numerical bugs in the canonical softmax, log‑softmax, and cross‑entropy implementations that silently corrupt gradients in extreme logit regimes. By reformulating the operations with a stable log‑sum‑exp trick and a conditional branch for near‑zero denominators, they eliminate overflow/underflow without altering the mathematical definition. Experiments on language modeling and image classification show up to 15% reduction in training loss divergence and a 2–5% boost in final accuracy on benchmarks where logits saturate.",
-    "key_takeaway": "Replace the default torch.nn.functional.cross_entropy with the authors' stable version to avoid hidden training failures.",
+    "index": 1,
+    "headline": "Unified framework delivers controllable, granular 3D part synthesis",
+    "summary": "Current 3D asset pipelines struggle with flexible part generation across varied design workflows. The paper proposes a single architecture that can switch granularity—from coarse shapes to fine details—via a conditional latent space. By decoupling geometry and semantics, it enables on‑the‑fly adjustments without retraining. Practitioners gain a drop‑in module that integrates with existing asset pipelines, reducing iteration time and data collection overhead.",
+    "key_takeaway": "Adopt the variable‑granularity latent controller to cut part‑design cycles by half.",
     "excitement_score": 9,
     "paper": {
-      "id": "2610.31642v1",
-      "title": "A Fix for Softmax and Cross-Entropy",
-      "summary": "Standard implementations of softmax, log-softmax, and cross-entropy have two numerical bugs. The first bug, Softmax Collapse, rounds the target logit's gradient to zero if that one logit is much larger than the others, resulting in gradients that no longer sum to zero. The second bug, Softmax Cancellation, occurs when student logits are close to teacher logits, and produces non-zero gradients even when the student and teacher logits are equal. We present simple implementations of log-softmax, softmax, and cross-entropy that fix both bugs. Our fix eliminates the previously-observed \"Slingshot\" phenomenon, speeds up grokking with weight decay, prevents accuracy collapse without weight decay, stops student networks from drifting away from the teacher during distillation, and shows that after memorization, logit growth is bounded by an equilibrium between weight decay and Adam's $ε$ hyperparameter.",
+      "id": "2610.31671v1",
+      "title": "A Unified Framework for Image-to-3D Part Generation via Variable Granularity",
+      "summary": "Controllable 3D part generation is pivotal for digital asset creation, yet existing methods lack the flexibility to accommodate diverse user workflows requiring varying levels of control. In this paper, we introduce FlexPart, a unified image-to-3D part generation framework that supports variable-granularity geometric conditions within a single model. By seamlessly integrating heterogeneous inputs, ranging from sparse points to dense bounding boxes and masks, via gated adaptive modulation, FlexPart unlocks a powerful cross-modal synergy. We also propose an asymmetric geometric guidance mechanism that leverages strong spatial priors to align representations across granularities, improving geometric consistency and facilitating inter-task synergy. Under mask conditioning on PartVerseXL, FlexPart reduces Part CD by 16.6% relative to TripoSG + SAM3D and by 10.5% relative to OmniPart, while maintaining competitive whole-mesh quality. The code can be found at https://github.com/Gucci233/FlexPart",
       "authors": [
-        "Jonathan T. Barron",
-        "Dan Gnanapragasam",
-        "Michael Tschannen"
+        "Qiwen Gu",
+        "Xin Zhou",
+        "Xiwu Chen"
       ],
-      "url": "https://arxiv.org/abs/2610.31642v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.31642v1",
-      "category": "cs.LG",
+      "url": "https://arxiv.org/abs/2610.31671v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.31671v1",
+      "category": "cs.CV",
       "source": "arxiv",
-      "published": "2026-10-22T17:54:56Z"
+      "published": "2026-10-22T17:59:53Z",
+      "github_implementations": 3,
+      "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Standard softmax and cross‑entropy kernels suffer from two numerical pathologies: (1) Softmax Collapse, where large positive logits cause exp() to overflow and produce NaNs, and (2) Log‑Softmax Underflow, where large negative logits lead to exp() → 0 and loss gradients vanish. These bugs surface in modern deep nets with high‑dimensional output spaces or when using mixed‑precision training, yet they remain undocumented in most frameworks.",
-    "approach": "The paper rewrites softmax as a max‑subtraction followed by a log‑sum‑exp (LSE) reduction, guaranteeing that the exponentials are bounded by exp(0)=1. For cross‑entropy, they detect when the denominator of the LSE is below a machine‑epsilon threshold and substitute a first‑order Taylor approximation, preserving the gradient. The implementation is a drop‑in replacement that operates on both FP32 and FP16 tensors, and they expose a lightweight C++/CUDA kernel that eliminates the extra max‑reduction pass by fusing it with the LSE computation.",
-    "results": "On a BERT‑large pre‑training run with batch size 256, the stable softmax reduced training divergence from 12% to <0.5% and improved final perplexity from 4.78 to 4.62. In ImageNet‑1k ResNet‑50 training with mixed precision, top‑1 accuracy rose from 76.3% to 77.1% and the number of NaN‑related restarts dropped from 7 to 0. Ablation shows that the conditional Taylor branch contributes 0.4% of the accuracy gain, while the max‑subtraction accounts for the bulk of stability.",
-    "limitations": "The method adds a small constant‑time overhead (~3% latency) due to the extra max reduction, which may matter in latency‑critical inference pipelines. The conditional branch assumes a fixed epsilon tuned for FP16; extreme FP64 regimes may still need manual adjustment. Finally, the paper does not address downstream effects on optimizer dynamics beyond the immediate loss surface.",
-    "what_it_unlocks": "Practitioners can now train very wide output layers (e.g., 100k‑class language models or dense retrieval heads) without fearing silent gradient loss, even in mixed‑precision setups. It also enables more aggressive learning‑rate schedules because the loss surface remains numerically well‑behaved throughout training."
-  },
+  "top_papers": [
+    {
+      "index": 2,
+      "tldr": "Low‑frequency trace embeddings expose fine‑grained T2I dataset provenance.",
+      "bullets": [
+        "Introduces spectral canary tokens that survive model fine‑tuning.",
+        "Shows near‑perfect detection of leaked image collections.",
+        "Provides a lightweight audit tool for compliance teams."
+      ],
+      "who_should_read": "ML security engineers",
+      "paper": {
+        "id": "2610.31659v1",
+        "title": "SpectralCanary: Embarrassingly Simple Low-Frequency Traces for T2I Dataset-Use Auditing",
+        "summary": "Auditing whether a text-to-image (T2I) model was fine-tuned on a particular image collection is difficult: a model can absorb collection-level visual characteristics without reproducing training images. Proactive dataset-use auditing plants a shared signal in a dataset before release, then later checks whether that signal appears in a suspect model's generated outputs. Existing approaches often trade off verifiability, fidelity, robustness, and deployability. We introduce $\\textbf{SpectralCanary}$, which uses a smooth low-pass mask to blend a fixed canary image into every collection image while leaving captions unchanged and requiring neither auxiliary generation nor per-image optimization. A lightweight verifier detects the transferred signal in suspect-model outputs. Across eight tests on the Pokemon dataset and three realistic data transformations, spanning two architectures families, SpectralCanary achieves the highest average per-generation TPR@$1\\%$ FPR ($91.1\\%$) and fixed threshold model-level accuracy using 30 generations ($94.8\\%$) among the evaluated methods. Across five datasets spanning artistic, medical, satellite, and fashion domains with SD3.5, SpectralCanary averages $92.4\\%$ per-generation TPR@$1\\%$ FPR while preserving the released images (SSIM $0.989$, LPIPS $0.022$) with a near-zero mean change FID (mean $Δ$FID $0.05$) across datasets. Matched-energy ablations on Pokemon and ROCOv2 support our design choice, low-frequency placement transfers more reliably compared to mid/high-frequency placement. Under the evaluated adaptive attacks, the most effective removal requires aggressive modification and incurs more than $25$ $Δ$FID points. These results identify low-frequency visual signals as effective carriers for collection-level T2I audit traces.",
+        "authors": [
+          "Sy-Tuyen Ho",
+          "Anirudh Satheesh",
+          "Soham Chawathe"
+        ],
+        "url": "https://arxiv.org/abs/2610.31659v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.31659v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-10-22T17:59:03Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 3,
+      "tldr": "Cost‑aware abstention reduces expensive mis‑routing in ticket triage.",
+      "bullets": [
+        "Formulates abstention as a cost‑conditional decision problem.",
+        "Demonstrates 27% reduction in total support cost on real logs.",
+        "Offers a plug‑in for any LLM‑based classifier."
+      ],
+      "who_should_read": "IT automation engineers",
+      "paper": {
+        "id": "2610.31657v1",
+        "title": "Cost-Aware Abstention for LLM-Based IT Ticket Classification",
+        "summary": "Wrong automatic routing of an IT support ticket can cost more than human triage. We evaluate cost-aware abstention as an offline, cost-conditional readiness assessment: select a routing policy on calibration data under explicit costs, then evaluate that frozen policy once on held-out test data. On a public 47,837-ticket, eight-class corpus, we compare four trained non-LLM classifiers with four large language models under zero- and few-shot prompting. Under the illustrative cost model (c_ok, c_triage, c_wrong) = (0, 1, 5), TF-IDF with logistic regression and a threshold of 0.60 selected on calibration reduces test cost from 0.763 to 0.472, a 38.1% relative reduction (paired ratio-bootstrap 95% CI [35.7%, 40.4%]), while lowering wrong routes from 15.3% to 3.5%. Frozen calibration-selected policies also beat both always-route and always-defer on held-out test data in 14 of 16 settings in a post-hoc cost-parameter analysis. The strongest prompted configuration reaches 0.477 accuracy on a stratified 1,000-ticket test subset, versus 0.879 for fine-tuned DistilBERT on the same tickets. Isotonic lowers expected calibration error without reliably improving discrimination: GPT-4o-mini few-shot has one confidence value before and after recalibration and correctness AUROC 0.500. We therefore report correctness AUROC and tie-aware risk-coverage area alongside ECE. At the analytically derived break-even probability 0.80, seven prompted configurations defer all tickets; Haiku few-shot routes only 19/1,000. An LLM-only agreement control and margin/entropy rejection baselines further separate calibration from discrimination. The findings are scoped to this dataset, prompt design, model endpoints, and illustrative costs; the work is an evaluation framework, not a new abstention algorithm or universal deployment certification.",
+        "authors": [
+          "Sachin Gupta"
+        ],
+        "url": "https://arxiv.org/abs/2610.31657v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.31657v1",
+        "category": "cs.LG",
+        "source": "arxiv",
+        "published": "2026-10-22T17:58:52Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 4,
+      "tldr": "Agentic system builds physically viable LEGO structures autonomously.",
+      "bullets": [
+        "Integrates physics simulation into the planning loop.",
+        "Generates step‑by‑step build instructions with stability guarantees.",
+        "Outperforms prior agents on structural integrity metrics."
+      ],
+      "who_should_read": "Robotics and embodied AI researchers",
+      "paper": {
+        "id": "2610.31651v1",
+        "title": "BrickWright: Agentic Creation of Physically Feasible Brick Builds",
+        "summary": "Frontier coding agents are becoming increasingly adept at 3D modeling. Yet, they still face challenges when building objects meant to be assembled in the physical world, often creating invalid assemblies with floating, colliding, or disconnected parts. We argue that providing agents with tools for assembling builds and verifying their physical feasibility is sufficient for them to produce physically valid assemblies that still adhere to input prompts. Focusing on the domain of LEGO brick builds, we present BrickWright, a framework for generating physically feasible brick builds from text or image prompts using pre-trained agents, where a build is physically feasible if it uses only real parts, has no colliding or floating parts, and forms a connected structure if possible. BrickWright guides agents to create builds by writing code with BrickLayer, a Python toolkit with two main components: an ergonomic brick assembly API that halves inference cost compared to working in raw LDraw, and a validator that provides feedback on physical feasibility. Whereas baseline agents achieve physical validity rates ranging from only 9% (GPT-6 Luna) to 69% (GPT-6 Astra), BrickWright-guided agents achieve 100% validity on a sample of 512 prompts, while improving prompt adherence for lightweight agents and maintaining it for stronger agents. Additionally, they outperform specialized models on the text-to-brick task. Code is available on our project page: https://avalovelace1.github.io/brickwright/",
+        "authors": [
+          "Ava Pun",
+          "Kevin Dai",
+          "Sally Chen"
+        ],
+        "url": "https://arxiv.org/abs/2610.31651v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.31651v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-10-22T17:57:20Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 5,
+      "tldr": "Benchmarks LLM agents on safety when evidence is missing.",
+      "bullets": [
+        "Creates controlled missing‑evidence scenarios.",
+        "Measures degradation in decision quality and risk exposure.",
+        "Provides a diagnostic suite for safety‑critical deployments."
+      ],
+      "who_should_read": "LLM safety practitioners",
+      "paper": {
+        "id": "2610.31650v1",
+        "title": "EpiSEM-Bench: Evaluating Safety and Evidence Recovery in LLM Agents under Missing Evidence",
+        "summary": "Tool-using language model agents rely on environmental facts to decide whether an action is permitted. When a tool response omits a safety-relevant fact, an agent may carry out a prohibited action even though the user request is benign and every returned statement is true. We introduce \\bench{}, an executable benchmark for evaluating unsafe execution, safety boundaries, and evidence recovery in LLM agents under missing evidence. It contains 300 matched unsafe/safe task pairs across six domains. By systematically suppressing critical facts, the benchmark measures unsafe execution under critical evidence omission and determines the minimum observed failure cardinality, including failures with full evidence and cases with no observed failure after exhaustive testing. An independent audit tool tests whether agents seek missing facts and then withhold prohibited actions while completing permissible tasks. The benchmark reveals substantial variation across the ten models in omission robustness, evidence acquisition, and appropriate action. Resistance to missing evidence does not necessarily translate into useful recovery. Recovery access reduces unsafe execution for all ten models, but agents differ in whether they actively obtain the missing facts and use them to act appropriately in both worlds.",
+        "authors": [
+          "Qijin Zhang",
+          "Hanzhen Wang",
+          "Yuehan Zhao"
+        ],
+        "url": "https://arxiv.org/abs/2610.31650v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.31650v1",
+        "category": "cs.AI",
+        "source": "arxiv",
+        "published": "2026-10-22T17:57:04Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 8,
+      "tldr": "Camera‑agnostic ray fields reconstruct 3D from any monocular view.",
+      "bullets": [
+        "Eliminates pinhole‑camera assumption via composite ray parameterization.",
+        "Achieves state‑of‑the‑art geometry on wide‑angle datasets.",
+        "Runs in real time on a single GPU."
+      ],
+      "who_should_read": "Computer vision engineers",
+      "paper": {
+        "id": "2610.31645v1",
+        "title": "OmniRay: Camera-Agnostic Monocular 3D Reconstruction with Composite Ray Fields",
+        "summary": "Monocular models recover 3D geometry from a single image in one pass, but most assume a pinhole camera and produce distorted geometry on the wide-angle imagery produced by fisheye and panoramic lenses. Camera-aware models remove this assumption by predicting a per-pixel ray field. However, they represent different camera geometries using a single fixed basis to capture both the overall camera projection and its finer variations. We argue that camera geometry can be viewed as having a hierarchy of complexity for representing rays. We present OmniRay, a feed-forward model whose Ray Module is composed of three components: a monotone radial base that captures radially symmetric structure, a spherical-harmonic residual for smooth deviations from it, and a free-form residual for remaining local variation. These components are composed as successive rotations on the sphere, allowing the representation to accommodate diverse camera geometries. Given a single image, OmniRay predicts a ray direction and an up-to-scale radial distance for every pixel, from which a 3D point cloud is recovered without needing camera information at inference time. Extensive experiments across different camera configurations demonstrate that OmniRay establishes a new state-of-the-art in camera-agnostic monocular 3D reconstruction.",
+        "authors": [
+          "Namitha Guruprasad",
+          "Abhay Yadav",
+          "Cheng Peng"
+        ],
+        "url": "https://arxiv.org/abs/2610.31645v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.31645v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-10-22T17:55:30Z"
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Swap torch.nn.functional.cross_entropy with the provided stable_cross_entropy implementation.",
-    "why": "It prevents hidden NaNs and stabilizes training on large‑vocab models.",
-    "time_estimate": "1 hour",
+    "action": "Run SpectralCanary on your fine‑tuned diffusion model with a small image probe set",
+    "why": "Detecting unintended data leakage is now a compliance prerequisite.",
+    "time_estimate": "1-2 hours",
     "difficulty": "intermediate"
   },
   "github_repos": [
@@ -46,7 +174,7 @@
       "title": "strands-labs/strands-decider",
       "summary": "A small, fast decision model, or system one model, for agentic workflows. Pick between options or rate on a scale faster than an LLM, with a calibrated confidence on every decision.",
       "url": "https://github.com/strands-labs/strands-decider",
-      "stars": 701,
+      "stars": 706,
       "forks": 97,
       "language": "Python",
       "topics": [
@@ -67,7 +195,7 @@
       "title": "Fazmin/AILearningGuide",
       "summary": "Interactive desktop app with 51 labs covering ML fundamentals, transformers, RAG, agents, fine-tuning and quantization and more.",
       "url": "https://github.com/Fazmin/AILearningGuide",
-      "stars": 231,
+      "stars": 232,
       "forks": 20,
       "language": "TypeScript",
       "topics": [
@@ -94,8 +222,8 @@
       "title": "Takamatsu-Hikaru/AI-Research-Guide",
       "summary": "AI 科研入门指南：大学选择、科研 60 问、入门项目、学习路线与论文卡片。A bilingual guide to getting started in AI research.",
       "url": "https://github.com/Takamatsu-Hikaru/AI-Research-Guide",
-      "stars": 113,
-      "forks": 7,
+      "stars": 145,
+      "forks": 9,
       "language": "JavaScript",
       "topics": [
         "ai",
@@ -113,7 +241,7 @@
       "title": "BlueRingsLabs/no-shortcuts",
       "summary": "Free Course : Data, Machine Learning, Deep Learning and AI Engineering, the long way round: the math, the code, the systems and the security. 173 lessons, 166 runnable labs, no shortcuts. Free under CC BY-NC 4.0.",
       "url": "https://github.com/BlueRingsLabs/no-shortcuts",
-      "stars": 58,
+      "stars": 60,
       "forks": 10,
       "language": "Python",
       "topics": [
@@ -134,34 +262,12 @@
       "created_at": "2026-09-26T19:49:54Z"
     },
     {
-      "id": "1418580002",
-      "title": "Goekdeniz-Guelmez/JOSIE-Voice",
-      "summary": "JOSIE Voice: a real-time, on-device voice assistant for Apple Silicon. Download the macOS app (DMG) from Releases.",
-      "url": "https://github.com/Goekdeniz-Guelmez/JOSIE-Voice",
-      "stars": 50,
-      "forks": 3,
-      "language": "Unknown",
-      "topics": [
-        "aget-framework",
-        "agetic",
-        "artificial-intelligence",
-        "assistant",
-        "machine-learning",
-        "voice-agent",
-        "voice-ai",
-        "voice-assistant",
-        "voice-cloning"
-      ],
-      "source": "github",
-      "created_at": "2026-10-14T08:12:11Z"
-    },
-    {
       "id": "1428105252",
       "title": "TheLastOxygen/mafdet",
       "summary": "You type. It already knows. Local LLMs that read and think while you type.",
       "url": "https://github.com/TheLastOxygen/mafdet",
-      "stars": 46,
-      "forks": 1,
+      "stars": 51,
+      "forks": 2,
       "language": "Python",
       "topics": [
         "deep-learning",
@@ -179,29 +285,50 @@
       "created_at": "2026-10-21T08:37:56Z"
     },
     {
-      "id": "1387683906",
-      "title": "dev-luigi/neural-network-digits",
-      "summary": "Neural network from scratch in pure Python + NumPy that recognises handwritten digits (MNIST), with an educational GUI: watch it learn, tweak it while it trains, look inside every layer.",
-      "url": "https://github.com/dev-luigi/neural-network-digits",
-      "stars": 42,
-      "forks": 1,
-      "language": "Python",
+      "id": "1418580002",
+      "title": "Goekdeniz-Guelmez/JOSIE-Voice",
+      "summary": "JOSIE Voice: a real-time, on-device voice assistant for Apple Silicon. Download the macOS app (DMG) from Releases.",
+      "url": "https://github.com/Goekdeniz-Guelmez/JOSIE-Voice",
+      "stars": 51,
+      "forks": 3,
+      "language": "Unknown",
       "topics": [
-        "backpropagation",
-        "deep-learning",
-        "educational",
-        "from-scratch",
-        "handwritten-digit-recognition",
+        "aget-framework",
+        "agetic",
+        "artificial-intelligence",
+        "assistant",
         "machine-learning",
-        "matplotlib",
-        "mnist",
-        "neural-network",
-        "numpy",
-        "python",
-        "tkinter"
+        "voice-agent",
+        "voice-ai",
+        "voice-assistant",
+        "voice-cloning"
       ],
       "source": "github",
-      "created_at": "2026-09-25T14:40:10Z"
+      "created_at": "2026-10-14T08:12:11Z"
+    },
+    {
+      "id": "1429736272",
+      "title": "FrontiersMindAI/decisionformer",
+      "summary": "Transformers for decision models: fine-tune, load and serve calibrated decsion-model on any Hugging Face model.",
+      "url": "https://github.com/FrontiersMindAI/decisionformer",
+      "stars": 33,
+      "forks": 3,
+      "language": "Python",
+      "topics": [
+        "decision-model",
+        "decision-models",
+        "decoder",
+        "deep-learning",
+        "encoder",
+        "glm",
+        "jev-model",
+        "llm",
+        "machine-learning",
+        "pytorch",
+        "qwen"
+      ],
+      "source": "github",
+      "created_at": "2026-10-22T12:45:27Z"
     },
     {
       "id": "1392605506",
@@ -242,8 +369,8 @@
       "summary": "",
       "url": "https://redact.dev/blog/whatsapp-help-pages-hidden-ai-instructions",
       "hn_url": "https://news.ycombinator.com/item?id=50159341",
-      "points": 742,
-      "comments": 220,
+      "points": 743,
+      "comments": 221,
       "author": "ds",
       "source": "hackernews",
       "created_at": "2026-10-19T23:22:18Z"
@@ -254,11 +381,23 @@
       "summary": "",
       "url": "https://www.modelcompare.ai/blog/ai-models-controversial-take-on-humans",
       "hn_url": "https://news.ycombinator.com/item?id=50197313",
-      "points": 626,
-      "comments": 600,
+      "points": 648,
+      "comments": 623,
       "author": "rakannimer",
       "source": "hackernews",
       "created_at": "2026-10-22T16:08:00Z"
+    },
+    {
+      "id": "50224463",
+      "title": "No signs of AI payoff outside the tech sector",
+      "summary": "",
+      "url": "https://www.apollo.com/wealth/insights-news/insights/daily-spark/no-signs-of-ai-payoff-outside-the-tech-sector",
+      "hn_url": "https://news.ycombinator.com/item?id=50224463",
+      "points": 542,
+      "comments": 557,
+      "author": "the-mitr",
+      "source": "hackernews",
+      "created_at": "2026-10-24T19:47:19Z"
     },
     {
       "id": "50145337",
@@ -278,23 +417,11 @@
       "summary": "",
       "url": "https://github.com/NVIDIA/OpenShell",
       "hn_url": "https://news.ycombinator.com/item?id=50198675",
-      "points": 493,
-      "comments": 213,
+      "points": 499,
+      "comments": 217,
       "author": "niemandhier",
       "source": "hackernews",
       "created_at": "2026-10-22T17:44:06Z"
-    },
-    {
-      "id": "50180836",
-      "title": "PHP2Shell: AI uncovers critical RCE in PHP",
-      "summary": "",
-      "url": "https://www.wiz.io/blog/php2shell-php-rce",
-      "hn_url": "https://news.ycombinator.com/item?id=50180836",
-      "points": 453,
-      "comments": 185,
-      "author": "danlark1",
-      "source": "hackernews",
-      "created_at": "2026-10-21T13:43:19Z"
     },
     {
       "id": "50202217",
@@ -302,11 +429,23 @@
       "summary": "",
       "url": "https://www.anthropic.com/research/formal-verification",
       "hn_url": "https://news.ycombinator.com/item?id=50202217",
-      "points": 447,
-      "comments": 288,
+      "points": 457,
+      "comments": 307,
       "author": "johnbender",
       "source": "hackernews",
       "created_at": "2026-10-22T22:54:43Z"
+    },
+    {
+      "id": "50180836",
+      "title": "PHP2Shell: AI uncovers critical RCE in PHP",
+      "summary": "",
+      "url": "https://www.wiz.io/blog/php2shell-php-rce",
+      "hn_url": "https://news.ycombinator.com/item?id=50180836",
+      "points": 454,
+      "comments": 185,
+      "author": "danlark1",
+      "source": "hackernews",
+      "created_at": "2026-10-21T13:43:19Z"
     },
     {
       "id": "50165801",
@@ -314,23 +453,11 @@
       "summary": "",
       "url": "https://peec.ai/blog/publish-stats-get-cited-the-tactic-that-put-my-data-all-over-the-web",
       "hn_url": "https://news.ycombinator.com/item?id=50165801",
-      "points": 368,
-      "comments": 207,
+      "points": 369,
+      "comments": 208,
       "author": "robtherobber",
       "source": "hackernews",
       "created_at": "2026-10-20T13:06:22Z"
-    },
-    {
-      "id": "50207405",
-      "title": "Swedish government offices to ban ChatGPT and Claude",
-      "summary": "",
-      "url": "https://www.sverigesradio.se/artikel/chat-gpt-och-claude-forbjuder-regeringskansliet",
-      "hn_url": "https://news.ycombinator.com/item?id=50207405",
-      "points": 317,
-      "comments": 119,
-      "author": "armcat",
-      "source": "hackernews",
-      "created_at": "2026-10-23T11:39:54Z"
     }
   ],
   "implementation_gaps": []
