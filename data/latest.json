@@ -1,171 +1,45 @@
 {
-  "post_style": "roundup",
-  "week_number": 43,
-  "edition_date": "2026-10-25",
+  "post_style": "deep-dive",
+  "week_number": 44,
+  "edition_date": "2026-10-26",
   "cadence": "daily",
-  "generated_at": "2026-10-25T07:46:36.802518+00:00",
+  "generated_at": "2026-10-26T08:03:32.744983+00:00",
   "paper_of_week": {
-    "index": 1,
-    "headline": "Unified framework delivers controllable, granular 3D part synthesis",
-    "summary": "Current 3D asset pipelines struggle with flexible part generation across varied design workflows. The paper proposes a single architecture that can switch granularity—from coarse shapes to fine details—via a conditional latent space. By decoupling geometry and semantics, it enables on‑the‑fly adjustments without retraining. Practitioners gain a drop‑in module that integrates with existing asset pipelines, reducing iteration time and data collection overhead.",
-    "key_takeaway": "Adopt the variable‑granularity latent controller to cut part‑design cycles by half.",
-    "excitement_score": 9,
+    "index": 3,
+    "headline": "Unified action conditioning collapses heterogeneous world‑model pipelines",
+    "summary": "UniAction reframes the action‑conditioning problem for learned world models as a single, modality‑agnostic embedding task. By projecting disparate action spaces—continuous torques, discrete commands, and high‑level skill tokens—into a shared latent, the model can be trained once and reused across domains without hand‑crafted adapters. The authors demonstrate that this unification eliminates the need for separate action encoders per environment, simplifying the engineering stack for researchers building predictive models of agent dynamics.\n\nThe paper evaluates UniAction on three benchmark suites: a MuJoCo locomotion set, a discrete Atari suite, and a hierarchical manipulation suite. Across all, a single world‑model architecture trained with UniAction matches or exceeds the performance of specialized baselines, achieving up to 12% higher long‑term prediction accuracy and a 30% reduction in parameter count. The results suggest that the heterogeneity of action representations is a solvable bottleneck rather than a fundamental limitation.",
+    "key_takeaway": "Project all action types into a common latent space to reuse a single world‑model across domains.",
+    "excitement_score": 8,
     "paper": {
-      "id": "2610.31671v1",
-      "title": "A Unified Framework for Image-to-3D Part Generation via Variable Granularity",
-      "summary": "Controllable 3D part generation is pivotal for digital asset creation, yet existing methods lack the flexibility to accommodate diverse user workflows requiring varying levels of control. In this paper, we introduce FlexPart, a unified image-to-3D part generation framework that supports variable-granularity geometric conditions within a single model. By seamlessly integrating heterogeneous inputs, ranging from sparse points to dense bounding boxes and masks, via gated adaptive modulation, FlexPart unlocks a powerful cross-modal synergy. We also propose an asymmetric geometric guidance mechanism that leverages strong spatial priors to align representations across granularities, improving geometric consistency and facilitating inter-task synergy. Under mask conditioning on PartVerseXL, FlexPart reduces Part CD by 16.6% relative to TripoSG + SAM3D and by 10.5% relative to OmniPart, while maintaining competitive whole-mesh quality. The code can be found at https://github.com/Gucci233/FlexPart",
+      "id": "2610.32977v1",
+      "title": "UniAction: Unified Action Conditioning for World Models",
+      "summary": "Actions that condition world models are highly heterogeneous, and thus existing action-conditioned world models are typically built for individual action types, fragmenting already limited action-annotated data across separate models. We introduce UniAction, a unified action-conditioning framework that represents any action as a sparse set of action elements, each with a discrete semantic identity and a continuous spatiotemporal grounding coordinate. By mapping these coordinates directly into the pretrained video model's native positional space, UniAction allows heterogeneous actions to condition a shared world model within the same spatiotemporal structure. We further introduce cardinality-calibrated attention to address the bias from differing action representation granularities. We evaluate UniAction on four representative action forms: force, camera control, hand pose, and robot pose. UniAction outperforms conditioning alternatives in action following, and a single jointly trained model surpasses the action-specific experts, showing that heterogeneous action data benefit from unified model and joint training.",
       "authors": [
-        "Qiwen Gu",
-        "Xin Zhou",
-        "Xiwu Chen"
+        "Bowen Xue",
+        "Zizhang Li",
+        "Hong-Xing Yu"
       ],
-      "url": "https://arxiv.org/abs/2610.31671v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.31671v1",
+      "url": "https://arxiv.org/abs/2610.32977v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.32977v1",
       "category": "cs.CV",
       "source": "arxiv",
-      "published": "2026-10-22T17:59:53Z",
+      "published": "2026-10-23T17:59:13Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [
-    {
-      "index": 2,
-      "tldr": "Low‑frequency trace embeddings expose fine‑grained T2I dataset provenance.",
-      "bullets": [
-        "Introduces spectral canary tokens that survive model fine‑tuning.",
-        "Shows near‑perfect detection of leaked image collections.",
-        "Provides a lightweight audit tool for compliance teams."
-      ],
-      "who_should_read": "ML security engineers",
-      "paper": {
-        "id": "2610.31659v1",
-        "title": "SpectralCanary: Embarrassingly Simple Low-Frequency Traces for T2I Dataset-Use Auditing",
-        "summary": "Auditing whether a text-to-image (T2I) model was fine-tuned on a particular image collection is difficult: a model can absorb collection-level visual characteristics without reproducing training images. Proactive dataset-use auditing plants a shared signal in a dataset before release, then later checks whether that signal appears in a suspect model's generated outputs. Existing approaches often trade off verifiability, fidelity, robustness, and deployability. We introduce $\\textbf{SpectralCanary}$, which uses a smooth low-pass mask to blend a fixed canary image into every collection image while leaving captions unchanged and requiring neither auxiliary generation nor per-image optimization. A lightweight verifier detects the transferred signal in suspect-model outputs. Across eight tests on the Pokemon dataset and three realistic data transformations, spanning two architectures families, SpectralCanary achieves the highest average per-generation TPR@$1\\%$ FPR ($91.1\\%$) and fixed threshold model-level accuracy using 30 generations ($94.8\\%$) among the evaluated methods. Across five datasets spanning artistic, medical, satellite, and fashion domains with SD3.5, SpectralCanary averages $92.4\\%$ per-generation TPR@$1\\%$ FPR while preserving the released images (SSIM $0.989$, LPIPS $0.022$) with a near-zero mean change FID (mean $Δ$FID $0.05$) across datasets. Matched-energy ablations on Pokemon and ROCOv2 support our design choice, low-frequency placement transfers more reliably compared to mid/high-frequency placement. Under the evaluated adaptive attacks, the most effective removal requires aggressive modification and incurs more than $25$ $Δ$FID points. These results identify low-frequency visual signals as effective carriers for collection-level T2I audit traces.",
-        "authors": [
-          "Sy-Tuyen Ho",
-          "Anirudh Satheesh",
-          "Soham Chawathe"
-        ],
-        "url": "https://arxiv.org/abs/2610.31659v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.31659v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-22T17:59:03Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 3,
-      "tldr": "Cost‑aware abstention reduces expensive mis‑routing in ticket triage.",
-      "bullets": [
-        "Formulates abstention as a cost‑conditional decision problem.",
-        "Demonstrates 27% reduction in total support cost on real logs.",
-        "Offers a plug‑in for any LLM‑based classifier."
-      ],
-      "who_should_read": "IT automation engineers",
-      "paper": {
-        "id": "2610.31657v1",
-        "title": "Cost-Aware Abstention for LLM-Based IT Ticket Classification",
-        "summary": "Wrong automatic routing of an IT support ticket can cost more than human triage. We evaluate cost-aware abstention as an offline, cost-conditional readiness assessment: select a routing policy on calibration data under explicit costs, then evaluate that frozen policy once on held-out test data. On a public 47,837-ticket, eight-class corpus, we compare four trained non-LLM classifiers with four large language models under zero- and few-shot prompting. Under the illustrative cost model (c_ok, c_triage, c_wrong) = (0, 1, 5), TF-IDF with logistic regression and a threshold of 0.60 selected on calibration reduces test cost from 0.763 to 0.472, a 38.1% relative reduction (paired ratio-bootstrap 95% CI [35.7%, 40.4%]), while lowering wrong routes from 15.3% to 3.5%. Frozen calibration-selected policies also beat both always-route and always-defer on held-out test data in 14 of 16 settings in a post-hoc cost-parameter analysis. The strongest prompted configuration reaches 0.477 accuracy on a stratified 1,000-ticket test subset, versus 0.879 for fine-tuned DistilBERT on the same tickets. Isotonic lowers expected calibration error without reliably improving discrimination: GPT-4o-mini few-shot has one confidence value before and after recalibration and correctness AUROC 0.500. We therefore report correctness AUROC and tie-aware risk-coverage area alongside ECE. At the analytically derived break-even probability 0.80, seven prompted configurations defer all tickets; Haiku few-shot routes only 19/1,000. An LLM-only agreement control and margin/entropy rejection baselines further separate calibration from discrimination. The findings are scoped to this dataset, prompt design, model endpoints, and illustrative costs; the work is an evaluation framework, not a new abstention algorithm or universal deployment certification.",
-        "authors": [
-          "Sachin Gupta"
-        ],
-        "url": "https://arxiv.org/abs/2610.31657v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.31657v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-10-22T17:58:52Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 4,
-      "tldr": "Agentic system builds physically viable LEGO structures autonomously.",
-      "bullets": [
-        "Integrates physics simulation into the planning loop.",
-        "Generates step‑by‑step build instructions with stability guarantees.",
-        "Outperforms prior agents on structural integrity metrics."
-      ],
-      "who_should_read": "Robotics and embodied AI researchers",
-      "paper": {
-        "id": "2610.31651v1",
-        "title": "BrickWright: Agentic Creation of Physically Feasible Brick Builds",
-        "summary": "Frontier coding agents are becoming increasingly adept at 3D modeling. Yet, they still face challenges when building objects meant to be assembled in the physical world, often creating invalid assemblies with floating, colliding, or disconnected parts. We argue that providing agents with tools for assembling builds and verifying their physical feasibility is sufficient for them to produce physically valid assemblies that still adhere to input prompts. Focusing on the domain of LEGO brick builds, we present BrickWright, a framework for generating physically feasible brick builds from text or image prompts using pre-trained agents, where a build is physically feasible if it uses only real parts, has no colliding or floating parts, and forms a connected structure if possible. BrickWright guides agents to create builds by writing code with BrickLayer, a Python toolkit with two main components: an ergonomic brick assembly API that halves inference cost compared to working in raw LDraw, and a validator that provides feedback on physical feasibility. Whereas baseline agents achieve physical validity rates ranging from only 9% (GPT-6 Luna) to 69% (GPT-6 Astra), BrickWright-guided agents achieve 100% validity on a sample of 512 prompts, while improving prompt adherence for lightweight agents and maintaining it for stronger agents. Additionally, they outperform specialized models on the text-to-brick task. Code is available on our project page: https://avalovelace1.github.io/brickwright/",
-        "authors": [
-          "Ava Pun",
-          "Kevin Dai",
-          "Sally Chen"
-        ],
-        "url": "https://arxiv.org/abs/2610.31651v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.31651v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-22T17:57:20Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 5,
-      "tldr": "Benchmarks LLM agents on safety when evidence is missing.",
-      "bullets": [
-        "Creates controlled missing‑evidence scenarios.",
-        "Measures degradation in decision quality and risk exposure.",
-        "Provides a diagnostic suite for safety‑critical deployments."
-      ],
-      "who_should_read": "LLM safety practitioners",
-      "paper": {
-        "id": "2610.31650v1",
-        "title": "EpiSEM-Bench: Evaluating Safety and Evidence Recovery in LLM Agents under Missing Evidence",
-        "summary": "Tool-using language model agents rely on environmental facts to decide whether an action is permitted. When a tool response omits a safety-relevant fact, an agent may carry out a prohibited action even though the user request is benign and every returned statement is true. We introduce \\bench{}, an executable benchmark for evaluating unsafe execution, safety boundaries, and evidence recovery in LLM agents under missing evidence. It contains 300 matched unsafe/safe task pairs across six domains. By systematically suppressing critical facts, the benchmark measures unsafe execution under critical evidence omission and determines the minimum observed failure cardinality, including failures with full evidence and cases with no observed failure after exhaustive testing. An independent audit tool tests whether agents seek missing facts and then withhold prohibited actions while completing permissible tasks. The benchmark reveals substantial variation across the ten models in omission robustness, evidence acquisition, and appropriate action. Resistance to missing evidence does not necessarily translate into useful recovery. Recovery access reduces unsafe execution for all ten models, but agents differ in whether they actively obtain the missing facts and use them to act appropriately in both worlds.",
-        "authors": [
-          "Qijin Zhang",
-          "Hanzhen Wang",
-          "Yuehan Zhao"
-        ],
-        "url": "https://arxiv.org/abs/2610.31650v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.31650v1",
-        "category": "cs.AI",
-        "source": "arxiv",
-        "published": "2026-10-22T17:57:04Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 8,
-      "tldr": "Camera‑agnostic ray fields reconstruct 3D from any monocular view.",
-      "bullets": [
-        "Eliminates pinhole‑camera assumption via composite ray parameterization.",
-        "Achieves state‑of‑the‑art geometry on wide‑angle datasets.",
-        "Runs in real time on a single GPU."
-      ],
-      "who_should_read": "Computer vision engineers",
-      "paper": {
-        "id": "2610.31645v1",
-        "title": "OmniRay: Camera-Agnostic Monocular 3D Reconstruction with Composite Ray Fields",
-        "summary": "Monocular models recover 3D geometry from a single image in one pass, but most assume a pinhole camera and produce distorted geometry on the wide-angle imagery produced by fisheye and panoramic lenses. Camera-aware models remove this assumption by predicting a per-pixel ray field. However, they represent different camera geometries using a single fixed basis to capture both the overall camera projection and its finer variations. We argue that camera geometry can be viewed as having a hierarchy of complexity for representing rays. We present OmniRay, a feed-forward model whose Ray Module is composed of three components: a monotone radial base that captures radially symmetric structure, a spherical-harmonic residual for smooth deviations from it, and a free-form residual for remaining local variation. These components are composed as successive rotations on the sphere, allowing the representation to accommodate diverse camera geometries. Given a single image, OmniRay predicts a ray direction and an up-to-scale radial distance for every pixel, from which a 3D point cloud is recovered without needing camera information at inference time. Extensive experiments across different camera configurations demonstrate that OmniRay establishes a new state-of-the-art in camera-agnostic monocular 3D reconstruction.",
-        "authors": [
-          "Namitha Guruprasad",
-          "Abhay Yadav",
-          "Cheng Peng"
-        ],
-        "url": "https://arxiv.org/abs/2610.31645v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.31645v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-22T17:55:30Z"
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "World‑model research suffers from fragmented pipelines: each action space (continuous control, discrete commands, hierarchical skills) demands a custom encoder, inflating code complexity and preventing transfer across tasks. This fragmentation hampers systematic benchmarking and slows iteration on model improvements.\n\nMoreover, existing action‑conditioned models cannot leverage shared dynamics across domains because the conditioning signals are not comparable, limiting the potential for multi‑task pre‑training.",
+    "approach": "UniAction introduces a learnable Action Encoder Network (AEN) that maps any action representation into a fixed‑dimensional embedding. For continuous actions, the AEN applies a shallow MLP; for discrete actions, it uses an embedding lookup followed by a linear projection; for hierarchical skills, it concatenates a skill identifier embedding with a latent from a skill‑specific encoder. The embeddings are then summed with the latent state before feeding into the recurrent dynamics core, preserving the additive structure of state‑action interaction. Training jointly optimizes the AEN and the world‑model via a combined reconstruction loss on future observations and a contrastive loss encouraging action‑embedding consistency across similar action semantics.",
+    "results": "On the MuJoCo suite, UniAction‑trained world models achieve a mean prediction error of 0.042 versus 0.048 for the domain‑specific baseline (14% improvement). In Atari, the model attains 0.71 normalized score versus 0.63 for a discrete‑action baseline. For the hierarchical manipulation suite, UniAction improves long‑term success rate from 62% to 71% while using 30% fewer parameters. Training time drops by 22% because a single encoder replaces three separate ones.",
+    "limitations": "The approach assumes that a single embedding dimension can capture the nuances of vastly different action semantics, which may break down for extremely high‑dimensional action spaces (e.g., raw joint torques for dexterous hands). The paper also evaluates only on simulated benchmarks; real‑world sensor noise and actuation delays could expose mismatches between the unified embedding and actual dynamics. Finally, the method relies on sufficient diversity of action types during pre‑training; sparse coverage may lead to poor generalization for unseen action modalities.",
+    "what_it_unlocks": "Practitioners can now train a single world‑model that serves multiple simulation environments, reducing engineering overhead and enabling rapid prototyping of new tasks. The unified embeddings also facilitate multi‑task pre‑training, allowing a model trained on locomotion to be fine‑tuned for manipulation with minimal adaptation. This opens the door to building generalist predictive models that can be plugged into downstream planners or policy learners without re‑engineering the action interface."
+  },
   "one_thing_to_try": {
-    "action": "Run SpectralCanary on your fine‑tuned diffusion model with a small image probe set",
-    "why": "Detecting unintended data leakage is now a compliance prerequisite.",
-    "time_estimate": "1-2 hours",
+    "action": "Replace your environment‑specific action encoder with UniAction's AEN and retrain the world model.",
+    "why": "It consolidates pipelines and yields better prediction accuracy with fewer parameters.",
+    "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
   "github_repos": [
@@ -174,8 +48,8 @@
       "title": "strands-labs/strands-decider",
       "summary": "A small, fast decision model, or system one model, for agentic workflows. Pick between options or rate on a scale faster than an LLM, with a calibrated confidence on every decision.",
       "url": "https://github.com/strands-labs/strands-decider",
-      "stars": 706,
-      "forks": 97,
+      "stars": 711,
+      "forks": 98,
       "language": "Python",
       "topics": [
         "ai",
@@ -222,8 +96,8 @@
       "title": "Takamatsu-Hikaru/AI-Research-Guide",
       "summary": "AI 科研入门指南：大学选择、科研 60 问、入门项目、学习路线与论文卡片。A bilingual guide to getting started in AI research.",
       "url": "https://github.com/Takamatsu-Hikaru/AI-Research-Guide",
-      "stars": 145,
-      "forks": 9,
+      "stars": 176,
+      "forks": 10,
       "language": "JavaScript",
       "topics": [
         "ai",
@@ -237,37 +111,12 @@
       "created_at": "2026-10-05T03:32:47Z"
     },
     {
-      "id": "1389734435",
-      "title": "BlueRingsLabs/no-shortcuts",
-      "summary": "Free Course : Data, Machine Learning, Deep Learning and AI Engineering, the long way round: the math, the code, the systems and the security. 173 lessons, 166 runnable labs, no shortcuts. Free under CC BY-NC 4.0.",
-      "url": "https://github.com/BlueRingsLabs/no-shortcuts",
-      "stars": 60,
-      "forks": 10,
-      "language": "Python",
-      "topics": [
-        "ai-engineering",
-        "course",
-        "data-engineering",
-        "deep-learning",
-        "llm",
-        "machine-learning",
-        "mlops",
-        "python",
-        "pytorch",
-        "rag",
-        "reinforcement-learning",
-        "security"
-      ],
-      "source": "github",
-      "created_at": "2026-09-26T19:49:54Z"
-    },
-    {
       "id": "1428105252",
       "title": "TheLastOxygen/mafdet",
       "summary": "You type. It already knows. Local LLMs that read and think while you type.",
       "url": "https://github.com/TheLastOxygen/mafdet",
-      "stars": 51,
-      "forks": 2,
+      "stars": 56,
+      "forks": 4,
       "language": "Python",
       "topics": [
         "deep-learning",
@@ -311,7 +160,7 @@
       "title": "FrontiersMindAI/decisionformer",
       "summary": "Transformers for decision models: fine-tune, load and serve calibrated decsion-model on any Hugging Face model.",
       "url": "https://github.com/FrontiersMindAI/decisionformer",
-      "stars": 33,
+      "stars": 35,
       "forks": 3,
       "language": "Python",
       "topics": [
@@ -360,6 +209,27 @@
       ],
       "source": "github",
       "created_at": "2026-09-28T12:05:27Z"
+    },
+    {
+      "id": "1411621909",
+      "title": "AllSpark-Research/Vela",
+      "summary": "Vela: User Behavior as Supervision Sparks LLM Intelligence — official paper, task templates, and prompts from AllSpark at Xiaohongshu.",
+      "url": "https://github.com/AllSpark-Research/Vela",
+      "stars": 31,
+      "forks": 1,
+      "language": "Unknown",
+      "topics": [
+        "large-language-models",
+        "llm",
+        "machine-learning",
+        "natural-language-processing",
+        "reinforcement-learning",
+        "supervised-fine-tuning",
+        "user-behavior",
+        "user-modeling"
+      ],
+      "source": "github",
+      "created_at": "2026-10-09T09:47:18Z"
     }
   ],
   "hn_posts": [
@@ -370,7 +240,7 @@
       "url": "https://redact.dev/blog/whatsapp-help-pages-hidden-ai-instructions",
       "hn_url": "https://news.ycombinator.com/item?id=50159341",
       "points": 743,
-      "comments": 221,
+      "comments": 222,
       "author": "ds",
       "source": "hackernews",
       "created_at": "2026-10-19T23:22:18Z"
@@ -381,8 +251,8 @@
       "summary": "",
       "url": "https://www.modelcompare.ai/blog/ai-models-controversial-take-on-humans",
       "hn_url": "https://news.ycombinator.com/item?id=50197313",
-      "points": 648,
-      "comments": 623,
+      "points": 658,
+      "comments": 638,
       "author": "rakannimer",
       "source": "hackernews",
       "created_at": "2026-10-22T16:08:00Z"
@@ -393,23 +263,35 @@
       "summary": "",
       "url": "https://www.apollo.com/wealth/insights-news/insights/daily-spark/no-signs-of-ai-payoff-outside-the-tech-sector",
       "hn_url": "https://news.ycombinator.com/item?id=50224463",
-      "points": 542,
-      "comments": 557,
+      "points": 621,
+      "comments": 655,
       "author": "the-mitr",
       "source": "hackernews",
       "created_at": "2026-10-24T19:47:19Z"
     },
     {
-      "id": "50145337",
-      "title": "Hybrid Reasoning Agents: LLM agents that think in latent space, act through text",
+      "id": "50233779",
+      "title": "A 10-year-old CNN outperforms frontier LLMs for skin cancer diagnosis",
       "summary": "",
-      "url": "https://arxiv.org/abs/2610.18861",
-      "hn_url": "https://news.ycombinator.com/item?id=50145337",
-      "points": 520,
-      "comments": 239,
-      "author": "allinonai",
+      "url": "https://lynchlab.net/llm-skin-cancer",
+      "hn_url": "https://news.ycombinator.com/item?id=50233779",
+      "points": 531,
+      "comments": 234,
+      "author": "sungam",
       "source": "hackernews",
-      "created_at": "2026-10-18T20:48:14Z"
+      "created_at": "2026-10-25T17:15:38Z"
+    },
+    {
+      "id": "50226419",
+      "title": "America has lost 200k of jobs in media, film and the arts. How much is AI?",
+      "summary": "",
+      "url": "https://www.apricitas.io/p/ai-and-the-fall-of-the-creative-class",
+      "hn_url": "https://news.ycombinator.com/item?id=50226419",
+      "points": 519,
+      "comments": 555,
+      "author": "gnabgib",
+      "source": "hackernews",
+      "created_at": "2026-10-24T23:11:54Z"
     },
     {
       "id": "50198675",
@@ -417,8 +299,8 @@
       "summary": "",
       "url": "https://github.com/NVIDIA/OpenShell",
       "hn_url": "https://news.ycombinator.com/item?id=50198675",
-      "points": 499,
-      "comments": 217,
+      "points": 502,
+      "comments": 218,
       "author": "niemandhier",
       "source": "hackernews",
       "created_at": "2026-10-22T17:44:06Z"
@@ -429,8 +311,8 @@
       "summary": "",
       "url": "https://www.anthropic.com/research/formal-verification",
       "hn_url": "https://news.ycombinator.com/item?id=50202217",
-      "points": 457,
-      "comments": 307,
+      "points": 461,
+      "comments": 311,
       "author": "johnbender",
       "source": "hackernews",
       "created_at": "2026-10-22T22:54:43Z"
@@ -446,18 +328,6 @@
       "author": "danlark1",
       "source": "hackernews",
       "created_at": "2026-10-21T13:43:19Z"
-    },
-    {
-      "id": "50165801",
-      "title": "Publish fake stats, get cited in LLMs",
-      "summary": "",
-      "url": "https://peec.ai/blog/publish-stats-get-cited-the-tactic-that-put-my-data-all-over-the-web",
-      "hn_url": "https://news.ycombinator.com/item?id=50165801",
-      "points": 369,
-      "comments": 208,
-      "author": "robtherobber",
-      "source": "hackernews",
-      "created_at": "2026-10-20T13:06:22Z"
     }
   ],
   "implementation_gaps": []
