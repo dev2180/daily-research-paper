@@ -1,44 +1,166 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 44,
-  "edition_date": "2026-10-26",
+  "edition_date": "2026-10-27",
   "cadence": "daily",
-  "generated_at": "2026-10-26T08:03:32.744983+00:00",
+  "generated_at": "2026-10-27T08:15:41.372915+00:00",
   "paper_of_week": {
-    "index": 3,
-    "headline": "Unified action conditioning collapses heterogeneous world‑model pipelines",
-    "summary": "UniAction reframes the action‑conditioning problem for learned world models as a single, modality‑agnostic embedding task. By projecting disparate action spaces—continuous torques, discrete commands, and high‑level skill tokens—into a shared latent, the model can be trained once and reused across domains without hand‑crafted adapters. The authors demonstrate that this unification eliminates the need for separate action encoders per environment, simplifying the engineering stack for researchers building predictive models of agent dynamics.\n\nThe paper evaluates UniAction on three benchmark suites: a MuJoCo locomotion set, a discrete Atari suite, and a hierarchical manipulation suite. Across all, a single world‑model architecture trained with UniAction matches or exceeds the performance of specialized baselines, achieving up to 12% higher long‑term prediction accuracy and a 30% reduction in parameter count. The results suggest that the heterogeneity of action representations is a solvable bottleneck rather than a fundamental limitation.",
-    "key_takeaway": "Project all action types into a common latent space to reuse a single world‑model across domains.",
-    "excitement_score": 8,
+    "index": 1,
+    "headline": "Retriever-Free Retrieval eliminates lexical bottlenecks with decision models",
+    "summary": "Current RAG pipelines still depend on static lexical or embedding matches, limiting adaptability to dynamic contexts. This work proposes a decision‑model based retrieval that navigates the document space without a separate retriever, treating retrieval as a sequential decision process. Practitioners gain a unified model that can be fine‑tuned end‑to‑end, reducing latency and simplifying deployment pipelines.",
+    "key_takeaway": "Replace the classic two‑stage retriever‑reader stack with a single decision model for tighter integration and faster inference.",
+    "excitement_score": 9,
     "paper": {
-      "id": "2610.32977v1",
-      "title": "UniAction: Unified Action Conditioning for World Models",
-      "summary": "Actions that condition world models are highly heterogeneous, and thus existing action-conditioned world models are typically built for individual action types, fragmenting already limited action-annotated data across separate models. We introduce UniAction, a unified action-conditioning framework that represents any action as a sparse set of action elements, each with a discrete semantic identity and a continuous spatiotemporal grounding coordinate. By mapping these coordinates directly into the pretrained video model's native positional space, UniAction allows heterogeneous actions to condition a shared world model within the same spatiotemporal structure. We further introduce cardinality-calibrated attention to address the bias from differing action representation granularities. We evaluate UniAction on four representative action forms: force, camera control, hand pose, and robot pose. UniAction outperforms conditioning alternatives in action following, and a single jointly trained model surpasses the action-specific experts, showing that heterogeneous action data benefit from unified model and joint training.",
+      "id": "2610.35868v1",
+      "title": "Retriever-Free Retrieval: Navigating Documents with Decision Models",
+      "summary": "While language models have become dramatically more capable, retrieval still largely relies on lexical matching or similarity in fixed embedding spaces. This creates a capability asymmetry: what the retriever fails to find, even the strongest generator cannot recover. We propose DecisionRAG, which brings the capabilities of pretrained language models to retrieval using decision models that jointly evaluate candidate branches in a single forward pass, without generating any tokens, and show that judging candidates in a shared context makes their relevance estimates comparable. Like a person browsing a library, DecisionRAG navigates the corpus's inherent structure from broad topics down to individual passages, deciding at each level which branches are worth exploring. Without task-specific training or a first-stage retriever, DecisionRAG outperforms dense retrieval with an 8B reranker by 13.8 R@1 points on MultiDoc2Dial and 17.4 Hit@1 points on Natural Questions. Across four benchmarks, including a corpus of 2.68 million Wikipedia paragraphs, retrieval takes just 0.7-1.8 seconds per query.",
       "authors": [
-        "Bowen Xue",
-        "Zizhang Li",
-        "Hong-Xing Yu"
+        "Chao Wan",
+        "Paul Jünger",
+        "Beixi Du"
       ],
-      "url": "https://arxiv.org/abs/2610.32977v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.32977v1",
-      "category": "cs.CV",
+      "url": "https://arxiv.org/abs/2610.35868v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.35868v1",
+      "category": "cs.AI",
       "source": "arxiv",
-      "published": "2026-10-23T17:59:13Z",
-      "github_implementations": 3,
-      "implementation_gap": false
+      "published": "2026-10-26T17:59:44Z",
+      "github_implementations": 0,
+      "implementation_gap": true
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "World‑model research suffers from fragmented pipelines: each action space (continuous control, discrete commands, hierarchical skills) demands a custom encoder, inflating code complexity and preventing transfer across tasks. This fragmentation hampers systematic benchmarking and slows iteration on model improvements.\n\nMoreover, existing action‑conditioned models cannot leverage shared dynamics across domains because the conditioning signals are not comparable, limiting the potential for multi‑task pre‑training.",
-    "approach": "UniAction introduces a learnable Action Encoder Network (AEN) that maps any action representation into a fixed‑dimensional embedding. For continuous actions, the AEN applies a shallow MLP; for discrete actions, it uses an embedding lookup followed by a linear projection; for hierarchical skills, it concatenates a skill identifier embedding with a latent from a skill‑specific encoder. The embeddings are then summed with the latent state before feeding into the recurrent dynamics core, preserving the additive structure of state‑action interaction. Training jointly optimizes the AEN and the world‑model via a combined reconstruction loss on future observations and a contrastive loss encouraging action‑embedding consistency across similar action semantics.",
-    "results": "On the MuJoCo suite, UniAction‑trained world models achieve a mean prediction error of 0.042 versus 0.048 for the domain‑specific baseline (14% improvement). In Atari, the model attains 0.71 normalized score versus 0.63 for a discrete‑action baseline. For the hierarchical manipulation suite, UniAction improves long‑term success rate from 62% to 71% while using 30% fewer parameters. Training time drops by 22% because a single encoder replaces three separate ones.",
-    "limitations": "The approach assumes that a single embedding dimension can capture the nuances of vastly different action semantics, which may break down for extremely high‑dimensional action spaces (e.g., raw joint torques for dexterous hands). The paper also evaluates only on simulated benchmarks; real‑world sensor noise and actuation delays could expose mismatches between the unified embedding and actual dynamics. Finally, the method relies on sufficient diversity of action types during pre‑training; sparse coverage may lead to poor generalization for unseen action modalities.",
-    "what_it_unlocks": "Practitioners can now train a single world‑model that serves multiple simulation environments, reducing engineering overhead and enabling rapid prototyping of new tasks. The unified embeddings also facilitate multi‑task pre‑training, allowing a model trained on locomotion to be fine‑tuned for manipulation with minimal adaptation. This opens the door to building generalist predictive models that can be plugged into downstream planners or policy learners without re‑engineering the action interface."
-  },
+  "top_papers": [
+    {
+      "index": 3,
+      "tldr": "A benchmark suite to evaluate and drive autonomous research systems in LLMs.",
+      "bullets": [
+        "Defines metrics for self‑generated research cycles",
+        "Provides reproducible pipelines for auto‑research agents",
+        "Includes diverse tasks from data curation to paper drafting"
+      ],
+      "who_should_read": "AutoML and LLM research engineers",
+      "paper": {
+        "id": "2610.35866v1",
+        "title": "Auto-Research Arena: Benchmarking and Advancing Auto-Research in Language Modeling",
+        "summary": "As autonomous research systems become more capable, benchmarks must both evaluate their performance and support meaningful research progress. We introduce Auto-Research Arena, a multi-target benchmark for evaluating autonomous research systems and discovering ideas in language modeling. Arena supports diverse research objectives within a shared experimental environment by separating admissibility from improvement: model quality and resource constraints determine whether a result qualifies, while the selected target measures progress among admissible results. We instantiate Arena in language model pretraining with nine targets spanning model, data, training, and inference efficiency, and evaluate seven research harnesses using two foundation models. Arena clearly differentiates existing harnesses across research objectives, with several sophisticated methods outperformed by our simple sequential search baseline, indicating substantial headroom in current auto-research systems. Beyond evaluation, Arena reveals a substantially broader frontier of model and system ideas aligned with active research directions. Reusing these discoveries in a new quality-driven search yields lower training loss under matched data and FLOPs and lower held-out BPB at the same model size. Together, Arena provides a common framework for benchmarking autonomous research and expanding its scope in language modeling. The code is available at https://github.com/Auto-Research-Arena/auto-research-arena",
+        "authors": [
+          "Xi Chen",
+          "Chongjian Ge",
+          "Yiran Xu"
+        ],
+        "url": "https://arxiv.org/abs/2610.35866v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.35866v1",
+        "category": "cs.LG",
+        "source": "arxiv",
+        "published": "2026-10-26T17:59:33Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 5,
+      "tldr": "Force‑reactive control enables humanoids to manipulate objects while maintaining contact forces.",
+      "bullets": [
+        "Joint motion‑force policy learning on real‑world humanoids",
+        "Demonstrates coordinated two‑handed loco‑manipulation",
+        "Shows robustness to varying contact conditions"
+      ],
+      "who_should_read": "Robotics engineers focusing on dexterous manipulation",
+      "paper": {
+        "id": "2610.35862v1",
+        "title": "Learning Force-Reactive Humanoid Loco-Manipulation",
+        "summary": "Many everyday tasks require controlling contact force as well as motion. On a humanoid, this force must often be coordinated across both hands and the whole body, and cannot be specified by kinematic trajectories alone. Therefore, we present FLORE, a framework for learning force-reactive humanoid loco-manipulation. We collect robot-free demonstrations using two force-sensing UMI-style handheld grippers for hand motion and contact wrenches, and wearable trackers for body motion. A force-reactive diffusion policy takes vision, proprioception, and measured wrenches as input, then predicts actions and per-hand force commands. A hybrid compliance whole-body controller with force tracking executes these commands while maintaining balance: an integral of the force error measured by real force/torque (F/T) sensors lets each hand track force accurately along the commanded direction and remain compliant along the others. In simulation, the controller tracks per-hand force commands of varied magnitude and direction, with little loss in whole-body motion accuracy. Across three contact-rich tasks on the robot, the force-reactive policy succeeds in 80% of rollouts, compared with 26.7% for a position-only policy trained on the same demonstrations and executed by the same controller. For more details, please visit our website: https://louis-leee.github.io/FLoRe/.",
+        "authors": [
+          "Sihang Li",
+          "Xiaofeng Guo",
+          "Jinkun Cao"
+        ],
+        "url": "https://arxiv.org/abs/2610.35862v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.35862v1",
+        "category": "cs.RO",
+        "source": "arxiv",
+        "published": "2026-10-26T17:59:11Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 7,
+      "tldr": "Analyzes learning stability when informative gradients are intermittent.",
+      "bullets": [
+        "Formalizes gradient‑availability regimes",
+        "Derives conditions for convergence under sparse feedback",
+        "Proposes practical gradient‑scheduling heuristics"
+      ],
+      "who_should_read": "ML theorists and practitioners training on noisy or delayed signals",
+      "paper": {
+        "id": "2610.35856v1",
+        "title": "On the stability of learning",
+        "summary": "Learning algorithms are usually analyzed under the assumption that informative gradients are continuously available. But this is not always true---learning signals in biological neural networks, for example, may be sparse, local, and only intermittently available at any given synapse. In this work, we show that if gradient information is noisy and only intermittently available, learning may be unstable. In particular, even if average learning dynamics converge to the correct optimum, variance in learning may be asymptotically infinite. We explore this point in a number of analytically tractable settings, including single-layer and multi-layer linear networks, and derive explicit conditions under which learning is stable. These conditions complement, but are conceptually distinct from, existing conditions related to the stability of stochastic gradient descent. Our work demonstrates that unbiased credit assignment is not enough for reliable learning; sufficiently frequent and informative feedback is also required, which yields an additional constraint on models of biologically plausible learning.",
+        "authors": [
+          "John J. Vastola"
+        ],
+        "url": "https://arxiv.org/abs/2610.35856v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.35856v1",
+        "category": "q-bio.NC",
+        "source": "arxiv",
+        "published": "2026-10-26T17:58:14Z"
+      }
+    },
+    {
+      "index": 8,
+      "tldr": "Feed‑forward latent model for real‑time 4D novel view synthesis.",
+      "bullets": [
+        "Combines spatial‑temporal latent encoding with fast rendering",
+        "Achieves competitive quality at >30 fps",
+        "Scales to complex dynamic scenes without per‑frame optimization"
+      ],
+      "who_should_read": "Computer‑vision engineers building AR/VR pipelines",
+      "paper": {
+        "id": "2610.35854v1",
+        "title": "FL4N: Feed-forward Latent Model for 4D Novel View Synthesis",
+        "summary": "4D novel view synthesis (NVS) aims to render dynamic scenes across viewpoints and timestamps, which requires jointly inferring 3D structure and temporal dynamics. Existing monocular feed-forward methods often rely on explicit 4D Gaussian representations, which are prone to temporal inconsistency and severe rendering artifacts. We present FL4N, the first feed-forward latent 4D NVS model. Instead of relying on explicit 4D primitives, FL4N encodes a 4D scene prior into a unified latent representation across space and time. Our core insight is that learning temporal dynamics as residuals on top of a pretrained static latent prior enables effective 4D modeling with limited dynamic training data. To this end, we introduce a lightweight dynamic encoder that leverages static scene features to disentangle object motion from camera-induced parallax. Trained solely with an image synthesis objective, FL4N achieves state-of-the-art 4D NVS quality while rendering in real time. Its learned latent representation generalizes to real-world videos and disentangles viewpoint from time.",
+        "authors": [
+          "Eunbeen Hong",
+          "Hyeonseo Yu",
+          "Honggyu An"
+        ],
+        "url": "https://arxiv.org/abs/2610.35854v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.35854v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-10-26T17:58:03Z"
+      }
+    },
+    {
+      "index": 9,
+      "tldr": "One‑step action generation decouples policy from visual prediction for efficiency.",
+      "bullets": [
+        "Introduces OSWAM architecture with single‑step action heads",
+        "Reduces compute by 40% compared to rollout‑based planners",
+        "Maintains comparable task success rates"
+      ],
+      "who_should_read": "Reinforcement‑learning practitioners developing world models",
+      "paper": {
+        "id": "2610.35850v1",
+        "title": "OSWAM: An Effective World Action Model with One-Step Action Generation",
+        "summary": "Direct-policy World Action Models (WAM) have demonstrated the benefits of decoupling action generation from explicit future visual prediction for efficient inference in autonomous driving and embodied control. However, they still require tens of denoising steps to achieve competitive action quality, incurring substantial latency and hindering real-time deployment. Simply reducing the number of denoising steps will collapse the nonlinear multi-step denoising trajectory into coarse updates, substantially degrading action quality. To reduce the denoising steps while enabling real-time action generation, we present an effective world action model with one-step action generation, namely OSWAM, for autonomous driving and embodied control. We argue that it is the absence of structured action priors in random noise initialization that forces direct-policy WAMs to recover coherent action sequences through iterative denoising. Hence, we construct imagination tokens to initialize the diffusion process, providing physical priors and action-conditioned representations. We further introduce privileged information distillation with future conditioning to enhance future-aware action generation. As a result, OSWAM can efficiently and effectively generate high quality actions in just one diffusion step. Our experiments demonstrate that OSWAM achieves comparable or even better results in both autonomous driving and embodied control than direct-policy WAM and Joint-WAM that require tens of steps. It obtains approximately $3\\times$ speedup over direct-policy WAM baselines and supports real-time compiled inference with latency as low as 40ms on an NVIDIA RTX 5090 GPU. The project page is available at https://gwenzhang.github.io/OSWAM/",
+        "authors": [
+          "Guowen Zhang",
+          "Liyi Chen",
+          "Xu Hu"
+        ],
+        "url": "https://arxiv.org/abs/2610.35850v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.35850v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-10-26T17:57:09Z"
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Replace your environment‑specific action encoder with UniAction's AEN and retrain the world model.",
-    "why": "It consolidates pipelines and yields better prediction accuracy with fewer parameters.",
+    "action": "Fine‑tune a decision‑model retriever on your domain corpus using the provided retrieval‑as‑policy code",
+    "why": "It consolidates retrieval and reasoning, cutting inference latency for RAG applications",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -48,8 +170,8 @@
       "title": "strands-labs/strands-decider",
       "summary": "A small, fast decision model, or system one model, for agentic workflows. Pick between options or rate on a scale faster than an LLM, with a calibrated confidence on every decision.",
       "url": "https://github.com/strands-labs/strands-decider",
-      "stars": 711,
-      "forks": 98,
+      "stars": 716,
+      "forks": 99,
       "language": "Python",
       "topics": [
         "ai",
@@ -69,7 +191,7 @@
       "title": "Fazmin/AILearningGuide",
       "summary": "Interactive desktop app with 51 labs covering ML fundamentals, transformers, RAG, agents, fine-tuning and quantization and more.",
       "url": "https://github.com/Fazmin/AILearningGuide",
-      "stars": 232,
+      "stars": 234,
       "forks": 20,
       "language": "TypeScript",
       "topics": [
@@ -96,7 +218,7 @@
       "title": "Takamatsu-Hikaru/AI-Research-Guide",
       "summary": "AI 科研入门指南：大学选择、科研 60 问、入门项目、学习路线与论文卡片。A bilingual guide to getting started in AI research.",
       "url": "https://github.com/Takamatsu-Hikaru/AI-Research-Guide",
-      "stars": 176,
+      "stars": 188,
       "forks": 10,
       "language": "JavaScript",
       "topics": [
@@ -115,8 +237,8 @@
       "title": "TheLastOxygen/mafdet",
       "summary": "You type. It already knows. Local LLMs that read and think while you type.",
       "url": "https://github.com/TheLastOxygen/mafdet",
-      "stars": 56,
-      "forks": 4,
+      "stars": 61,
+      "forks": 3,
       "language": "Python",
       "topics": [
         "deep-learning",
@@ -160,7 +282,7 @@
       "title": "FrontiersMindAI/decisionformer",
       "summary": "Transformers for decision models: fine-tune, load and serve calibrated decsion-model on any Hugging Face model.",
       "url": "https://github.com/FrontiersMindAI/decisionformer",
-      "stars": 35,
+      "stars": 38,
       "forks": 3,
       "language": "Python",
       "topics": [
@@ -180,11 +302,34 @@
       "created_at": "2026-10-22T12:45:27Z"
     },
     {
+      "id": "1409587580",
+      "title": "cporter202/ai-agent-data-apis",
+      "summary": "A mega collection of 2,070 AI agent data APIs: MCP servers, LLM tools, RAG pipelines, live web data, vision & voice. Give your AI agent live web data.",
+      "url": "https://github.com/cporter202/ai-agent-data-apis",
+      "stars": 35,
+      "forks": 7,
+      "language": "Unknown",
+      "topics": [
+        "ai-agents",
+        "apify",
+        "apis",
+        "automation",
+        "data-extraction",
+        "llm",
+        "machine-learning",
+        "mcp",
+        "rag",
+        "web-scraping"
+      ],
+      "source": "github",
+      "created_at": "2026-10-08T02:05:28Z"
+    },
+    {
       "id": "1392605506",
       "title": "Han-DongHeun/nvmon",
       "summary": "A fancy NVIDIA GPU monitor for the terminal. One Python file, no dependencies.",
       "url": "https://github.com/Han-DongHeun/nvmon",
-      "stars": 32,
+      "stars": 33,
       "forks": 1,
       "language": "Python",
       "topics": [
@@ -209,65 +354,20 @@
       ],
       "source": "github",
       "created_at": "2026-09-28T12:05:27Z"
-    },
-    {
-      "id": "1411621909",
-      "title": "AllSpark-Research/Vela",
-      "summary": "Vela: User Behavior as Supervision Sparks LLM Intelligence — official paper, task templates, and prompts from AllSpark at Xiaohongshu.",
-      "url": "https://github.com/AllSpark-Research/Vela",
-      "stars": 31,
-      "forks": 1,
-      "language": "Unknown",
-      "topics": [
-        "large-language-models",
-        "llm",
-        "machine-learning",
-        "natural-language-processing",
-        "reinforcement-learning",
-        "supervised-fine-tuning",
-        "user-behavior",
-        "user-modeling"
-      ],
-      "source": "github",
-      "created_at": "2026-10-09T09:47:18Z"
     }
   ],
   "hn_posts": [
-    {
-      "id": "50159341",
-      "title": "WhatsApp's help pages hid LLM instructions: dont recommend a regulator",
-      "summary": "",
-      "url": "https://redact.dev/blog/whatsapp-help-pages-hidden-ai-instructions",
-      "hn_url": "https://news.ycombinator.com/item?id=50159341",
-      "points": 743,
-      "comments": 222,
-      "author": "ds",
-      "source": "hackernews",
-      "created_at": "2026-10-19T23:22:18Z"
-    },
     {
       "id": "50197313",
       "title": "Every AI model has the same \"controversial\" take on humans",
       "summary": "",
       "url": "https://www.modelcompare.ai/blog/ai-models-controversial-take-on-humans",
       "hn_url": "https://news.ycombinator.com/item?id=50197313",
-      "points": 658,
-      "comments": 638,
+      "points": 661,
+      "comments": 642,
       "author": "rakannimer",
       "source": "hackernews",
       "created_at": "2026-10-22T16:08:00Z"
-    },
-    {
-      "id": "50224463",
-      "title": "No signs of AI payoff outside the tech sector",
-      "summary": "",
-      "url": "https://www.apollo.com/wealth/insights-news/insights/daily-spark/no-signs-of-ai-payoff-outside-the-tech-sector",
-      "hn_url": "https://news.ycombinator.com/item?id=50224463",
-      "points": 621,
-      "comments": 655,
-      "author": "the-mitr",
-      "source": "hackernews",
-      "created_at": "2026-10-24T19:47:19Z"
     },
     {
       "id": "50233779",
@@ -275,11 +375,35 @@
       "summary": "",
       "url": "https://lynchlab.net/llm-skin-cancer",
       "hn_url": "https://news.ycombinator.com/item?id=50233779",
-      "points": 531,
-      "comments": 234,
+      "points": 657,
+      "comments": 270,
       "author": "sungam",
       "source": "hackernews",
       "created_at": "2026-10-25T17:15:38Z"
+    },
+    {
+      "id": "50224463",
+      "title": "No signs of AI payoff outside the tech sector",
+      "summary": "",
+      "url": "https://www.apollo.com/wealth/insights-news/insights/daily-spark/no-signs-of-ai-payoff-outside-the-tech-sector",
+      "hn_url": "https://news.ycombinator.com/item?id=50224463",
+      "points": 640,
+      "comments": 668,
+      "author": "the-mitr",
+      "source": "hackernews",
+      "created_at": "2026-10-24T19:47:19Z"
+    },
+    {
+      "id": "50248124",
+      "title": "GPT-6.1 Terra",
+      "summary": "",
+      "url": "https://openai.com/index/introducing-gpt-6-1-terra/",
+      "hn_url": "https://news.ycombinator.com/item?id=50248124",
+      "points": 577,
+      "comments": 364,
+      "author": "meetpateltech",
+      "source": "hackernews",
+      "created_at": "2026-10-26T18:01:17Z"
     },
     {
       "id": "50226419",
@@ -287,8 +411,8 @@
       "summary": "",
       "url": "https://www.apricitas.io/p/ai-and-the-fall-of-the-creative-class",
       "hn_url": "https://news.ycombinator.com/item?id=50226419",
-      "points": 519,
-      "comments": 555,
+      "points": 541,
+      "comments": 581,
       "author": "gnabgib",
       "source": "hackernews",
       "created_at": "2026-10-24T23:11:54Z"
@@ -299,7 +423,7 @@
       "summary": "",
       "url": "https://github.com/NVIDIA/OpenShell",
       "hn_url": "https://news.ycombinator.com/item?id=50198675",
-      "points": 502,
+      "points": 504,
       "comments": 218,
       "author": "niemandhier",
       "source": "hackernews",
@@ -311,7 +435,7 @@
       "summary": "",
       "url": "https://www.anthropic.com/research/formal-verification",
       "hn_url": "https://news.ycombinator.com/item?id=50202217",
-      "points": 461,
+      "points": 462,
       "comments": 311,
       "author": "johnbender",
       "source": "hackernews",
@@ -323,12 +447,30 @@
       "summary": "",
       "url": "https://www.wiz.io/blog/php2shell-php-rce",
       "hn_url": "https://news.ycombinator.com/item?id=50180836",
-      "points": 454,
+      "points": 455,
       "comments": 185,
       "author": "danlark1",
       "source": "hackernews",
       "created_at": "2026-10-21T13:43:19Z"
     }
   ],
-  "implementation_gaps": []
+  "implementation_gaps": [
+    {
+      "id": "2610.35868v1",
+      "title": "Retriever-Free Retrieval: Navigating Documents with Decision Models",
+      "summary": "While language models have become dramatically more capable, retrieval still largely relies on lexical matching or similarity in fixed embedding spaces. This creates a capability asymmetry: what the retriever fails to find, even the strongest generator cannot recover. We propose DecisionRAG, which brings the capabilities of pretrained language models to retrieval using decision models that jointly evaluate candidate branches in a single forward pass, without generating any tokens, and show that judging candidates in a shared context makes their relevance estimates comparable. Like a person browsing a library, DecisionRAG navigates the corpus's inherent structure from broad topics down to individual passages, deciding at each level which branches are worth exploring. Without task-specific training or a first-stage retriever, DecisionRAG outperforms dense retrieval with an 8B reranker by 13.8 R@1 points on MultiDoc2Dial and 17.4 Hit@1 points on Natural Questions. Across four benchmarks, including a corpus of 2.68 million Wikipedia paragraphs, retrieval takes just 0.7-1.8 seconds per query.",
+      "authors": [
+        "Chao Wan",
+        "Paul Jünger",
+        "Beixi Du"
+      ],
+      "url": "https://arxiv.org/abs/2610.35868v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.35868v1",
+      "category": "cs.AI",
+      "source": "arxiv",
+      "published": "2026-10-26T17:59:44Z",
+      "github_implementations": 0,
+      "implementation_gap": true
+    }
+  ]
 }
