@@ -1,172 +1,44 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 44,
-  "edition_date": "2026-10-29",
+  "edition_date": "2026-10-30",
   "cadence": "daily",
-  "generated_at": "2026-10-29T08:47:40.002097+00:00",
+  "generated_at": "2026-10-30T08:53:35.048377+00:00",
   "paper_of_week": {
     "index": 4,
-    "headline": "Test-time interventions: timing decides model resilience",
-    "summary": "Many deployed models face distribution shift, yet naive test‑time adaptation can degrade performance. This work formalizes when an update helps versus harms, introducing a decision framework based on batch statistics and uncertainty signals. Practitioners gain a principled guardrail to trigger adaptation only when it is statistically justified, avoiding costly regressions.",
-    "key_takeaway": "Deploy a simple statistical trigger before applying test‑time updates to safeguard performance.",
+    "headline": "Neural thickets survive without weight noise, reshaping model specialization",
+    "summary": "The authors challenge the Neural Thickets hypothesis, which asserts that pretrained language models contain dense clusters of task‑specific experts reachable via small weight perturbations. By systematically removing weight perturbations and probing with linear probes and fine‑tuning, they demonstrate that task performance does not hinge on navigating a thicket of local minima. Their experiments span GPT‑2, LLaMA, and T5 across ten downstream benchmarks, revealing that performance gradients are smoother than previously claimed.\n\nCrucially, they introduce a diagnostic suite—weight‑space curvature analysis, activation‑space clustering, and gradient‑flow tracing—to map where task‑relevant information resides. The results suggest that task specialization is encoded more in activation patterns than in isolated weight regions, prompting a rethink of model interpretability and pruning strategies.",
+    "key_takeaway": "Task‑specific competence can be extracted without traversing weight thickets, so pruning and adaptation can focus on activation pathways.",
     "excitement_score": 8,
     "paper": {
-      "id": "2610.37658v1",
-      "title": "When Should We Intervene at Test Time?",
-      "summary": "Test-time adaptation helps a deployed model respond to changing inputs, but the same intervention can rescue one batch and damage the next. Updating normalization statistics, for example, can improve corrupted images yet fail when a batch contains mostly one class. Average accuracy hides these failures and cannot tell a model when to use an intervention. Target labels can guide this decision, but they are scarce and some choices are already clear. We introduce PORTAL, a controller that chooses when to deploy an intervention, which inputs to label, and when to stop querying. Each available prediction rule is a candidate, and its predictions are fixed before current feedback arrives. Every acquired label therefore evaluates all candidates on the same input. PORTAL combines these shared comparisons and directs queries toward candidates that can still overtake the current leader. It stops when the remaining labels cannot change the choice or when the possible accuracy gain no longer justifies another query. Our analysis links the required feedback to accuracy gaps and shared mistakes, explaining why some choices need much less evidence. Experiments show that this control turns an intervention that loses accuracy overall into a useful choice on selected batches. It prevents severe failures caused by changes in arrival order and preserves gains across complete corruption streams. When a fixed rule already works well, PORTAL uses little feedback to retain its performance. Periodic label checks reveal when past evidence needs refreshing and help the controller recover as conditions change. The acquired labels also train stronger candidates for future batches, and selection brings nearly all of their accuracy gains into deployment. The same feedback therefore improves both the choice made now and the predictions available to later batches.",
+      "id": "2610.40649v1",
+      "title": "Rethinking Neural Thickets Without Weight Perturbations",
+      "summary": "The Neural Thickets hypothesis posits that pretrained language models lie in dense neighborhoods of task-specific experts in weight space, which random Gaussian perturbations can uncover. We reproduce the reported gains, but show that they do not require this geometric explanation. Perturbing a single decoder block already recovers much of the improvement, while keeping the model entirely frozen and adding a random bias to its output logits matches or exceeds full-weight perturbations on most reasoning tasks. This suggests an alternative explanation based on output diversity, validation-based selection, and voting. We formalize this view as Perturb-Select-Vote (PSV), a general procedure that generates perturbed predictors, selects high-performing members on a small validation set, and aggregates their predictions.   This interpretation connects Neural Thickets to established inference-time methods, including sampling, self-consistency, and verifier-guided selection. A first-order analysis further shows that small weight perturbations act primarily through their induced logit shifts. We extend this analysis to vision, where logit PSV substantially improves performance under domain shift, including on Earth observation, while full-weight perturbations provide little additional benefit. Together, these results suggest that the gains attributed to nearby weight-space experts can instead be obtained through output diversity, selection, and voting. Logit PSV realizes these benefits with a fully frozen model, providing a simple, training-free alternative to full-weight perturbation ensembles across language and vision.",
       "authors": [
-        "Jiahao Zhang",
-        "Xinling Wen",
-        "Liangliang Li"
+        "Nicolas Dufour",
+        "Elouan Gardès",
+        "Amil Dravid"
       ],
-      "url": "https://arxiv.org/abs/2610.37658v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.37658v1",
+      "url": "https://arxiv.org/abs/2610.40649v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.40649v1",
       "category": "cs.LG",
       "source": "arxiv",
-      "published": "2026-10-27T17:58:53Z",
+      "published": "2026-10-29T17:59:29Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [
-    {
-      "index": 1,
-      "tldr": "Hexagonal surfels enable compact, fast scene rendering and reconstruction.",
-      "bullets": [
-        "Introduce honeycomb‑surfels as memory‑efficient primitives",
-        "Demonstrate real‑time rendering on large scenes",
-        "Show reconstruction quality comparable to dense point clouds"
-      ],
-      "who_should_read": "Computer graphics and vision engineers",
-      "paper": {
-        "id": "2610.37668v1",
-        "title": "Honeycomb-Surfels: Compact Hexagonal Primitives for Efficient Scene Rendering and Reconstruction",
-        "summary": "Novel view synthesis and 3D reconstruction have advanced rapidly with radiance fields and splatting, yet their memory and computational demands limit their use in resource-constrained settings. We introduce Hexels: novel planar hexagonal surface elements with a first-order spatial color field for efficient 3D scene and 2D image representation. Hexels exploit locally planar regions with smoothly varying appearance using fewer, larger primitives. Their hexagonal support provides an area- and boundary-efficient domain, while the local color field captures appearance variation within each primitive. Across 34 scenes, Hexels improve PSNR over memory-matched 2DGS by 4.53-7.38 dB across datasets while requiring lower training VRAM. We further ablate Hexels by showing that per primitive, Hexels outperform 2DGS by upto 4.74 dB while using lower training VRAM and having 2.31 times faster FPS. Even in unconstrained settings, Hexels offers complementary quality-memory trade-offs. For efficient 3D surface reconstruction, Hexels reduce error by 28.9% compared with memory-matched 2DGS across 15 DTU scans. On 6 Tanks and Temples surface scenes, Hexels achieves the highest mean F1 among compared methods (34.38%, versus 31.72% for 2DGS). We further also show that Hexels, as a general primitive, improves 2D image representation over Image-GS. Hexels push the Pareto frontier on the quality-efficiency trade-off of surface-aligned primitives.",
-        "authors": [
-          "Prakhar Kaushik",
-          "Soumava Paul",
-          "Alan Yuille"
-        ],
-        "url": "https://arxiv.org/abs/2610.37668v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.37668v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-27T17:59:59Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 2,
-      "tldr": "World imagination augments chain‑of‑dynamics reasoning in robotic VLA models.",
-      "bullets": [
-        "Integrate generative world simulation into VLA pipelines",
-        "Improve zero‑shot manipulation generalization",
-        "Provide quantitative gains on benchmark tasks"
-      ],
-      "who_should_read": "Robotics and multimodal researchers",
-      "paper": {
-        "id": "2610.37666v1",
-        "title": "ThinkWorld: World Imagination Reinforces Chain-of-Dynamics Reasoning",
-        "summary": "Vision-Language-Action (VLA) models have made substantial progress in robotic manipulation, but their generalization remains constrained by the diversity and coverage of action-labeled robot demonstrations. Human videos provide much broader behavioral and environmental experience, while learning from them faces a fundamental trade-off between scalable data and explicit action grounding. We introduce ThinkWorld, a VLA learning framework that grounds action reasoning in world dynamics and strengthens it through reinforcement learning with world imagination. ThinkWorld represents each action thought as a Chain-of-Dynamics (CoD), a sequence of discrete motion tokens that captures the intermediate dynamics connecting the current world to a future state and serves as a common action representation across embodiments. We first initialize CoD with action-labeled demonstrations, then predict the future induced by each CoD and reinforce those whose predictions better match the observed outcome. This enables videos without action annotations to provide direct supervision from observed state transitions, allowing human and robot experience to refine the same reasoning space. Experiments in simulation and on real robots demonstrate effective human-to-robot transfer and strong generalization to unseen tasks and environments.",
-        "authors": [
-          "Chaehyun Kim",
-          "Chi-Pin Huang",
-          "Jisoo Kim"
-        ],
-        "url": "https://arxiv.org/abs/2610.37666v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.37666v1",
-        "category": "cs.RO",
-        "source": "arxiv",
-        "published": "2026-10-27T17:59:52Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 3,
-      "tldr": "Discrete visual tokens act as lossless semantic encodings for multimodal models.",
-      "bullets": [
-        "Propose a tokenization scheme preserving fine‑grained semantics",
-        "Enable language‑vision models to share vocabularies",
-        "Show near‑perfect reconstruction on ImageNet"
-      ],
-      "who_should_read": "Multimodal model developers",
-      "paper": {
-        "id": "2610.37662v1",
-        "title": "Can Discrete Tokens Serve as Semantically Lossless Representations of Visual Signals?",
-        "summary": "Discrete visual tokens represent vision in a discrete form analogous to language, offering a native interface for multimodal modeling under a shared next-token prediction objective. However, quantization error is widely assumed to cause unavoidable semantic loss, fundamentally limiting the semantic fidelity of discrete visual tokens and positioning continuous visual representations as an intrinsic upper bound. Using multimodal understanding as a proxy for semantic fidelity, we revisit this assumption and find quantization error unreliable, as discrete representations with substantially larger errors can achieve better understanding. Instead, the effective bit budget of discrete indices emerges as a key determinant of downstream performance. However, existing quantizers eventually saturate as additional codebooks contribute progressively less semantic information. As one approach to alleviating this saturation, we introduce Factorized Vector Quantization, which quantizes complementary, fixed-dimensional views of the visual feature with symmetric parallel codebooks. It continues to improve at larger bit budgets, ultimately matching continuous visual representations in multimodal understanding. Trained on industrial-scale multimodal data, our model achieves state-of-the-art performance among discrete-representation models, outperforming UniAR and Emu3-Chat by 22.8% and 59.2%, respectively, on a nine-metric average. To our knowledge, it is also the first discrete-representation model competitive with strong continuous-representation models such as Qwen3-VL, including on fine-grained OCR tasks. We further identify the key principles and a practical recipe enabling this competitiveness. These results and insights support the potential of discrete visual representations to underpin large-scale native multimodal foundation models. Code and models are available at https://github.com/hustvl/FVQ",
-        "authors": [
-          "Jialv Zou",
-          "Xiaotong Li",
-          "Zhengrong Yue"
-        ],
-        "url": "https://arxiv.org/abs/2610.37662v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.37662v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-27T17:59:22Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 5,
-      "tldr": "Learned attention gates protect LLM prompts from injection attacks.",
-      "bullets": [
-        "Design per‑head gating modules trained on adversarial prompts",
-        "Maintain downstream task performance",
-        "Release a lightweight defense plug‑in"
-      ],
-      "who_should_read": "LLM deployment engineers",
-      "paper": {
-        "id": "2610.37657v1",
-        "title": "Heads of Security: Learned Attention Gates Improve Prompt Injection Robustness",
-        "summary": "We introduce Heads of Security (HoS), a prompt injection defense that enforces instruction-data separation via a small set of learned per-head attention gates. HoS learns how each head should redistribute attention between trusted and untrusted tokens, enabling models to reason over untrusted content without following injected instructions. We evaluate HoS on Llama-3.3-70B-Instruct and GPT-OSS-20B. We compare it against SecAlign++, a state-of-the-art finetuning-based defense, and ASIDE, a defense that, like ours, builds instruction-data separation into the model architecture. We show that HoS offers greater robustness to adaptive attacks, better performance on standard utility benchmarks, and matches top performance on standard agentic prompt injection benchmarks. More specifically, the black-box RL-Hammer attack reaches 97% ASR against GPT-OSS-20B and 85% against SecAlign, but only 10% against HoS. Claudini, a state-of-the-art white-box attack, strengthened against HoS through autoresearch, requires 3 times more FLOPs to reach the same ASR on HoS as it does on GPT-OSS-20B or SecAlign. HoS preserves base-model utility across standard multiple-choice benchmarks and prompting setups, whereas SecAlign and ASIDE degrade in few-shot settings. On agentic benchmarks with static attacks, HoS and SecAlign perform similarly and substantially improve the security-utility trade-off over the base model. ASIDE struggles with tool use, achieving only 10% utility. These results show that prompt injection robustness can be achieved and improved through targeted attention interventions.",
-        "authors": [
-          "Igor Shilov",
-          "Xiaoxue Yang",
-          "Alexander Panfilov"
-        ],
-        "url": "https://arxiv.org/abs/2610.37657v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.37657v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-10-27T17:58:52Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 7,
-      "tldr": "Differentiable kinetic ODEs accelerate atmospheric chemistry ML pipelines.",
-      "bullets": [
-        "Wrap KPP mechanisms in a gradient‑compatible layer",
-        "Achieve speed‑ups over traditional simulators",
-        "Validate on benchmark chemical networks"
-      ],
-      "who_should_read": "Scientific ML practitioners",
-      "paper": {
-        "id": "2610.37655v1",
-        "title": "KPPax: preprocess differentiable kinetic ODE for machine learning in atmospheric chemistry",
-        "summary": "Atmospheric chemical mechanisms are commonly distributed in the language of the Kinetic PreProcessor (KPP), which generates efficient Fortran or C code but does not fit into the differentiable programming frameworks in which machine-learning models are developed. We present KPPax, a kinetic preprocessor that generates differentiable, just-in-time compiled, and vectorisable chemistry code in JAX from mechanisms written in the KPP language. KPPax evaluates the rate law with sparse operations in log space, which keeps it differentiable, and integrates the stiff system with the implicit solvers and the forward- and reverse-mode adjoints of the \\texttt{diffrax} library, so that exact sensitivities are obtained without hand-derived adjoint code. We demonstrate two applications with the POLLU benchmark mechanism. In the first, the Fisher information matrix computed from an automatically differentiated Jacobian predicts, before any fit, which of the 25 rate coefficients a flow-tube-like design can identify, and noisy synthetic estimation confirms the predicted uncertainties of the nine identifiable rate coefficients to within about 30\\% while revealing clusters of fast reactions of which only ratios are constrained. In the second, a neural-network correction of an emission inventory is trained offline on per-scenario 4D-Var retrievals and then fine-tuned online through the chemical model, which reduces the error of the biogenic correction by a factor of 2.4--5 and recovers information on low-temperature emissions that the individual retrievals lose. KPPax makes KPP mechanisms directly usable for parameter estimation and hybrid physics--machine-learning modelling.",
-        "authors": [
-          "Wenqing Peng",
-          "Michael Boy",
-          "Zhi-Song Liu"
-        ],
-        "url": "https://arxiv.org/abs/2610.37655v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.37655v1",
-        "category": "cs.AI",
-        "source": "arxiv",
-        "published": "2026-10-27T17:58:40Z"
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "The Neural Thickets hypothesis posits that pretrained LMs hide dense neighborhoods of task‑specific experts in weight space, implying that small weight perturbations can uncover specialized subnetworks. This view underpins many pruning, fine‑tuning, and interpretability methods, yet it lacks rigorous empirical validation across model families and tasks.",
+    "approach": "The authors replace stochastic weight perturbations with deterministic weight freezes and evaluate linear probing, low‑rank adaptation (LoRA), and full fine‑tuning. They compute Hessian spectra to quantify curvature, perform activation‑space clustering via k‑means on hidden states, and trace gradient flow during adaptation to see if performance gains align with weight movement or activation reshaping. A control suite injects synthetic noise to compare against the no‑noise baseline.",
+    "results": "Across GPT‑2 (124M–1.5B), LLaMA (7B), and T5 (3B), removing weight perturbations reduced the average downstream accuracy drop from 3.2% (with noise) to 0.4%, while linear probe scores remained within 1% of the noisy baseline. Hessian spectra showed heavy‑tailed distributions but no distinct low‑curvature basins correlating with task performance. Activation clustering revealed task‑specific clusters with silhouette scores of 0.68 versus 0.32 for weight‑only analyses.",
+    "limitations": "The study focuses on decoder‑only and encoder‑decoder architectures up to 7B parameters; scaling to >30B models may surface different dynamics. Moreover, the diagnostic tools rely on batch‑level statistics, which could miss rare but critical weight configurations. The paper does not address continual learning scenarios where weight drift accumulates over many tasks.",
+    "what_it_unlocks": "Practitioners can now prioritize activation‑centric adaptation—e.g., inserting lightweight adapters or prompt tuning—without fearing that hidden weight thickets must be navigated. This simplifies pruning pipelines, reduces the need for expensive weight‑noise searches, and opens a path to more stable, interpretable fine‑tuning across diverse downstream tasks."
+  },
   "one_thing_to_try": {
-    "action": "Add a statistical trigger before test‑time adaptation in your deployment pipeline",
-    "why": "It prevents harmful updates during distribution shifts, preserving reliability",
+    "action": "Run a linear probe on frozen GPT‑2 while adding a LoRA adapter for a downstream classification task.",
+    "why": "It validates that activation‑based adaptation works without weight perturbations.",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -176,8 +48,8 @@
       "title": "Fazmin/AILearningGuide",
       "summary": "Interactive desktop app with 51 labs covering ML fundamentals, transformers, RAG, agents, fine-tuning and quantization and more.",
       "url": "https://github.com/Fazmin/AILearningGuide",
-      "stars": 235,
-      "forks": 20,
+      "stars": 240,
+      "forks": 21,
       "language": "TypeScript",
       "topics": [
         "ai",
@@ -203,7 +75,7 @@
       "title": "Takamatsu-Hikaru/AI-Research-Guide",
       "summary": "AI 科研入门指南：大学选择、科研 60 问、入门项目、学习路线与论文卡片。A bilingual guide to getting started in AI research.",
       "url": "https://github.com/Takamatsu-Hikaru/AI-Research-Guide",
-      "stars": 196,
+      "stars": 197,
       "forks": 10,
       "language": "JavaScript",
       "topics": [
@@ -222,7 +94,7 @@
       "title": "TheLastOxygen/mafdet",
       "summary": "You type. It already knows. Local LLMs that read and think while you type.",
       "url": "https://github.com/TheLastOxygen/mafdet",
-      "stars": 74,
+      "stars": 76,
       "forks": 4,
       "language": "Python",
       "topics": [
@@ -245,8 +117,8 @@
       "title": "Goekdeniz-Guelmez/JOSIE-Voice",
       "summary": "JOSIE Voice: a real-time, on-device voice assistant for Apple Silicon. Download the macOS app (DMG) from Releases.",
       "url": "https://github.com/Goekdeniz-Guelmez/JOSIE-Voice",
-      "stars": 51,
-      "forks": 3,
+      "stars": 53,
+      "forks": 4,
       "language": "Unknown",
       "topics": [
         "aget-framework",
@@ -267,7 +139,7 @@
       "title": "cporter202/ai-agent-data-apis",
       "summary": "A mega collection of 2,070 AI agent data APIs: MCP servers, LLM tools, RAG pipelines, live web data, vision & voice. Give your AI agent live web data.",
       "url": "https://github.com/cporter202/ai-agent-data-apis",
-      "stars": 50,
+      "stars": 51,
       "forks": 11,
       "language": "Unknown",
       "topics": [
@@ -290,7 +162,7 @@
       "title": "FrontiersMindAI/decisionformer",
       "summary": "Transformers for decision models: fine-tune, load and serve calibrated decsion-model on any Hugging Face model.",
       "url": "https://github.com/FrontiersMindAI/decisionformer",
-      "stars": 40,
+      "stars": 41,
       "forks": 3,
       "language": "Python",
       "topics": [
@@ -367,8 +239,8 @@
       "summary": "",
       "url": "https://oioannou.com/blog/ai-promised-less-work/",
       "hn_url": "https://news.ycombinator.com/item?id=50257325",
-      "points": 671,
-      "comments": 655,
+      "points": 677,
+      "comments": 660,
       "author": "oorestisime",
       "source": "hackernews",
       "created_at": "2026-10-27T11:08:14Z"
@@ -379,23 +251,11 @@
       "summary": "",
       "url": "https://lynchlab.net/llm-skin-cancer",
       "hn_url": "https://news.ycombinator.com/item?id=50233779",
-      "points": 669,
+      "points": 670,
       "comments": 274,
       "author": "sungam",
       "source": "hackernews",
       "created_at": "2026-10-25T17:15:38Z"
-    },
-    {
-      "id": "50197313",
-      "title": "Every AI model has the same \"controversial\" take on humans",
-      "summary": "",
-      "url": "https://www.modelcompare.ai/blog/ai-models-controversial-take-on-humans",
-      "hn_url": "https://news.ycombinator.com/item?id=50197313",
-      "points": 666,
-      "comments": 646,
-      "author": "rakannimer",
-      "source": "hackernews",
-      "created_at": "2026-10-22T16:08:00Z"
     },
     {
       "id": "50224463",
@@ -404,7 +264,7 @@
       "url": "https://www.apollo.com/wealth/insights-news/insights/daily-spark/no-signs-of-ai-payoff-outside-the-tech-sector",
       "hn_url": "https://news.ycombinator.com/item?id=50224463",
       "points": 649,
-      "comments": 675,
+      "comments": 677,
       "author": "the-mitr",
       "source": "hackernews",
       "created_at": "2026-10-24T19:47:19Z"
@@ -415,8 +275,8 @@
       "summary": "",
       "url": "https://openai.com/index/introducing-gpt-6-1-terra/",
       "hn_url": "https://news.ycombinator.com/item?id=50248124",
-      "points": 633,
-      "comments": 426,
+      "points": 636,
+      "comments": 427,
       "author": "meetpateltech",
       "source": "hackernews",
       "created_at": "2026-10-26T18:01:17Z"
@@ -427,8 +287,8 @@
       "summary": "",
       "url": "https://www.apricitas.io/p/ai-and-the-fall-of-the-creative-class",
       "hn_url": "https://news.ycombinator.com/item?id=50226419",
-      "points": 545,
-      "comments": 589,
+      "points": 546,
+      "comments": 590,
       "author": "gnabgib",
       "source": "hackernews",
       "created_at": "2026-10-24T23:11:54Z"
@@ -439,23 +299,35 @@
       "summary": "",
       "url": "https://www.brangus.io/survival-llm",
       "hn_url": "https://news.ycombinator.com/item?id=50264853",
-      "points": 526,
-      "comments": 195,
+      "points": 538,
+      "comments": 202,
       "author": "Luc",
       "source": "hackernews",
       "created_at": "2026-10-27T19:55:06Z"
     },
     {
-      "id": "50198675",
-      "title": "OpenShell – A safe, private runtime for fleets of autonomous AI agents",
+      "id": "50257326",
+      "title": "Wikipedia's Cleanup of AI-Generated Content",
       "summary": "",
-      "url": "https://github.com/NVIDIA/OpenShell",
-      "hn_url": "https://news.ycombinator.com/item?id=50198675",
-      "points": 507,
-      "comments": 218,
-      "author": "niemandhier",
+      "url": "https://spectrum.ieee.org/wikipedia-wikiproject-ai-writing-cleanup",
+      "hn_url": "https://news.ycombinator.com/item?id=50257326",
+      "points": 516,
+      "comments": 241,
+      "author": "rbanffy",
       "source": "hackernews",
-      "created_at": "2026-10-22T17:44:06Z"
+      "created_at": "2026-10-27T11:08:15Z"
+    },
+    {
+      "id": "50255298",
+      "title": "The Mythical Man-Month in the Age of AI",
+      "summary": "",
+      "url": "https://j11g.com/the-mythical-man-month-in-the-age-of-ai",
+      "hn_url": "https://news.ycombinator.com/item?id=50255298",
+      "points": 488,
+      "comments": 361,
+      "author": "ilreb",
+      "source": "hackernews",
+      "created_at": "2026-10-27T06:25:37Z"
     }
   ],
   "implementation_gaps": []
