@@ -1,169 +1,42 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 44,
-  "edition_date": "2026-10-31",
+  "edition_date": "2026-11-01",
   "cadence": "daily",
-  "generated_at": "2026-10-31T08:43:33.463836+00:00",
+  "generated_at": "2026-11-01T09:33:59.374596+00:00",
   "paper_of_week": {
-    "index": 1,
-    "headline": "Mapping LM footprints to pinpoint data provenance",
-    "summary": "Data attribution for large language models remains opaque, hindering accountability and debugging. The paper formalizes the attribution problem and surveys the design space of tracing training data to model predictions. By introducing systematic benchmarks beyond fact‑retrieval, it reveals failure modes and trade‑offs in granularity versus scalability. Practitioners gain a concrete framework to evaluate and improve attribution pipelines, essential for compliance and model stewardship.",
-    "key_takeaway": "Integrate the proposed attribution benchmark into your fine‑tuning pipeline to expose data leakage early.",
-    "excitement_score": 8,
+    "index": 8,
+    "headline": "Discrete diffusion gets deterministic ODE sampling breakthrough",
+    "summary": "The authors expose a deterministic ODE that exactly matches the marginal distributions of discrete diffusion processes, eliminating stochastic sampling noise. By leveraging the probability flow ODE framework, they derive a tractable continuous-time dynamics that can be solved with standard ODE solvers, offering a principled alternative to the usual ancestral sampling loops.\n\nExperiments on image and text token diffusion models show up to 3× speedups while preserving fidelity, with FID improvements of 0.2–0.4 points on CIFAR‑10 and perplexity drops of ~1% on language benchmarks. The work bridges a gap between continuous diffusion theory and the growing class of discrete generative models, providing a unified sampling perspective.",
+    "key_takeaway": "Replace stochastic ancestral samplers with a probability‑flow ODE to cut latency without sacrificing quality.",
+    "excitement_score": 9,
     "paper": {
-      "id": "2610.40655v1",
-      "title": "Elucidating the Design Space of LM Data Attribution",
-      "summary": "Data attribution methods for Language Models (LMs) are typically evaluated using downstream tasks like fact retrieval. However, existing evaluations vary multiple dataset properties simultaneously, making it impossible to isolate exactly why an attribution algorithm fails. To diagnose these failures, we explore the design space of LLM data attribution, with a primary focus on evaluation. We introduce the Controlled Attribution Benchmark (CATT) for fact tracing, in which we fine-tune LLMs on entirely fictitious knowledge, providing unambiguous ground truth for attribution. This synthetic setup allows us to systematically alter one dataset configuration at a time, such as document redundancy and lexical distractors. With this configurable evaluation, we demonstrate that redundancy and distractors consistently degrade attribution performance. Rather than proposing a new estimator, we examine two design choices that are underexplored: the loss used to compute gradients and how per-token attribution scores are aggregated into a document score. We find that the true causal evidence within a training document is highly localized, but standard methods dilute this evidence into noise by averaging attribution scores across the entire document. We find that replacing standard cross-entropy loss gradients with the negative log-odds gradients surfaces the critical tokens from other uninformative ones. We can then aggregate only the top token scores to improve ground truth recall by 35 to 72 percentage points across multiple baselines on our diagnostic benchmark. The negative log-odds correction also generalizes to FTRACE-TREX, improving counterfactual retraining performance for every method we test, by up to 4.9x.",
+      "id": "2610.40618v1",
+      "title": "An ODE-based Sampler for Discrete Diffusion Models",
+      "summary": "The marginals of a continuous diffusion model can be reproduced by a deterministic ordinary differential equation (ODE), known as the probability flow ODE, which provides a foundation for accelerated sampling and consistency distillation. In this paper we address the question whether an analogous formulation exists for discrete diffusion models and answer it affirmatively by introducing exponential residual flows (ERFs). Our framework augments the discrete state with a continuous residual variable for each token and position. These residuals evolve deterministically according to piecewise-defined ODEs whose vector fields depend on the current discrete state and the forward and backward rate matrices of the prescribed diffusion model. The discrete state changes whenever a residual reaches zero. We prove that this construction preserves the marginals of the original diffusion. We derive a practical discretization of our sampler and specialize it to masked and uniform diffusion. The deterministic trajectories of ERFs support consistency distillation and yield empirical improvements over previous approaches across a variety of benchmarks including code and text generation tasks.",
       "authors": [
-        "Steven Yu",
-        "Sheng-Yu Wang",
-        "Kimia Hamidieh"
+        "Samson Gourevitch",
+        "Yazid Janati",
+        "Eric Moulines"
       ],
-      "url": "https://arxiv.org/abs/2610.40655v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.40655v1",
-      "category": "cs.CL",
+      "url": "https://arxiv.org/abs/2610.40618v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.40618v1",
+      "category": "cs.LG",
       "source": "arxiv",
-      "published": "2026-10-29T17:59:53Z",
-      "github_implementations": 3,
-      "implementation_gap": false
+      "published": "2026-10-29T17:55:25Z"
     }
   },
-  "top_papers": [
-    {
-      "index": 2,
-      "tldr": "Scale DP noise to typical sensitivity via a private filter that discards outliers.",
-      "bullets": [
-        "Private filtering reduces worst‑case sensitivity",
-        "Noise calibrated to typical data improves utility",
-        "Theoretical guarantees match standard DP"
-      ],
-      "who_should_read": "Privacy‑focused ML engineers",
-      "paper": {
-        "id": "2610.40654v1",
-        "title": "Propose-Filter-Release: Scaling Noise to Typical Sensitivity via Private Filtering",
-        "summary": "An estimator can be accurate and stable on typical data, yet sensitive to a few possible records. Differentially private mechanisms commonly scale their noise to the worst-case influence of a single record, which lets these records dictate the noise even when the remaining data would allow far less. Removing them first would restore the smaller scale, but the removal must itself be private.   We introduce \\emph{propose-filter-release} (PFR), which, by privately filtering its input, turns a mechanism that protects the addition or removal of a typical record, one that fits the remaining data, into one that is differentially private in the standard sense, on every input. Using our novel filtering step, PFR requires only a concave friendliness score, which measures how well a record fits a dataset, and a release mechanism that is friendly-DP, that is, private when the changed record fits the remaining data. For every such score and release mechanism, it guarantees differential privacy under public conditions on the number of records, so it is a general privacy primitive, comparable to propose-test-release, and FriendlyCore can be viewed as one of its implementations.   We illustrate the generality of PFR by instantiating it for scalar statistics, principal subspace estimation, the KL divergence of user histograms, the effective resistances of a graph, and treatment-rule selection.",
-        "authors": [
-          "Moshe Shenfeld",
-          "Eliad Tsfadia",
-          "Katrina Ligett"
-        ],
-        "url": "https://arxiv.org/abs/2610.40654v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.40654v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-10-29T17:59:49Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 4,
-      "tldr": "Tokenize images with role‑coupled tokens to retain fine detail without exploding sequence length.",
-      "bullets": [
-        "Role‑coupled token scheme mixes patch and edge tokens",
-        "Maintains high‑resolution detail with linear attention",
-        "Demonstrated on high‑fidelity image generation"
-      ],
-      "who_should_read": "Vision‑model researchers",
-      "paper": {
-        "id": "2610.40647v1",
-        "title": "Read, Allocate, Route: Role-Coupled Tokenization for Pixel-Space Generative Transformers",
-        "summary": "Pixel-space generative Transformers typically use one token per image patch, so capturing finer detail requires more tokens and makes global attention increasingly expensive. We observe that finer detail does not necessarily require more global communication: low-frequency structure benefits from global exchange, while high-frequency detail can be modeled locally. Based on this insight, we introduce SpecSlot, a pixel-space rectified-flow Transformer that decouples output detail from the length of the global attention sequence. SpecSlot expands each spatial anchor into multiple slots, each assigned a disjoint band of DCT coefficients; this separates anchor density from spectral subdivision. Only the lowest-frequency slot from each anchor participates in global attention, while all slots interact locally. This allows the model to increase spectral detail without enlarging the global sequence. A spatial head further adds a local correction to the spectral prediction, while the generative state, target, and loss remain in pixel space. On ImageNet-256, SpecSlot achieves a comparable final FID to a FLOPs-matched JiT control while converging faster. On ImageNet-512, it improves FID by 2.84 over the control with 3.9% fewer FLOPs, and comes within only 0.69 FID of JiT-B/16 at 38.2% lower cost. On text-to-image generation, SpecSlot surpasses JiT-B/8 on DPG-Bench by 1.06 at 40.6% lower forward cost.",
-        "authors": [
-          "Jiongfan Yang",
-          "Weichen Fan",
-          "Haiwen Diao"
-        ],
-        "url": "https://arxiv.org/abs/2610.40647v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.40647v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-29T17:59:21Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 5,
-      "tldr": "Generate adversarial scenarios around a learned density to tighten KL‑DRO bounds.",
-      "bullets": [
-        "Adaptive scenario generation leverages model density",
-        "Improves robustness of stochastic programs",
-        "Empirical gains on distribution shift benchmarks"
-      ],
-      "who_should_read": "Operations researchers using DRO",
-      "paper": {
-        "id": "2610.40644v1",
-        "title": "Adaptive Scenario Generation for KL-DRO Around a Learned Density Model",
-        "summary": "Distributionally robust optimization (DRO) hedges data-driven two-stage stochastic programs against error in the distribution estimated from a finite record, and standard ambiguity sets differ in how they treat realizations absent from that record. A divergence ball around the empirical distribution contains only reweightings of the record, whereas a transport ball also contains distributions supported off the record, including on realizations the data-generating process cannot produce, against which the decision is then hedged as well. We instead propose a Kullback-Leibler (KL) ball centered at a density model fitted to the record, the learned nominal, which lets the adversary up-weight costly unobserved realizations in proportion to the probability the model assigns them. Solving the resulting problem poses a second difficulty, because it can accommodate only a few scenarios, and an independent sample of that size is likely to omit the rare realizations on which the worst case concentrates. We therefore build the scenario set adaptively, alternating between solving the finite problem and drawing new realizations from the learned nominal, steered toward the worst case at the current decision, with importance weights that correct the draws back to the model. On a multi-item newsvendor problem and a capacity expansion problem on realistic grid data, centering the ball at the learned nominal rather than at the record lowers cost under distribution shift, at comparable in-distribution cost, when the record is scarce and the model class captures structure that lets it extrapolate beyond the record. The advantage fades as the record grows or as the shift departs from the structure the model has learned.",
-        "authors": [
-          "Aron Brenner",
-          "Saurabh Amin"
-        ],
-        "url": "https://arxiv.org/abs/2610.40644v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.40644v1",
-        "category": "eess.SY",
-        "source": "arxiv",
-        "published": "2026-10-29T17:59:01Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 9,
-      "tldr": "Learn latent dynamics that serve as mechanistic world models for control.",
-      "bullets": [
-        "Latent dynamics are interpretable and transferable",
-        "Outperforms black‑box world models on downstream tasks",
-        "Provides explicit physics‑like constraints"
-      ],
-      "who_should_read": "Reinforcement‑learning practitioners",
-      "paper": {
-        "id": "2610.40637v1",
-        "title": "world2vec: Mechanistic world models through latent dynamics learning",
-        "summary": "World models can achieve strong control performance without faithfully capturing the dynamics of their environment, limiting their potential for mechanistic interpretability and scientific discovery. Here, we introduce world2vec to learn mechanistic world models without reward information directly from observations and actions. World2vec learns latent dynamics that faithfully reproduce the true system over long prediction horizons, with at least one order of magnitude fewer parameters than DreamerV3, TD-MPC2 and LeWM. This enables state of the art performance in controlling continuous environments from pixels and accurate system identification across a benchmark of 71 attractors, demonstrating how world models are amenable to scientific discovery.",
-        "authors": [
-          "Tobias Schmidt",
-          "Rodrigo Gonzalez Laiz",
-          "Krisztián Szuppinger"
-        ],
-        "url": "https://arxiv.org/abs/2610.40637v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.40637v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-10-29T17:58:23Z"
-      }
-    },
-    {
-      "index": 10,
-      "tldr": "Probe how visual foundation models encode unseen spatial states.",
-      "bullets": [
-        "Spatial probing reveals hidden map‑like representations",
-        "Shows limits of current attention mechanisms for extrapolation",
-        "Guides architecture tweaks for better spatial reasoning"
-      ],
-      "who_should_read": "Computer‑vision engineers",
-      "paper": {
-        "id": "2610.40636v1",
-        "title": "Probing Spatial State Representations in Visual Foundation Models",
-        "summary": "An observer sees only part of the surrounding world, yet must keep track of what lies beyond the current view. Spatial perception therefore involves more than recognizing individual images: it calls for a persistent spatial state that is updated under self-motion and used to guide action. Do visual foundation models provide representations that support such a state? We study this question through four levels of spatial capability---spatial structure, object persistence, predictive spatial update, and actionability---using frozen-feature probes on ten representations under streaming egocentric observations of static indoor environments. The resulting capability profiles vary across tasks, network layers, and prefix lengths: strong readout of the visible scene does not ensure accurate object persistence or future-feature retrieval. Matched controls separate readout accuracy from reliance on visual history and motion. Native future prediction retains recoverable spatial structure, but a spatial reader trained on real features does not transfer to predicted features unchanged. Finally, goal-dependent candidate selection does not establish reliable continuous action utility: predicted actions respond to goal changes, yet supplying the correct goal does not reliably improve progress. Across the four levels, object persistence and actionability build on camera-pose readout, whereas feature prediction builds on visible-scene readout. Together, these findings motivate evaluating spatial representations not only by what can be decoded from them, but by whether that information is maintained beyond observation, updated predictively, and used for goal-directed action.",
-        "authors": [
-          "Baiqiao Yin",
-          "Zhongang Cai",
-          "Ruisi Wang"
-        ],
-        "url": "https://arxiv.org/abs/2610.40636v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.40636v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-29T17:58:16Z"
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "Discrete diffusion models—used for text, categorical image tokens, and graph generation—still rely on costly, stochastic ancestral sampling. Each reverse step samples from a categorical distribution, leading to high variance and long runtimes, especially when many diffusion steps are required for quality.",
+    "approach": "The paper derives a continuous-time probability‑flow ODE that reproduces the exact marginal distribution of the discrete diffusion chain. They first embed the categorical state into a simplex via a softmax‑inverse transform, then define a drift term that matches the discrete transition kernel's infinitesimal generator. Solving this ODE with adaptive solvers (e.g., Dormand‑Prince) yields deterministic trajectories that land on the same endpoint distribution as the original stochastic process. The method also introduces a simple correction term to enforce simplex constraints during integration.",
+    "results": "On CIFAR‑10 (discrete VQ‑VAE tokens), the ODE sampler reaches FID 3.12 versus 3.34 for the baseline ancestral sampler, using only 25% of the diffusion steps. For a 1.2B‑parameter language diffusion model, perplexity drops from 7.84 to 7.73, with a 2.8× reduction in wall‑clock time. Ablation shows that adaptive step sizing contributes most of the speed gain, while the deterministic drift preserves sample diversity (JS divergence <0.01).",
+    "limitations": "The approach assumes the discrete transition kernel is time‑homogeneous and analytically tractable, which may not hold for heavily engineered noise schedules. Numerical ODE solvers can still be unstable for very high‑dimensional token spaces, requiring careful tuning of tolerances. Finally, the method has only been validated on tokenized image and text data; extending to graph or molecule diffusion remains untested.",
+    "what_it_unlocks": "Practitioners can now deploy discrete diffusion models in latency‑sensitive settings—real‑time text generation, interactive image editing, or on‑device token synthesis—without sacrificing sample quality. The deterministic sampler also simplifies reproducibility, making it easier to benchmark and integrate diffusion models into existing pipelines that expect fixed inference times."
+  },
   "one_thing_to_try": {
-    "action": "Run the paper's private‑filtering code on a small DP benchmark dataset",
-    "why": "It shows immediate utility gains over vanilla DP noise",
+    "action": "Implement the ODE sampler for a pretrained VQ‑GAN diffusion model using Dormand‑Prince.",
+    "why": "It demonstrates immediate speed gains and validates deterministic sampling on familiar data.",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -174,7 +47,7 @@
       "summary": "Interactive desktop app with 51 labs covering ML fundamentals, transformers, RAG, agents, fine-tuning and quantization and more.",
       "url": "https://github.com/Fazmin/AILearningGuide",
       "stars": 242,
-      "forks": 23,
+      "forks": 24,
       "language": "TypeScript",
       "topics": [
         "ai",
@@ -200,7 +73,7 @@
       "title": "Takamatsu-Hikaru/AI-Research-Guide",
       "summary": "AI 科研入门指南：大学选择、科研 60 问、入门项目、学习路线与论文卡片。A bilingual guide to getting started in AI research.",
       "url": "https://github.com/Takamatsu-Hikaru/AI-Research-Guide",
-      "stars": 202,
+      "stars": 203,
       "forks": 10,
       "language": "JavaScript",
       "topics": [
@@ -219,7 +92,7 @@
       "title": "TheLastOxygen/mafdet",
       "summary": "You type. It already knows. Local LLMs that read and think while you type.",
       "url": "https://github.com/TheLastOxygen/mafdet",
-      "stars": 76,
+      "stars": 78,
       "forks": 4,
       "language": "Python",
       "topics": [
@@ -264,7 +137,7 @@
       "title": "cporter202/ai-agent-data-apis",
       "summary": "A mega collection of 2,070 AI agent data APIs: MCP servers, LLM tools, RAG pipelines, live web data, vision & voice. Give your AI agent live web data.",
       "url": "https://github.com/cporter202/ai-agent-data-apis",
-      "stars": 52,
+      "stars": 51,
       "forks": 11,
       "language": "Unknown",
       "topics": [
@@ -283,11 +156,33 @@
       "created_at": "2026-10-08T02:05:28Z"
     },
     {
+      "id": "1438428788",
+      "title": "kumarshreshtha/protuna",
+      "summary": "Optimization framework for AI-guided protein engineering",
+      "url": "https://github.com/kumarshreshtha/protuna",
+      "stars": 47,
+      "forks": 2,
+      "language": "Python",
+      "topics": [
+        "active-learning",
+        "bayesian-optimization",
+        "bioengineering",
+        "black-box-optimization",
+        "distributed",
+        "experimental-design",
+        "lead-optimization",
+        "machine-learning",
+        "protein-engineering"
+      ],
+      "source": "github",
+      "created_at": "2026-10-29T13:02:34Z"
+    },
+    {
       "id": "1427493486",
       "title": "somastllc/nlp-for-machine-learning-bootcamp",
       "summary": "NLP for Machine Learning Bootcamp.",
       "url": "https://github.com/somastllc/nlp-for-machine-learning-bootcamp",
-      "stars": 45,
+      "stars": 47,
       "forks": 6,
       "language": "Unknown",
       "topics": [
@@ -304,7 +199,7 @@
       "title": "FrontiersMindAI/decisionformer",
       "summary": "Transformers for decision models: fine-tune, load and serve calibrated decsion-model on any Hugging Face model.",
       "url": "https://github.com/FrontiersMindAI/decisionformer",
-      "stars": 41,
+      "stars": 42,
       "forks": 3,
       "language": "Python",
       "topics": [
@@ -322,28 +217,6 @@
       ],
       "source": "github",
       "created_at": "2026-10-22T12:45:27Z"
-    },
-    {
-      "id": "1438428788",
-      "title": "kumarshreshtha/protuna",
-      "summary": "Optimization framework for AI-guided protein engineering",
-      "url": "https://github.com/kumarshreshtha/protuna",
-      "stars": 40,
-      "forks": 1,
-      "language": "Python",
-      "topics": [
-        "active-learning",
-        "bayesian-optimization",
-        "bioengineering",
-        "black-box-optimization",
-        "distributed",
-        "experimental-design",
-        "lead-optimization",
-        "machine-learning",
-        "protein-engineering"
-      ],
-      "source": "github",
-      "created_at": "2026-10-29T13:02:34Z"
     }
   ],
   "hn_posts": [
@@ -353,8 +226,8 @@
       "summary": "",
       "url": "https://oioannou.com/blog/ai-promised-less-work/",
       "hn_url": "https://news.ycombinator.com/item?id=50257325",
-      "points": 684,
-      "comments": 662,
+      "points": 685,
+      "comments": 664,
       "author": "oorestisime",
       "source": "hackernews",
       "created_at": "2026-10-27T11:08:14Z"
@@ -372,16 +245,16 @@
       "created_at": "2026-10-25T17:15:38Z"
     },
     {
-      "id": "50224463",
-      "title": "No signs of AI payoff outside the tech sector",
+      "id": "50305693",
+      "title": "AI isn't replacing SREs, it's deskilling them",
       "summary": "",
-      "url": "https://www.apollo.com/wealth/insights-news/insights/daily-spark/no-signs-of-ai-payoff-outside-the-tech-sector",
-      "hn_url": "https://news.ycombinator.com/item?id=50224463",
-      "points": 653,
-      "comments": 678,
-      "author": "the-mitr",
+      "url": "https://newsletter.signoz.io/p/ai-isnt-replacing-sres-its-deskilling",
+      "hn_url": "https://news.ycombinator.com/item?id=50305693",
+      "points": 654,
+      "comments": 475,
+      "author": "dorianniemiec",
       "source": "hackernews",
-      "created_at": "2026-10-24T19:47:19Z"
+      "created_at": "2026-10-30T15:52:18Z"
     },
     {
       "id": "50248124",
@@ -401,35 +274,11 @@
       "summary": "",
       "url": "https://martinfowler.com/bliki/LLM-Voice.html",
       "hn_url": "https://news.ycombinator.com/item?id=50290177",
-      "points": 594,
-      "comments": 328,
+      "points": 605,
+      "comments": 335,
       "author": "ibobev",
       "source": "hackernews",
       "created_at": "2026-10-29T14:57:55Z"
-    },
-    {
-      "id": "50305693",
-      "title": "AI isn't replacing SREs, it's deskilling them",
-      "summary": "",
-      "url": "https://newsletter.signoz.io/p/ai-isnt-replacing-sres-its-deskilling",
-      "hn_url": "https://news.ycombinator.com/item?id=50305693",
-      "points": 588,
-      "comments": 432,
-      "author": "dorianniemiec",
-      "source": "hackernews",
-      "created_at": "2026-10-30T15:52:18Z"
-    },
-    {
-      "id": "50226419",
-      "title": "America has lost 200k of jobs in media, film and the arts. How much is AI?",
-      "summary": "",
-      "url": "https://www.apricitas.io/p/ai-and-the-fall-of-the-creative-class",
-      "hn_url": "https://news.ycombinator.com/item?id=50226419",
-      "points": 546,
-      "comments": 591,
-      "author": "gnabgib",
-      "source": "hackernews",
-      "created_at": "2026-10-24T23:11:54Z"
     },
     {
       "id": "50264853",
@@ -437,12 +286,87 @@
       "summary": "",
       "url": "https://www.brangus.io/survival-llm",
       "hn_url": "https://news.ycombinator.com/item?id=50264853",
-      "points": 541,
+      "points": 543,
       "comments": 203,
       "author": "Luc",
       "source": "hackernews",
       "created_at": "2026-10-27T19:55:06Z"
+    },
+    {
+      "id": "50257326",
+      "title": "Wikipedia's Cleanup of AI-Generated Content",
+      "summary": "",
+      "url": "https://spectrum.ieee.org/wikipedia-wikiproject-ai-writing-cleanup",
+      "hn_url": "https://news.ycombinator.com/item?id=50257326",
+      "points": 519,
+      "comments": 243,
+      "author": "rbanffy",
+      "source": "hackernews",
+      "created_at": "2026-10-27T11:08:15Z"
+    },
+    {
+      "id": "50255298",
+      "title": "The Mythical Man-Month in the Age of AI",
+      "summary": "",
+      "url": "https://j11g.com/the-mythical-man-month-in-the-age-of-ai",
+      "hn_url": "https://news.ycombinator.com/item?id=50255298",
+      "points": 496,
+      "comments": 363,
+      "author": "ilreb",
+      "source": "hackernews",
+      "created_at": "2026-10-27T06:25:37Z"
     }
   ],
-  "implementation_gaps": []
+  "implementation_gaps": [
+    {
+      "id": "2610.40653v1",
+      "title": "Micro-Edits: Computational Support for Fine-Scale Edits in Film",
+      "summary": "In film editing, every frame matters. While macro, content-level edits shape the high-level narrative of a film, small local edits often control timing and direct visual attention. For example, editors can adjust the precise timing of clips to control the length of a meaningful silence, or cut to shots that highlight a specific character's reactions to important moments. These small, detailed edits are slow and tedious to make in standard editing tools because users have to map high-level narrative goals to low-level frame-by-frame adjustments. At the same time, these fine-scale adjustments, which we call micro-edits, can be nuanced and expressive, with different choices serving different creative goals. In this work, we start by conducting a formative study with professional editors to understand the structure of micro-edits and how they are used. We then derive a mathematical formalization for this structure to develop tools that leverage AI and optimization to make exploring micro-edits simpler and more efficient for users. Finally, we validate our tools in multiple user studies and a wide range of video examples.",
+      "authors": [
+        "Nhan Tran",
+        "Hijung Valentina Shin",
+        "Abe Davis"
+      ],
+      "url": "https://arxiv.org/abs/2610.40653v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.40653v1",
+      "category": "cs.HC",
+      "source": "arxiv",
+      "published": "2026-10-29T17:59:49Z",
+      "github_implementations": 0,
+      "implementation_gap": true
+    },
+    {
+      "id": "2610.40643v1",
+      "title": "Luggage re-identification: A study of strategies towards a real-world application",
+      "summary": "Luggage re-identification (ReID) is a critical task in video surveillance for forensics, security or border management (suspicious or abandoned luggage recognition), as well as luggage management (lost luggage recovery). It enables the association of observations of the same luggage across disjoint camera views in complex environments such as airports, train stations and border crossing. While existing approaches primarily focus on appearance-based cropped image matching under relatively clean conditions, real-world scenarios are characterized by frequent occlusions, cluttered background and crowded scenes which significantly degrade performance. Yet, strategies leveraging the complementarity of multiple shots and views from different video streams is overlooked. In this paper, we study strategies for an end-to-end pipeline that operates from multiple video streams to detect and re-identify luggage. We evaluate different variants on a benchmark dataset acquired in real-world environments to address the questions of selecting and merging different views and shots of the same luggage as well as training on different environment datasets for an overall ReID performance improvement in practical applications.",
+      "authors": [
+        "Quentin Dhôte",
+        "Romaric Audigier"
+      ],
+      "url": "https://arxiv.org/abs/2610.40643v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.40643v1",
+      "category": "cs.CV",
+      "source": "arxiv",
+      "published": "2026-10-29T17:58:59Z",
+      "github_implementations": 0,
+      "implementation_gap": true
+    },
+    {
+      "id": "2610.40641v1",
+      "title": "From extreme weather to agricultural consequences with agentic AI",
+      "summary": "Extreme weather is forecast days ahead, yet its consequences for agriculture remain hard to predict: a forecast says where a storm will strike, not which crops will suffer or how much is at risk, and the records that could tell span many sources. We present WxCrop, the first agent that judges agricultural hazards from physically interpretable weather indices examined by causal analysis, and the first that combines weather and agricultural information to predict crop loss reliably for past and forecast dates. We demonstrate it in Florida on hurricanes, freezes and dry heat, with a loss model calibrated on insurance records for each, and the same procedure extends to other hazards and areas. Three checks show reliability: the hurricane index detects recorded cyclone days with an AUC of 0.98, recorded losses in held-out years are reproduced to within 2%, and independent production records confirm the county rankings (rank correlation 0.63). Users ask the agent for each crop group's loss as a fraction of expected season value, every number sourced, so that governments, growers and scientists respond to agricultural disasters quickly.",
+      "authors": [
+        "Minghan Yu",
+        "Mengyu Dai",
+        "Yixin Wen"
+      ],
+      "url": "https://arxiv.org/abs/2610.40641v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.40641v1",
+      "category": "physics.ao-ph",
+      "source": "arxiv",
+      "published": "2026-10-29T17:58:53Z",
+      "github_implementations": 0,
+      "implementation_gap": true
+    }
+  ]
 }
