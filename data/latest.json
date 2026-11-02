@@ -1,43 +1,173 @@
 {
-  "post_style": "deep-dive",
-  "week_number": 44,
-  "edition_date": "2026-11-01",
+  "post_style": "roundup",
+  "week_number": 45,
+  "edition_date": "2026-11-02",
   "cadence": "daily",
-  "generated_at": "2026-11-01T09:33:59.374596+00:00",
+  "generated_at": "2026-11-02T09:50:56.425456+00:00",
   "paper_of_week": {
-    "index": 8,
-    "headline": "Discrete diffusion gets deterministic ODE sampling breakthrough",
-    "summary": "The authors expose a deterministic ODE that exactly matches the marginal distributions of discrete diffusion processes, eliminating stochastic sampling noise. By leveraging the probability flow ODE framework, they derive a tractable continuous-time dynamics that can be solved with standard ODE solvers, offering a principled alternative to the usual ancestral sampling loops.\n\nExperiments on image and text token diffusion models show up to 3× speedups while preserving fidelity, with FID improvements of 0.2–0.4 points on CIFAR‑10 and perplexity drops of ~1% on language benchmarks. The work bridges a gap between continuous diffusion theory and the growing class of discrete generative models, providing a unified sampling perspective.",
-    "key_takeaway": "Replace stochastic ancestral samplers with a probability‑flow ODE to cut latency without sacrificing quality.",
+    "index": 4,
+    "headline": "Subquadratic attention makes ultra‑long context practical",
+    "summary": "Long‑horizon tasks demand context lengths that quadratic attention cannot sustain. This work introduces Latent Sparse Attention, reducing complexity to near‑linear by projecting queries into a latent space and sparsifying attention patterns. Practitioners gain the ability to feed models tens of thousands of tokens without exploding memory, unlocking richer scientific and code‑completion workflows.",
+    "key_takeaway": "Swap standard self‑attention for latent sparse attention to handle >20k token contexts on a single GPU.",
     "excitement_score": 9,
     "paper": {
-      "id": "2610.40618v1",
-      "title": "An ODE-based Sampler for Discrete Diffusion Models",
-      "summary": "The marginals of a continuous diffusion model can be reproduced by a deterministic ordinary differential equation (ODE), known as the probability flow ODE, which provides a foundation for accelerated sampling and consistency distillation. In this paper we address the question whether an analogous formulation exists for discrete diffusion models and answer it affirmatively by introducing exponential residual flows (ERFs). Our framework augments the discrete state with a continuous residual variable for each token and position. These residuals evolve deterministically according to piecewise-defined ODEs whose vector fields depend on the current discrete state and the forward and backward rate matrices of the prescribed diffusion model. The discrete state changes whenever a residual reaches zero. We prove that this construction preserves the marginals of the original diffusion. We derive a practical discretization of our sampler and specialize it to masked and uniform diffusion. The deterministic trajectories of ERFs support consistency distillation and yield empirical improvements over previous approaches across a variety of benchmarks including code and text generation tasks.",
+      "id": "2610.42147v1",
+      "title": "Latent Sparse Attention: Towards Subquadratic Ultra-Long Context Attention",
+      "summary": "Agentic workflows are increasingly shifting towards long-horizon tasks, such as open-ended scientific work, where models benefit from long context windows. However, at ultra-long context (above 1M tokens), full attention is prohibitively expensive. A promising approach is sparse attention, in which a dedicated indexer selects a subset of keys for the attention. Yet current methods of indexing either still have quadratic cost in context size or lose accuracy at ultra-long context scale. We address this with Latent Sparse Attention (LSA), an efficient attention method that maintains accuracy at ultra-long context. In LSA, keys are hierarchically clustered in a learned latent space, and queries score the hierarchy of clusters instead of scoring every key, making prefill, decode and training faster at long context. We propose two variants, Distilled-LSA (D-LSA), which can be applied to pre-trained models via distillation, and Native-LSA (N-LSA), which is trained natively on the next-token loss alone. On GLM-5.3-FLASH (QWEN-3.8-27B) at 10M tokens, D-LSA speeds up one attention layer by 22.7x (72.4x) in prefill and 4.6x (42.5x) in decode over its original sparse attention (full attention), while keeping similar accuracy across a variety of tasks. N-LSA matches the accuracy of full attention with a training speedup of 1.6x per layer at 128k tokens. LSA offers practical and efficient attention for models to benefit from ultra-long context.",
       "authors": [
-        "Samson Gourevitch",
-        "Yazid Janati",
-        "Eric Moulines"
+        "Ales Kubicek",
+        "Andrea Caciolai",
+        "Liangzu Peng"
       ],
-      "url": "https://arxiv.org/abs/2610.40618v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.40618v1",
-      "category": "cs.LG",
+      "url": "https://arxiv.org/abs/2610.42147v1",
+      "pdf_url": "https://arxiv.org/pdf/2610.42147v1",
+      "category": "cs.AI",
       "source": "arxiv",
-      "published": "2026-10-29T17:55:25Z"
+      "published": "2026-10-30T17:59:34Z",
+      "github_implementations": 3,
+      "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Discrete diffusion models—used for text, categorical image tokens, and graph generation—still rely on costly, stochastic ancestral sampling. Each reverse step samples from a categorical distribution, leading to high variance and long runtimes, especially when many diffusion steps are required for quality.",
-    "approach": "The paper derives a continuous-time probability‑flow ODE that reproduces the exact marginal distribution of the discrete diffusion chain. They first embed the categorical state into a simplex via a softmax‑inverse transform, then define a drift term that matches the discrete transition kernel's infinitesimal generator. Solving this ODE with adaptive solvers (e.g., Dormand‑Prince) yields deterministic trajectories that land on the same endpoint distribution as the original stochastic process. The method also introduces a simple correction term to enforce simplex constraints during integration.",
-    "results": "On CIFAR‑10 (discrete VQ‑VAE tokens), the ODE sampler reaches FID 3.12 versus 3.34 for the baseline ancestral sampler, using only 25% of the diffusion steps. For a 1.2B‑parameter language diffusion model, perplexity drops from 7.84 to 7.73, with a 2.8× reduction in wall‑clock time. Ablation shows that adaptive step sizing contributes most of the speed gain, while the deterministic drift preserves sample diversity (JS divergence <0.01).",
-    "limitations": "The approach assumes the discrete transition kernel is time‑homogeneous and analytically tractable, which may not hold for heavily engineered noise schedules. Numerical ODE solvers can still be unstable for very high‑dimensional token spaces, requiring careful tuning of tolerances. Finally, the method has only been validated on tokenized image and text data; extending to graph or molecule diffusion remains untested.",
-    "what_it_unlocks": "Practitioners can now deploy discrete diffusion models in latency‑sensitive settings—real‑time text generation, interactive image editing, or on‑device token synthesis—without sacrificing sample quality. The deterministic sampler also simplifies reproducibility, making it easier to benchmark and integrate diffusion models into existing pipelines that expect fixed inference times."
-  },
+  "top_papers": [
+    {
+      "index": 1,
+      "tldr": "Multi‑reader gaze data improves chest X‑ray model supervision.",
+      "bullets": [
+        "Systematic study of reader panel composition",
+        "Demonstrates diminishing returns beyond 3 radiologists",
+        "Provides open gaze dataset"
+      ],
+      "who_should_read": "Medical imaging ML engineers",
+      "paper": {
+        "id": "2610.42152v1",
+        "title": "GazeRIB: Systematic Evaluation of Multi-Reader Gaze-Guided Chest X-ray Learning",
+        "summary": "Radiologists' visual attention can supervise medical image learning, but how reader panel composition affects its value remains untested. We evaluated GazeRIB (Gaze-guided Radiologist-Informed Blackout), which masks unviewed regions during training and uses unmasked images at inference. Eight experts repeatedly read the same 80 chest X-rays (CXRs). We compared individual readers with three-, five- and eight-reader panels across seven architectures and 10 seeds, evaluating 910 models on a separate 2,897-CXR cohort for four-class severity prediction. Every panel improved macro F1 over the no-gaze baseline by 5.33-7.47 percentage points (pp; Bonferroni-adjusted p < 0.007); no individual reader reached significance on this endpoint. Three readers captured 73-80% of the eight-reader gain in macro F1, the area under the receiver-operating-characteristic curve (ROC-AUC) and the area under the precision-recall curve (AU-PRC). On external validation without retraining, all four panels improved ROC-AUC on SIIM-FISABIO-RSNA by +1.93 to +4.24 pp (p <= 0.004); on MIMIC-Eye no panel differed significantly from baseline, whereas the single-reader average declined (-1.40 pp, p = 0.008). Reader composition therefore influenced performance, although transfer depended on the cohort.",
+        "authors": [
+          "Nattakorn Kittisut",
+          "Roy M. Gabriel",
+          "Marly van Assen"
+        ],
+        "url": "https://arxiv.org/abs/2610.42152v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.42152v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-10-30T17:59:59Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 2,
+      "tldr": "Continuous latent reasoning unifies multimodal tasks.",
+      "bullets": [
+        "Latent space chain‑of‑thought reasoning",
+        "Unified encoder‑decoder architecture",
+        "State‑of‑the‑art on VQA and image captioning"
+      ],
+      "who_should_read": "Multimodal model researchers",
+      "paper": {
+        "id": "2610.42149v1",
+        "title": "Latent Reasoning in Continuous Space for Unified Multimodal Models",
+        "summary": "Unified Multimodal Models (UMMs) achieve remarkable success on diverse multimodal understanding and generation tasks, yet they still struggle to effectively leverage language-based chain-of-thought reasoning for image generation. As a result, existing reasoning-augmented UMMs often fail to inherit the test-time scaling and fine-grained controllability observed in large language models. We attribute this failure to a fundamental modality mismatch: reasoning is performed in a discrete token space, whereas image generation operates in a continuous space. To bridge this gap, we introduce a Latent Reasoning framework in Continuous space (LARC), which alleviates the token-level bottleneck by reasoning over continuous hidden states. Specifically, the training framework consists of two stages: (i) curriculum supervised fine-tuning (SFT), and (ii) information-gain reinforcement learning (RL). First, the curriculum SFT stage gradually converts token-level reasoning into latent reasoning. Subsequently, the information-gain RL stage self-evolves latent reasoning without ground truth supervision. Experiments across diverse text-to-image generation benchmarks show that LARC consistently improves generation quality, prompt following, and compositional fidelity. Notably, LARC achieves state-of-the-art performance on GenEval with a 7%p gain over BAGEL and demonstrates clear test-time scaling behavior, outperforming token-based generation under both parallel and sequential test-time scaling strategies.",
+        "authors": [
+          "Byungwoo Jeon",
+          "Yoonwoo Jeong",
+          "Hyunseok Lee"
+        ],
+        "url": "https://arxiv.org/abs/2610.42149v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.42149v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-10-30T17:59:43Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 3,
+      "tldr": "Exact state forking speeds decision inference.",
+      "bullets": [
+        "Forking algorithm eliminates redundant computation",
+        "Applies to Jev decision models",
+        "10‑15% latency reduction on benchmark tasks"
+      ],
+      "who_should_read": "LLM‑agent system developers",
+      "paper": {
+        "id": "2610.42148v1",
+        "title": "Flide: Accelerating Decision Inference with Exact State Forking",
+        "summary": "Decision models such as Jev have emerged as a highly promising paradigm for LLM agent systems, providing lightweight and reliable categorical reasoning for rapid System One execution. However, existing generation-oriented inference engines fail to support these workloads effectively, suffering from severe prefix recomputation overheads or distorted output probabilities. To address this challenge, we propose Flide, an efficient and exact inference engine that decouples the logical tree structure of a decision request from its physical execution within a single flattened token stream. Through ForkAttention, Flide navigates request dependencies using GPU-resident indices across both standard attention and recurrent Gated DeltaNet layers, guaranteeing in exact arithmetic that every query branch evaluates identically to an isolated forward pass. By expressing branch topologies directly in GPU-resident metadata, Flide accommodates diverse request mixtures with a compact set of pre-recorded execution graphs while enabling expanding agent histories to resume from checkpoints saved in earlier passes. Extensive evaluations on public hybrid and decision models demonstrate that Flide answers queries up to 9.5 times faster than vLLM and SGLang while staying closest to a float32 reference in total variation distance. By unifying physical execution throughput with mathematical exactness, Flide establishes a principled foundation for scalable, latency-critical decision intelligence in agent systems.",
+        "authors": [
+          "Bobo Li",
+          "Jiajia Song",
+          "Hao Fei"
+        ],
+        "url": "https://arxiv.org/abs/2610.42148v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.42148v1",
+        "category": "cs.CL",
+        "source": "arxiv",
+        "published": "2026-10-30T17:59:38Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 5,
+      "tldr": "Implicit dynamics enable hierarchical world models.",
+      "bullets": [
+        "Learned dynamics without explicit simulators",
+        "Hierarchical planning improves sample efficiency",
+        "Benchmarked on robotic locomotion"
+      ],
+      "who_should_read": "Embodied AI practitioners",
+      "paper": {
+        "id": "2610.42146v1",
+        "title": "Hierarchical World Models with Implicit Dynamics",
+        "summary": "Planning with world models enables test-time adaptation for embodied agents, offering superior generalization over direct policy learning. However, long-horizon tasks remain hindered by cumulative errors and search complexity. Existing hierarchical methods often use rigid macro-actions or latent skills, leading to brittle representations and limited fine-grained control. We introduce ID-WM (Implicit Dynamics World Models), a hierarchical world model that decouples state-space reachability from local control. Our framework utilizes a high-level model to sample feasible transitions across the state manifold and a low-level world model as an inverse dynamics solver to ground these transitions into precise actions. This allows the planner to identify reachable subgoals without being constrained by low-level execution details. By prioritizing local physical feasibility over global behavioral patterns, ID-WM synthesizes novel long-horizon plans from short segments, transcending the specific behavioral modes seen during training. We demonstrate its effectiveness across three navigation and manipulation suites, achieving a 38.5% improvement over state-of-the-art policy and diffusion-based planners. Crucially, by leveraging this hierarchical structure to mitigate compounding errors, our approach yields a 135% performance gain over single-level world model MPC, particularly in complex, unseen configurations for long-horizon tasks. Videos can be viewed at https://id-wm.github.io",
+        "authors": [
+          "Gaoyue Zhou",
+          "Yvonne Wu",
+          "Zichen Jeff Cui"
+        ],
+        "url": "https://arxiv.org/abs/2610.42146v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.42146v1",
+        "category": "cs.RO",
+        "source": "arxiv",
+        "published": "2026-10-30T17:59:25Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 8,
+      "tldr": "Observable counts boost DP‑SGD privacy.",
+      "bullets": [
+        "Privacy amplification via truncated batches",
+        "Theoretical guarantees under realistic sampling",
+        "Empirical gains on CIFAR‑10 training"
+      ],
+      "who_should_read": "Privacy‑focused ML engineers",
+      "paper": {
+        "id": "2610.42139v1",
+        "title": "Counting on Dummies: Privacy Amplification with Observable Counts and Truncated Batches",
+        "summary": "In many practical deployments of Differentially Private Stochastic Gradient Descent (DP-SGD), the server processes data in batches. Randomly sampling these batches allows for better privacy bounds via privacy amplification results. Most sampling schemes with provable privacy amplification, including Poisson sampling and random allocation, result in variable batch sizes. The privacy guarantee of these schemes requires that the batch sizes are not revealed. In distributed settings, the server performing the aggregation or any party observing the communication traffic may learn these batch sizes. Furthermore, in both centralized and distributed settings, memory and computation constraints may require each batch to be of some maximum size $s$, necessitating truncation of the batch when it exceeds this limit. It is known that this truncation can result in a significant increase in privacy loss. In this work, we address both of these challenges via a simple mechanism that uses a random number of \\emph{dummy points} to privatize the batch size and maintain the privacy guarantee even under truncation. We demonstrate that our mechanism is easy to implement in a distributed setting, and provide a general analysis of this mechanism for both Poisson sampling and random allocation. Our analysis is designed to support efficient and relatively tight privacy accounting. It also effectively amplifies the privacy of the count releases by subsampling, making the expected number of dummy points asymptotically smaller than what is needed to directly privatize the (sensitivity-one) batch sizes with non-negative noise. For Poisson sampling with truncated batches, we demonstrate empirically that our mechanism achieves better privacy--efficiency tradeoffs than the direct accounting for truncation recently given by (Ganesh, 2025).",
+        "authors": [
+          "Vitaly Feldman",
+          "Audra McMillan",
+          "Kunal Talwar"
+        ],
+        "url": "https://arxiv.org/abs/2610.42139v1",
+        "pdf_url": "https://arxiv.org/pdf/2610.42139v1",
+        "category": "cs.LG",
+        "source": "arxiv",
+        "published": "2026-10-30T17:58:42Z"
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Implement the ODE sampler for a pretrained VQ‑GAN diffusion model using Dormand‑Prince.",
-    "why": "It demonstrates immediate speed gains and validates deterministic sampling on familiar data.",
-    "time_estimate": "2-3 hours",
+    "action": "Replace standard attention with Latent Sparse Attention in your transformer code",
+    "why": "It immediately cuts memory use, enabling longer contexts on existing hardware",
+    "time_estimate": "2‑3 hours",
     "difficulty": "intermediate"
   },
   "github_repos": [
@@ -73,7 +203,7 @@
       "title": "Takamatsu-Hikaru/AI-Research-Guide",
       "summary": "AI 科研入门指南：大学选择、科研 60 问、入门项目、学习路线与论文卡片。A bilingual guide to getting started in AI research.",
       "url": "https://github.com/Takamatsu-Hikaru/AI-Research-Guide",
-      "stars": 203,
+      "stars": 207,
       "forks": 10,
       "language": "JavaScript",
       "topics": [
@@ -109,6 +239,67 @@
       ],
       "source": "github",
       "created_at": "2026-10-21T08:37:56Z"
+    },
+    {
+      "id": "1440248149",
+      "title": "kerlenton/bootgpt",
+      "summary": "A language model that lives in a boot sector",
+      "url": "https://github.com/kerlenton/bootgpt",
+      "stars": 64,
+      "forks": 2,
+      "language": "Python",
+      "topics": [
+        "assembly",
+        "bootsector",
+        "demoscene",
+        "language-model",
+        "machine-learning",
+        "neural-networks",
+        "qemu",
+        "sizecoding",
+        "x86"
+      ],
+      "source": "github",
+      "created_at": "2026-10-30T21:28:17Z"
+    },
+    {
+      "id": "1427493486",
+      "title": "somastllc/nlp-for-machine-learning-bootcamp",
+      "summary": "NLP for Machine Learning Bootcamp.",
+      "url": "https://github.com/somastllc/nlp-for-machine-learning-bootcamp",
+      "stars": 55,
+      "forks": 6,
+      "language": "Unknown",
+      "topics": [
+        "ai",
+        "bootcamp",
+        "machine-learning",
+        "nlp"
+      ],
+      "source": "github",
+      "created_at": "2026-10-20T19:48:09Z"
+    },
+    {
+      "id": "1438428788",
+      "title": "kumarshreshtha/protuna",
+      "summary": "Optimization framework for AI-guided protein engineering",
+      "url": "https://github.com/kumarshreshtha/protuna",
+      "stars": 54,
+      "forks": 2,
+      "language": "Python",
+      "topics": [
+        "active-learning",
+        "bayesian-optimization",
+        "bioengineering",
+        "black-box-optimization",
+        "distributed",
+        "experimental-design",
+        "lead-optimization",
+        "machine-learning",
+        "protein-engineering"
+      ],
+      "source": "github",
+      "created_at": "2026-10-29T13:02:34Z"
     },
     {
       "id": "1418580002",
@@ -154,69 +345,6 @@
       ],
       "source": "github",
       "created_at": "2026-10-08T02:05:28Z"
-    },
-    {
-      "id": "1438428788",
-      "title": "kumarshreshtha/protuna",
-      "summary": "Optimization framework for AI-guided protein engineering",
-      "url": "https://github.com/kumarshreshtha/protuna",
-      "stars": 47,
-      "forks": 2,
-      "language": "Python",
-      "topics": [
-        "active-learning",
-        "bayesian-optimization",
-        "bioengineering",
-        "black-box-optimization",
-        "distributed",
-        "experimental-design",
-        "lead-optimization",
-        "machine-learning",
-        "protein-engineering"
-      ],
-      "source": "github",
-      "created_at": "2026-10-29T13:02:34Z"
-    },
-    {
-      "id": "1427493486",
-      "title": "somastllc/nlp-for-machine-learning-bootcamp",
-      "summary": "NLP for Machine Learning Bootcamp.",
-      "url": "https://github.com/somastllc/nlp-for-machine-learning-bootcamp",
-      "stars": 47,
-      "forks": 6,
-      "language": "Unknown",
-      "topics": [
-        "ai",
-        "bootcamp",
-        "machine-learning",
-        "nlp"
-      ],
-      "source": "github",
-      "created_at": "2026-10-20T19:48:09Z"
-    },
-    {
-      "id": "1429736272",
-      "title": "FrontiersMindAI/decisionformer",
-      "summary": "Transformers for decision models: fine-tune, load and serve calibrated decsion-model on any Hugging Face model.",
-      "url": "https://github.com/FrontiersMindAI/decisionformer",
-      "stars": 42,
-      "forks": 3,
-      "language": "Python",
-      "topics": [
-        "decision-model",
-        "decision-models",
-        "decoder",
-        "deep-learning",
-        "encoder",
-        "glm",
-        "jev-model",
-        "llm",
-        "machine-learning",
-        "pytorch",
-        "qwen"
-      ],
-      "source": "github",
-      "created_at": "2026-10-22T12:45:27Z"
     }
   ],
   "hn_posts": [
@@ -226,23 +354,11 @@
       "summary": "",
       "url": "https://oioannou.com/blog/ai-promised-less-work/",
       "hn_url": "https://news.ycombinator.com/item?id=50257325",
-      "points": 685,
+      "points": 689,
       "comments": 664,
       "author": "oorestisime",
       "source": "hackernews",
       "created_at": "2026-10-27T11:08:14Z"
-    },
-    {
-      "id": "50233779",
-      "title": "A 10-year-old CNN outperforms frontier LLMs for skin cancer diagnosis",
-      "summary": "",
-      "url": "https://lynchlab.net/llm-skin-cancer",
-      "hn_url": "https://news.ycombinator.com/item?id=50233779",
-      "points": 670,
-      "comments": 274,
-      "author": "sungam",
-      "source": "hackernews",
-      "created_at": "2026-10-25T17:15:38Z"
     },
     {
       "id": "50305693",
@@ -250,8 +366,8 @@
       "summary": "",
       "url": "https://newsletter.signoz.io/p/ai-isnt-replacing-sres-its-deskilling",
       "hn_url": "https://news.ycombinator.com/item?id=50305693",
-      "points": 654,
-      "comments": 475,
+      "points": 670,
+      "comments": 485,
       "author": "dorianniemiec",
       "source": "hackernews",
       "created_at": "2026-10-30T15:52:18Z"
@@ -274,8 +390,8 @@
       "summary": "",
       "url": "https://martinfowler.com/bliki/LLM-Voice.html",
       "hn_url": "https://news.ycombinator.com/item?id=50290177",
-      "points": 605,
-      "comments": 335,
+      "points": 606,
+      "comments": 336,
       "author": "ibobev",
       "source": "hackernews",
       "created_at": "2026-10-29T14:57:55Z"
@@ -298,8 +414,8 @@
       "summary": "",
       "url": "https://spectrum.ieee.org/wikipedia-wikiproject-ai-writing-cleanup",
       "hn_url": "https://news.ycombinator.com/item?id=50257326",
-      "points": 519,
-      "comments": 243,
+      "points": 520,
+      "comments": 242,
       "author": "rbanffy",
       "source": "hackernews",
       "created_at": "2026-10-27T11:08:15Z"
@@ -315,58 +431,19 @@
       "author": "ilreb",
       "source": "hackernews",
       "created_at": "2026-10-27T06:25:37Z"
+    },
+    {
+      "id": "50273396",
+      "title": "Kentucky man becomes the first humanist granted religious exemption from AI",
+      "summary": "",
+      "url": "https://religionnews.com/2026/10/26/in-a-first-a-humanist-granted-a-religious-exemption-from-using-ai/",
+      "hn_url": "https://news.ycombinator.com/item?id=50273396",
+      "points": 491,
+      "comments": 550,
+      "author": "danso",
+      "source": "hackernews",
+      "created_at": "2026-10-28T13:41:30Z"
     }
   ],
-  "implementation_gaps": [
-    {
-      "id": "2610.40653v1",
-      "title": "Micro-Edits: Computational Support for Fine-Scale Edits in Film",
-      "summary": "In film editing, every frame matters. While macro, content-level edits shape the high-level narrative of a film, small local edits often control timing and direct visual attention. For example, editors can adjust the precise timing of clips to control the length of a meaningful silence, or cut to shots that highlight a specific character's reactions to important moments. These small, detailed edits are slow and tedious to make in standard editing tools because users have to map high-level narrative goals to low-level frame-by-frame adjustments. At the same time, these fine-scale adjustments, which we call micro-edits, can be nuanced and expressive, with different choices serving different creative goals. In this work, we start by conducting a formative study with professional editors to understand the structure of micro-edits and how they are used. We then derive a mathematical formalization for this structure to develop tools that leverage AI and optimization to make exploring micro-edits simpler and more efficient for users. Finally, we validate our tools in multiple user studies and a wide range of video examples.",
-      "authors": [
-        "Nhan Tran",
-        "Hijung Valentina Shin",
-        "Abe Davis"
-      ],
-      "url": "https://arxiv.org/abs/2610.40653v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.40653v1",
-      "category": "cs.HC",
-      "source": "arxiv",
-      "published": "2026-10-29T17:59:49Z",
-      "github_implementations": 0,
-      "implementation_gap": true
-    },
-    {
-      "id": "2610.40643v1",
-      "title": "Luggage re-identification: A study of strategies towards a real-world application",
-      "summary": "Luggage re-identification (ReID) is a critical task in video surveillance for forensics, security or border management (suspicious or abandoned luggage recognition), as well as luggage management (lost luggage recovery). It enables the association of observations of the same luggage across disjoint camera views in complex environments such as airports, train stations and border crossing. While existing approaches primarily focus on appearance-based cropped image matching under relatively clean conditions, real-world scenarios are characterized by frequent occlusions, cluttered background and crowded scenes which significantly degrade performance. Yet, strategies leveraging the complementarity of multiple shots and views from different video streams is overlooked. In this paper, we study strategies for an end-to-end pipeline that operates from multiple video streams to detect and re-identify luggage. We evaluate different variants on a benchmark dataset acquired in real-world environments to address the questions of selecting and merging different views and shots of the same luggage as well as training on different environment datasets for an overall ReID performance improvement in practical applications.",
-      "authors": [
-        "Quentin Dhôte",
-        "Romaric Audigier"
-      ],
-      "url": "https://arxiv.org/abs/2610.40643v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.40643v1",
-      "category": "cs.CV",
-      "source": "arxiv",
-      "published": "2026-10-29T17:58:59Z",
-      "github_implementations": 0,
-      "implementation_gap": true
-    },
-    {
-      "id": "2610.40641v1",
-      "title": "From extreme weather to agricultural consequences with agentic AI",
-      "summary": "Extreme weather is forecast days ahead, yet its consequences for agriculture remain hard to predict: a forecast says where a storm will strike, not which crops will suffer or how much is at risk, and the records that could tell span many sources. We present WxCrop, the first agent that judges agricultural hazards from physically interpretable weather indices examined by causal analysis, and the first that combines weather and agricultural information to predict crop loss reliably for past and forecast dates. We demonstrate it in Florida on hurricanes, freezes and dry heat, with a loss model calibrated on insurance records for each, and the same procedure extends to other hazards and areas. Three checks show reliability: the hurricane index detects recorded cyclone days with an AUC of 0.98, recorded losses in held-out years are reproduced to within 2%, and independent production records confirm the county rankings (rank correlation 0.63). Users ask the agent for each crop group's loss as a fraction of expected season value, every number sourced, so that governments, growers and scientists respond to agricultural disasters quickly.",
-      "authors": [
-        "Minghan Yu",
-        "Mengyu Dai",
-        "Yixin Wen"
-      ],
-      "url": "https://arxiv.org/abs/2610.40641v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.40641v1",
-      "category": "physics.ao-ph",
-      "source": "arxiv",
-      "published": "2026-10-29T17:58:53Z",
-      "github_implementations": 0,
-      "implementation_gap": true
-    }
-  ]
+  "implementation_gaps": []
 }
