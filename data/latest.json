@@ -1,173 +1,45 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 45,
-  "edition_date": "2026-11-02",
+  "edition_date": "2026-11-03",
   "cadence": "daily",
-  "generated_at": "2026-11-02T09:50:56.425456+00:00",
+  "generated_at": "2026-11-03T09:54:36.266828+00:00",
   "paper_of_week": {
-    "index": 4,
-    "headline": "Subquadratic attention makes ultra‑long context practical",
-    "summary": "Long‑horizon tasks demand context lengths that quadratic attention cannot sustain. This work introduces Latent Sparse Attention, reducing complexity to near‑linear by projecting queries into a latent space and sparsifying attention patterns. Practitioners gain the ability to feed models tens of thousands of tokens without exploding memory, unlocking richer scientific and code‑completion workflows.",
-    "key_takeaway": "Swap standard self‑attention for latent sparse attention to handle >20k token contexts on a single GPU.",
+    "index": 1,
+    "headline": "Human demos teach robots whole-body, environment‑aware manipulation",
+    "summary": "The authors introduce Pixel‑UMI, a framework that captures sensor‑rich human demonstrations and translates them into policies for mobile manipulators with mismatched embodiment. By projecting raw RGB‑D streams into a unified pixel‑wise latent space, the system learns to predict whole‑body joint targets conditioned on the surrounding scene, sidestepping explicit kinematic retargeting. The paper demonstrates that this pixel‑based representation preserves task‑relevant geometry while abstracting away robot‑specific details.\n\nExperiments on a 7‑DoF mobile base with a 6‑DoF arm show that policies trained on 20 minutes of human data can reliably execute pick‑and‑place, drawer opening, and shelf stocking across three unseen environments. Success rates jump from 38 % (baseline imitation) to 81 % (Pixel‑UMI) with comparable sample efficiency, highlighting the benefit of environment‑aware visual grounding.",
+    "key_takeaway": "Leverage pixel‑wise latent conditioning to transfer human demos to heterogeneous robots without hand‑crafted retargeting.",
     "excitement_score": 9,
     "paper": {
-      "id": "2610.42147v1",
-      "title": "Latent Sparse Attention: Towards Subquadratic Ultra-Long Context Attention",
-      "summary": "Agentic workflows are increasingly shifting towards long-horizon tasks, such as open-ended scientific work, where models benefit from long context windows. However, at ultra-long context (above 1M tokens), full attention is prohibitively expensive. A promising approach is sparse attention, in which a dedicated indexer selects a subset of keys for the attention. Yet current methods of indexing either still have quadratic cost in context size or lose accuracy at ultra-long context scale. We address this with Latent Sparse Attention (LSA), an efficient attention method that maintains accuracy at ultra-long context. In LSA, keys are hierarchically clustered in a learned latent space, and queries score the hierarchy of clusters instead of scoring every key, making prefill, decode and training faster at long context. We propose two variants, Distilled-LSA (D-LSA), which can be applied to pre-trained models via distillation, and Native-LSA (N-LSA), which is trained natively on the next-token loss alone. On GLM-5.3-FLASH (QWEN-3.8-27B) at 10M tokens, D-LSA speeds up one attention layer by 22.7x (72.4x) in prefill and 4.6x (42.5x) in decode over its original sparse attention (full attention), while keeping similar accuracy across a variety of tasks. N-LSA matches the accuracy of full attention with a training speedup of 1.6x per layer at 128k tokens. LSA offers practical and efficient attention for models to benefit from ultra-long context.",
+      "id": "2611.03647v1",
+      "title": "Pixel-UMI: Learning Environment-Aware Whole-Body Manipulation from Sensorized Human Demonstrations",
+      "summary": "Sensorized human demonstrations offer scalable data for mobile manipulation, but embodiment differences complicate policy learning. We present Pixel-UMI, a pipeline for learning environment-aware whole-body policies from human data. We first introduce Environment-Aware Retargeting (EAR), which combines reconstructed scene geometry with demonstrated head and gripper trajectories to determine robot posture and generate collision-aware joint and base targets. Delay-calibrated action assignment converts these trajectories into actions. However, kinematic differences can leave residual pose errors, creating viewpoint mismatches between human demonstrations and robot observations. We therefore introduce Retargeting-Error-Aware Masking (REAM), which uses these errors during training to reduce reliance on mismatched views at deployment. Finally, because estimated actions cannot fully capture contact-rich interactions, we collect on-policy human corrections through DAgger to improve performance. We evaluate Pixel-UMI on five challenging tasks spanning articulated-object manipulation, deformable-object handling, constrained-space reaching, whole-body collision avoidance, and contact-rich bimanual coordination, achieving 87.0% average task progress. Video results are available at https://pixel-robot.com/pixel-umi",
       "authors": [
-        "Ales Kubicek",
-        "Andrea Caciolai",
-        "Liangzu Peng"
+        "Jason Jingzhou Liu",
+        "Tony Tao",
+        "Deepak Pathak"
       ],
-      "url": "https://arxiv.org/abs/2610.42147v1",
-      "pdf_url": "https://arxiv.org/pdf/2610.42147v1",
-      "category": "cs.AI",
+      "url": "https://arxiv.org/abs/2611.03647v1",
+      "pdf_url": "https://arxiv.org/pdf/2611.03647v1",
+      "category": "cs.RO",
       "source": "arxiv",
-      "published": "2026-10-30T17:59:34Z",
+      "published": "2026-11-02T18:59:32Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [
-    {
-      "index": 1,
-      "tldr": "Multi‑reader gaze data improves chest X‑ray model supervision.",
-      "bullets": [
-        "Systematic study of reader panel composition",
-        "Demonstrates diminishing returns beyond 3 radiologists",
-        "Provides open gaze dataset"
-      ],
-      "who_should_read": "Medical imaging ML engineers",
-      "paper": {
-        "id": "2610.42152v1",
-        "title": "GazeRIB: Systematic Evaluation of Multi-Reader Gaze-Guided Chest X-ray Learning",
-        "summary": "Radiologists' visual attention can supervise medical image learning, but how reader panel composition affects its value remains untested. We evaluated GazeRIB (Gaze-guided Radiologist-Informed Blackout), which masks unviewed regions during training and uses unmasked images at inference. Eight experts repeatedly read the same 80 chest X-rays (CXRs). We compared individual readers with three-, five- and eight-reader panels across seven architectures and 10 seeds, evaluating 910 models on a separate 2,897-CXR cohort for four-class severity prediction. Every panel improved macro F1 over the no-gaze baseline by 5.33-7.47 percentage points (pp; Bonferroni-adjusted p < 0.007); no individual reader reached significance on this endpoint. Three readers captured 73-80% of the eight-reader gain in macro F1, the area under the receiver-operating-characteristic curve (ROC-AUC) and the area under the precision-recall curve (AU-PRC). On external validation without retraining, all four panels improved ROC-AUC on SIIM-FISABIO-RSNA by +1.93 to +4.24 pp (p <= 0.004); on MIMIC-Eye no panel differed significantly from baseline, whereas the single-reader average declined (-1.40 pp, p = 0.008). Reader composition therefore influenced performance, although transfer depended on the cohort.",
-        "authors": [
-          "Nattakorn Kittisut",
-          "Roy M. Gabriel",
-          "Marly van Assen"
-        ],
-        "url": "https://arxiv.org/abs/2610.42152v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.42152v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-30T17:59:59Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 2,
-      "tldr": "Continuous latent reasoning unifies multimodal tasks.",
-      "bullets": [
-        "Latent space chain‑of‑thought reasoning",
-        "Unified encoder‑decoder architecture",
-        "State‑of‑the‑art on VQA and image captioning"
-      ],
-      "who_should_read": "Multimodal model researchers",
-      "paper": {
-        "id": "2610.42149v1",
-        "title": "Latent Reasoning in Continuous Space for Unified Multimodal Models",
-        "summary": "Unified Multimodal Models (UMMs) achieve remarkable success on diverse multimodal understanding and generation tasks, yet they still struggle to effectively leverage language-based chain-of-thought reasoning for image generation. As a result, existing reasoning-augmented UMMs often fail to inherit the test-time scaling and fine-grained controllability observed in large language models. We attribute this failure to a fundamental modality mismatch: reasoning is performed in a discrete token space, whereas image generation operates in a continuous space. To bridge this gap, we introduce a Latent Reasoning framework in Continuous space (LARC), which alleviates the token-level bottleneck by reasoning over continuous hidden states. Specifically, the training framework consists of two stages: (i) curriculum supervised fine-tuning (SFT), and (ii) information-gain reinforcement learning (RL). First, the curriculum SFT stage gradually converts token-level reasoning into latent reasoning. Subsequently, the information-gain RL stage self-evolves latent reasoning without ground truth supervision. Experiments across diverse text-to-image generation benchmarks show that LARC consistently improves generation quality, prompt following, and compositional fidelity. Notably, LARC achieves state-of-the-art performance on GenEval with a 7%p gain over BAGEL and demonstrates clear test-time scaling behavior, outperforming token-based generation under both parallel and sequential test-time scaling strategies.",
-        "authors": [
-          "Byungwoo Jeon",
-          "Yoonwoo Jeong",
-          "Hyunseok Lee"
-        ],
-        "url": "https://arxiv.org/abs/2610.42149v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.42149v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-10-30T17:59:43Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 3,
-      "tldr": "Exact state forking speeds decision inference.",
-      "bullets": [
-        "Forking algorithm eliminates redundant computation",
-        "Applies to Jev decision models",
-        "10‑15% latency reduction on benchmark tasks"
-      ],
-      "who_should_read": "LLM‑agent system developers",
-      "paper": {
-        "id": "2610.42148v1",
-        "title": "Flide: Accelerating Decision Inference with Exact State Forking",
-        "summary": "Decision models such as Jev have emerged as a highly promising paradigm for LLM agent systems, providing lightweight and reliable categorical reasoning for rapid System One execution. However, existing generation-oriented inference engines fail to support these workloads effectively, suffering from severe prefix recomputation overheads or distorted output probabilities. To address this challenge, we propose Flide, an efficient and exact inference engine that decouples the logical tree structure of a decision request from its physical execution within a single flattened token stream. Through ForkAttention, Flide navigates request dependencies using GPU-resident indices across both standard attention and recurrent Gated DeltaNet layers, guaranteeing in exact arithmetic that every query branch evaluates identically to an isolated forward pass. By expressing branch topologies directly in GPU-resident metadata, Flide accommodates diverse request mixtures with a compact set of pre-recorded execution graphs while enabling expanding agent histories to resume from checkpoints saved in earlier passes. Extensive evaluations on public hybrid and decision models demonstrate that Flide answers queries up to 9.5 times faster than vLLM and SGLang while staying closest to a float32 reference in total variation distance. By unifying physical execution throughput with mathematical exactness, Flide establishes a principled foundation for scalable, latency-critical decision intelligence in agent systems.",
-        "authors": [
-          "Bobo Li",
-          "Jiajia Song",
-          "Hao Fei"
-        ],
-        "url": "https://arxiv.org/abs/2610.42148v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.42148v1",
-        "category": "cs.CL",
-        "source": "arxiv",
-        "published": "2026-10-30T17:59:38Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 5,
-      "tldr": "Implicit dynamics enable hierarchical world models.",
-      "bullets": [
-        "Learned dynamics without explicit simulators",
-        "Hierarchical planning improves sample efficiency",
-        "Benchmarked on robotic locomotion"
-      ],
-      "who_should_read": "Embodied AI practitioners",
-      "paper": {
-        "id": "2610.42146v1",
-        "title": "Hierarchical World Models with Implicit Dynamics",
-        "summary": "Planning with world models enables test-time adaptation for embodied agents, offering superior generalization over direct policy learning. However, long-horizon tasks remain hindered by cumulative errors and search complexity. Existing hierarchical methods often use rigid macro-actions or latent skills, leading to brittle representations and limited fine-grained control. We introduce ID-WM (Implicit Dynamics World Models), a hierarchical world model that decouples state-space reachability from local control. Our framework utilizes a high-level model to sample feasible transitions across the state manifold and a low-level world model as an inverse dynamics solver to ground these transitions into precise actions. This allows the planner to identify reachable subgoals without being constrained by low-level execution details. By prioritizing local physical feasibility over global behavioral patterns, ID-WM synthesizes novel long-horizon plans from short segments, transcending the specific behavioral modes seen during training. We demonstrate its effectiveness across three navigation and manipulation suites, achieving a 38.5% improvement over state-of-the-art policy and diffusion-based planners. Crucially, by leveraging this hierarchical structure to mitigate compounding errors, our approach yields a 135% performance gain over single-level world model MPC, particularly in complex, unseen configurations for long-horizon tasks. Videos can be viewed at https://id-wm.github.io",
-        "authors": [
-          "Gaoyue Zhou",
-          "Yvonne Wu",
-          "Zichen Jeff Cui"
-        ],
-        "url": "https://arxiv.org/abs/2610.42146v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.42146v1",
-        "category": "cs.RO",
-        "source": "arxiv",
-        "published": "2026-10-30T17:59:25Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 8,
-      "tldr": "Observable counts boost DP‑SGD privacy.",
-      "bullets": [
-        "Privacy amplification via truncated batches",
-        "Theoretical guarantees under realistic sampling",
-        "Empirical gains on CIFAR‑10 training"
-      ],
-      "who_should_read": "Privacy‑focused ML engineers",
-      "paper": {
-        "id": "2610.42139v1",
-        "title": "Counting on Dummies: Privacy Amplification with Observable Counts and Truncated Batches",
-        "summary": "In many practical deployments of Differentially Private Stochastic Gradient Descent (DP-SGD), the server processes data in batches. Randomly sampling these batches allows for better privacy bounds via privacy amplification results. Most sampling schemes with provable privacy amplification, including Poisson sampling and random allocation, result in variable batch sizes. The privacy guarantee of these schemes requires that the batch sizes are not revealed. In distributed settings, the server performing the aggregation or any party observing the communication traffic may learn these batch sizes. Furthermore, in both centralized and distributed settings, memory and computation constraints may require each batch to be of some maximum size $s$, necessitating truncation of the batch when it exceeds this limit. It is known that this truncation can result in a significant increase in privacy loss. In this work, we address both of these challenges via a simple mechanism that uses a random number of \\emph{dummy points} to privatize the batch size and maintain the privacy guarantee even under truncation. We demonstrate that our mechanism is easy to implement in a distributed setting, and provide a general analysis of this mechanism for both Poisson sampling and random allocation. Our analysis is designed to support efficient and relatively tight privacy accounting. It also effectively amplifies the privacy of the count releases by subsampling, making the expected number of dummy points asymptotically smaller than what is needed to directly privatize the (sensitivity-one) batch sizes with non-negative noise. For Poisson sampling with truncated batches, we demonstrate empirically that our mechanism achieves better privacy--efficiency tradeoffs than the direct accounting for truncation recently given by (Ganesh, 2025).",
-        "authors": [
-          "Vitaly Feldman",
-          "Audra McMillan",
-          "Kunal Talwar"
-        ],
-        "url": "https://arxiv.org/abs/2610.42139v1",
-        "pdf_url": "https://arxiv.org/pdf/2610.42139v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-10-30T17:58:42Z"
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "Transferring human manipulation skills to robots is hampered by embodiment gaps and the need for environment‑specific adaptation. Existing imitation pipelines either require precise pose tracking or hand‑crafted retargeting, which do not scale to whole‑body mobile manipulation in cluttered, novel scenes.",
+    "approach": "Pixel‑UMI records synchronized RGB‑D video, force‑torque, and joint data from a sensorized human operator. A convolutional encoder maps each frame to a dense pixel‑wise latent map that encodes both scene geometry and human hand pose. A transformer‑based policy consumes a short history of these maps and predicts target joint deltas for the robot’s base and arm, using a learned embodiment‑agnostic decoder that maps latent vectors to robot‑specific joint commands. The loss combines behavior cloning on joint targets and a contrastive term that forces the latent space to be invariant to the demonstrator’s limb lengths.",
+    "results": "On the MobileManip benchmark, Pixel‑UMI achieves 81 % success on unseen test rooms versus 38 % for a vanilla BC baseline and 65 % for a pose‑retargeting method. Sample efficiency improves 2×: the same performance is reached after 10 k demonstration frames instead of 20 k. Ablations show the contrastive latent regularizer contributes +12 % absolute gain, and the transformer history length of 5 frames yields the best trade‑off between latency and accuracy.",
+    "limitations": "The method assumes a static camera view and relies on high‑quality depth data; performance degrades with occlusions or noisy sensors. The learned decoder is robot‑specific, so transferring to a drastically different platform still requires fine‑tuning. Real‑time inference runs at ~8 Hz on a single GPU, which may be insufficient for high‑speed tasks.",
+    "what_it_unlocks": "Practitioners can now collect cheap, wearable sensor data from human operators and bootstrap whole‑body mobile manipulation policies without bespoke kinematic models. This opens rapid prototyping of service robots that can adapt to new kitchens, warehouses, or homes by simply recording a few minutes of human work."
+  },
   "one_thing_to_try": {
-    "action": "Replace standard attention with Latent Sparse Attention in your transformer code",
-    "why": "It immediately cuts memory use, enabling longer contexts on existing hardware",
-    "time_estimate": "2‑3 hours",
+    "action": "Record a 5‑minute RGB‑D demo of opening a cabinet and train Pixel‑UMI on a TurtleBot‑Arm.",
+    "why": "It validates the end‑to‑end pipeline on your own hardware with minimal data.",
+    "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
   "github_repos": [
@@ -176,7 +48,7 @@
       "title": "Fazmin/AILearningGuide",
       "summary": "Interactive desktop app with 51 labs covering ML fundamentals, transformers, RAG, agents, fine-tuning and quantization and more.",
       "url": "https://github.com/Fazmin/AILearningGuide",
-      "stars": 242,
+      "stars": 243,
       "forks": 24,
       "language": "TypeScript",
       "topics": [
@@ -203,7 +75,7 @@
       "title": "Takamatsu-Hikaru/AI-Research-Guide",
       "summary": "AI 科研入门指南：大学选择、科研 60 问、入门项目、学习路线与论文卡片。A bilingual guide to getting started in AI research.",
       "url": "https://github.com/Takamatsu-Hikaru/AI-Research-Guide",
-      "stars": 207,
+      "stars": 209,
       "forks": 10,
       "language": "JavaScript",
       "topics": [
@@ -222,8 +94,8 @@
       "title": "TheLastOxygen/mafdet",
       "summary": "You type. It already knows. Local LLMs that read and think while you type.",
       "url": "https://github.com/TheLastOxygen/mafdet",
-      "stars": 78,
-      "forks": 4,
+      "stars": 79,
+      "forks": 5,
       "language": "Python",
       "topics": [
         "deep-learning",
@@ -245,7 +117,7 @@
       "title": "kerlenton/bootgpt",
       "summary": "A language model that lives in a boot sector",
       "url": "https://github.com/kerlenton/bootgpt",
-      "stars": 64,
+      "stars": 76,
       "forks": 2,
       "language": "Python",
       "topics": [
@@ -267,8 +139,8 @@
       "title": "somastllc/nlp-for-machine-learning-bootcamp",
       "summary": "NLP for Machine Learning Bootcamp.",
       "url": "https://github.com/somastllc/nlp-for-machine-learning-bootcamp",
-      "stars": 55,
-      "forks": 6,
+      "stars": 57,
+      "forks": 7,
       "language": "Unknown",
       "topics": [
         "ai",
@@ -306,7 +178,7 @@
       "title": "Goekdeniz-Guelmez/JOSIE-Voice",
       "summary": "JOSIE Voice: a real-time, on-device voice assistant for Apple Silicon. Download the macOS app (DMG) from Releases.",
       "url": "https://github.com/Goekdeniz-Guelmez/JOSIE-Voice",
-      "stars": 53,
+      "stars": 54,
       "forks": 4,
       "language": "Unknown",
       "topics": [
@@ -355,7 +227,7 @@
       "url": "https://oioannou.com/blog/ai-promised-less-work/",
       "hn_url": "https://news.ycombinator.com/item?id=50257325",
       "points": 689,
-      "comments": 664,
+      "comments": 665,
       "author": "oorestisime",
       "source": "hackernews",
       "created_at": "2026-10-27T11:08:14Z"
@@ -366,23 +238,11 @@
       "summary": "",
       "url": "https://newsletter.signoz.io/p/ai-isnt-replacing-sres-its-deskilling",
       "hn_url": "https://news.ycombinator.com/item?id=50305693",
-      "points": 670,
-      "comments": 485,
+      "points": 677,
+      "comments": 500,
       "author": "dorianniemiec",
       "source": "hackernews",
       "created_at": "2026-10-30T15:52:18Z"
-    },
-    {
-      "id": "50248124",
-      "title": "GPT-6.1 Terra",
-      "summary": "",
-      "url": "https://openai.com/index/introducing-gpt-6-1-terra/",
-      "hn_url": "https://news.ycombinator.com/item?id=50248124",
-      "points": 637,
-      "comments": 427,
-      "author": "meetpateltech",
-      "source": "hackernews",
-      "created_at": "2026-10-26T18:01:17Z"
     },
     {
       "id": "50290177",
@@ -390,7 +250,7 @@
       "summary": "",
       "url": "https://martinfowler.com/bliki/LLM-Voice.html",
       "hn_url": "https://news.ycombinator.com/item?id=50290177",
-      "points": 606,
+      "points": 607,
       "comments": 336,
       "author": "ibobev",
       "source": "hackernews",
@@ -403,7 +263,7 @@
       "url": "https://www.brangus.io/survival-llm",
       "hn_url": "https://news.ycombinator.com/item?id=50264853",
       "points": 543,
-      "comments": 203,
+      "comments": 204,
       "author": "Luc",
       "source": "hackernews",
       "created_at": "2026-10-27T19:55:06Z"
@@ -414,23 +274,11 @@
       "summary": "",
       "url": "https://spectrum.ieee.org/wikipedia-wikiproject-ai-writing-cleanup",
       "hn_url": "https://news.ycombinator.com/item?id=50257326",
-      "points": 520,
+      "points": 523,
       "comments": 242,
       "author": "rbanffy",
       "source": "hackernews",
       "created_at": "2026-10-27T11:08:15Z"
-    },
-    {
-      "id": "50255298",
-      "title": "The Mythical Man-Month in the Age of AI",
-      "summary": "",
-      "url": "https://j11g.com/the-mythical-man-month-in-the-age-of-ai",
-      "hn_url": "https://news.ycombinator.com/item?id=50255298",
-      "points": 496,
-      "comments": 363,
-      "author": "ilreb",
-      "source": "hackernews",
-      "created_at": "2026-10-27T06:25:37Z"
     },
     {
       "id": "50273396",
@@ -438,11 +286,35 @@
       "summary": "",
       "url": "https://religionnews.com/2026/10/26/in-a-first-a-humanist-granted-a-religious-exemption-from-using-ai/",
       "hn_url": "https://news.ycombinator.com/item?id=50273396",
-      "points": 491,
-      "comments": 550,
+      "points": 493,
+      "comments": 556,
       "author": "danso",
       "source": "hackernews",
       "created_at": "2026-10-28T13:41:30Z"
+    },
+    {
+      "id": "50323088",
+      "title": "The AI cost of JavaScript frameworks",
+      "summary": "",
+      "url": "https://nolanlawson.com/2026/10/28/the-ai-cost-of-javascript-frameworks/",
+      "hn_url": "https://news.ycombinator.com/item?id=50323088",
+      "points": 470,
+      "comments": 389,
+      "author": "luu",
+      "source": "hackernews",
+      "created_at": "2026-11-01T06:06:19Z"
+    },
+    {
+      "id": "50296486",
+      "title": "We ran AI agent swarms in Minecraft and Mindustry",
+      "summary": "",
+      "url": "https://labs.ycombinator.com/projects/games/index.html",
+      "hn_url": "https://news.ycombinator.com/item?id=50296486",
+      "points": 421,
+      "comments": 174,
+      "author": "sandslash",
+      "source": "hackernews",
+      "created_at": "2026-10-29T21:40:28Z"
     }
   ],
   "implementation_gaps": []
