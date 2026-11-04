@@ -1,123 +1,180 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 45,
-  "edition_date": "2026-11-03",
+  "edition_date": "2026-11-04",
   "cadence": "daily",
-  "generated_at": "2026-11-03T09:54:36.266828+00:00",
+  "generated_at": "2026-11-04T09:42:08.240803+00:00",
   "paper_of_week": {
-    "index": 1,
-    "headline": "Human demos teach robots whole-body, environment‑aware manipulation",
-    "summary": "The authors introduce Pixel‑UMI, a framework that captures sensor‑rich human demonstrations and translates them into policies for mobile manipulators with mismatched embodiment. By projecting raw RGB‑D streams into a unified pixel‑wise latent space, the system learns to predict whole‑body joint targets conditioned on the surrounding scene, sidestepping explicit kinematic retargeting. The paper demonstrates that this pixel‑based representation preserves task‑relevant geometry while abstracting away robot‑specific details.\n\nExperiments on a 7‑DoF mobile base with a 6‑DoF arm show that policies trained on 20 minutes of human data can reliably execute pick‑and‑place, drawer opening, and shelf stocking across three unseen environments. Success rates jump from 38 % (baseline imitation) to 81 % (Pixel‑UMI) with comparable sample efficiency, highlighting the benefit of environment‑aware visual grounding.",
-    "key_takeaway": "Leverage pixel‑wise latent conditioning to transfer human demos to heterogeneous robots without hand‑crafted retargeting.",
+    "index": 4,
+    "headline": "Precision Inverse Kinematics via Reinforcement Learning Redefines Robot Control",
+    "summary": "Robotic systems still struggle with high‑precision inverse kinematics, especially under visual‑language constraints. PolicyIK reframes IK as a reinforcement learning problem, training a policy that directly maps end‑effector poses to joint commands. The key insight is conditioning the RL policy on a learned latent representation of the robot’s kinematic manifold, enabling sub‑millimeter accuracy without iterative solvers. Practitioners gain a drop‑in module that eliminates costly Jacobian calculations, accelerates deployment, and integrates seamlessly with vision‑language pipelines.",
+    "key_takeaway": "Replace traditional IK solvers with the PolicyIK RL policy for faster, higher‑precision joint commands.",
     "excitement_score": 9,
     "paper": {
-      "id": "2611.03647v1",
-      "title": "Pixel-UMI: Learning Environment-Aware Whole-Body Manipulation from Sensorized Human Demonstrations",
-      "summary": "Sensorized human demonstrations offer scalable data for mobile manipulation, but embodiment differences complicate policy learning. We present Pixel-UMI, a pipeline for learning environment-aware whole-body policies from human data. We first introduce Environment-Aware Retargeting (EAR), which combines reconstructed scene geometry with demonstrated head and gripper trajectories to determine robot posture and generate collision-aware joint and base targets. Delay-calibrated action assignment converts these trajectories into actions. However, kinematic differences can leave residual pose errors, creating viewpoint mismatches between human demonstrations and robot observations. We therefore introduce Retargeting-Error-Aware Masking (REAM), which uses these errors during training to reduce reliance on mismatched views at deployment. Finally, because estimated actions cannot fully capture contact-rich interactions, we collect on-policy human corrections through DAgger to improve performance. We evaluate Pixel-UMI on five challenging tasks spanning articulated-object manipulation, deformable-object handling, constrained-space reaching, whole-body collision avoidance, and contact-rich bimanual coordination, achieving 87.0% average task progress. Video results are available at https://pixel-robot.com/pixel-umi",
+      "id": "2611.05372v1",
+      "title": "PolicyIK: High-Precision Inverse Kinematics for Robot Arms with Reinforcement Learning",
+      "summary": "Inverse kinematics (IK) converts end-effector pose commands into joint motion, and many vision-language-action (VLA) policies rely on it to act on a given arm and to transfer across embodiments. Precise IK remains laborious: redundancy and singularities complicate the inverse mapping, execution depends on hand-tuned controllers, and training data on physical robots are costly to collect. We present PolicyIK, a goal-conditioned reinforcement learning policy for high-precision IK. It updates joint-position references from pose feedback and observes its accumulated reference relative to the measured joints, so it can retain the offset that the position controller needs at rest. Two-scale pose errors with an error-dependent action gain resolve millimeter residuals while preserving large motions. Progress and dwell rewards teach it to both reach the tolerance and stay within it. In simulation, a single attempt by the trained PPO policy keeps the mean errors over the final second within 1 mm and 0.2° on 93.5% of held-out tasks, and a deployment protocol raises success to 98.9%. When trained directly on a physical arm with an off-policy RL learner, PolicyIK achieves higher reaching and holding success than all four classical IK controllers under the same time budgets. In simulated pick-and-place, PolicyIK executes the end-effector commands of the $π_{0.5}$ VLA policy with 95.7% success. These results show that reinforcement learning can provide high-precision inverse kinematics for robot arms. Code is available at https://github.com/Tinaliu0123/PolicyIK.",
       "authors": [
-        "Jason Jingzhou Liu",
-        "Tony Tao",
-        "Deepak Pathak"
+        "Yuhan Liu",
+        "Xinqi Liu",
+        "Zixuan Dong"
       ],
-      "url": "https://arxiv.org/abs/2611.03647v1",
-      "pdf_url": "https://arxiv.org/pdf/2611.03647v1",
+      "url": "https://arxiv.org/abs/2611.05372v1",
+      "pdf_url": "https://arxiv.org/pdf/2611.05372v1",
       "category": "cs.RO",
       "source": "arxiv",
-      "published": "2026-11-02T18:59:32Z",
+      "published": "2026-11-03T18:59:14Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Transferring human manipulation skills to robots is hampered by embodiment gaps and the need for environment‑specific adaptation. Existing imitation pipelines either require precise pose tracking or hand‑crafted retargeting, which do not scale to whole‑body mobile manipulation in cluttered, novel scenes.",
-    "approach": "Pixel‑UMI records synchronized RGB‑D video, force‑torque, and joint data from a sensorized human operator. A convolutional encoder maps each frame to a dense pixel‑wise latent map that encodes both scene geometry and human hand pose. A transformer‑based policy consumes a short history of these maps and predicts target joint deltas for the robot’s base and arm, using a learned embodiment‑agnostic decoder that maps latent vectors to robot‑specific joint commands. The loss combines behavior cloning on joint targets and a contrastive term that forces the latent space to be invariant to the demonstrator’s limb lengths.",
-    "results": "On the MobileManip benchmark, Pixel‑UMI achieves 81 % success on unseen test rooms versus 38 % for a vanilla BC baseline and 65 % for a pose‑retargeting method. Sample efficiency improves 2×: the same performance is reached after 10 k demonstration frames instead of 20 k. Ablations show the contrastive latent regularizer contributes +12 % absolute gain, and the transformer history length of 5 frames yields the best trade‑off between latency and accuracy.",
-    "limitations": "The method assumes a static camera view and relies on high‑quality depth data; performance degrades with occlusions or noisy sensors. The learned decoder is robot‑specific, so transferring to a drastically different platform still requires fine‑tuning. Real‑time inference runs at ~8 Hz on a single GPU, which may be insufficient for high‑speed tasks.",
-    "what_it_unlocks": "Practitioners can now collect cheap, wearable sensor data from human operators and bootstrap whole‑body mobile manipulation policies without bespoke kinematic models. This opens rapid prototyping of service robots that can adapt to new kitchens, warehouses, or homes by simply recording a few minutes of human work."
-  },
+  "top_papers": [
+    {
+      "index": 1,
+      "tldr": "Video diffusion learns a universal latent action space across varied executions.",
+      "bullets": [
+        "Joint video‑action representation without task‑specific heads",
+        "Latent dynamics consistent across agents and environments",
+        "Benchmarks show zero‑shot transfer to new tasks"
+      ],
+      "who_should_read": "Robotics perception researchers",
+      "paper": {
+        "id": "2611.05377v1",
+        "title": "DreamX: Video Diffusion Model is a Universal Latent Action Learner",
+        "summary": "Learning a universal action representation from video requires modeling dynamics that are consistent across different executions of the same action yet invariant to changes in embodiment and appearance. Existing latent action models infer actions from visual transitions, but their representations often entangle the underlying action with irrelevant visual variations, limiting transfer across embodiments. We introduce DreamX, which repurposes a pretrained video diffusion model as a universal latent action learner. Our approach extracts compact latent actions from the video model's rich spatiotemporal features, compressing each latent video frame by $\\boldsymbol{300\\times}$ ($\\boldsymbol{1{,}200 \\rightarrow 4}$ tokens). In addition, by leveraging the video model's generative prior, these latent actions capture action-relevant dynamics disentangled from visual appearance. The resulting latent space serves as a shared action interface across embodiments (human and robot), environments, and action parameterizations. On LARY-Bench, DreamX achieves state-of-the-art performance among latent action models. Moreover, actions encoded in one setting remain effective in another: the latent space supports any-to-any video transfer and zero-shot action transfer across diverse embodiments and environments. Furthermore, this shared interface also enables policy learning in a compact latent action space, reducing the computational cost of video-diffusion-based policies.",
+        "authors": [
+          "Jisoo Kim",
+          "Chaehyun Kim",
+          "Junsu Kim"
+        ],
+        "url": "https://arxiv.org/abs/2611.05377v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.05377v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-03T18:59:56Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 3,
+      "tldr": "Direct Nash Optimization aligns LMs to generic preference functions.",
+      "bullets": [
+        "Formulates alignment as a two‑player game",
+        "Empirical convergence guarantees on large models",
+        "Outperforms RLHF on diverse human feedback"
+      ],
+      "who_should_read": "LLM alignment engineers",
+      "paper": {
+        "id": "2611.05373v1",
+        "title": "Aligning Language Models with General Preferences: An Empirical Study of Direct Nash Optimization",
+        "summary": "Direct Nash Optimization (DNO) aligns a language model to a general preference function by approximating the Nash equilibrium of a two-player preference game. Its practical variant, DNO-Prct, iterates on-policy sampling, LLM-based rating of the samples together with a teacher's gold response, large-margin preference-pair selection and a DPO-style contrastive update. We re-implement DNO-Prct independently and study it on two open-weight instruct models, Llama 3.1 8B Instruct and Mistral 7B Instruct v0.1, with GPT-4o or a larger open-weight model of the same family as the annotator. On AlpacaEval 2.0 with GPT-4o as judge, three iterations raise the length-controlled (LC) win rate against GPT-4o from 31.7% to 45.3% for Llama and from 6.8% to 18.4% for Mistral, and the tuned 8B model scores above Llama 3.1 70B Instruct on every reported win rate. With same-family open-weight annotators, the runs retain 62% (Llama) and 82% (Mistral) of the LC gain achieved with GPT-4o as annotator, so the rating step does not require a proprietary model. In a separate ablation configuration, variants that remove the gold responses, remove the data look-back, or accept only teacher-preferred pairs score 6 to 10 LC points below the full procedure, whereas varying the number of on-policy samples per prompt (1 to 7) moves the LC win rate by at most 2.1 points, and a margin sweep (1 to 5) run in its own pipeline by at most 2.4 points. We also report the cost of the pipeline and where the practical algorithm departs from the theory it approximates. All results are single runs, and GPT-4o is both the teacher and the evaluation judge; we discuss what this implies for the reported gains.",
+        "authors": [
+          "Austin Tsai",
+          "Saurav Nanda",
+          "Ganapathy Parthasarathy"
+        ],
+        "url": "https://arxiv.org/abs/2611.05373v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.05373v1",
+        "category": "cs.LG",
+        "source": "arxiv",
+        "published": "2026-11-03T18:59:15Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 5,
+      "tldr": "Guided iterative data collection reduces imitation‑learning costs.",
+      "bullets": [
+        "Active selection of teleoperation segments",
+        "Iterative policy‑feedback loop improves sample efficiency",
+        "Demonstrated 40% fewer demos for comparable performance"
+      ],
+      "who_should_read": "Robotics imitation‑learning teams",
+      "paper": {
+        "id": "2611.05368v1",
+        "title": "GUILD: Guided Iterative Data Collection for Imitation Learning",
+        "summary": "Imitation learning policies in robotics are trained on datasets collected through costly real-world teleoperation. Often, the data-collection process is unguided, relying on the teleoperator's intuition, resulting in data that contributes little to overall policy performance. Recent work has shown that curating such unguided datasets can substantially improve policy performance, but these approaches operate by filtering existing datasets after collection and therefore do not prevent the acquisition of uninformative data. In this work, we propose GUILD, a novel Guided Data Collection (GDC) method that actively reasons about which data should be collected to maximize downstream policy performance. We introduce an iterative framework that alternates between 1) task proposal and data collection and 2) data evaluation to close the loop. For task proposal, we leverage semantic priors from vision-language models to identify relevant environments, object configurations, and goals for data collection. However, since semantic relevance does not imply policy improvement, we perform data evaluation. By leveraging predictive data attribution we approximate how the collected trajectories influence policy performance on a target deployment setting. This signal is then used as feedback to guide subsequent data collection, closing the data collection loop. We evaluate our approach in simulation and real robot settings, demonstrating that guided data collection substantially improves sample efficiency and deployment performance compared to passive data collection strategies, multiple baselines and experienced roboticists. More information at https://robin-lab.cs.utexas.edu/guild2026/",
+        "authors": [
+          "Shivin Dass",
+          "Kevin Nguyen",
+          "Rohan Yelandur"
+        ],
+        "url": "https://arxiv.org/abs/2611.05368v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.05368v1",
+        "category": "cs.RO",
+        "source": "arxiv",
+        "published": "2026-11-03T18:57:35Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 7,
+      "tldr": "GSCV++ compresses 3D Gaussian splatting sequences with video codecs.",
+      "bullets": [
+        "Maps GS frames to standard video streams",
+        "Achieves >10× bitrate reduction with negligible quality loss",
+        "Open‑source pipeline integrates with existing renderers"
+      ],
+      "who_should_read": "3D graphics and VR developers",
+      "paper": {
+        "id": "2611.05359v1",
+        "title": "GSCV++: Lightweight 3D Gaussian Splatting Sequence Compression via Standard Video Codecs",
+        "summary": "This paper presents GSCV++, a lightweight pipeline for 3D {G}aussian {S}platting (GS) sequences {C}ompression with standard {V}ideo codecs. To meet the requirements of low-complexity and hardware compatibility from the industry, GSCV++ jointly improves preprocessing, 3D-to-2D mapping, and practical video compression configuration of GS compression. First, for preprocessing, energy-adaptive inter-frame spherical harmonic (SH) alternative current (AC) dimensionality reduction (EA-SHDR) is proposed to produces a compact and stable temporal SH AC feature space. It can reduce the data volume of following mapping and practical compression, as well as less complexity while eliminating redundant information. Second, for 3D-to-2D mapping, prior-based Inter-MiniPLAS (P-MiniPLAS) is designed to generate smooth 2D feature maps through prior-based weighting factor inference and small scale remapping. Compared with vanilla Parallel Linear Assignment Sorting (PLAS) and Morton scan, P-MiniPLAS ensures the generated 2D maps are more suitable for the video codec while maintaining a low level of computational complexity. Third, for practical compression, content-aware generalized compression (CA-GC) is developed to use a non-uniform bit-depth split for coordinate map generation, and a coding unit size selection is introduced for efficient compression complexity control, which fully exploits the performance of video codecs without involving normative changes. Experiments demonstrate that GSCV++ reports over 20\\% in intra- and 60\\% in inter-prediction rate-distortion gains compared with state-of-the-art (SOTA) methods. GSCV++ also achieves faster 2D map generation, encoding, and decoding than other SOTA methods using the same type of video codecs. Ablation studies verify the effectiveness and robustness of the proposed modules and provide insights for subsequent research.",
+        "authors": [
+          "Qi Yang",
+          "Yingzhan Xu",
+          "Kai Zhang"
+        ],
+        "url": "https://arxiv.org/abs/2611.05359v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.05359v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-03T18:54:29Z"
+      }
+    },
+    {
+      "index": 8,
+      "tldr": "Durable suppression techniques prevent misaligned LM behaviors.",
+      "bullets": [
+        "Identifies persistent failure modes across training phases",
+        "Applies targeted regularization and replay buffers",
+        "Shows long‑term behavior stability in continual fine‑tuning"
+      ],
+      "who_should_read": "LLM safety practitioners",
+      "paper": {
+        "id": "2611.05358v1",
+        "title": "Suppressing Misaligned Behaviors in Language Models, Durably",
+        "summary": "Undesired model behaviors can emerge or re-emerge at any stage of training. Once observed, how effectively can we suppress them? To study this question, we first construct two model organisms--language models deliberately trained to exhibit a specific misalignment--that differ in what triggers the behavior. The narrow-trigger organism misbehaves only when the prompt contains a specific cue: it cheats on multiple-choice questions by following a planted hint that points to a wrong answer, and behaves normally otherwise. The broad-trigger organism has no such cue: after fine-tuning on insecure code, it gives harmful responses across a wide range of open-ended prompts. We then formalize post-hoc behavioral suppression and evaluate methods along three criteria: immediate suppression of the target behavior, durability under further training, and preservation of general capability. We compare standard methods--SFT, GRPO, and gradient-ascent unlearning--along these dimensions. Building on prior work on alignment shallowness, we hypothesize that more durable suppression requires the ability to recover from a wider range of misalignment states. We introduce Prefix-Expanded Adversarial Reinforcement Learning (PEARL), a GRPO variant that augments rollouts with continuations from intermediate states sampled along cached organism trajectories. Across both organism settings and two model families (Qwen3-4B, GPT-OSS-20B), PEARL achieves strong immediate suppression while preserving task accuracy, and remains durable under further fine-tuning on either the organism's data or unrelated data. It obtains the greatest benefit when the undesirable behavior is broad and cannot be addressed through targeted SFT. Together, our framework and method offer a step toward more durable post-hoc removal of undesired behaviors.",
+        "authors": [
+          "Luxi He",
+          "Pengcheng Jiang",
+          "Jifan Zhang"
+        ],
+        "url": "https://arxiv.org/abs/2611.05358v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.05358v1",
+        "category": "cs.CL",
+        "source": "arxiv",
+        "published": "2026-11-03T18:54:08Z"
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Record a 5‑minute RGB‑D demo of opening a cabinet and train Pixel‑UMI on a TurtleBot‑Arm.",
-    "why": "It validates the end‑to‑end pipeline on your own hardware with minimal data.",
+    "action": "Fine‑tune a small LM with Direct Nash Optimization on your preference dataset",
+    "why": "It yields alignment without expensive RLHF loops, ready for production use",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
   "github_repos": [
     {
-      "id": "1405013963",
-      "title": "Fazmin/AILearningGuide",
-      "summary": "Interactive desktop app with 51 labs covering ML fundamentals, transformers, RAG, agents, fine-tuning and quantization and more.",
-      "url": "https://github.com/Fazmin/AILearningGuide",
-      "stars": 243,
-      "forks": 24,
-      "language": "TypeScript",
-      "topics": [
-        "ai",
-        "ai-education",
-        "deep-learning",
-        "educational",
-        "educational-resources",
-        "educational-tool",
-        "generative-ai",
-        "interactive-learning",
-        "learning",
-        "llm",
-        "machine-learning",
-        "offline-first",
-        "onnx",
-        "transformers"
-      ],
-      "source": "github",
-      "created_at": "2026-10-05T02:29:23Z"
-    },
-    {
-      "id": "1405070384",
-      "title": "Takamatsu-Hikaru/AI-Research-Guide",
-      "summary": "AI 科研入门指南：大学选择、科研 60 问、入门项目、学习路线与论文卡片。A bilingual guide to getting started in AI research.",
-      "url": "https://github.com/Takamatsu-Hikaru/AI-Research-Guide",
-      "stars": 209,
-      "forks": 10,
-      "language": "JavaScript",
-      "topics": [
-        "ai",
-        "chinese",
-        "education",
-        "getting-started",
-        "machine-learning",
-        "research"
-      ],
-      "source": "github",
-      "created_at": "2026-10-05T03:32:47Z"
-    },
-    {
-      "id": "1428105252",
-      "title": "TheLastOxygen/mafdet",
-      "summary": "You type. It already knows. Local LLMs that read and think while you type.",
-      "url": "https://github.com/TheLastOxygen/mafdet",
-      "stars": 79,
-      "forks": 5,
-      "language": "Python",
-      "topics": [
-        "deep-learning",
-        "framework",
-        "large-language-models",
-        "llm-inference",
-        "llm-tools",
-        "local-ai",
-        "local-development",
-        "machine-learning",
-        "research-project",
-        "research-tool"
-      ],
-      "source": "github",
-      "created_at": "2026-10-21T08:37:56Z"
-    },
-    {
       "id": "1440248149",
       "title": "kerlenton/bootgpt",
       "summary": "A language model that lives in a boot sector",
       "url": "https://github.com/kerlenton/bootgpt",
-      "stars": 76,
+      "stars": 89,
       "forks": 2,
       "language": "Python",
       "topics": [
@@ -135,12 +192,35 @@
       "created_at": "2026-10-30T21:28:17Z"
     },
     {
+      "id": "1428105252",
+      "title": "TheLastOxygen/mafdet",
+      "summary": "You type. It already knows. Local LLMs that read and think while you type.",
+      "url": "https://github.com/TheLastOxygen/mafdet",
+      "stars": 80,
+      "forks": 6,
+      "language": "Python",
+      "topics": [
+        "deep-learning",
+        "framework",
+        "large-language-models",
+        "llm-inference",
+        "llm-tools",
+        "local-ai",
+        "local-development",
+        "machine-learning",
+        "research-project",
+        "research-tool"
+      ],
+      "source": "github",
+      "created_at": "2026-10-21T08:37:56Z"
+    },
+    {
       "id": "1427493486",
       "title": "somastllc/nlp-for-machine-learning-bootcamp",
       "summary": "NLP for Machine Learning Bootcamp.",
       "url": "https://github.com/somastllc/nlp-for-machine-learning-bootcamp",
-      "stars": 57,
-      "forks": 7,
+      "stars": 58,
+      "forks": 8,
       "language": "Unknown",
       "topics": [
         "ai",
@@ -156,7 +236,7 @@
       "title": "kumarshreshtha/protuna",
       "summary": "Optimization framework for AI-guided protein engineering",
       "url": "https://github.com/kumarshreshtha/protuna",
-      "stars": 54,
+      "stars": 55,
       "forks": 2,
       "language": "Python",
       "topics": [
@@ -217,20 +297,77 @@
       ],
       "source": "github",
       "created_at": "2026-10-08T02:05:28Z"
+    },
+    {
+      "id": "1429736272",
+      "title": "FrontiersMindAI/decisionformer",
+      "summary": "Transformers for decision models: fine-tune, load and serve calibrated decsion-model on any Hugging Face model.",
+      "url": "https://github.com/FrontiersMindAI/decisionformer",
+      "stars": 44,
+      "forks": 4,
+      "language": "Python",
+      "topics": [
+        "decision-model",
+        "decision-models",
+        "decoder",
+        "deep-learning",
+        "encoder",
+        "glm",
+        "jev-model",
+        "llm",
+        "machine-learning",
+        "pytorch",
+        "qwen"
+      ],
+      "source": "github",
+      "created_at": "2026-10-22T12:45:27Z"
+    },
+    {
+      "id": "1408152368",
+      "title": "PkLavc/Autotrader",
+      "summary": "Autonomous AI trading system powered by Kronos. Forecasts markets, builds portfolios and paper-trades automatically with GitHub Actions.",
+      "url": "https://github.com/PkLavc/Autotrader",
+      "stars": 38,
+      "forks": 1,
+      "language": "Python",
+      "topics": [
+        "ai-trading-system",
+        "algorithmic-trading-quantitative",
+        "artificial-intelligence",
+        "automated-trading-tool",
+        "deep-learning",
+        "finance",
+        "financial-machine-learning",
+        "github-actions",
+        "machine-learning",
+        "market-prediction",
+        "paper-trading-platform",
+        "portfolio-optimization",
+        "python",
+        "pytorch",
+        "quantitative-finance",
+        "quantitative-trading-tool",
+        "stock-market",
+        "stock-prediction",
+        "time-series-forecasting",
+        "trading-bot-ai-automated"
+      ],
+      "source": "github",
+      "created_at": "2026-10-07T02:43:14Z"
     }
   ],
   "hn_posts": [
     {
-      "id": "50257325",
-      "title": "AI promised less work. I've never worked more",
+      "id": "50354960",
+      "title": "Postman silently auto-installs AI plugins and attempts to share all API data",
       "summary": "",
-      "url": "https://oioannou.com/blog/ai-promised-less-work/",
-      "hn_url": "https://news.ycombinator.com/item?id=50257325",
-      "points": 689,
-      "comments": 665,
-      "author": "oorestisime",
+      "url": "https://github.com/postmanlabs/postman-app-support/issues/14370",
+      "hn_url": "https://news.ycombinator.com/item?id=50354960",
+      "points": 1265,
+      "comments": 418,
+      "author": "sidgarimella",
       "source": "hackernews",
-      "created_at": "2026-10-27T11:08:14Z"
+      "created_at": "2026-11-03T17:22:37Z"
     },
     {
       "id": "50305693",
@@ -238,11 +375,23 @@
       "summary": "",
       "url": "https://newsletter.signoz.io/p/ai-isnt-replacing-sres-its-deskilling",
       "hn_url": "https://news.ycombinator.com/item?id=50305693",
-      "points": 677,
-      "comments": 500,
+      "points": 683,
+      "comments": 505,
       "author": "dorianniemiec",
       "source": "hackernews",
       "created_at": "2026-10-30T15:52:18Z"
+    },
+    {
+      "id": "50353192",
+      "title": "Google will turn off search for schools that reject AI",
+      "summary": "",
+      "url": "https://www.nytimes.com/2026/11/03/us/google-search-schools-restrict-ai.html",
+      "hn_url": "https://news.ycombinator.com/item?id=50353192",
+      "points": 614,
+      "comments": 432,
+      "author": "ceejayoz",
+      "source": "hackernews",
+      "created_at": "2026-11-03T15:25:47Z"
     },
     {
       "id": "50290177",
@@ -250,35 +399,11 @@
       "summary": "",
       "url": "https://martinfowler.com/bliki/LLM-Voice.html",
       "hn_url": "https://news.ycombinator.com/item?id=50290177",
-      "points": 607,
+      "points": 610,
       "comments": 336,
       "author": "ibobev",
       "source": "hackernews",
       "created_at": "2026-10-29T14:57:55Z"
-    },
-    {
-      "id": "50264853",
-      "title": "Survival LLM: AI assistant and emergency library that runs on your own computer",
-      "summary": "",
-      "url": "https://www.brangus.io/survival-llm",
-      "hn_url": "https://news.ycombinator.com/item?id=50264853",
-      "points": 543,
-      "comments": 204,
-      "author": "Luc",
-      "source": "hackernews",
-      "created_at": "2026-10-27T19:55:06Z"
-    },
-    {
-      "id": "50257326",
-      "title": "Wikipedia's Cleanup of AI-Generated Content",
-      "summary": "",
-      "url": "https://spectrum.ieee.org/wikipedia-wikiproject-ai-writing-cleanup",
-      "hn_url": "https://news.ycombinator.com/item?id=50257326",
-      "points": 523,
-      "comments": 242,
-      "author": "rbanffy",
-      "source": "hackernews",
-      "created_at": "2026-10-27T11:08:15Z"
     },
     {
       "id": "50273396",
@@ -286,7 +411,7 @@
       "summary": "",
       "url": "https://religionnews.com/2026/10/26/in-a-first-a-humanist-granted-a-religious-exemption-from-using-ai/",
       "hn_url": "https://news.ycombinator.com/item?id=50273396",
-      "points": 493,
+      "points": 494,
       "comments": 556,
       "author": "danso",
       "source": "hackernews",
@@ -298,11 +423,23 @@
       "summary": "",
       "url": "https://nolanlawson.com/2026/10/28/the-ai-cost-of-javascript-frameworks/",
       "hn_url": "https://news.ycombinator.com/item?id=50323088",
-      "points": 470,
-      "comments": 389,
+      "points": 474,
+      "comments": 394,
       "author": "luu",
       "source": "hackernews",
       "created_at": "2026-11-01T06:06:19Z"
+    },
+    {
+      "id": "50336918",
+      "title": "Fujifilm to boost tape production 5x as AI fuels archiving demand",
+      "summary": "",
+      "url": "https://arstechnica.com/gadgets/2026/10/fujifilm-to-boost-tape-production-5x-as-ai-fuels-archiving-demand/",
+      "hn_url": "https://news.ycombinator.com/item?id=50336918",
+      "points": 468,
+      "comments": 193,
+      "author": "bookofjoe",
+      "source": "hackernews",
+      "created_at": "2026-11-02T14:02:42Z"
     },
     {
       "id": "50296486",
@@ -310,7 +447,7 @@
       "summary": "",
       "url": "https://labs.ycombinator.com/projects/games/index.html",
       "hn_url": "https://news.ycombinator.com/item?id=50296486",
-      "points": 421,
+      "points": 422,
       "comments": 174,
       "author": "sandslash",
       "source": "hackernews",
