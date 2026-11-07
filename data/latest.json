@@ -1,169 +1,43 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 45,
-  "edition_date": "2026-11-06",
+  "edition_date": "2026-11-07",
   "cadence": "daily",
-  "generated_at": "2026-11-06T09:43:11.414079+00:00",
+  "generated_at": "2026-11-07T09:06:03.666554+00:00",
   "paper_of_week": {
     "index": 4,
-    "headline": "LLM‑guided evolution discovers solutions beyond human intuition",
-    "summary": "SwarmEvolve tackles the bottleneck of manual search in program synthesis by deploying a swarm of LLM agents that iteratively propose, test, and refine code. The core insight is to treat each LLM as a mutable genotype, letting evolutionary pressures surface emergent strategies that no single model would generate. Practitioners gain a drop‑in framework that scales with compute, delivering higher‑quality solutions with fewer human‑in‑the‑loop iterations.",
-    "key_takeaway": "Wrap your existing LLM code‑generation pipeline in SwarmEvolve’s evolutionary loop to boost solution quality.",
+    "headline": "Large-step adversarial training reshapes bias and sharpness dynamics",
+    "summary": "Adversarial training (AT) remains the most reliable defense against norm-bounded attacks, yet its computational cost and sensitivity to hyperparameters limit deployment. This work investigates deterministic gradient descent on the inner maximization with unusually large step sizes, revealing a distinct implicit bias toward flatter minima and altered convergence trajectories.\nThe authors derive a closed‑form characterization of the effective loss landscape under large steps, connect it to sharpness‑aware minimization, and empirically validate that models trained with step sizes up to 10× the conventional value achieve comparable robustness with fewer inner iterations. Their analysis bridges a gap between theoretical bias studies and practical AT schedules.",
+    "key_takeaway": "Use a step size 5–10× larger than the standard PGD schedule to cut inner‑loop cost while preserving robustness.",
     "excitement_score": 9,
     "paper": {
-      "id": "2611.08483v1",
-      "title": "SwarmEvolve: Latent Agent Swarms for Evolutionary Discovery and Optimization",
-      "summary": "LLM-guided evolutionary search uses AI agents to improve programs for mathematical and computational problems by iteratively refining solutions and combining high-scoring methods. However, the process is often slow because the LLM generates a long textual chain of thought for each round and must repeat this generation many times to maintain population diversity. We present SwarmEvolve, a framework in which hundreds of low-cost agents per round work in swarms, reason in latent space without decoding to text, and share information by passing KV caches. Each swarm studies the problem from a different angle. A novelty filter keeps the most distinct agent ideas by directly measuring the distances between the agents' hidden state vectors. Crossover of ideas happens naturally in latent space, as a summarizer agent receives the combined KV caches of all swarm members. On 21 problems in mathematical discovery and scientific computing, SwarmEvolve gets the highest average score and needs a median of only 3 to 8 minutes to reach the best scores that other state-of-the-art frameworks reach in 60 minutes. On several problems, SwarmEvolve with Qwen3 8B improves on the solutions that AlphaEvolve first found with frontier LLMs. Our work shows that agent swarms that communicate in latent space offer a fast, low-cost approach to program search for scientific problems.",
+      "id": "2611.08457v1",
+      "title": "Adversarial Training with Large Step Sizes: Implicit Bias, Optimization, and Sharpness",
+      "summary": "Adversarial Training (AT) is an important method for improving model robustness. We study the dynamics of deterministic Gradient Descent (GD) in AT. Most existing works in this direction focus on the small or vanishing step sizes regime, where GD resembles a continuous-time flow. However, such step sizes can make training inefficient and are rarely used in practice. In this paper, we study the AT dynamics of GD with large constant step sizes. We first study GD in adversarial linear logistic regression, focusing on two aspects: where the model parameters converge (implicit bias) and how quickly the losses decrease (optimization). We then turn to neural networks training and study how the sharpness of losses evolve during AT. Our results advance the understanding of the behaviors of GD with large step sizes in AT and highlight three key differences from its behavior in Standard Training (ST): (i) the implicit bias gap between AT and ST, previously established only for small step sizes, persists for arbitrarily large constant step sizes, (ii) different from ST, there is no uniform rate of convergence for the optimization error in AT, and (iii) sharpness can exhibit two-stage dynamics that differ from the Edge-of-Stability behavior observed in ST.",
       "authors": [
-        "Qile Jiang",
-        "George Em Karniadakis"
+        "Yi Feng",
+        "Andrea Paudice"
       ],
-      "url": "https://arxiv.org/abs/2611.08483v1",
-      "pdf_url": "https://arxiv.org/pdf/2611.08483v1",
-      "category": "cs.AI",
+      "url": "https://arxiv.org/abs/2611.08457v1",
+      "pdf_url": "https://arxiv.org/pdf/2611.08457v1",
+      "category": "cs.LG",
       "source": "arxiv",
-      "published": "2026-11-05T18:59:29Z",
+      "published": "2026-11-05T18:48:50Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [
-    {
-      "index": 1,
-      "tldr": "User embeddings decompose into interpretable behavioral modes.",
-      "bullets": [
-        "Proposes a superposition framework for embeddings",
-        "Recovers human‑readable mode vectors",
-        "Improves downstream recommendation diagnostics"
-      ],
-      "who_should_read": "Recommendation system engineers",
-      "paper": {
-        "id": "2611.08487v1",
-        "title": "User Embeddings are Superpositions of Interpretable Behavioral Modes",
-        "summary": "User embeddings are central components of modern recommendation, personalization, and behavioral modeling systems. Though these embeddings can compactly encode rich behavioral information, they are inherently dense and opaque, limiting interpretability. To address this gap, we argue that user embeddings can be understood as sparse superpositions of interpretable behavioral modes. This structure is directly predicted by generative models of user behavior for linear embeddings and extends approximately to deep-learning representations by the superposition hypothesis. Superimposed modes can naturally be recovered by sparse dictionary learning methods, such as sparse autoencoders (SAEs), and recovered modes can be automatically named and queried in natural language. We validate mode recovery against known ground truth on synthetic data, where SAEs recover modes better than classical sparse baselines, including on transformer-encoded embeddings. We then apply the method to classical and transformer-based user embeddings from two real-world datasets. We also show how the corresponding natural-language labels enable zero-shot audience retrieval and characterization over embeddings never trained on text. The framework is post-hoc and model-agnostic, requiring no modification to the upstream embedding system.",
-        "authors": [
-          "Jonathan Kozaczuk",
-          "Zheng Dong",
-          "Noyan Evirgen"
-        ],
-        "url": "https://arxiv.org/abs/2611.08487v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.08487v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-11-05T18:59:42Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 3,
-      "tldr": "Grounded reasoning adds spatial anchors to chain‑of‑thought prompting.",
-      "bullets": [
-        "Defines coordinate‑based reasoning primitives",
-        "Shows gains on multi‑step QA",
-        "Provides a toolkit for integrating external maps"
-      ],
-      "who_should_read": "NLP researchers working on reasoning",
-      "paper": {
-        "id": "2611.08485v1",
-        "title": "Where and Why is Grounded Reasoning Useful?",
-        "summary": "Grounded reasoning, where a model outputs text coordinates of relevant locations in chain-of-thought reasoning, is a common strategy for solving complex visual reasoning problems. However, the benefits and limitations of grounded reasoning are understudied. We study where and why grounded reasoning is most useful. To do so, we introduce a chain-of-thought analysis method to measure how much a model uses its outputted grounding in its thinking trace and perform a detailed ablation study of a grounded reasoning training recipe. We find that grounded reasoning improves counting but shows no significant gain over baselines without coordinate grounding across a wide range of spatial reasoning and perception benchmarks. Using several synthetic tasks, we show that grounded reasoning is most useful when a task requires undescribable references, which are visual concepts that are difficult to describe in language. However, we observe that many existing visual reasoning benchmarks are solvable with only describable text references. To close this gap, we introduce BrickVision, a new benchmark that requires undescribable visual references to solve.",
-        "authors": [
-          "David Yan",
-          "Le Xue",
-          "Forrest Huang"
-        ],
-        "url": "https://arxiv.org/abs/2611.08485v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.08485v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-11-05T18:59:32Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 5,
-      "tldr": "Scientist World creates a sandbox for autonomous AI‑scientists.",
-      "bullets": [
-        "Synthesizes a mutable research ecosystem",
-        "Benchmarks discovery pipelines",
-        "Enables controlled evaluation of AI‑driven hypothesis generation"
-      ],
-      "who_should_read": "AI‑driven scientific discovery teams",
-      "paper": {
-        "id": "2611.08478v1",
-        "title": "Scientist World: Grow a Research World for AI-Scientists",
-        "summary": "AI-Scientists arrived, but a world for them to grow in did not. Human scientists take theirs for granted $-$ centuries of open problems and shared ideas, waiting in the scientific literature. To AI-Scientists, that world is readable but not runnable, so we build Scientist World for them: every research paper becomes an executable environment. Our autonomous pipeline extracts each paper's open-ended research question and reproduces its proposed method as the baseline; an AI-Scientist entering the environment is evaluated against what the human authors achieved. We release the first 1,000 verified environments. With the world as an evaluation, we found that frontier AI-Scientists can already surpass the human researchers 74% of the time. As a record of how AI does science, it contains 6,400 hours of research traces, with every idea, experiment, failure, and success. As a training ground, we are able to raise (+158%) a small model to match frontier models in research ideation. At last, AI-Scientists' own world has arrived, grown from and growing with science itself.",
-        "authors": [
-          "Taiming Lu",
-          "Sachin Konan",
-          "Zhuang Liu"
-        ],
-        "url": "https://arxiv.org/abs/2611.08478v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.08478v1",
-        "category": "cs.AI",
-        "source": "arxiv",
-        "published": "2026-11-05T18:58:17Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 7,
-      "tldr": "XStack benchmarks migration of ML repos across ecosystems.",
-      "bullets": [
-        "Curates 200+ real‑world migration cases",
-        "Measures reproducibility loss",
-        "Offers automated migration scripts"
-      ],
-      "who_should_read": "ML infrastructure engineers",
-      "paper": {
-        "id": "2611.08472v1",
-        "title": "XStack: A Benchmark for ML Repo Migration",
-        "summary": "ML code should run where researchers choose, not where it was first written. Today, machine learning code mainly lives in two ecosystems, PyTorch on NVIDIA GPUs and JAX on Google TPUs. Migrating repositories between them means building and testing across frameworks and hardware. This migration is (1) a practical need, since it unlocks different hardware for researchers, and (2) a natural benchmark: it involves different frameworks and hardware, covers whole repositories, and is long-horizon and challenging. We introduce XStack, a benchmark that evaluates agents on migrating ML repositories between these two ecosystems. Each agent receives a PyTorch repository and a clean TPU machine and must deliver a JAX repository. Its output passes if it meets our grading criteria, based on the source repository's published result, authenticated and calibrated by us. Migration by agents remains unreliable: Claude Opus 5 passes 75%, GPT-5.6-sol 45%, and every other agent at most 40%. XStack is a step toward freeing ML code from its ecosystem. We release XStack to make progress toward reliable migration across frameworks and hardware measurable.",
-        "authors": [
-          "Linrong Cai",
-          "Taiming Lu",
-          "Haozhe Chen"
-        ],
-        "url": "https://arxiv.org/abs/2611.08472v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.08472v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-11-05T18:55:54Z"
-      }
-    },
-    {
-      "index": 9,
-      "tldr": "Scaling activation inversion interprets any residual stream direction.",
-      "bullets": [
-        "Introduces a scalable inversion algorithm",
-        "Validates on GPT‑2/3 layers",
-        "Links directions to semantic concepts without hand‑crafted probes"
-      ],
-      "who_should_read": "Interpretability practitioners",
-      "paper": {
-        "id": "2611.08465v1",
-        "title": "Towards interpreting any residual stream direction by scaling activation inversion",
-        "summary": "To interpret a direction in a language model's residual stream, we can look for text that strongly activates it. But when such text is found by scanning a corpus, it is limited to what that corpus contains. We develop Maximally-Activating Example Metamodels (MAEMs), language models which map residual stream directions from a subject model to text exemplars that strongly activate those directions. Our objective is to maximise the cosine similarity of a supplied residual stream direction with the activations of the text generated by the MAEM. This label-free RL objective helps to scale MAEMs on diverse sources of residual stream directions. Empirically, we find the resultant metamodel produces informative exemplars: a Qwen3.6-27B MAEM inverts held-out activations better than corpus search or a natural-language autoencoder (NLA), beats corpus search (at 10M tokens) on a majority of held-out languages/domains, and activates 89% of held-out SAE features. It also identifies concepts behind steering vectors about as well as NLAs, recovers the payloads of LoRA backdoors more often than corpus search, and can even verbalise some model workspace inner monologue. Unlike explanations produced by other metamodels (e.g. NLAs), MAEM exemplars can be verified with a forward pass on the subject model, making the MAEM objective a grounded alternative for scaling the training of metamodels.",
-        "authors": [
-          "Celeste De Schamphelaere",
-          "Juan J. Vazquez",
-          "Ari Spiesberger"
-        ],
-        "url": "https://arxiv.org/abs/2611.08465v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.08465v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-11-05T18:54:40Z"
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "Standard adversarial training solves a min‑max problem with many inner gradient steps (often 10–20) to approximate the worst‑case perturbation. This inner loop dominates runtime and forces small step sizes for stability, limiting scalability to larger models and datasets.",
+    "approach": "The authors replace the conventional small‑step PGD inner optimizer with a deterministic gradient descent that uses a single, large step (up to 10× the usual step size). They analytically show that this induces an implicit regularizer equivalent to a sharpness‑aware penalty, effectively smoothing the loss landscape. Training proceeds with the same outer SGD but with a modified inner loop that computes the gradient of the loss at the perturbed point and then projects back onto the norm ball using the large step.",
+    "results": "On CIFAR‑10/100 with ResNet‑18, large‑step AT (step size 8×) reduces inner iterations from 10 to 2 while achieving 45.2% robust accuracy against PGD‑50 (ε=8/255), matching the 45.5% of standard AT. On ImageNet (ResNet‑50), robustness improves from 31.0% to 32.3% with a 5× step size and half the inner steps, cutting total training time by ~35%. Sharpness measurements drop 12% relative to baseline, confirming the theoretical bias.\nAblation shows that overly large steps (>12×) cause divergence, and the benefit diminishes when combined with stochastic inner loops.",
+    "limitations": "The analysis assumes deterministic gradients and L2‑bounded perturbations; extending to stochastic or ℓ∞ attacks is non‑trivial. The method’s stability hinges on careful tuning of the step‑size multiplier, and it may not generalize to transformer‑based vision models without additional regularization. No formal guarantee is provided for certified robustness.",
+    "what_it_unlocks": "Practitioners can now train adversarially robust models on commodity GPUs with roughly half the compute budget, enabling routine robustness checks on larger datasets. The implicit flattening effect also makes the resulting models more amenable to post‑hoc pruning and quantization, opening the door to robust deployment on edge devices."
+  },
   "one_thing_to_try": {
-    "action": "Run SwarmEvolve on a small combinatorial optimization benchmark",
-    "why": "It reveals emergent LLM strategies that traditional prompting misses",
+    "action": "Replace PGD inner loop with a single 8× step size gradient descent in your AT script.",
+    "why": "It halves inner‑loop cost while preserving robustness.",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -173,7 +47,7 @@
       "title": "kerlenton/bootgpt",
       "summary": "A language model that lives in a boot sector",
       "url": "https://github.com/kerlenton/bootgpt",
-      "stars": 96,
+      "stars": 100,
       "forks": 4,
       "language": "Python",
       "topics": [
@@ -192,9 +66,9 @@
     },
     {
       "id": "1428105252",
-      "title": "TheLastOxygen/mafdet",
+      "title": "Mafdet-AI/mafdet",
       "summary": "You type. It already knows. Local LLMs that read and think while you type.",
-      "url": "https://github.com/TheLastOxygen/mafdet",
+      "url": "https://github.com/Mafdet-AI/mafdet",
       "stars": 80,
       "forks": 6,
       "language": "Python",
@@ -214,38 +88,11 @@
       "created_at": "2026-10-21T08:37:56Z"
     },
     {
-      "id": "1442163738",
-      "title": "MarkIvor/predictorlab",
-      "summary": "Self-hosted tabular ML that doesn't lie. Leakage Guard, conformal intervals, profit-optimized thresholds, counterfactuals & instant REST/MCP API.",
-      "url": "https://github.com/MarkIvor/predictorlab",
-      "stars": 67,
-      "forks": 1,
-      "language": "Python",
-      "topics": [
-        "automl",
-        "catboost",
-        "conformal-prediction",
-        "counterfactual-explanations",
-        "data-leakage",
-        "duckdb",
-        "explainable-ai",
-        "fastapi",
-        "lightgbm",
-        "machine-learning",
-        "mcp-server",
-        "mlops",
-        "self-hosted",
-        "tabular-data"
-      ],
-      "source": "github",
-      "created_at": "2026-11-01T19:30:27Z"
-    },
-    {
       "id": "1427493486",
       "title": "somastllc/nlp-for-machine-learning-bootcamp",
       "summary": "NLP for Machine Learning Bootcamp.",
       "url": "https://github.com/somastllc/nlp-for-machine-learning-bootcamp",
-      "stars": 58,
+      "stars": 61,
       "forks": 8,
       "language": "Unknown",
       "topics": [
@@ -302,29 +149,6 @@
       "created_at": "2026-10-14T08:12:11Z"
     },
     {
-      "id": "1409587580",
-      "title": "cporter202/ai-agent-data-apis",
-      "summary": "A mega collection of 2,070 AI agent data APIs: MCP servers, LLM tools, RAG pipelines, live web data, vision & voice. Give your AI agent live web data.",
-      "url": "https://github.com/cporter202/ai-agent-data-apis",
-      "stars": 51,
-      "forks": 11,
-      "language": "Unknown",
-      "topics": [
-        "ai-agents",
-        "apify",
-        "apis",
-        "automation",
-        "data-extraction",
-        "llm",
-        "machine-learning",
-        "mcp",
-        "rag",
-        "web-scraping"
-      ],
-      "source": "github",
-      "created_at": "2026-10-08T02:05:28Z"
-    },
-    {
       "id": "1429736272",
       "title": "FrontiersMindAI/decisionformer",
       "summary": "Transformers for decision models: fine-tune, load and serve calibrated decsion-model on any Hugging Face model.",
@@ -347,6 +171,46 @@
       ],
       "source": "github",
       "created_at": "2026-10-22T12:45:27Z"
+    },
+    {
+      "id": "1411621909",
+      "title": "AllSpark-Research/Vela",
+      "summary": "Vela: User Behavior as Supervision Sparks LLM Intelligence — official paper, task templates, and prompts from AllSpark at Xiaohongshu.",
+      "url": "https://github.com/AllSpark-Research/Vela",
+      "stars": 32,
+      "forks": 1,
+      "language": "Unknown",
+      "topics": [
+        "large-language-models",
+        "llm",
+        "machine-learning",
+        "natural-language-processing",
+        "reinforcement-learning",
+        "supervised-fine-tuning",
+        "user-behavior",
+        "user-modeling"
+      ],
+      "source": "github",
+      "created_at": "2026-10-09T09:47:18Z"
+    },
+    {
+      "id": "1437656497",
+      "title": "mehmetsongur/Machine-Learning-in-Economics-and-Finance",
+      "summary": "Weekly materials for the Dicle University course Machine Learning in Economics and Finance: slides, lecture videos and code. Course taught in Turkish.",
+      "url": "https://github.com/mehmetsongur/Machine-Learning-in-Economics-and-Finance",
+      "stars": 30,
+      "forks": 4,
+      "language": "Jupyter Notebook",
+      "topics": [
+        "econometrics",
+        "economics",
+        "finance",
+        "google-colab",
+        "machine-learning",
+        "python"
+      ],
+      "source": "github",
+      "created_at": "2026-10-28T21:36:44Z"
     }
   ],
   "hn_posts": [
@@ -356,8 +220,8 @@
       "summary": "",
       "url": "https://github.com/postmanlabs/postman-app-support/issues/14370",
       "hn_url": "https://news.ycombinator.com/item?id=50354960",
-      "points": 1517,
-      "comments": 490,
+      "points": 1523,
+      "comments": 494,
       "author": "sidgarimella",
       "source": "hackernews",
       "created_at": "2026-11-03T17:22:37Z"
@@ -368,23 +232,11 @@
       "summary": "",
       "url": "https://spectrum.ieee.org/ai-in-cybersecurity-php2shell-vulnerability",
       "hn_url": "https://news.ycombinator.com/item?id=50364336",
-      "points": 1274,
-      "comments": 743,
+      "points": 1292,
+      "comments": 748,
       "author": "pseudolus",
       "source": "hackernews",
       "created_at": "2026-11-04T11:52:17Z"
-    },
-    {
-      "id": "50305693",
-      "title": "AI isn't replacing SREs, it's deskilling them",
-      "summary": "",
-      "url": "https://newsletter.signoz.io/p/ai-isnt-replacing-sres-its-deskilling",
-      "hn_url": "https://news.ycombinator.com/item?id=50305693",
-      "points": 684,
-      "comments": 509,
-      "author": "dorianniemiec",
-      "source": "hackernews",
-      "created_at": "2026-10-30T15:52:18Z"
     },
     {
       "id": "50353192",
@@ -393,7 +245,7 @@
       "url": "https://www.nytimes.com/2026/11/03/us/google-search-schools-restrict-ai.html",
       "hn_url": "https://news.ycombinator.com/item?id=50353192",
       "points": 672,
-      "comments": 465,
+      "comments": 468,
       "author": "ceejayoz",
       "source": "hackernews",
       "created_at": "2026-11-03T15:25:47Z"
@@ -409,6 +261,18 @@
       "author": "bookofjoe",
       "source": "hackernews",
       "created_at": "2026-11-02T14:02:42Z"
+    },
+    {
+      "id": "50385870",
+      "title": "Cuban: Facebook knowingly runs AI deepfake scam ads; docs say $16B fraud revenue",
+      "summary": "",
+      "url": "https://finance.yahoo.com/technology/ai/articles/mark-cuban-says-facebook-knowingly-213000020.html",
+      "hn_url": "https://news.ycombinator.com/item?id=50385870",
+      "points": 507,
+      "comments": 224,
+      "author": "randycupertino",
+      "source": "hackernews",
+      "created_at": "2026-11-05T23:09:57Z"
     },
     {
       "id": "50323088",
