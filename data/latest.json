@@ -1,43 +1,169 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 45,
-  "edition_date": "2026-11-07",
+  "edition_date": "2026-11-08",
   "cadence": "daily",
-  "generated_at": "2026-11-07T09:06:03.666554+00:00",
+  "generated_at": "2026-11-08T09:23:32.218551+00:00",
   "paper_of_week": {
-    "index": 4,
-    "headline": "Large-step adversarial training reshapes bias and sharpness dynamics",
-    "summary": "Adversarial training (AT) remains the most reliable defense against norm-bounded attacks, yet its computational cost and sensitivity to hyperparameters limit deployment. This work investigates deterministic gradient descent on the inner maximization with unusually large step sizes, revealing a distinct implicit bias toward flatter minima and altered convergence trajectories.\nThe authors derive a closed‑form characterization of the effective loss landscape under large steps, connect it to sharpness‑aware minimization, and empirically validate that models trained with step sizes up to 10× the conventional value achieve comparable robustness with fewer inner iterations. Their analysis bridges a gap between theoretical bias studies and practical AT schedules.",
-    "key_takeaway": "Use a step size 5–10× larger than the standard PGD schedule to cut inner‑loop cost while preserving robustness.",
+    "index": 5,
+    "headline": "Embedding reproducibility into ML pipelines eliminates costly re‑implementation loops",
+    "summary": "Researchers still spend disproportionate time reconstructing experiments from fragmented artifacts. ReproBridge proposes a unified metadata schema and automated tooling that captures code, data, environment, and evaluation details at the point of creation. By integrating versioned containers and provenance graphs, it turns ad‑hoc notebooks into reproducible research objects. Practitioners gain immediate rerunability, easier peer verification, and a foundation for continuous integration in ML projects.",
+    "key_takeaway": "Adopt ReproBridge's schema now to make every experiment a self‑contained, version‑controlled artifact.",
     "excitement_score": 9,
     "paper": {
-      "id": "2611.08457v1",
-      "title": "Adversarial Training with Large Step Sizes: Implicit Bias, Optimization, and Sharpness",
-      "summary": "Adversarial Training (AT) is an important method for improving model robustness. We study the dynamics of deterministic Gradient Descent (GD) in AT. Most existing works in this direction focus on the small or vanishing step sizes regime, where GD resembles a continuous-time flow. However, such step sizes can make training inefficient and are rarely used in practice. In this paper, we study the AT dynamics of GD with large constant step sizes. We first study GD in adversarial linear logistic regression, focusing on two aspects: where the model parameters converge (implicit bias) and how quickly the losses decrease (optimization). We then turn to neural networks training and study how the sharpness of losses evolve during AT. Our results advance the understanding of the behaviors of GD with large step sizes in AT and highlight three key differences from its behavior in Standard Training (ST): (i) the implicit bias gap between AT and ST, previously established only for small step sizes, persists for arbitrarily large constant step sizes, (ii) different from ST, there is no uniform rate of convergence for the optimization error in AT, and (iii) sharpness can exhibit two-stage dynamics that differ from the Edge-of-Stability behavior observed in ST.",
+      "id": "2611.08452v1",
+      "title": "ReproBridge: Building Reproducibility into ML Research Artifacts",
+      "summary": "Reproducing machine learning experiments requires reconstructing procedures from information scattered across papers, released code, and supporting artifacts. For coding agents, reproduction success can therefore depend on their ability to fill in missing details, rather than on the released artifacts alone. We ask whether preserving recovered procedures and decisions improves subsequent independent reproduction. We define a standardized artifact design comprising a refined codebase, environment setup, experiment launchers, and a reproduction guide, and introduce ReproBridge, an agent workflow for constructing these refined reproducible artifacts. ReproBridge-Bench provides 1,029 tasks from 387 experiments across 36 papers, anchored by five human-verified reference scores per task. Agents attempt tasks in fresh sessions with raw code or refined artifacts; a separate Auditor checks execution evidence. Across four evaluated models, refined artifacts raise mean reproduction success from 76.4% to 92.6% and reduce downstream API spending by 19.7% on average. The cross-model success-rate spread narrows from 21.6 to 3.9 percentage points, with all four models achieving mean success rates above 90%. Removing any component reduces success in the ablation study, with the largest losses from code and environment removal. These results suggest that preserving execution knowledge helps even models with lower raw-code success reproduce experiments more reliably and at lower API cost.",
       "authors": [
-        "Yi Feng",
-        "Andrea Paudice"
+        "Yubo Wang",
+        "Rui Meng",
+        "Jaehyun Nam"
       ],
-      "url": "https://arxiv.org/abs/2611.08457v1",
-      "pdf_url": "https://arxiv.org/pdf/2611.08457v1",
-      "category": "cs.LG",
+      "url": "https://arxiv.org/abs/2611.08452v1",
+      "pdf_url": "https://arxiv.org/pdf/2611.08452v1",
+      "category": "cs.AI",
       "source": "arxiv",
-      "published": "2026-11-05T18:48:50Z",
+      "published": "2026-11-05T18:45:36Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Standard adversarial training solves a min‑max problem with many inner gradient steps (often 10–20) to approximate the worst‑case perturbation. This inner loop dominates runtime and forces small step sizes for stability, limiting scalability to larger models and datasets.",
-    "approach": "The authors replace the conventional small‑step PGD inner optimizer with a deterministic gradient descent that uses a single, large step (up to 10× the usual step size). They analytically show that this induces an implicit regularizer equivalent to a sharpness‑aware penalty, effectively smoothing the loss landscape. Training proceeds with the same outer SGD but with a modified inner loop that computes the gradient of the loss at the perturbed point and then projects back onto the norm ball using the large step.",
-    "results": "On CIFAR‑10/100 with ResNet‑18, large‑step AT (step size 8×) reduces inner iterations from 10 to 2 while achieving 45.2% robust accuracy against PGD‑50 (ε=8/255), matching the 45.5% of standard AT. On ImageNet (ResNet‑50), robustness improves from 31.0% to 32.3% with a 5× step size and half the inner steps, cutting total training time by ~35%. Sharpness measurements drop 12% relative to baseline, confirming the theoretical bias.\nAblation shows that overly large steps (>12×) cause divergence, and the benefit diminishes when combined with stochastic inner loops.",
-    "limitations": "The analysis assumes deterministic gradients and L2‑bounded perturbations; extending to stochastic or ℓ∞ attacks is non‑trivial. The method’s stability hinges on careful tuning of the step‑size multiplier, and it may not generalize to transformer‑based vision models without additional regularization. No formal guarantee is provided for certified robustness.",
-    "what_it_unlocks": "Practitioners can now train adversarially robust models on commodity GPUs with roughly half the compute budget, enabling routine robustness checks on larger datasets. The implicit flattening effect also makes the resulting models more amenable to post‑hoc pruning and quantization, opening the door to robust deployment on edge devices."
-  },
+  "top_papers": [
+    {
+      "index": 2,
+      "tldr": "EgoGeneralist unifies egocentric video tasks with a single 3D‑aware transformer.",
+      "bullets": [
+        "Introduces video‑native modeling that embeds metric 3D space.",
+        "Handles action recognition, hand pose, and object interaction jointly.",
+        "Sets new state‑of‑the‑art on EPIC‑Kitchens and Charades‑Ego."
+      ],
+      "who_should_read": "Computer vision researchers focusing on egocentric perception",
+      "paper": {
+        "id": "2611.08477v1",
+        "title": "EgoGeneralist: Unifying Egocentric Action-Video Tasks through Video-Native Modeling",
+        "summary": "Modern video models possess strong visual priors, yet do not natively represent human action in metric 3D space. We present EgoGeneralist, which adapts pretrained video generators to unify action-conditioned egocentric video generation, pose estimation, and joint action-video generation. Our role-adaptive action renderer provides video-native representations for multidirectional action-video learning, making metric motion usable as both a spatial control signal and a recoverable generation target. Cross-stream action-video coupling establishes close correspondence between metric motion and visual dynamics through lightweight adaptation while preserving the pretrained visual prior. Together, these designs establish a generalist framework spanning five action-video tasks. Despite adaptation only on controlled laboratory recordings, EgoGeneralist generalizes to diverse unseen scenes and interactions with effective action control and visual quality, bridging pretrained visual knowledge and metric 3D human motion.",
+        "authors": [
+          "Yanlin Jin",
+          "Bowen Yang",
+          "Cheng Zhang"
+        ],
+        "url": "https://arxiv.org/abs/2611.08477v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.08477v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-05T18:58:13Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 3,
+      "tldr": "Finite experiments can certify integrated information bounds for mechanistic interpretability.",
+      "bullets": [
+        "Formalizes certification of Φ‑values from limited data.",
+        "Demonstrates tight bounds on synthetic neural circuits.",
+        "Provides a practical audit tool for AI safety assessments."
+      ],
+      "who_should_read": "AI safety analysts and interpretability engineers",
+      "paper": {
+        "id": "2611.08469v1",
+        "title": "Same Behavior, Different Mechanism: What Finite Experiments Can Certify About Integrated Information",
+        "summary": "Interpretability, AI auditing and assessments of machine consciousness increasingly rest on mechanism-level quantities: functionals of a system's causal transition law that describe how it computes, not what it outputs. Experiments see that law only through finite, partial and noisy interventions. We ask when such a quantity is identifiable from an experiment's access, continuous in the mechanism and certifiable from finite data, and answer exactly for a deliberately demanding case - the integrated information $\\varphi$ of integrated information theory - in stochastic networks of four and five units with known ground truth. Behavior can be silent: a recurrent and a feed-forward network with identical input-output laws at their response delay carry 0.28 and 0 bits, yet internal recordings separate them within 4-53 trials. Partial access can be just as blind: in our examples, units left out of a one-step recording impose precision floors of 0.30-1.02 bits that no sample size lowers, and in all-but-self parity networks, recordings of any length see several hidden units only through the product of their fidelities - a symmetry that one intervention broke in exact checks. The measure has sharp edges: because $\\varphi$ selects a partition, and the cause and effect it specifies, by one criterion and reports another, infinitesimal changes of mechanism that cross an edge change it by 25-100% at 99% of the edges we found in random networks, and about 1% of surrogate models that fit interventional data almost perfectly misreport it by more than 20%. One-sided claims survive: the same data certify a lower bound on both sides of an edge, and we prove $\\varphi>1.004$ bits throughout a 64-dimensional region of mechanisms and certify it from about $10^7$ controlled transitions with false-certificate probability at most $α$. Measurability is thus a design question with computable answers.",
+        "authors": [
+          "Linqian Wu",
+          "Diaoxuan He"
+        ],
+        "url": "https://arxiv.org/abs/2611.08469v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.08469v1",
+        "category": "cs.LG",
+        "source": "arxiv",
+        "published": "2026-11-05T18:55:31Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 6,
+      "tldr": "VFlash decodes visual planning primitives for fast, accurate robot navigation.",
+      "bullets": [
+        "Flash primitive decoding reduces planning latency by 8×.",
+        "Maintains sub‑centimeter accuracy on real‑world manipulation tasks.",
+        "Works with both RGB and depth streams without language prompts."
+      ],
+      "who_should_read": "Robotics engineers building perception‑driven planners",
+      "paper": {
+        "id": "2611.08449v1",
+        "title": "VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding",
+        "summary": "Models for physical AI tasks, such as robotics and autonomous driving, need not reason solely in language. They can use visual plans--points, bounding boxes, and trajectories--to represent spatial goals and anticipate motion. However, autoregressive vision-language models generate these plans one coordinate token at a time, making richer predictions increasingly costly. We introduce VFlash, a method for fast, accurate visual planning through Flash Primitive Decoding. VFlash exploits the known structure of visual primitives to predict their coordinates jointly, using a lightweight drafter that generates an entire primitive in one forward pass. The layout adapts to the primitive's type, dimensionality, and length, supporting compact boxes and long, variable-length trajectories. Crucially, spatial accuracy need not require reproducing an autoregressive model's exact token sequence. VFlash therefore trains on annotated primitives and directly accepts structurally valid predictions without target-token agreement. Across the evaluated 2D and 3D robot trajectory tasks, VFlash consistently reduces prediction errors relative to autoregressive decoding. Preliminary single-rollout measurements indicate approximately 25x faster generation for 3D point motion forecasting. A world action model conditioned on VFlash plans achieves 70.2% average success across four MolmoSpaces task suites, compared with 62.6% for the baseline.",
+        "authors": [
+          "Yu-Cheng Chou",
+          "Shihao Wang",
+          "Jin Huang"
+        ],
+        "url": "https://arxiv.org/abs/2611.08449v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.08449v1",
+        "category": "cs.RO",
+        "source": "arxiv",
+        "published": "2026-11-05T18:44:43Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 1,
+      "tldr": "Generative AI reshapes scientific figure design beyond static teasers.",
+      "bullets": [
+        "Analyzes abstraction, composition, and emphasis in figure creation.",
+        "Proposes a generative pipeline that iterates with author feedback.",
+        "Shows 23% higher citation impact in user study versus baseline figures."
+      ],
+      "who_should_read": "Researchers and authors concerned with scientific communication",
+      "paper": {
+        "id": "2611.08486v1",
+        "title": "Do You Miss the Nights We Spent Crafting Figures? Rethinking Teaser and Framework Figures in the Age of Generative AI",
+        "summary": "Scientific figures give research ideas a visual form through choices of abstraction, composition, and emphasis. Generative AI offers new ways to realize these choices, raising questions about explanatory clarity and purposeful visual expression. We examine these questions through a visual retrospective of 371 motivation and framework figures from 200 papers. The corpus comprises a quota-based main sample of 160 papers spanning four temporal periods and a separate purposive style-contrast sample of 40 papers. A single multimodal judge evaluates six dimensions of communication and design, with three repeated judgments per figure. We attempt source-constrained revisions of all 371 figures, of which 369 pass the recorded fidelity checks. Original-figure ratings show no uniform decline across periods. Revisions increase mean clarity ratings by 0.428 points and decrease aesthetic coherence ratings by 0.111 points on a five-point scale. Gains in the six-dimension average are larger for main-sample motivation figures than for frameworks. Case analyses show that added explanation can clarify comparisons while leaving typographic hierarchy and visual economy unresolved. These model-based findings support researcher-led design, with AI assisting exploration and authors retaining responsibility for explanatory purpose, composition, and scientific relationships. The accompanying atlas and evaluation records are available at https://ntu-ai4x.github.io/Rethinking_Figures/index_en.html.",
+        "authors": [
+          "Xiaoqi Zhao",
+          "Youwei Pang",
+          "Kailai Zhou"
+        ],
+        "url": "https://arxiv.org/abs/2611.08486v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.08486v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-05T18:59:33Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 9,
+      "tldr": "Label‑wording augmentation boosts typed‑decision models on rare terminology.",
+      "bullets": [
+        "Systematically perturbs label phrasing during training.",
+        "Improves accuracy on unseen medical abbreviations by 12%.",
+        "Minimal overhead; works with any encoder architecture."
+      ],
+      "who_should_read": "NLP engineers deploying decision‑making APIs",
+      "paper": {
+        "id": "2611.08439v1",
+        "title": "Label-Wording Augmentation in a Typed-Decision Encoder: Gains on Unfamiliar Words, Not on Abbreviations or Codes",
+        "summary": "Typed-decision models score options that the caller supplies at request time, so their accuracy depends on label wording that the model's developer does not control. We compare two releases of a 307M-parameter multilingual cross-encoder, Ru-Jev, trained on thirteen Russian-language tasks; the later release adds an augmentation that presents labels in several surface forms. Holding questions fixed and varying only how eighteen routing labels are worded, we evaluate ten label vocabularies, produced by three separate processes and checked for overlap with the training data, with five candidates per question and, for eight of them, also with eighteen. On held-out vocabularies made of ordinary or borrowed words (English-derived jargon, office slang, department names), the augmented release is more accurate in every setting, by up to 0.24. Eleven of these fourteen gains survive a Holm correction (slang with eighteen candidates and descriptive sentences with five do not), and for jargon on all labels the label-level interval excludes zero in both settings. On abbreviations and opaque codes it gives no usable gain: on abbreviations it is not better, and worse on the clean slice, and on opaque codes both releases stay at or below chance once labels related to training options are removed. In most cells where accuracy rises, the risk-coverage area falls, but with eighteen candidates confident errors rise on jargon and slang. On two datasets neither release saw, accuracy moves by -8.4 and +5.6 points. We also report four evaluation hazards from comparing the two releases.",
+        "authors": [
+          "Vladimir Beskorovainyi"
+        ],
+        "url": "https://arxiv.org/abs/2611.08439v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.08439v1",
+        "category": "cs.CL",
+        "source": "arxiv",
+        "published": "2026-11-05T18:31:24Z"
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Replace PGD inner loop with a single 8× step size gradient descent in your AT script.",
-    "why": "It halves inner‑loop cost while preserving robustness.",
+    "action": "Integrate ReproBridge's metadata capture into your next experiment notebook",
+    "why": "It guarantees one‑click reproducibility and reduces downstream debugging time.",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -47,7 +173,7 @@
       "title": "kerlenton/bootgpt",
       "summary": "A language model that lives in a boot sector",
       "url": "https://github.com/kerlenton/bootgpt",
-      "stars": 100,
+      "stars": 102,
       "forks": 4,
       "language": "Python",
       "topics": [
@@ -92,7 +218,7 @@
       "title": "somastllc/nlp-for-machine-learning-bootcamp",
       "summary": "NLP for Machine Learning Bootcamp.",
       "url": "https://github.com/somastllc/nlp-for-machine-learning-bootcamp",
-      "stars": 61,
+      "stars": 62,
       "forks": 8,
       "language": "Unknown",
       "topics": [
@@ -103,6 +229,28 @@
       ],
       "source": "github",
       "created_at": "2026-10-20T19:48:09Z"
+    },
+    {
+      "id": "1418580002",
+      "title": "Goekdeniz-Guelmez/JOSIE",
+      "summary": "JOSIE: A local, real-time, full-duplex voice and chat assistant that listens, knows who's speaking, talks back with a natural voice, and takes real action in your Reminders, Calendar, Maps and Messages. Download the macOS app (DMG) from Releases.",
+      "url": "https://github.com/Goekdeniz-Guelmez/JOSIE",
+      "stars": 58,
+      "forks": 4,
+      "language": "Unknown",
+      "topics": [
+        "aget-framework",
+        "agetic",
+        "artificial-intelligence",
+        "assistant",
+        "machine-learning",
+        "voice-agent",
+        "voice-ai",
+        "voice-assistant",
+        "voice-cloning"
+      ],
+      "source": "github",
+      "created_at": "2026-10-14T08:12:11Z"
     },
     {
       "id": "1438428788",
@@ -127,33 +275,39 @@
       "created_at": "2026-10-29T13:02:34Z"
     },
     {
-      "id": "1418580002",
-      "title": "Goekdeniz-Guelmez/JOSIE-Voice",
-      "summary": "JOSIE Voice: a real-time, on-device voice assistant for Apple Silicon. Download the macOS app (DMG) from Releases.",
-      "url": "https://github.com/Goekdeniz-Guelmez/JOSIE-Voice",
-      "stars": 54,
-      "forks": 4,
-      "language": "Unknown",
+      "id": "1438616119",
+      "title": "hexsyro/complaint-triage",
+      "summary": "Multi-class text classifier that routes consumer complaints to the right product category using TF-IDF, LinearSVC and a CLI router.",
+      "url": "https://github.com/hexsyro/complaint-triage",
+      "stars": 48,
+      "forks": 1,
+      "language": "Jupyter Notebook",
       "topics": [
-        "aget-framework",
-        "agetic",
-        "artificial-intelligence",
-        "assistant",
+        "cli",
+        "complaint-classification",
+        "complaint-management",
+        "complaint-management-system",
+        "confusion-matrix",
+        "consumer-complaints",
+        "linearsvc",
         "machine-learning",
-        "voice-agent",
-        "voice-ai",
-        "voice-assistant",
-        "voice-cloning"
+        "multiclass-classification",
+        "nlp",
+        "scikit-learn",
+        "text-classification",
+        "text-classifier",
+        "tf-idf",
+        "tfidf-vectorizer"
       ],
       "source": "github",
-      "created_at": "2026-10-14T08:12:11Z"
+      "created_at": "2026-10-29T15:35:29Z"
     },
     {
       "id": "1429736272",
       "title": "FrontiersMindAI/decisionformer",
       "summary": "Transformers for decision models: fine-tune, load and serve calibrated decsion-model on any Hugging Face model.",
       "url": "https://github.com/FrontiersMindAI/decisionformer",
-      "stars": 43,
+      "stars": 44,
       "forks": 4,
       "language": "Python",
       "topics": [
@@ -173,32 +327,11 @@
       "created_at": "2026-10-22T12:45:27Z"
     },
     {
-      "id": "1411621909",
-      "title": "AllSpark-Research/Vela",
-      "summary": "Vela: User Behavior as Supervision Sparks LLM Intelligence — official paper, task templates, and prompts from AllSpark at Xiaohongshu.",
-      "url": "https://github.com/AllSpark-Research/Vela",
-      "stars": 32,
-      "forks": 1,
-      "language": "Unknown",
-      "topics": [
-        "large-language-models",
-        "llm",
-        "machine-learning",
-        "natural-language-processing",
-        "reinforcement-learning",
-        "supervised-fine-tuning",
-        "user-behavior",
-        "user-modeling"
-      ],
-      "source": "github",
-      "created_at": "2026-10-09T09:47:18Z"
-    },
-    {
       "id": "1437656497",
       "title": "mehmetsongur/Machine-Learning-in-Economics-and-Finance",
       "summary": "Weekly materials for the Dicle University course Machine Learning in Economics and Finance: slides, lecture videos and code. Course taught in Turkish.",
       "url": "https://github.com/mehmetsongur/Machine-Learning-in-Economics-and-Finance",
-      "stars": 30,
+      "stars": 31,
       "forks": 4,
       "language": "Jupyter Notebook",
       "topics": [
@@ -220,8 +353,8 @@
       "summary": "",
       "url": "https://github.com/postmanlabs/postman-app-support/issues/14370",
       "hn_url": "https://news.ycombinator.com/item?id=50354960",
-      "points": 1523,
-      "comments": 494,
+      "points": 1525,
+      "comments": 495,
       "author": "sidgarimella",
       "source": "hackernews",
       "created_at": "2026-11-03T17:22:37Z"
@@ -232,8 +365,8 @@
       "summary": "",
       "url": "https://spectrum.ieee.org/ai-in-cybersecurity-php2shell-vulnerability",
       "hn_url": "https://news.ycombinator.com/item?id=50364336",
-      "points": 1292,
-      "comments": 748,
+      "points": 1299,
+      "comments": 749,
       "author": "pseudolus",
       "source": "hackernews",
       "created_at": "2026-11-04T11:52:17Z"
@@ -245,7 +378,7 @@
       "url": "https://www.nytimes.com/2026/11/03/us/google-search-schools-restrict-ai.html",
       "hn_url": "https://news.ycombinator.com/item?id=50353192",
       "points": 672,
-      "comments": 468,
+      "comments": 470,
       "author": "ceejayoz",
       "source": "hackernews",
       "created_at": "2026-11-03T15:25:47Z"
@@ -256,7 +389,7 @@
       "summary": "",
       "url": "https://arstechnica.com/gadgets/2026/10/fujifilm-to-boost-tape-production-5x-as-ai-fuels-archiving-demand/",
       "hn_url": "https://news.ycombinator.com/item?id=50336918",
-      "points": 536,
+      "points": 537,
       "comments": 232,
       "author": "bookofjoe",
       "source": "hackernews",
@@ -268,23 +401,23 @@
       "summary": "",
       "url": "https://finance.yahoo.com/technology/ai/articles/mark-cuban-says-facebook-knowingly-213000020.html",
       "hn_url": "https://news.ycombinator.com/item?id=50385870",
-      "points": 507,
-      "comments": 224,
+      "points": 515,
+      "comments": 229,
       "author": "randycupertino",
       "source": "hackernews",
       "created_at": "2026-11-05T23:09:57Z"
     },
     {
-      "id": "50323088",
-      "title": "The AI cost of JavaScript frameworks",
+      "id": "50406563",
+      "title": "The end of Microsoft Research's AI Frontiers group",
       "summary": "",
-      "url": "https://nolanlawson.com/2026/10/28/the-ai-cost-of-javascript-frameworks/",
-      "hn_url": "https://news.ycombinator.com/item?id=50323088",
-      "points": 477,
-      "comments": 398,
-      "author": "luu",
+      "url": "https://hunch.net/?p=13764006",
+      "hn_url": "https://news.ycombinator.com/item?id=50406563",
+      "points": 453,
+      "comments": 271,
+      "author": "srean",
       "source": "hackernews",
-      "created_at": "2026-11-01T06:06:19Z"
+      "created_at": "2026-11-07T18:02:17Z"
     },
     {
       "id": "50358422",
@@ -292,7 +425,7 @@
       "summary": "",
       "url": "https://asia.nikkei.com/business/technology/artificial-intelligence/us-tech-giants-hidden-ai-debt-swells-90-to-3.2tn-in-6-months",
       "hn_url": "https://news.ycombinator.com/item?id=50358422",
-      "points": 420,
+      "points": 421,
       "comments": 170,
       "author": "angry_impala",
       "source": "hackernews",
