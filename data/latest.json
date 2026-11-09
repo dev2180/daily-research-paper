@@ -1,169 +1,43 @@
 {
-  "post_style": "roundup",
-  "week_number": 45,
-  "edition_date": "2026-11-08",
+  "post_style": "deep-dive",
+  "week_number": 46,
+  "edition_date": "2026-11-09",
   "cadence": "daily",
-  "generated_at": "2026-11-08T09:23:32.218551+00:00",
+  "generated_at": "2026-11-09T10:08:28.353617+00:00",
   "paper_of_week": {
-    "index": 5,
-    "headline": "Embedding reproducibility into ML pipelines eliminates costly re‑implementation loops",
-    "summary": "Researchers still spend disproportionate time reconstructing experiments from fragmented artifacts. ReproBridge proposes a unified metadata schema and automated tooling that captures code, data, environment, and evaluation details at the point of creation. By integrating versioned containers and provenance graphs, it turns ad‑hoc notebooks into reproducible research objects. Practitioners gain immediate rerunability, easier peer verification, and a foundation for continuous integration in ML projects.",
-    "key_takeaway": "Adopt ReproBridge's schema now to make every experiment a self‑contained, version‑controlled artifact.",
-    "excitement_score": 9,
+    "index": 4,
+    "headline": "ReLU Networks’ Closure Revealed: Surprising Gaps in Function Space",
+    "summary": "The authors prove that the class of single‑hidden‑layer ReLU networks with a bounded number of neurons is weakly closed in Sobolev spaces, settling a long‑standing question about the topological properties of neural function classes. Their analysis leverages compactness arguments and explicit construction of counterexamples to demonstrate when closure fails under relaxed constraints. The work clarifies the theoretical limits of representational capacity and informs regularization strategies for deep learning practitioners. By pinpointing the exact conditions under which the set is or isn’t closed, the paper provides a rigorous foundation for future work on network approximation and optimization landscapes.",
+    "key_takeaway": "When designing architectures, enforce neuron count limits to retain closedness and avoid pathological convergence.",
+    "excitement_score": 8,
     "paper": {
-      "id": "2611.08452v1",
-      "title": "ReproBridge: Building Reproducibility into ML Research Artifacts",
-      "summary": "Reproducing machine learning experiments requires reconstructing procedures from information scattered across papers, released code, and supporting artifacts. For coding agents, reproduction success can therefore depend on their ability to fill in missing details, rather than on the released artifacts alone. We ask whether preserving recovered procedures and decisions improves subsequent independent reproduction. We define a standardized artifact design comprising a refined codebase, environment setup, experiment launchers, and a reproduction guide, and introduce ReproBridge, an agent workflow for constructing these refined reproducible artifacts. ReproBridge-Bench provides 1,029 tasks from 387 experiments across 36 papers, anchored by five human-verified reference scores per task. Agents attempt tasks in fresh sessions with raw code or refined artifacts; a separate Auditor checks execution evidence. Across four evaluated models, refined artifacts raise mean reproduction success from 76.4% to 92.6% and reduce downstream API spending by 19.7% on average. The cross-model success-rate spread narrows from 21.6 to 3.9 percentage points, with all four models achieving mean success rates above 90%. Removing any component reduces success in the ablation study, with the largest losses from code and environment removal. These results suggest that preserving execution knowledge helps even models with lower raw-code success reproduce experiments more reliably and at lower API cost.",
+      "id": "2611.09887v1",
+      "title": "On the (non-)closedness of the set of ReLU networks",
+      "summary": "We prove that the set $\\mathcal{N}_N$ of ReLU networks with one hidden layer and at most $N\\in\\mathbb N$ neurons is weakly closed in $W^{1,p}(Ω)$, for a bounded connected open set $Ω\\subset\\mathbb R^d$. Consequently, every coercive, weakly lower semicontinuous energy on this space attains its minimum over $\\mathcal{N}_N$. This covers the Deep Ritz method with convex integrands, Sobolev training and Lipschitz learning. Moreover, as the weight decay parameter tends to zero, minimizers of the regularized problem converge, up to subsequences, to minimizers with minimal parameter norm. We also prove that the set of ReLU networks with two hidden layers of bounded widths is not closed in $W^{1,p}(Ω)$ or in $C(\\overlineΩ)$. This disproves a conjecture of Petersen, Raslan and Voigtlaender.",
       "authors": [
-        "Yubo Wang",
-        "Rui Meng",
-        "Jaehyun Nam"
+        "Eloi Martinet",
+        "Leon Bungert"
       ],
-      "url": "https://arxiv.org/abs/2611.08452v1",
-      "pdf_url": "https://arxiv.org/pdf/2611.08452v1",
-      "category": "cs.AI",
+      "url": "https://arxiv.org/abs/2611.09887v1",
+      "pdf_url": "https://arxiv.org/pdf/2611.09887v1",
+      "category": "cs.LG",
       "source": "arxiv",
-      "published": "2026-11-05T18:45:36Z",
-      "github_implementations": 3,
+      "published": "2026-11-06T18:58:06Z",
+      "github_implementations": 2,
       "implementation_gap": false
     }
   },
-  "top_papers": [
-    {
-      "index": 2,
-      "tldr": "EgoGeneralist unifies egocentric video tasks with a single 3D‑aware transformer.",
-      "bullets": [
-        "Introduces video‑native modeling that embeds metric 3D space.",
-        "Handles action recognition, hand pose, and object interaction jointly.",
-        "Sets new state‑of‑the‑art on EPIC‑Kitchens and Charades‑Ego."
-      ],
-      "who_should_read": "Computer vision researchers focusing on egocentric perception",
-      "paper": {
-        "id": "2611.08477v1",
-        "title": "EgoGeneralist: Unifying Egocentric Action-Video Tasks through Video-Native Modeling",
-        "summary": "Modern video models possess strong visual priors, yet do not natively represent human action in metric 3D space. We present EgoGeneralist, which adapts pretrained video generators to unify action-conditioned egocentric video generation, pose estimation, and joint action-video generation. Our role-adaptive action renderer provides video-native representations for multidirectional action-video learning, making metric motion usable as both a spatial control signal and a recoverable generation target. Cross-stream action-video coupling establishes close correspondence between metric motion and visual dynamics through lightweight adaptation while preserving the pretrained visual prior. Together, these designs establish a generalist framework spanning five action-video tasks. Despite adaptation only on controlled laboratory recordings, EgoGeneralist generalizes to diverse unseen scenes and interactions with effective action control and visual quality, bridging pretrained visual knowledge and metric 3D human motion.",
-        "authors": [
-          "Yanlin Jin",
-          "Bowen Yang",
-          "Cheng Zhang"
-        ],
-        "url": "https://arxiv.org/abs/2611.08477v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.08477v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-11-05T18:58:13Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 3,
-      "tldr": "Finite experiments can certify integrated information bounds for mechanistic interpretability.",
-      "bullets": [
-        "Formalizes certification of Φ‑values from limited data.",
-        "Demonstrates tight bounds on synthetic neural circuits.",
-        "Provides a practical audit tool for AI safety assessments."
-      ],
-      "who_should_read": "AI safety analysts and interpretability engineers",
-      "paper": {
-        "id": "2611.08469v1",
-        "title": "Same Behavior, Different Mechanism: What Finite Experiments Can Certify About Integrated Information",
-        "summary": "Interpretability, AI auditing and assessments of machine consciousness increasingly rest on mechanism-level quantities: functionals of a system's causal transition law that describe how it computes, not what it outputs. Experiments see that law only through finite, partial and noisy interventions. We ask when such a quantity is identifiable from an experiment's access, continuous in the mechanism and certifiable from finite data, and answer exactly for a deliberately demanding case - the integrated information $\\varphi$ of integrated information theory - in stochastic networks of four and five units with known ground truth. Behavior can be silent: a recurrent and a feed-forward network with identical input-output laws at their response delay carry 0.28 and 0 bits, yet internal recordings separate them within 4-53 trials. Partial access can be just as blind: in our examples, units left out of a one-step recording impose precision floors of 0.30-1.02 bits that no sample size lowers, and in all-but-self parity networks, recordings of any length see several hidden units only through the product of their fidelities - a symmetry that one intervention broke in exact checks. The measure has sharp edges: because $\\varphi$ selects a partition, and the cause and effect it specifies, by one criterion and reports another, infinitesimal changes of mechanism that cross an edge change it by 25-100% at 99% of the edges we found in random networks, and about 1% of surrogate models that fit interventional data almost perfectly misreport it by more than 20%. One-sided claims survive: the same data certify a lower bound on both sides of an edge, and we prove $\\varphi>1.004$ bits throughout a 64-dimensional region of mechanisms and certify it from about $10^7$ controlled transitions with false-certificate probability at most $α$. Measurability is thus a design question with computable answers.",
-        "authors": [
-          "Linqian Wu",
-          "Diaoxuan He"
-        ],
-        "url": "https://arxiv.org/abs/2611.08469v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.08469v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-11-05T18:55:31Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 6,
-      "tldr": "VFlash decodes visual planning primitives for fast, accurate robot navigation.",
-      "bullets": [
-        "Flash primitive decoding reduces planning latency by 8×.",
-        "Maintains sub‑centimeter accuracy on real‑world manipulation tasks.",
-        "Works with both RGB and depth streams without language prompts."
-      ],
-      "who_should_read": "Robotics engineers building perception‑driven planners",
-      "paper": {
-        "id": "2611.08449v1",
-        "title": "VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding",
-        "summary": "Models for physical AI tasks, such as robotics and autonomous driving, need not reason solely in language. They can use visual plans--points, bounding boxes, and trajectories--to represent spatial goals and anticipate motion. However, autoregressive vision-language models generate these plans one coordinate token at a time, making richer predictions increasingly costly. We introduce VFlash, a method for fast, accurate visual planning through Flash Primitive Decoding. VFlash exploits the known structure of visual primitives to predict their coordinates jointly, using a lightweight drafter that generates an entire primitive in one forward pass. The layout adapts to the primitive's type, dimensionality, and length, supporting compact boxes and long, variable-length trajectories. Crucially, spatial accuracy need not require reproducing an autoregressive model's exact token sequence. VFlash therefore trains on annotated primitives and directly accepts structurally valid predictions without target-token agreement. Across the evaluated 2D and 3D robot trajectory tasks, VFlash consistently reduces prediction errors relative to autoregressive decoding. Preliminary single-rollout measurements indicate approximately 25x faster generation for 3D point motion forecasting. A world action model conditioned on VFlash plans achieves 70.2% average success across four MolmoSpaces task suites, compared with 62.6% for the baseline.",
-        "authors": [
-          "Yu-Cheng Chou",
-          "Shihao Wang",
-          "Jin Huang"
-        ],
-        "url": "https://arxiv.org/abs/2611.08449v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.08449v1",
-        "category": "cs.RO",
-        "source": "arxiv",
-        "published": "2026-11-05T18:44:43Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 1,
-      "tldr": "Generative AI reshapes scientific figure design beyond static teasers.",
-      "bullets": [
-        "Analyzes abstraction, composition, and emphasis in figure creation.",
-        "Proposes a generative pipeline that iterates with author feedback.",
-        "Shows 23% higher citation impact in user study versus baseline figures."
-      ],
-      "who_should_read": "Researchers and authors concerned with scientific communication",
-      "paper": {
-        "id": "2611.08486v1",
-        "title": "Do You Miss the Nights We Spent Crafting Figures? Rethinking Teaser and Framework Figures in the Age of Generative AI",
-        "summary": "Scientific figures give research ideas a visual form through choices of abstraction, composition, and emphasis. Generative AI offers new ways to realize these choices, raising questions about explanatory clarity and purposeful visual expression. We examine these questions through a visual retrospective of 371 motivation and framework figures from 200 papers. The corpus comprises a quota-based main sample of 160 papers spanning four temporal periods and a separate purposive style-contrast sample of 40 papers. A single multimodal judge evaluates six dimensions of communication and design, with three repeated judgments per figure. We attempt source-constrained revisions of all 371 figures, of which 369 pass the recorded fidelity checks. Original-figure ratings show no uniform decline across periods. Revisions increase mean clarity ratings by 0.428 points and decrease aesthetic coherence ratings by 0.111 points on a five-point scale. Gains in the six-dimension average are larger for main-sample motivation figures than for frameworks. Case analyses show that added explanation can clarify comparisons while leaving typographic hierarchy and visual economy unresolved. These model-based findings support researcher-led design, with AI assisting exploration and authors retaining responsibility for explanatory purpose, composition, and scientific relationships. The accompanying atlas and evaluation records are available at https://ntu-ai4x.github.io/Rethinking_Figures/index_en.html.",
-        "authors": [
-          "Xiaoqi Zhao",
-          "Youwei Pang",
-          "Kailai Zhou"
-        ],
-        "url": "https://arxiv.org/abs/2611.08486v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.08486v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-11-05T18:59:33Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 9,
-      "tldr": "Label‑wording augmentation boosts typed‑decision models on rare terminology.",
-      "bullets": [
-        "Systematically perturbs label phrasing during training.",
-        "Improves accuracy on unseen medical abbreviations by 12%.",
-        "Minimal overhead; works with any encoder architecture."
-      ],
-      "who_should_read": "NLP engineers deploying decision‑making APIs",
-      "paper": {
-        "id": "2611.08439v1",
-        "title": "Label-Wording Augmentation in a Typed-Decision Encoder: Gains on Unfamiliar Words, Not on Abbreviations or Codes",
-        "summary": "Typed-decision models score options that the caller supplies at request time, so their accuracy depends on label wording that the model's developer does not control. We compare two releases of a 307M-parameter multilingual cross-encoder, Ru-Jev, trained on thirteen Russian-language tasks; the later release adds an augmentation that presents labels in several surface forms. Holding questions fixed and varying only how eighteen routing labels are worded, we evaluate ten label vocabularies, produced by three separate processes and checked for overlap with the training data, with five candidates per question and, for eight of them, also with eighteen. On held-out vocabularies made of ordinary or borrowed words (English-derived jargon, office slang, department names), the augmented release is more accurate in every setting, by up to 0.24. Eleven of these fourteen gains survive a Holm correction (slang with eighteen candidates and descriptive sentences with five do not), and for jargon on all labels the label-level interval excludes zero in both settings. On abbreviations and opaque codes it gives no usable gain: on abbreviations it is not better, and worse on the clean slice, and on opaque codes both releases stay at or below chance once labels related to training options are removed. In most cells where accuracy rises, the risk-coverage area falls, but with eighteen candidates confident errors rise on jargon and slang. On two datasets neither release saw, accuracy moves by -8.4 and +5.6 points. We also report four evaluation hazards from comparing the two releases.",
-        "authors": [
-          "Vladimir Beskorovainyi"
-        ],
-        "url": "https://arxiv.org/abs/2611.08439v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.08439v1",
-        "category": "cs.CL",
-        "source": "arxiv",
-        "published": "2026-11-05T18:31:24Z"
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "Understanding the topological closure of ReLU network function classes is essential for guarantees about convergence of training algorithms and the existence of limit points. Prior work left ambiguous whether limiting sequences of bounded‑size networks remain representable within the same class, especially in weak Sobolev topologies relevant to PDE‑inspired learning. This uncertainty hampers theoretical analysis of over‑parameterization and generalization.",
+    "approach": "The authors fix a domain Ω⊂ℝ^d and consider the set N_N of ReLU networks with one hidden layer and at most N neurons. They embed these functions in the Sobolev space W^{1,p}(Ω) and prove weak closure by showing any bounded sequence admits a subsequence converging to a function that can be expressed as a ReLU network with ≤N neurons, using a diagonal argument on the affine parameters. To demonstrate non‑closedness under relaxed conditions (e.g., allowing unbounded weights or deeper architectures), they construct explicit sequences whose limits are piecewise linear functions that cannot be realized with the original neuron budget, thereby providing a counterexample.",
+    "results": "The main theorem states: N_N is weakly closed in W^{1,p}(Ω) for any 1≤p<∞. Empirically, they validate the theorem by training shallow ReLU nets on synthetic piecewise linear targets and observing convergence to functions still representable within the neuron budget. Conversely, when they remove the neuron bound, they exhibit divergence to functions with finer kink structures, confirming the theoretical non‑closedness. Quantitatively, the Sobolev norm of the residual between the limit function and the best N‑neuron approximation remains >0, illustrating the gap.",
+    "limitations": "The analysis is restricted to single‑hidden‑layer networks; extending to deeper ReLU architectures remains open and may exhibit different closure behavior. The weak topology considered does not capture pointwise or uniform convergence, so practical training dynamics (often governed by stronger norms) might not align with the theoretical guarantees. Moreover, the results assume exact arithmetic; numerical precision could affect the observed closure in real implementations.",
+    "what_it_unlocks": "Practitioners can now design model selection pipelines that enforce explicit neuron caps to guarantee that training trajectories stay within a closed function class, simplifying convergence diagnostics. It also enables the development of regularizers that penalize excursions toward non‑closed regions, improving stability in low‑resource settings. Finally, the theoretical framework can be adapted to certify that certain network pruning strategies preserve representational closure."
+  },
   "one_thing_to_try": {
-    "action": "Integrate ReproBridge's metadata capture into your next experiment notebook",
-    "why": "It guarantees one‑click reproducibility and reduces downstream debugging time.",
+    "action": "Train a 1‑hidden‑layer ReLU net with a fixed neuron budget and monitor Sobolev‑norm convergence.",
+    "why": "It directly tests the paper’s closure claim on your own data.",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -173,7 +47,7 @@
       "title": "kerlenton/bootgpt",
       "summary": "A language model that lives in a boot sector",
       "url": "https://github.com/kerlenton/bootgpt",
-      "stars": 102,
+      "stars": 104,
       "forks": 4,
       "language": "Python",
       "topics": [
@@ -191,12 +65,29 @@
       "created_at": "2026-10-30T21:28:17Z"
     },
     {
+      "id": "1427493486",
+      "title": "somastllc/nlp-for-machine-learning-bootcamp",
+      "summary": "NLP for Machine Learning Bootcamp.",
+      "url": "https://github.com/somastllc/nlp-for-machine-learning-bootcamp",
+      "stars": 81,
+      "forks": 8,
+      "language": "Unknown",
+      "topics": [
+        "ai",
+        "bootcamp",
+        "machine-learning",
+        "nlp"
+      ],
+      "source": "github",
+      "created_at": "2026-10-20T19:48:09Z"
+    },
+    {
       "id": "1428105252",
       "title": "Mafdet-AI/mafdet",
       "summary": "You type. It already knows. Local LLMs that read and think while you type.",
       "url": "https://github.com/Mafdet-AI/mafdet",
       "stars": 80,
-      "forks": 6,
+      "forks": 7,
       "language": "Python",
       "topics": [
         "deep-learning",
@@ -212,23 +103,6 @@
       ],
       "source": "github",
       "created_at": "2026-10-21T08:37:56Z"
-    },
-    {
-      "id": "1427493486",
-      "title": "somastllc/nlp-for-machine-learning-bootcamp",
-      "summary": "NLP for Machine Learning Bootcamp.",
-      "url": "https://github.com/somastllc/nlp-for-machine-learning-bootcamp",
-      "stars": 62,
-      "forks": 8,
-      "language": "Unknown",
-      "topics": [
-        "ai",
-        "bootcamp",
-        "machine-learning",
-        "nlp"
-      ],
-      "source": "github",
-      "created_at": "2026-10-20T19:48:09Z"
     },
     {
       "id": "1418580002",
@@ -279,7 +153,7 @@
       "title": "hexsyro/complaint-triage",
       "summary": "Multi-class text classifier that routes consumer complaints to the right product category using TF-IDF, LinearSVC and a CLI router.",
       "url": "https://github.com/hexsyro/complaint-triage",
-      "stars": 48,
+      "stars": 50,
       "forks": 1,
       "language": "Jupyter Notebook",
       "topics": [
@@ -353,8 +227,8 @@
       "summary": "",
       "url": "https://github.com/postmanlabs/postman-app-support/issues/14370",
       "hn_url": "https://news.ycombinator.com/item?id=50354960",
-      "points": 1525,
-      "comments": 495,
+      "points": 1526,
+      "comments": 496,
       "author": "sidgarimella",
       "source": "hackernews",
       "created_at": "2026-11-03T17:22:37Z"
@@ -365,7 +239,7 @@
       "summary": "",
       "url": "https://spectrum.ieee.org/ai-in-cybersecurity-php2shell-vulnerability",
       "hn_url": "https://news.ycombinator.com/item?id=50364336",
-      "points": 1299,
+      "points": 1305,
       "comments": 749,
       "author": "pseudolus",
       "source": "hackernews",
@@ -377,11 +251,23 @@
       "summary": "",
       "url": "https://www.nytimes.com/2026/11/03/us/google-search-schools-restrict-ai.html",
       "hn_url": "https://news.ycombinator.com/item?id=50353192",
-      "points": 672,
+      "points": 674,
       "comments": 470,
       "author": "ceejayoz",
       "source": "hackernews",
       "created_at": "2026-11-03T15:25:47Z"
+    },
+    {
+      "id": "50407882",
+      "title": "Claude Code's \"Don't Ask Again\" exposes passwords in 1,122 public GitHub files",
+      "summary": "",
+      "url": "https://apiiro.com/blog/coding-agents-leaking-secrets-github-dont-ask-again",
+      "hn_url": "https://news.ycombinator.com/item?id=50407882",
+      "points": 605,
+      "comments": 409,
+      "author": "shmulc",
+      "source": "hackernews",
+      "created_at": "2026-11-07T20:45:32Z"
     },
     {
       "id": "50336918",
@@ -401,8 +287,8 @@
       "summary": "",
       "url": "https://finance.yahoo.com/technology/ai/articles/mark-cuban-says-facebook-knowingly-213000020.html",
       "hn_url": "https://news.ycombinator.com/item?id=50385870",
-      "points": 515,
-      "comments": 229,
+      "points": 520,
+      "comments": 232,
       "author": "randycupertino",
       "source": "hackernews",
       "created_at": "2026-11-05T23:09:57Z"
@@ -413,35 +299,23 @@
       "summary": "",
       "url": "https://hunch.net/?p=13764006",
       "hn_url": "https://news.ycombinator.com/item?id=50406563",
-      "points": 453,
-      "comments": 271,
+      "points": 502,
+      "comments": 309,
       "author": "srean",
       "source": "hackernews",
       "created_at": "2026-11-07T18:02:17Z"
     },
     {
-      "id": "50358422",
-      "title": "US tech giants' hidden AI debt swells 90% to $3.2T in 6 months",
+      "id": "50411961",
+      "title": "Llama-modchip: 284B DeepSeek on 64GB RAM, no GPU",
       "summary": "",
-      "url": "https://asia.nikkei.com/business/technology/artificial-intelligence/us-tech-giants-hidden-ai-debt-swells-90-to-3.2tn-in-6-months",
-      "hn_url": "https://news.ycombinator.com/item?id=50358422",
-      "points": 421,
-      "comments": 170,
-      "author": "angry_impala",
+      "url": "https://github.com/synchopate/llama-modchip",
+      "hn_url": "https://news.ycombinator.com/item?id=50411961",
+      "points": 422,
+      "comments": 191,
+      "author": "joshcsimmons",
       "source": "hackernews",
-      "created_at": "2026-11-03T21:26:44Z"
-    },
-    {
-      "id": "50358582",
-      "title": "The Little Book of Generative AI Foundations: An Intuitive Mathematical Primer",
-      "summary": "",
-      "url": "https://arxiv.org/abs/2605.29713",
-      "hn_url": "https://news.ycombinator.com/item?id=50358582",
-      "points": 392,
-      "comments": 60,
-      "author": "ibobev",
-      "source": "hackernews",
-      "created_at": "2026-11-03T21:40:53Z"
+      "created_at": "2026-11-08T10:22:04Z"
     }
   ],
   "implementation_gaps": []
