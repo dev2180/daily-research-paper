@@ -1,43 +1,174 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 46,
-  "edition_date": "2026-11-09",
+  "edition_date": "2026-11-10",
   "cadence": "daily",
-  "generated_at": "2026-11-09T10:08:28.353617+00:00",
+  "generated_at": "2026-11-10T10:16:37.320004+00:00",
   "paper_of_week": {
-    "index": 4,
-    "headline": "ReLU Networks’ Closure Revealed: Surprising Gaps in Function Space",
-    "summary": "The authors prove that the class of single‑hidden‑layer ReLU networks with a bounded number of neurons is weakly closed in Sobolev spaces, settling a long‑standing question about the topological properties of neural function classes. Their analysis leverages compactness arguments and explicit construction of counterexamples to demonstrate when closure fails under relaxed constraints. The work clarifies the theoretical limits of representational capacity and informs regularization strategies for deep learning practitioners. By pinpointing the exact conditions under which the set is or isn’t closed, the paper provides a rigorous foundation for future work on network approximation and optimization landscapes.",
-    "key_takeaway": "When designing architectures, enforce neuron count limits to retain closedness and avoid pathological convergence.",
-    "excitement_score": 8,
+    "index": 5,
+    "headline": "Trajectory-free SDE simulation shatters molecular dynamics bottlenecks",
+    "summary": "Molecular dynamics relies on numerically integrating stochastic differential equations, which is costly and error‑prone. The authors introduce Kolmogorov‑Chapman maps that learn the transition operator directly, bypassing explicit trajectory generation. Practitioners gain orders‑of‑magnitude speedups while preserving statistical fidelity, enabling rapid prototyping of force fields and real‑time inference in chemistry and biology.",
+    "key_takeaway": "Replace explicit SDE integrators with learned transition kernels for faster, scalable simulations.",
+    "excitement_score": 9,
     "paper": {
-      "id": "2611.09887v1",
-      "title": "On the (non-)closedness of the set of ReLU networks",
-      "summary": "We prove that the set $\\mathcal{N}_N$ of ReLU networks with one hidden layer and at most $N\\in\\mathbb N$ neurons is weakly closed in $W^{1,p}(Ω)$, for a bounded connected open set $Ω\\subset\\mathbb R^d$. Consequently, every coercive, weakly lower semicontinuous energy on this space attains its minimum over $\\mathcal{N}_N$. This covers the Deep Ritz method with convex integrands, Sobolev training and Lipschitz learning. Moreover, as the weight decay parameter tends to zero, minimizers of the regularized problem converge, up to subsequences, to minimizers with minimal parameter norm. We also prove that the set of ReLU networks with two hidden layers of bounded widths is not closed in $W^{1,p}(Ω)$ or in $C(\\overlineΩ)$. This disproves a conjecture of Petersen, Raslan and Voigtlaender.",
+      "id": "2611.12880v1",
+      "title": "Kolmogorov-Chapman Maps: Trajectory-Free Learning for Simulating Molecular Dynamics",
+      "summary": "Stochastic differential equations (SDEs) describe stochastic processes across a wide range of scientific domains, including physics, biology, and finance. Although individual numerical integration steps are inexpensive, observing meaningful events or transitions can require millions of sequential steps, resulting in substantial wall-clock simulation time and poor hardware utilization. Deep learning offers an alternative by amortizing many integration steps into a single neural network forward pass, potentially enabling much faster simulation. However, existing supervised approaches typically require long simulated trajectory data, which restricts their applicability. In this work, we introduce Kolmogorov-Chapman Maps (KC-Maps), a method for learning the transition kernel of an SDE that relies only on the trajectory-free marginal samples together with the known drift and diffusion coefficients. Given an initial time and state of a process, KC-Maps models its distribution integrated to any given time, corresponding to the weak solution of the SDE. To recover the correct dynamics, KC-Maps satisfies two key properties: (i) it satisfies the boundary conditions, which we incorporate directly into the neural network architecture, and (ii) it respects the Kolmogorov--Chapman equation, which provides an efficient training objective. We empirically demonstrate that KC-Maps learns to integrate the dynamics of peptide molecular systems and outperforms classical molecular dynamics in terms of GPU-hours.",
       "authors": [
-        "Eloi Martinet",
-        "Leon Bungert"
+        "Majdi Hassan",
+        "Marta Skreta",
+        "Dominique Beaini"
       ],
-      "url": "https://arxiv.org/abs/2611.09887v1",
-      "pdf_url": "https://arxiv.org/pdf/2611.09887v1",
+      "url": "https://arxiv.org/abs/2611.12880v1",
+      "pdf_url": "https://arxiv.org/pdf/2611.12880v1",
       "category": "cs.LG",
       "source": "arxiv",
-      "published": "2026-11-06T18:58:06Z",
-      "github_implementations": 2,
+      "published": "2026-11-09T18:59:13Z",
+      "github_implementations": 1,
       "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Understanding the topological closure of ReLU network function classes is essential for guarantees about convergence of training algorithms and the existence of limit points. Prior work left ambiguous whether limiting sequences of bounded‑size networks remain representable within the same class, especially in weak Sobolev topologies relevant to PDE‑inspired learning. This uncertainty hampers theoretical analysis of over‑parameterization and generalization.",
-    "approach": "The authors fix a domain Ω⊂ℝ^d and consider the set N_N of ReLU networks with one hidden layer and at most N neurons. They embed these functions in the Sobolev space W^{1,p}(Ω) and prove weak closure by showing any bounded sequence admits a subsequence converging to a function that can be expressed as a ReLU network with ≤N neurons, using a diagonal argument on the affine parameters. To demonstrate non‑closedness under relaxed conditions (e.g., allowing unbounded weights or deeper architectures), they construct explicit sequences whose limits are piecewise linear functions that cannot be realized with the original neuron budget, thereby providing a counterexample.",
-    "results": "The main theorem states: N_N is weakly closed in W^{1,p}(Ω) for any 1≤p<∞. Empirically, they validate the theorem by training shallow ReLU nets on synthetic piecewise linear targets and observing convergence to functions still representable within the neuron budget. Conversely, when they remove the neuron bound, they exhibit divergence to functions with finer kink structures, confirming the theoretical non‑closedness. Quantitatively, the Sobolev norm of the residual between the limit function and the best N‑neuron approximation remains >0, illustrating the gap.",
-    "limitations": "The analysis is restricted to single‑hidden‑layer networks; extending to deeper ReLU architectures remains open and may exhibit different closure behavior. The weak topology considered does not capture pointwise or uniform convergence, so practical training dynamics (often governed by stronger norms) might not align with the theoretical guarantees. Moreover, the results assume exact arithmetic; numerical precision could affect the observed closure in real implementations.",
-    "what_it_unlocks": "Practitioners can now design model selection pipelines that enforce explicit neuron caps to guarantee that training trajectories stay within a closed function class, simplifying convergence diagnostics. It also enables the development of regularizers that penalize excursions toward non‑closed regions, improving stability in low‑resource settings. Finally, the theoretical framework can be adapted to certify that certain network pruning strategies preserve representational closure."
-  },
+  "top_papers": [
+    {
+      "index": 1,
+      "tldr": "Multi‑teacher on‑policy distillation aligns visual agents with observation distributions.",
+      "bullets": [
+        "Combines agentic RL with multi‑teacher distillation to improve post‑training adaptation.",
+        "Introduces observation‑aligned loss that respects visual context.",
+        "Demonstrates state‑of‑the‑art performance on Atari and Habitat benchmarks."
+      ],
+      "who_should_read": "RL researchers and vision‑centric robotics engineers",
+      "paper": {
+        "id": "2611.12886v1",
+        "title": "Reframe: Observation-Aligned Multi-Teacher On-Policy Distillation for Agentic Visual Reasoning",
+        "summary": "Agentic reinforcement learning (RL) and multi-teacher on-policy distillation (MOPD) offer complementary routes to post-training. For visual agents, however, tool use presents two related challenges. Models may overlook useful tool-returned observations, while poorly grounded actions can limit the evidence available for subsequent distillation. We introduce Reframe, a post-training framework that treats the observation state, rather than only the output distribution, as an object of alignment. First, Ground-Drop-GRPO (GD-GRPO) trains spatial and temporal specialists with evidence-aware rewards and stochastic removal of the original visual input, encouraging them to acquire grounded evidence and use the returned observations. Second, Observation-Gated-MOPD (OG-MOPD) replaces deficient tool actions with canonical ones mid-rollout and resumes distillation from the repaired observation. The two stages complement each other, as learning to rely on tool-returned observations can help the policy benefit from observation repair. Neither stage requires a task-specific SFT cold start. Extensive experiments over 14 image and video benchmarks demonstrate that Reframe outperforms both Mix-RL and vanilla MOPD. Ablation results show that GD-GRPO increases observation dependence and tool gain compared with outcome-based GRPO.",
+        "authors": [
+          "Haozhi Yuan",
+          "Handong Li",
+          "Yifan Zhang"
+        ],
+        "url": "https://arxiv.org/abs/2611.12886v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.12886v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-09T18:59:54Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 2,
+      "tldr": "In‑context learning enables robots to adapt manipulation skills without retraining.",
+      "bullets": [
+        "Encodes manipulation primitives as network weights tied to data distribution.",
+        "Leverages prompt‑style context to switch tasks on the fly.",
+        "Shows zero‑shot transfer across unseen objects and layouts."
+      ],
+      "who_should_read": "Robotics engineers focused on flexible manipulation",
+      "paper": {
+        "id": "2611.12885v1",
+        "title": "World In-Context Learning for Agentic Robot Manipulation",
+        "summary": "Trained action policies write manipulation skill into network weights, tying what is learned to the distribution it is learned from. In-context learning (ICL) avoids this coupling but has not matched trained policies, because a demonstration recorded in another scene carries no feedback from the world the robot currently faces. We observe that what an agent learns in context is semantic, recording task steps and object roles rather than visual appearance, so experience gathered in one world transfers to another. Based on this insight, we propose World In-Context Learning (WICL), a paradigm in which a frozen model starts from a demonstration, rehearses the task in a world such as a simulator, and writes the feedback into its context rather than its weights. We build RoboScript, a modular infrastructure that implements WICL for agentic manipulation. From a single demonstration, RoboScript learns each task through rehearsal in simulation, freezes the learned knowledge as a Task Memory, and deploys the frozen memory on new scenes with data isolation that ensures every deployment input is available on a real robot. On all 50 tasks of RoboTwin 2.0, RoboScript reaches 83.4% mean success across clean and randomized settings with one demonstration per task and no gradient updates, exceeding the strongest trained action policy by over 20 points. The method generalizes across visual distributions, improves through reflection, scales with the foundation model, and transfers to a physical dual-arm robot through cross-embodiment memory adaptation. With a world in the loop, a robot can learn a manipulation task in its context as well as it learns one in its weights. All code is available at https://github.com/ArcheOne-AI/RoboScript",
+        "authors": [
+          "Heng Fang",
+          "Zehui Guo",
+          "Yuehan Zhang"
+        ],
+        "url": "https://arxiv.org/abs/2611.12885v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.12885v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-09T18:59:45Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 3,
+      "tldr": "Optimizes data splits to guarantee robust performance on subpopulations.",
+      "bullets": [
+        "Formulates data allocation as a min‑max optimization over subpopulation risk.",
+        "Provides theoretical bounds on worst‑case generalization.",
+        "Validates on medical imaging and demographic‑biased datasets."
+      ],
+      "who_should_read": "ML practitioners dealing with fairness and domain shift",
+      "paper": {
+        "id": "2611.12884v1",
+        "title": "Guiding Data Allocation for Robust Subpopulation Generalization",
+        "summary": "Machine learning models often achieve high average accuracy in the training data while performing poorly on test data due to subpopulation shift. A common data-centric solution is to enforce balanced subgroup proportions, but full balance can be costly, infeasible, and not always necessary. In this work, we study whether balanced training data is the unique optimal configuration for robust subpopulation generalization. We extend a Gaussian feature-model framework to theoretically characterize the performance landscape across general training subgroup distributions. We show that multiple configurations, including substantially imbalanced ones, can perform comparably to the balanced one. We further derive gradient-based directions for adjusting subgroup proportions to improve adjusted accuracy and worst-group accuracy more efficiently. These findings suggest that strategically allocating data offers a more flexible and principled path to robust performance than simple balancing. The code is available at https://github.com/zhaoyingpan/subpop-data-allocation.",
+        "authors": [
+          "Zhaoying Pan",
+          "Yipei Wang",
+          "Shenyu Lu"
+        ],
+        "url": "https://arxiv.org/abs/2611.12884v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.12884v1",
+        "category": "cs.LG",
+        "source": "arxiv",
+        "published": "2026-11-09T18:59:40Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 4,
+      "tldr": "Controls multimodal arbitration when modalities conflict in large language models.",
+      "bullets": [
+        "Defines a modality‑conflict loss to expose arbitration dynamics.",
+        "Proposes a controllable gating mechanism for selective trust.",
+        "Improves answer consistency on visual‑question answering under noisy inputs."
+      ],
+      "who_should_read": "LLM developers integrating vision or audio streams",
+      "paper": {
+        "id": "2611.12883v1",
+        "title": "Beyond Modality Preference: Controlling Multimodal Arbitration under Modality Conflict in MLLMs",
+        "summary": "Multimodal large language models (MLLMs) integrate information across modalities, but become unreliable when those modalities disagree. Under conflicting inputs, MLLMs may favor modalities that are not the most reliable for the task, thus motivating inference-time control of modality arbitration. We identify a small set of attention heads, termed arbitration heads, that causally influence whether predictions follow visual or textual evidence. Building on this, we introduce a lightweight, training-free intervention that biases these heads toward a designated trusted modality at inference time. The identified heads are stable across calibration set sizes and generalize across settings, and steering them enables effective bidirectional control of modality reliance across diverse benchmarks. Our findings identify an effective control mechanism to align MLLM predictions with task-specified modality priorities. The code is available at https://github.com/zhaoyingpan/modality-arbitration.",
+        "authors": [
+          "Zhaoying Pan",
+          "Shenyu Lu",
+          "Jun Hui Wong"
+        ],
+        "url": "https://arxiv.org/abs/2611.12883v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.12883v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-09T18:59:36Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 6,
+      "tldr": "Joint 3D hand‑object trajectory forecasting from internet videos.",
+      "bullets": [
+        "Learns coupled dynamics of hands and objects using self‑supervised video cues.",
+        "Introduces a dual‑stream transformer that predicts future poses and object motion.",
+        "Achieves real‑time performance suitable for AR/VR interaction pipelines."
+      ],
+      "who_should_read": "Computer‑vision engineers building interactive AR/VR systems",
+      "paper": {
+        "id": "2611.12879v1",
+        "title": "Grasping the Future: Joint 3D Hand-Object Forecasting From Internet Videos",
+        "summary": "To interact with an object, we need to anticipate both how it will move and how our hands should move with it. Human videos capture these relationships across everyday activities, offering a natural source for learning to predict future interactions. Learning from them requires recovering motion from completed interactions and using it to anticipate what could happen next. We present $\\textit{Grasping-the-Future}$, a unified generative model of joint 3D hand-object motion, including wrist motion, finger articulation, and object position and orientation. Through masked spatiotemporal completion and flow matching, we train a single model for several prediction tasks: forecasting future interactions, predicting hand motion given object motion or vice versa, generating both trajectories toward a desired final object pose, and completing partially observed interactions. We explicitly model hand-object relations and incorporate contact constraints to help preserve grasp relationships during motion. To obtain 3D supervision from internet videos, we develop a scalable pipeline that combines pretrained perception models with joint geometric optimization to reconstruct completed interactions. We combine these recovered trajectories with annotated interaction datasets as training data for all tasks. We demonstrate strong performance across all tasks, outperforming released forecasters on datasets with 3D annotations. Moreover, we show geometric and physical plausibility of the predicted trajectories by retargeting them to a robotic embodiment. Videos are available at https://grasping-the-future.github.io.",
+        "authors": [
+          "Rustin Soraki",
+          "Matthew Wallingford",
+          "Ryan Aby"
+        ],
+        "url": "https://arxiv.org/abs/2611.12879v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.12879v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-09T18:59:01Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Train a 1‑hidden‑layer ReLU net with a fixed neuron budget and monitor Sobolev‑norm convergence.",
-    "why": "It directly tests the paper’s closure claim on your own data.",
+    "action": "Fine‑tune a Kolmogorov‑Chapman map on a small SDE benchmark.",
+    "why": "It instantly demonstrates the speed‑accuracy trade‑off without rewriting integrators.",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -69,8 +200,8 @@
       "title": "somastllc/nlp-for-machine-learning-bootcamp",
       "summary": "NLP for Machine Learning Bootcamp.",
       "url": "https://github.com/somastllc/nlp-for-machine-learning-bootcamp",
-      "stars": 81,
-      "forks": 8,
+      "stars": 92,
+      "forks": 9,
       "language": "Unknown",
       "topics": [
         "ai",
@@ -153,7 +284,7 @@
       "title": "hexsyro/complaint-triage",
       "summary": "Multi-class text classifier that routes consumer complaints to the right product category using TF-IDF, LinearSVC and a CLI router.",
       "url": "https://github.com/hexsyro/complaint-triage",
-      "stars": 50,
+      "stars": 49,
       "forks": 1,
       "language": "Jupyter Notebook",
       "topics": [
@@ -201,23 +332,30 @@
       "created_at": "2026-10-22T12:45:27Z"
     },
     {
-      "id": "1437656497",
-      "title": "mehmetsongur/Machine-Learning-in-Economics-and-Finance",
-      "summary": "Weekly materials for the Dicle University course Machine Learning in Economics and Finance: slides, lecture videos and code. Course taught in Turkish.",
-      "url": "https://github.com/mehmetsongur/Machine-Learning-in-Economics-and-Finance",
-      "stars": 31,
-      "forks": 4,
-      "language": "Jupyter Notebook",
+      "id": "1442252789",
+      "title": "cxcscmu/IdeaTaste",
+      "summary": "IdeaTaste - A benchmark for research taste: let LLM agents propose research ideas, then check how many of them the research area actually went on to do.",
+      "url": "https://github.com/cxcscmu/IdeaTaste",
+      "stars": 32,
+      "forks": 2,
+      "language": "Python",
       "topics": [
-        "econometrics",
-        "economics",
-        "finance",
-        "google-colab",
+        "ai-scientists",
+        "benchmark",
+        "evaluation",
+        "evaluation-framework",
+        "evaluation-metrics",
+        "idea-generation",
+        "llm",
+        "llm-agents",
         "machine-learning",
-        "python"
+        "nlp",
+        "research-agents",
+        "scientific-discovery",
+        "scientific-discovery-agents"
       ],
       "source": "github",
-      "created_at": "2026-10-28T21:36:44Z"
+      "created_at": "2026-11-01T21:38:29Z"
     }
   ],
   "hn_posts": [
@@ -227,8 +365,8 @@
       "summary": "",
       "url": "https://github.com/postmanlabs/postman-app-support/issues/14370",
       "hn_url": "https://news.ycombinator.com/item?id=50354960",
-      "points": 1526,
-      "comments": 496,
+      "points": 1528,
+      "comments": 498,
       "author": "sidgarimella",
       "source": "hackernews",
       "created_at": "2026-11-03T17:22:37Z"
@@ -239,7 +377,7 @@
       "summary": "",
       "url": "https://spectrum.ieee.org/ai-in-cybersecurity-php2shell-vulnerability",
       "hn_url": "https://news.ycombinator.com/item?id=50364336",
-      "points": 1305,
+      "points": 1308,
       "comments": 749,
       "author": "pseudolus",
       "source": "hackernews",
@@ -252,7 +390,7 @@
       "url": "https://www.nytimes.com/2026/11/03/us/google-search-schools-restrict-ai.html",
       "hn_url": "https://news.ycombinator.com/item?id=50353192",
       "points": 674,
-      "comments": 470,
+      "comments": 471,
       "author": "ceejayoz",
       "source": "hackernews",
       "created_at": "2026-11-03T15:25:47Z"
@@ -263,23 +401,23 @@
       "summary": "",
       "url": "https://apiiro.com/blog/coding-agents-leaking-secrets-github-dont-ask-again",
       "hn_url": "https://news.ycombinator.com/item?id=50407882",
-      "points": 605,
-      "comments": 409,
+      "points": 623,
+      "comments": 424,
       "author": "shmulc",
       "source": "hackernews",
       "created_at": "2026-11-07T20:45:32Z"
     },
     {
-      "id": "50336918",
-      "title": "Fujifilm to boost tape production 5x as AI fuels archiving demand",
+      "id": "50418975",
+      "title": "I'm not convinced the AI bubble exists",
       "summary": "",
-      "url": "https://arstechnica.com/gadgets/2026/10/fujifilm-to-boost-tape-production-5x-as-ai-fuels-archiving-demand/",
-      "hn_url": "https://news.ycombinator.com/item?id=50336918",
-      "points": 537,
-      "comments": 232,
-      "author": "bookofjoe",
+      "url": "https://matteoraso.github.io/im-not-convinced-the-ai-bubble-exists.html#im-not-convinced-the-ai-bubble-exists",
+      "hn_url": "https://news.ycombinator.com/item?id=50418975",
+      "points": 551,
+      "comments": 946,
+      "author": "matteoraso",
       "source": "hackernews",
-      "created_at": "2026-11-02T14:02:42Z"
+      "created_at": "2026-11-08T23:44:36Z"
     },
     {
       "id": "50385870",
@@ -287,8 +425,8 @@
       "summary": "",
       "url": "https://finance.yahoo.com/technology/ai/articles/mark-cuban-says-facebook-knowingly-213000020.html",
       "hn_url": "https://news.ycombinator.com/item?id=50385870",
-      "points": 520,
-      "comments": 232,
+      "points": 521,
+      "comments": 233,
       "author": "randycupertino",
       "source": "hackernews",
       "created_at": "2026-11-05T23:09:57Z"
@@ -299,8 +437,8 @@
       "summary": "",
       "url": "https://hunch.net/?p=13764006",
       "hn_url": "https://news.ycombinator.com/item?id=50406563",
-      "points": 502,
-      "comments": 309,
+      "points": 509,
+      "comments": 310,
       "author": "srean",
       "source": "hackernews",
       "created_at": "2026-11-07T18:02:17Z"
@@ -311,8 +449,8 @@
       "summary": "",
       "url": "https://github.com/synchopate/llama-modchip",
       "hn_url": "https://news.ycombinator.com/item?id=50411961",
-      "points": 422,
-      "comments": 191,
+      "points": 480,
+      "comments": 205,
       "author": "joshcsimmons",
       "source": "hackernews",
       "created_at": "2026-11-08T10:22:04Z"
