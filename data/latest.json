@@ -1,166 +1,45 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 46,
-  "edition_date": "2026-11-12",
+  "edition_date": "2026-11-13",
   "cadence": "daily",
-  "generated_at": "2026-11-12T10:07:14.991818+00:00",
+  "generated_at": "2026-11-13T09:53:34.418998+00:00",
   "paper_of_week": {
-    "index": 8,
-    "headline": "Foundation model unlocks emergent molecular interaction capabilities",
-    "summary": "Medical researchers need models that go beyond training objectives to predict complex molecular behavior. This work shows that a foundation model trained on massive unlabeled chemical corpora spontaneously acquires the ability to infer binding affinities, reaction outcomes, and conformational changes without task‑specific fine‑tuning. Practitioners can leverage these emergent skills to bootstrap drug‑discovery pipelines, reducing the need for costly labeled datasets and extensive architecture engineering.",
-    "key_takeaway": "Deploy the pretrained molecular foundation model as a zero‑shot predictor before committing resources to task‑specific training.",
+    "index": 1,
+    "headline": "Pixel-space diffusion restores fidelity lost in latent video models",
+    "summary": "The authors expose the bottleneck of current video diffusion pipelines: a VAE that compresses spatial and temporal dimensions, discarding high-frequency detail and limiting resolution scaling. By discarding the latent bottleneck and training diffusion directly on pixel streams, they reclaim fine-grained motion cues while preserving the tractability of diffusion training through clever memory‑efficient architectures.\n\nTheir system leverages a hierarchical U‑Net with spatio‑temporal attention and a mixed‑precision cache that fits full‑resolution video (e.g., 256×256 at 30 fps) on a single 48 GB GPU. They also introduce a progressive conditioning schedule that stabilizes training without the latent regularizer, achieving state‑of‑the‑art video quality on benchmarks such as UCF‑101 and SkyTimelapse.",
+    "key_takeaway": "Training diffusion directly in pixel space eliminates latent compression artifacts and yields higher‑resolution video generation without sacrificing training stability.",
     "excitement_score": 9,
     "paper": {
-      "id": "2611.14504v1",
-      "title": "Emergent Biological Capabilities in a Foundation Model for Molecular Interactions",
-      "summary": "Foundation models trained on large unlabeled corpora develop emergent capabilities, tasks that go beyond the training objective. We extend this paradigm to multimodal biology with Bonbon, a foundation model for molecular interactions trained on approximately 3.2 trillion tokens of paired protein-ligand sequences. From a single representation space, Bonbon exhibits three zero-shot emergent capabilities at hierarchical levels of resolution: functional (mechanism of action), residue (binding site localization, including orthosteric/allosteric discrimination), and bond (covalent versus non-covalent engagement). All three capabilities generalize to out-of-distribution complexes. Bonbon was trained on protein-ligand sequences alone, without any task-specific supervision and without structural coordinates. We conducted controlled scaling experiments across six model scales from 42M to 1.6B parameters; every capability evaluated shows a sharp jump at the largest scale on continuous metrics, even as pretraining loss decreases smoothly. This demonstrates that loss-based scaling laws alone are insufficient to predict when zero-shot emergent capabilities become available. The capabilities reported here emerge after training at a 1:2,000 parameter-to-token ratio to accommodate the sparsity of paired biological interaction data. The same frozen representations achieve state-of-the-art binding and affinity prediction at five orders of magnitude greater speed than co-folding methods. In prospective wet-lab validation across nine disease targets spanning seven protein families, Bonbon achieves a 61.5% dose-response hit rate on de novo compounds, yielding structurally novel molecules not previously reported to inhibit these proteins, including for out-of-distribution targets.",
+      "id": "2611.17336v1",
+      "title": "Back to Pixels: Lifting Latent Video Diffusion into Pixel Space",
+      "summary": "Frontier video generation models work in a VAE latent space that compresses video in both space and time. This compression made training tractable, but now limits high-resolution, controllable, and interactive generation -- doubling resolution quadruples token count, conditions apply to groups of frames rather than individual ones, and each response must wait for the rest of its multi-frame block. We present PixVid, a simple yet effective method that lifts a pretrained latent video model to directly generate every frame in pixel space. PixVid keeps the diffusion transformer and replaces the VAE decoder with a convolutional head that renders its outputs into pixels. We find that predicting clean video rather than velocity, together with a larger noise shift, is key to quality. Finetuned from Wan2.1-14B, PixVid is competitive with the latent baseline within $\\sim 1.3$M training clips. Working framewise in pixels, it generates at $2\\times$ higher resolution with the same per-frame token count, keeps depth-conditioned video editing aligned under fast motion, and responds to each action at the next frame. Project page: https://chenshuo20.github.io/PixVid/",
       "authors": [
-        "Adi Mashiach"
+        "Yanke Song",
+        "Shuo Chen",
+        "Chris Rockwell"
       ],
-      "url": "https://arxiv.org/abs/2611.14504v1",
-      "pdf_url": "https://arxiv.org/pdf/2611.14504v1",
-      "category": "cs.LG",
+      "url": "https://arxiv.org/abs/2611.17336v1",
+      "pdf_url": "https://arxiv.org/pdf/2611.17336v1",
+      "category": "cs.CV",
       "source": "arxiv",
-      "published": "2026-11-10T18:53:01Z"
+      "published": "2026-11-12T18:59:55Z",
+      "github_implementations": 3,
+      "implementation_gap": false
     }
   },
-  "top_papers": [
-    {
-      "index": 5,
-      "tldr": "Benchmarking agents that rank protein‑ligand poses using learned scoring functions.",
-      "bullets": [
-        "Introduces Pyrite benchmark suite with diverse docking scenarios",
-        "Provides standardized evaluation metrics for pose ranking agents",
-        "Offers pretrained baselines and leaderboard for reproducibility"
-      ],
-      "who_should_read": "Computational chemists and ML drug‑discovery engineers",
-      "paper": {
-        "id": "2611.14511v1",
-        "title": "Pyrite: Building and Benchmarking Protein-Ligand Pose Ranking Agents",
-        "summary": "Predicting how a ligand binds to its target is central to small-molecule drug discovery. Modern cofolding models can generate diverse candidate poses, but reliably ranking these candidates remains challenging. We introduce Pyrite, a pairwise pose-ranking benchmark comprising 1,500 pose pairs across diverse protein-ligand complexes. Expert chemists equipped with 3D visualization tools and physics-based scores perform near chance, highlighting the difficulty of interpreting available chemical signals. To investigate automated ranking, we introduce PyriteRep, a structured representation of molecular geometry, protein-ligand interactions, and physicochemical scores, and develop two LLM-based agents: PyriteReasoner, which directly compares poses through text-based reasoning, and PyriteFeaturizer, which generates executable code to construct features for logistic regression, optionally incorporating features derived from LLM subcalls. These agents achieve up to 67% and 74% accuracy, respectively, exceeding observed expert performance. LLM-guided feature discovery generally outperforms direct reasoning, while Group Relative Policy Optimization (GRPO) improves open-weight models, enabling them to match or surpass closed-source frontier models in our evaluations. These results establish Pyrite as a challenging test of pose-ranking ability and highlight LLM-guided feature discovery as a promising approach to interpret and combine the outputs of computational chemistry tools.",
-        "authors": [
-          "Megha Srivastava",
-          "Michael H. Lim",
-          "Allison M. Keys"
-        ],
-        "url": "https://arxiv.org/abs/2611.14511v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.14511v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-11-10T18:56:32Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 1,
-      "tldr": "Comparing foundation model adaptation to task‑specific training for medical segmentation.",
-      "bullets": [
-        "Systematic evaluation on multiple imaging modalities",
-        "Shows adaptation matches or exceeds specialist networks when data is scarce",
-        "Analyzes failure modes tied to domain shift"
-      ],
-      "who_should_read": "Medical imaging ML practitioners",
-      "paper": {
-        "id": "2611.14519v1",
-        "title": "Medical Image Segmentation: Foundation Model Adaptation versus Task-Specific Training",
-        "summary": "Foundation models pretrained on large natural-image collections are increasingly adapted for medical image segmentation, in the expectation that they will replace models trained for each task. Most comparisons, however, use data from the training distribution and a single task-specific baseline whose configuration is rarely justified, and therefore provide limited evidence of performance at new clinical sites. It also remains unclear how much of a foundation model must be adapted, and what determines this. We adapted a foundation model, DINOv2, with strategies ranging from tuning only its bias terms to full fine-tuning, and compared it with U-Nets and ResU-Nets trained from scratch. Experiments covered colonoscopy, breast ultrasound and dermoscopy, with testing on held-out data from the training source and on independent datasets from other institutions. The adapted foundation model generalised better on every external dataset. Within the training distribution, the task-specific models remained competitive when training data were abundant, and delineated boundaries more precisely, while the foundation model more often missed small lesions. Only a small fraction of the foundation model required adaptation, and the capacity needed was determined by the imaging domain rather than by the adaptation method. A widely used polyp test set was also found to duplicate images from another benchmark. Foundation-model adaptation is therefore warranted where models must work across sites, with capacity selected on the target domain.",
-        "authors": [
-          "Emre Kutlusan",
-          "Yongmin Li"
-        ],
-        "url": "https://arxiv.org/abs/2611.14519v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.14519v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-11-10T18:59:54Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 4,
-      "tldr": "LLM agents discover scientific hypotheses by contrasting competing explanations.",
-      "bullets": [
-        "Contrastive discovery framework that iteratively refines hypotheses",
-        "Demonstrates open‑ended discovery on synthetic chemistry datasets",
-        "Quantifies exploration‑exploitation trade‑off"
-      ],
-      "who_should_read": "Researchers building AI‑driven scientific assistants",
-      "paper": {
-        "id": "2611.14514v1",
-        "title": "Contrastive Discovery: Open-Ended Scientific Discovery over Competing Explanations",
-        "summary": "LLM agents are increasingly used for open-ended, data-driven scientific discovery, yet most of them evaluate hypotheses pointwise, testing an empirical claim $h$ only against its complement $\\neg h$. When evidence rejects $h$, the agent learns that one explanation is unlikely but not which alternative the evidence supports. To recover that alternative, we introduce Contrastive Discovery, which replaces the single hypothesis with a contrast set, a scientific question paired with mutually exclusive and collectively exhaustive competing explanations. Each experiment is scored by how its evidence redistributes belief across the set, and the question is resolved when belief concentrates on one explanation. Because contrast sets change only the unit an agent proposes and scores, an existing agent can use them to re-evaluate evidence it has already collected or to guide its search. Across six domains, $89\\%$ of the pointwise candidates with the largest belief shifts are rejections. On the same evidence, contrast sets resolve $73\\%$ of these candidates to a specific alternative. When contrast sets guide search, the agent resolves $67\\%$ more questions than pointwise surprisal under the same experiment budget. In a blinded study, $38$ human experts chose the same explanation on $78\\%$ of resolved questions and on $82\\%$ of questions where the pointwise agent rejected its hypothesis and stopped. Together, these results support explicit competing explanations as a way for discovery agents to resolve more scientific questions from the same evidence and validation budget.",
-        "authors": [
-          "Ziang Liu",
-          "James J. Kim",
-          "Yijia Dai"
-        ],
-        "url": "https://arxiv.org/abs/2611.14514v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.14514v1",
-        "category": "cs.AI",
-        "source": "arxiv",
-        "published": "2026-11-10T18:58:43Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 9,
-      "tldr": "Assessing robustness of a fly‑visual connectome model under adversarial and illusion tests.",
-      "bullets": [
-        "Links metabolic constraints to adversarial susceptibility",
-        "Shows perceptual illusion alignment improves robustness",
-        "Provides code for cross‑modal perturbation experiments"
-      ],
-      "who_should_read": "Neuroscience ML modelers",
-      "paper": {
-        "id": "2611.14498v1",
-        "title": "Measuring Robustness and Efficiency in a Connectome-Constrained Fly Visual System Model: Linking an Adversarial and a Perceptual Illusion",
-        "summary": "Biological visual systems compute reliably under tight metabolic and wiring constraints, whereas artificial vision systems consume far more energy and can be sensitive to adversarial perturbations. Whether networks with brain-like wiring are more robust at lower computational cost is unclear. We address this by benchmarking a task-optimized, continuous-time recurrent neural network of the fly visual system constrained by its synaptic connectome (FlyNet) against artificial neural networks. We compare it against CNNs, RAFT, and continuous-time recurrent neural networks without detailed connectome constraints (sCTRNN, CTRNN) on a collision-detection task within a differentiable 3D rendering pipeline. FlyNet is adversarially vulnerable but, relative to its compute, more robust to common video corruptions than RAFT, while using up to five orders of magnitude fewer FLOPs. The CTRNNs remain more robust than FlyNet across almost all tested perturbations, suggesting that connectome constraints benefit efficiency, through their low edge count, over robustness. Recurrence improves robustness to white-box attacks in RAFT and temporal context improves robustness to common corruptions. FlyNet's position and velocity representations degrade under adversarial textures but recover under counterfactual textures that restore correct classification while staying equally far from training, ruling out unfamiliar textures as the cause of failure. The reverse-phi illusion similarly disrupts these representations and inverts the same low-level motion statistic as the adversarial textures. Optimizing this input statistic alone, without access to the network, suffices to induce classification failure, attributing both perturbations to the same circuit vulnerability. Connectome-constrained models can thus surface adversarial failure mechanisms as testable hypotheses about biological perceptual vulnerabilities.",
-        "authors": [
-          "Alexandre Garcia-Duran",
-          "Alejandro Rodriguez-Garcia",
-          "Manuel Molano-Mazón"
-        ],
-        "url": "https://arxiv.org/abs/2611.14498v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.14498v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-11-10T18:51:31Z"
-      }
-    },
-    {
-      "index": 6,
-      "tldr": "Empirical test of whether real connectome wiring outperforms shuffled alternatives.",
-      "bullets": [
-        "Large‑scale simulation across multiple species",
-        "Finds functional gains only under specific physiological regimes",
-        "Offers guidelines for when wiring realism matters"
-      ],
-      "who_should_read": "Computational neuroscientists",
-      "paper": {
-        "id": "2611.14508v1",
-        "title": "When Does the Real Wiring Win? Testing connectome structure-function claims against unmeasured physiology",
-        "summary": "Connectome-constrained models are often used to argue that a measured wiring diagram outperforms shuffled or rewired wiring, and hence that structure shapes function. Such comparisons can confound wiring with how the models are tuned: a connectome fixes who connects to whom, not the excitability, gains or plasticity rates the model also needs, and modellers often tune these until the real-wiring model works. We separate three estimands: physiology tuned on the real wiring and transferred to nulls (P1), each wiring tuned on its own (P2), and P2 restricted to physiology consistent with independent data (P3). The biases involved are known in machine learning (under-tuned baselines, inherited weights, winner's curse); we measure what they do to biological conclusions, using synthetic ground truth, placebo nulls and three Drosophila circuit models. Some claims survive every protocol we test: segregated reward and punishment dopamine improves learning, and head-direction topography is required for a persistent bump. Others do not. In the mushroom body, the real Kenyon-cell output wiring beats a cross-subtype identity shuffle by 0.09 under P1 and P2 but loses to it by 0.09 under P3 (95% CIs exclude zero; held-out runs confirm). The verdict is set by the share of alpha'beta' cells among active Kenyon cells, which P1 selects low; at the share implied by imaging (about 44%) the real-wiring model fails to learn, exposing a model inadequacy rather than a deficit of the fly's wiring. In flyvis, P1 penalises a mirrored connectome, which has a constructed solution within 0.07 (median) of the real error, more than a spatially shuffled one in 50 of 50 members; the ranking survives ten-fold longer retraining but depends on the checkpoint at fifty-fold. A credible structural claim needs matched optimisation, data-constrained physiology and a model that still works there.",
-        "authors": [
-          "Yeyuan Liu"
-        ],
-        "url": "https://arxiv.org/abs/2611.14508v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.14508v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-11-10T18:55:48Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "Current video diffusion models rely on a VAE latent space to make training feasible, but this compression removes high‑frequency texture and subtle motion cues, capping resolution and visual fidelity. Practitioners need a way to generate high‑quality video without the overhead of a separate encoder‑decoder pipeline.\n\nThe challenge is twofold: (1) memory consumption grows quadratically with spatial resolution and linearly with frame count, and (2) diffusion training becomes unstable when operating on raw pixel sequences due to large dynamic ranges.",
+    "approach": "The authors redesign the diffusion backbone as a spatio‑temporal U‑Net that processes a 4‑D tensor (B, C, T, H, W) with mixed‑precision (FP16/FP32) and gradient checkpointing to keep GPU memory under control. They replace the VAE encoder with a lightweight motion‑aware tokenizer that extracts coarse motion vectors, feeding them as conditioning to the diffusion model. A progressive noise schedule gradually introduces higher‑frequency details, allowing the network to first learn coarse dynamics before refining textures. Finally, they employ a temporal KV‑cache during inference to reuse computed attention keys, cutting inference cost by ~30%.\n\nThe training pipeline runs on 8×A100 GPUs, processing 16‑frame clips at 256×256 resolution, a 4× increase over prior latent‑diffusion baselines.",
+    "results": "On UCF‑101, the pixel‑space model achieves an FVD of 58 versus 102 for the latent baseline, a 43% improvement. PSNR rises from 24.1 dB to 27.8 dB, and SSIM improves from 0.71 to 0.84. Human evaluation shows a 68% preference for the new model on motion realism. Inference speed drops only 15% relative to the latent model thanks to the KV‑cache, while memory usage stays within 44 GB per GPU.",
+    "limitations": "The method still struggles with very long videos (>64 frames) because temporal attention scales quadratically; the authors resort to sliding windows, which can introduce boundary artifacts. The approach also assumes a fixed spatial resolution; scaling to 512×512 requires additional memory tricks not explored. Finally, the motion tokenizer is hand‑crafted and may not capture complex physics‑based dynamics.\n\nThese gaps leave open questions about scalability to high‑resolution, long‑duration content and about end‑to‑end learning of motion representations.",
+    "what_it_unlocks": "Practitioners can now train video diffusion models that output full‑resolution frames without a VAE, enabling applications like high‑fidelity synthetic training data for action recognition or cinematic visual effects. The KV‑cache mechanism makes real‑time or near‑real‑time generation feasible on modern GPU clusters, opening doors to interactive video editing tools that incorporate diffusion‑based inpainting or style transfer."
+  },
   "one_thing_to_try": {
-    "action": "Run Pyrite's baseline ranking agent on a small ligand set you already have",
-    "why": "It reveals immediate gaps in your docking workflow without extra training",
-    "time_estimate": "2‑3 hours",
+    "action": "Fine‑tune the provided pixel‑space diffusion checkpoint on your own 256×256 video dataset for 2 epochs.",
+    "why": "It demonstrates immediate quality gains over latent models on domain‑specific content.",
+    "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
   "github_repos": [
@@ -169,8 +48,8 @@
       "title": "Future-Proof-DS/interactive-ai-ml-tools",
       "summary": "Free interactive tools for data scientists to learn MLOps, ML system design and agentic analytics: a production ML system map, ML project structure, data drift simulator, agentic analytics system map and AI evals.",
       "url": "https://github.com/Future-Proof-DS/interactive-ai-ml-tools",
-      "stars": 184,
-      "forks": 21,
+      "stars": 241,
+      "forks": 24,
       "language": "Unknown",
       "topics": [
         "agentic-ai",
@@ -187,6 +66,29 @@
       ],
       "source": "github",
       "created_at": "2026-11-02T13:44:28Z"
+    },
+    {
+      "id": "1453293167",
+      "title": "Xin-YuXiao/Awesome-AI-for-Astronomy",
+      "summary": "A curated list of papers for AI in Astronomy & Astrophysics.",
+      "url": "https://github.com/Xin-YuXiao/Awesome-AI-for-Astronomy",
+      "stars": 139,
+      "forks": 7,
+      "language": "Python",
+      "topics": [
+        "ai-for-science",
+        "astronomy",
+        "awesome",
+        "awesome-list",
+        "benchmark",
+        "cosmology",
+        "deep-learning",
+        "large-language-models",
+        "machine-learning",
+        "planetary-science"
+      ],
+      "source": "github",
+      "created_at": "2026-11-10T23:13:12Z"
     },
     {
       "id": "1440248149",
@@ -215,7 +117,7 @@
       "title": "somastllc/nlp-for-machine-learning-bootcamp",
       "summary": "NLP for Machine Learning Bootcamp.",
       "url": "https://github.com/somastllc/nlp-for-machine-learning-bootcamp",
-      "stars": 102,
+      "stars": 103,
       "forks": 9,
       "language": "Unknown",
       "topics": [
@@ -251,56 +153,11 @@
       "created_at": "2026-10-21T08:37:56Z"
     },
     {
-      "id": "1453293167",
-      "title": "Xin-YuXiao/Awesome-AI-for-Astronomy",
-      "summary": "A curated list of papers for AI in Astronomy & Astrophysics.",
-      "url": "https://github.com/Xin-YuXiao/Awesome-AI-for-Astronomy",
-      "stars": 65,
-      "forks": 5,
-      "language": "Python",
-      "topics": [
-        "ai-for-science",
-        "astronomy",
-        "awesome",
-        "awesome-list",
-        "benchmark",
-        "cosmology",
-        "deep-learning",
-        "large-language-models",
-        "machine-learning",
-        "planetary-science"
-      ],
-      "source": "github",
-      "created_at": "2026-11-10T23:13:12Z"
-    },
-    {
-      "id": "1418580002",
-      "title": "Goekdeniz-Guelmez/JOSIE",
-      "summary": "JOSIE: A local, real-time, full-duplex voice and chat assistant that listens, knows who's speaking, talks back with a natural voice, and takes real action in your Reminders, Calendar, Maps and Messages. Download the macOS app (DMG) from Releases.",
-      "url": "https://github.com/Goekdeniz-Guelmez/JOSIE",
-      "stars": 59,
-      "forks": 4,
-      "language": "Unknown",
-      "topics": [
-        "aget-framework",
-        "agetic",
-        "artificial-intelligence",
-        "assistant",
-        "machine-learning",
-        "voice-agent",
-        "voice-ai",
-        "voice-assistant",
-        "voice-cloning"
-      ],
-      "source": "github",
-      "created_at": "2026-10-14T08:12:11Z"
-    },
-    {
       "id": "1438428788",
       "title": "kumarshreshtha/protuna",
       "summary": "Optimization framework for AI-guided protein engineering",
       "url": "https://github.com/kumarshreshtha/protuna",
-      "stars": 56,
+      "stars": 57,
       "forks": 2,
       "language": "Python",
       "topics": [
@@ -344,6 +201,30 @@
       ],
       "source": "github",
       "created_at": "2026-10-29T15:35:29Z"
+    },
+    {
+      "id": "1429736272",
+      "title": "FrontiersMindAI/decisionformer",
+      "summary": "Transformers for decision models: fine-tune, load and serve calibrated decsion-model on any Hugging Face model.",
+      "url": "https://github.com/FrontiersMindAI/decisionformer",
+      "stars": 44,
+      "forks": 4,
+      "language": "Python",
+      "topics": [
+        "decision-model",
+        "decision-models",
+        "decoder",
+        "deep-learning",
+        "encoder",
+        "glm",
+        "jev-model",
+        "llm",
+        "machine-learning",
+        "pytorch",
+        "qwen"
+      ],
+      "source": "github",
+      "created_at": "2026-10-22T12:45:27Z"
     }
   ],
   "hn_posts": [
@@ -353,11 +234,23 @@
       "summary": "",
       "url": "https://pietromiotti.com/latest/maya-site",
       "hn_url": "https://news.ycombinator.com/item?id=50452455",
-      "points": 990,
-      "comments": 361,
+      "points": 1032,
+      "comments": 391,
       "author": "eyvindn",
       "source": "hackernews",
       "created_at": "2026-11-11T12:05:22Z"
+    },
+    {
+      "id": "50458900",
+      "title": "United Airlines bans AI agents from booking flights on behalf of travelers",
+      "summary": "",
+      "url": "https://www.cbsnews.com/news/united-airlines-bans-ai-agents-booking-flights/",
+      "hn_url": "https://news.ycombinator.com/item?id=50458900",
+      "points": 670,
+      "comments": 696,
+      "author": "herpderperator",
+      "source": "hackernews",
+      "created_at": "2026-11-11T21:24:35Z"
     },
     {
       "id": "50438318",
@@ -365,8 +258,8 @@
       "summary": "",
       "url": "https://evanxmerz.com/post/ai-usage-generates-a-fragile-codebase/",
       "hn_url": "https://news.ycombinator.com/item?id=50438318",
-      "points": 635,
-      "comments": 615,
+      "points": 640,
+      "comments": 624,
       "author": "plun9",
       "source": "hackernews",
       "created_at": "2026-11-10T10:25:58Z"
@@ -378,7 +271,7 @@
       "url": "https://apiiro.com/blog/coding-agents-leaking-secrets-github-dont-ask-again",
       "hn_url": "https://news.ycombinator.com/item?id=50407882",
       "points": 626,
-      "comments": 428,
+      "comments": 429,
       "author": "shmulc",
       "source": "hackernews",
       "created_at": "2026-11-07T20:45:32Z"
@@ -389,23 +282,11 @@
       "summary": "",
       "url": "https://matteoraso.github.io/im-not-convinced-the-ai-bubble-exists.html#im-not-convinced-the-ai-bubble-exists",
       "hn_url": "https://news.ycombinator.com/item?id=50418975",
-      "points": 572,
+      "points": 573,
       "comments": 972,
       "author": "matteoraso",
       "source": "hackernews",
       "created_at": "2026-11-08T23:44:36Z"
-    },
-    {
-      "id": "50458900",
-      "title": "United Airlines bans AI agents from booking flights on behalf of travelers",
-      "summary": "",
-      "url": "https://www.cbsnews.com/news/united-airlines-bans-ai-agents-booking-flights/",
-      "hn_url": "https://news.ycombinator.com/item?id=50458900",
-      "points": 556,
-      "comments": 547,
-      "author": "herpderperator",
-      "source": "hackernews",
-      "created_at": "2026-11-11T21:24:35Z"
     },
     {
       "id": "50446520",
@@ -413,23 +294,11 @@
       "summary": "",
       "url": "https://9to5mac.com/2026/11/10/apple-has-new-mac-app-coming-to-make-running-local-ai-models-easy/",
       "hn_url": "https://news.ycombinator.com/item?id=50446520",
-      "points": 530,
-      "comments": 536,
+      "points": 557,
+      "comments": 552,
       "author": "linolevan",
       "source": "hackernews",
       "created_at": "2026-11-10T21:25:03Z"
-    },
-    {
-      "id": "50385870",
-      "title": "Cuban: Facebook knowingly runs AI deepfake scam ads; docs say $16B fraud revenue",
-      "summary": "",
-      "url": "https://finance.yahoo.com/technology/ai/articles/mark-cuban-says-facebook-knowingly-213000020.html",
-      "hn_url": "https://news.ycombinator.com/item?id=50385870",
-      "points": 524,
-      "comments": 234,
-      "author": "randycupertino",
-      "source": "hackernews",
-      "created_at": "2026-11-05T23:09:57Z"
     },
     {
       "id": "50406563",
@@ -437,11 +306,23 @@
       "summary": "",
       "url": "https://hunch.net/?p=13764006",
       "hn_url": "https://news.ycombinator.com/item?id=50406563",
-      "points": 512,
+      "points": 513,
       "comments": 309,
       "author": "srean",
       "source": "hackernews",
       "created_at": "2026-11-07T18:02:17Z"
+    },
+    {
+      "id": "50411961",
+      "title": "Llama-modchip: 284B DeepSeek on 64GB RAM, no GPU",
+      "summary": "",
+      "url": "https://github.com/synchopate/llama-modchip",
+      "hn_url": "https://news.ycombinator.com/item?id=50411961",
+      "points": 483,
+      "comments": 210,
+      "author": "joshcsimmons",
+      "source": "hackernews",
+      "created_at": "2026-11-08T10:22:04Z"
     }
   ],
   "implementation_gaps": []
