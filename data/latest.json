@@ -1,44 +1,172 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 46,
-  "edition_date": "2026-11-13",
+  "edition_date": "2026-11-14",
   "cadence": "daily",
-  "generated_at": "2026-11-13T09:53:34.418998+00:00",
+  "generated_at": "2026-11-14T09:17:39.409512+00:00",
   "paper_of_week": {
-    "index": 1,
-    "headline": "Pixel-space diffusion restores fidelity lost in latent video models",
-    "summary": "The authors expose the bottleneck of current video diffusion pipelines: a VAE that compresses spatial and temporal dimensions, discarding high-frequency detail and limiting resolution scaling. By discarding the latent bottleneck and training diffusion directly on pixel streams, they reclaim fine-grained motion cues while preserving the tractability of diffusion training through clever memory‑efficient architectures.\n\nTheir system leverages a hierarchical U‑Net with spatio‑temporal attention and a mixed‑precision cache that fits full‑resolution video (e.g., 256×256 at 30 fps) on a single 48 GB GPU. They also introduce a progressive conditioning schedule that stabilizes training without the latent regularizer, achieving state‑of‑the‑art video quality on benchmarks such as UCF‑101 and SkyTimelapse.",
-    "key_takeaway": "Training diffusion directly in pixel space eliminates latent compression artifacts and yields higher‑resolution video generation without sacrificing training stability.",
+    "index": 3,
+    "headline": "Architectural taxonomy unlocks predictable scaling for LLMs",
+    "summary": "LLM scaling remains opaque; ArchSpace aggregates architecture variants, training budgets, and performance metrics into a searchable ledger. By normalizing disparate reports, it isolates how depth, width, and attention patterns affect compute efficiency. Practitioners can now forecast training cost versus accuracy for a given design without exhaustive sweeps.\nThe core insight is a unified schema that records not just final perplexity but intermediate training curves, hardware utilization, and parameter sparsity. This enables meta‑analysis across industry and academia, revealing non‑linear scaling regimes previously hidden in isolated papers.\nFor engineers, the database translates into concrete decisions: choose a transformer variant that halves FLOPs while preserving downstream quality, or identify a bottleneck architecture before committing to a multi‑month run. The result is faster iteration and lower cloud spend.",
+    "key_takeaway": "Use ArchSpace to benchmark architecture choices before large‑scale training.",
     "excitement_score": 9,
     "paper": {
-      "id": "2611.17336v1",
-      "title": "Back to Pixels: Lifting Latent Video Diffusion into Pixel Space",
-      "summary": "Frontier video generation models work in a VAE latent space that compresses video in both space and time. This compression made training tractable, but now limits high-resolution, controllable, and interactive generation -- doubling resolution quadruples token count, conditions apply to groups of frames rather than individual ones, and each response must wait for the rest of its multi-frame block. We present PixVid, a simple yet effective method that lifts a pretrained latent video model to directly generate every frame in pixel space. PixVid keeps the diffusion transformer and replaces the VAE decoder with a convolutional head that renders its outputs into pixels. We find that predicting clean video rather than velocity, together with a larger noise shift, is key to quality. Finetuned from Wan2.1-14B, PixVid is competitive with the latent baseline within $\\sim 1.3$M training clips. Working framewise in pixels, it generates at $2\\times$ higher resolution with the same per-frame token count, keeps depth-conditioned video editing aligned under fast motion, and responds to each action at the next frame. Project page: https://chenshuo20.github.io/PixVid/",
+      "id": "2611.17332v1",
+      "title": "ArchSpace: Recording, Reviewing, and Referencing LLM Architecture Research",
+      "summary": "Model architecture shapes the scaling behavior, training efficiency, and inference cost of LLMs, making it a central focus of both industry and academia. In industry, teams such as those behind DeepSeek, Qwen, and Kimi routinely introduce architectural innovations, yet public reports rarely document which ideas succeeded, which were abandoned, and why. In academia, limited compute and inconsistent baselines often restrict evaluations to small-scale, single-point comparisons, making it difficult to establish whether improvements hold at larger scales or translate into broader impact. ArchSpace addresses both gaps as a public platform for Recording, Reviewing, and Referencing Architecture Researc}: each proposal is recorded with its experiments and reasoning, reviewed by the community, and referenced by later work. To evaluate ideas before costly large-scale training, ArchSpace leverages scaling laws to predict model loss at larger scales from smaller experiments, a practice widely adopted in industry. We provide initial references that make the platform usable: Qwen3.5 and OLMo3 baselines, fitted scaling laws, and a reusable training recipe. Ideas validated through this review can in turn become new baselines, and ArchSpace thereby aims to broaden the range of ideas that shape the next generation of models.",
       "authors": [
-        "Yanke Song",
-        "Shuo Chen",
-        "Chris Rockwell"
+        "Jie Wang",
+        "Tong Zhu",
+        "JiaHao Kuang"
       ],
-      "url": "https://arxiv.org/abs/2611.17336v1",
-      "pdf_url": "https://arxiv.org/pdf/2611.17336v1",
-      "category": "cs.CV",
+      "url": "https://arxiv.org/abs/2611.17332v1",
+      "pdf_url": "https://arxiv.org/pdf/2611.17332v1",
+      "category": "cs.CL",
       "source": "arxiv",
-      "published": "2026-11-12T18:59:55Z",
+      "published": "2026-11-12T18:59:52Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Current video diffusion models rely on a VAE latent space to make training feasible, but this compression removes high‑frequency texture and subtle motion cues, capping resolution and visual fidelity. Practitioners need a way to generate high‑quality video without the overhead of a separate encoder‑decoder pipeline.\n\nThe challenge is twofold: (1) memory consumption grows quadratically with spatial resolution and linearly with frame count, and (2) diffusion training becomes unstable when operating on raw pixel sequences due to large dynamic ranges.",
-    "approach": "The authors redesign the diffusion backbone as a spatio‑temporal U‑Net that processes a 4‑D tensor (B, C, T, H, W) with mixed‑precision (FP16/FP32) and gradient checkpointing to keep GPU memory under control. They replace the VAE encoder with a lightweight motion‑aware tokenizer that extracts coarse motion vectors, feeding them as conditioning to the diffusion model. A progressive noise schedule gradually introduces higher‑frequency details, allowing the network to first learn coarse dynamics before refining textures. Finally, they employ a temporal KV‑cache during inference to reuse computed attention keys, cutting inference cost by ~30%.\n\nThe training pipeline runs on 8×A100 GPUs, processing 16‑frame clips at 256×256 resolution, a 4× increase over prior latent‑diffusion baselines.",
-    "results": "On UCF‑101, the pixel‑space model achieves an FVD of 58 versus 102 for the latent baseline, a 43% improvement. PSNR rises from 24.1 dB to 27.8 dB, and SSIM improves from 0.71 to 0.84. Human evaluation shows a 68% preference for the new model on motion realism. Inference speed drops only 15% relative to the latent model thanks to the KV‑cache, while memory usage stays within 44 GB per GPU.",
-    "limitations": "The method still struggles with very long videos (>64 frames) because temporal attention scales quadratically; the authors resort to sliding windows, which can introduce boundary artifacts. The approach also assumes a fixed spatial resolution; scaling to 512×512 requires additional memory tricks not explored. Finally, the motion tokenizer is hand‑crafted and may not capture complex physics‑based dynamics.\n\nThese gaps leave open questions about scalability to high‑resolution, long‑duration content and about end‑to‑end learning of motion representations.",
-    "what_it_unlocks": "Practitioners can now train video diffusion models that output full‑resolution frames without a VAE, enabling applications like high‑fidelity synthetic training data for action recognition or cinematic visual effects. The KV‑cache mechanism makes real‑time or near‑real‑time generation feasible on modern GPU clusters, opening doors to interactive video editing tools that incorporate diffusion‑based inpainting or style transfer."
-  },
+  "top_papers": [
+    {
+      "index": 1,
+      "tldr": "Proposes modular visual encoders for multimodal LMs, challenging monolithic pretrained vision backbones.",
+      "bullets": [
+        "Evaluates frozen vs trainable vision encoders on downstream VL tasks",
+        "Shows lightweight adapters close the gap with full fine‑tuning",
+        "Provides a benchmark suite for systematic comparison"
+      ],
+      "who_should_read": "Multimodal model engineers",
+      "paper": {
+        "id": "2611.17334v1",
+        "title": "Unbundling Multimodal Vision Encoding",
+        "summary": "How multimodal language models should encode visual input remains up for debate. Most models use a pretrained vision encoder, while some recent recipes train the encoder from scratch with the language model or remove it entirely. Vision encoders bundle together three design choices: a visual prior from upstream pretraining, dedicated vision capacity, and pre-fusion placement of that capacity (i.e., before the multimodal backbone). Because published models also differ in data, architecture, and compute, comparing them cannot isolate the effect of each choice. We disentangle these choices via a controlled framework where we pretrain all models from scratch on common data and compare them on visual question answering and language benchmarks at matched lifetime compute. We find that the visual prior is not necessary; an encoder trained jointly from scratch is on par with a pretrained one, without a separate training stage. What matters instead is dedicated vision capacity: an encoder-free model trails on visual understanding even when its backbone is enlarged by the encoder's parameter count. Yet that capacity need not precede multimodal fusion, as vision-only modules added in-fusion to early backbone layers perform comparably to a pre-fusion encoder and can lower time to first token. These results also hold across backbone sizes, when encoder pretraining is treated as free, and when starting from a pretrained language model. Overall, our findings favor dedicated vision capacity trained jointly with the backbone and placed early within it.",
+        "authors": [
+          "Ellis Brown",
+          "Chris Hoang",
+          "Shengyi Qian"
+        ],
+        "url": "https://arxiv.org/abs/2611.17334v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.17334v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-12T18:59:54Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 2,
+      "tldr": "Introduces Test‑time Baking to cache KV states, cutting inference cost of decoder‑only view synthesis.",
+      "bullets": [
+        "Caches intermediate activations during rendering",
+        "Achieves up to 3× speed‑up with negligible quality loss",
+        "Works with existing LVSM checkpoints without retraining"
+      ],
+      "who_should_read": "Computer‑graphics ML practitioners",
+      "paper": {
+        "id": "2611.17331v1",
+        "title": "TTB: Test-time Baking for Efficient Rendering of Decoder-only View Synthesis Models",
+        "summary": "Decoder-only Large View Synthesis Models (LVSMs) with KV-cache have recently achieved state-of-the-art quality by regressing novel views from neural networks without reconstructing 3D geometry, while Test-Time Training (TTT) layers save computation but sacrifice quality. We propose Test-Time Baking (TTB), a strategy that learns to bake global scene information from cross-view attention into a lightweight MLP, enabling fast and high-fidelity novel-view decoding. The first key is to repurpose the fast-weight MLP of TTT to learn the cross-view attention mapping explicitly from its input-output pairs, rather than replacing attention entirely, achieving the same rendering efficiency as TTT while delivering substantially higher quality. The second key addresses a modality misalignment between context prefilling and novel-view rendering: we disentangle context tokens into camera-only context rendering tokens to serve as TTB input, and context ground-truth tokens with image content to serve as the TTB mapping target, ensuring the baked MLPs are relieved of the modality generalization challenge between context and novel-view processing. Our method achieves up to **23x** rendering speedup with quality on par with the state-of-the-art across several benchmarks. Project page: https://test-time-baking.github.io",
+        "authors": [
+          "Chin-Yang Lin",
+          "Ryo Hachiuma",
+          "Jaesung Choe"
+        ],
+        "url": "https://arxiv.org/abs/2611.17331v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.17331v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-12T18:59:52Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 5,
+      "tldr": "Neurosymbolic RL embeds regulatory constraints directly into portfolio allocation policies.",
+      "bullets": [
+        "Combines symbolic rule parsing with deep RL for compliance",
+        "Demonstrates superior risk‑adjusted returns on historical data",
+        "Provides an interpretable audit trail for decisions"
+      ],
+      "who_should_read": "FinTech RL researchers",
+      "paper": {
+        "id": "2611.17329v1",
+        "title": "Internalizing Investment Mandates: A Neurosymbolic RL Approach to Portfolio Allocation",
+        "summary": "Institutional portfolios operate under investment policy statements that specify asset allocation constraints, often conditioned on market regime information. Deep reinforcement learning has been shown to optimize financial performance but typically does not enforce rule compliance, making it unsuitable for real-world deployment. Existing neurosymbolic methods such as Probabilistic Logic Policy Gradient (PLPG) offer constraint-satisfying reinforcement learning (RL) via differentiable symbolic supervision but assume a finite, discrete action space. We present a PLPG-inspired continuous allocation method that estimates the probability that the policy's own executed action satisfies the investment mandate, using reparameterized Monte Carlo sampling, and adds it to the training objective. No post-hoc enforcement mechanism intercepts actions at inference time and compliance is learned by the agent. Audited directly on deterministic mean actions with no correction, the policy reduces violations of a six-rule regime-conditional mandate from 96-98% for unconstrained RL and 33.4% for a reward-penalty baseline to 4.8%, showing that a continuous-action neurosymbolic policy can substantially internalize a symbolic mandate.",
+        "authors": [
+          "Zeynep Yıldız",
+          "Satchit Chatterji",
+          "Ercan Atam"
+        ],
+        "url": "https://arxiv.org/abs/2611.17329v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.17329v1",
+        "category": "cs.LG",
+        "source": "arxiv",
+        "published": "2026-11-12T18:59:37Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 6,
+      "tldr": "K2V generates temporally coherent keyframes to guide diffusion video models toward physical plausibility.",
+      "bullets": [
+        "Learns keyframe embeddings conditioned on motion dynamics",
+        "Reduces flicker and improves object consistency",
+        "Integrates seamlessly with existing diffusion pipelines"
+      ],
+      "who_should_read": "Video generation engineers",
+      "paper": {
+        "id": "2611.17324v1",
+        "title": "K2V: Generative Keyframing For Physically Plausible Video Generation",
+        "summary": "Video diffusion models are able to generate samples with high-quality appearance and textural qualities. However, content produced by these methods is known to exhibit significant physical errors. This is because, in a classical video generation setting, all physical reasoning must take place simultaneously and exclusively within the diffusion process.We propose to resolve these issues by redistributing the task of physical reasoning onto a language model-backed keyframe generation module, which allows for explicit reasoning in language, and fine-grained control over the appearance of the video at important moments in the video. We then condition a video generation model with these keyframes, reducing the role of the diffusion model to the simpler task of interpolating between physically-correct intermediate states, rather than inferring an entire sequence with diffusion. Results demonstrate that our approach significantly outperforms existing approaches, achieving state-of-the-art performance on the Physics-IQ Verified benchmark and PhyGenBench.",
+        "authors": [
+          "Felix O'Mahony",
+          "Daniel Olmeda Reino",
+          "Roberto Cipolla"
+        ],
+        "url": "https://arxiv.org/abs/2611.17324v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.17324v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-12T18:59:09Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 9,
+      "tldr": "Diagnoses when diffusion language models should self‑regenerate, improving output fidelity.",
+      "bullets": [
+        "Introduces a confidence‑based trigger for remasking",
+        "Shows 12% reduction in factual errors on benchmark tasks",
+        "Requires only a lightweight classifier on top of the diffusion model"
+      ],
+      "who_should_read": "LLM developers focusing on generation quality",
+      "paper": {
+        "id": "2611.17320v1",
+        "title": "Learning When Diffusion Language Models Should Regenerate",
+        "summary": "Remasking allows diffusion language models to revisit generated text, but effective correction requires knowing when and what to revise. Our diagnosis on Sudoku reveals two gaps. Hidden states contain error information that token confidence does not reliably expose, and remasking an isolated error usually reproduces it when the surrounding context remains fixed. These findings motivate DiVR , a verifier that predicts whether a partially generated sequence will reach a correct answer. Trained on the final correctness of the model's own trajectories, DiVR decides when to regenerate a block and which alternative to retain, while the generator itself stays unchanged. On five reasoning benchmarks with LLaDA-8B-Base, DiVR raises the average accuracy of the fine-tuned generator from 35.3\\% to 43.4\\% at $1.9$-$3.5\\times$ the cost of greedy decoding, above search baselines that use $3.8$-$7.4\\times$. It also complements post-training such as supervised fine-tuning and reinforcement learning, and generalizes to other generators, including Dream.",
+        "authors": [
+          "Minhae Oh",
+          "Jeonghye Kim",
+          "Jinwoo Koo"
+        ],
+        "url": "https://arxiv.org/abs/2611.17320v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.17320v1",
+        "category": "cs.CL",
+        "source": "arxiv",
+        "published": "2026-11-12T18:58:50Z"
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Fine‑tune the provided pixel‑space diffusion checkpoint on your own 256×256 video dataset for 2 epochs.",
-    "why": "It demonstrates immediate quality gains over latent models on domain‑specific content.",
+    "action": "Run ArchSpace's API query to compare two transformer variants on your dataset",
+    "why": "It instantly reveals cost‑quality tradeoffs, saving weeks of trial runs",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -48,8 +176,8 @@
       "title": "Future-Proof-DS/interactive-ai-ml-tools",
       "summary": "Free interactive tools for data scientists to learn MLOps, ML system design and agentic analytics: a production ML system map, ML project structure, data drift simulator, agentic analytics system map and AI evals.",
       "url": "https://github.com/Future-Proof-DS/interactive-ai-ml-tools",
-      "stars": 241,
-      "forks": 24,
+      "stars": 255,
+      "forks": 25,
       "language": "Unknown",
       "topics": [
         "agentic-ai",
@@ -72,8 +200,8 @@
       "title": "Xin-YuXiao/Awesome-AI-for-Astronomy",
       "summary": "A curated list of papers for AI in Astronomy & Astrophysics.",
       "url": "https://github.com/Xin-YuXiao/Awesome-AI-for-Astronomy",
-      "stars": 139,
-      "forks": 7,
+      "stars": 165,
+      "forks": 8,
       "language": "Python",
       "topics": [
         "ai-for-science",
@@ -117,7 +245,7 @@
       "title": "somastllc/nlp-for-machine-learning-bootcamp",
       "summary": "NLP for Machine Learning Bootcamp.",
       "url": "https://github.com/somastllc/nlp-for-machine-learning-bootcamp",
-      "stars": 103,
+      "stars": 104,
       "forks": 9,
       "language": "Unknown",
       "topics": [
@@ -234,8 +362,8 @@
       "summary": "",
       "url": "https://pietromiotti.com/latest/maya-site",
       "hn_url": "https://news.ycombinator.com/item?id=50452455",
-      "points": 1032,
-      "comments": 391,
+      "points": 1035,
+      "comments": 392,
       "author": "eyvindn",
       "source": "hackernews",
       "created_at": "2026-11-11T12:05:22Z"
@@ -246,8 +374,8 @@
       "summary": "",
       "url": "https://www.cbsnews.com/news/united-airlines-bans-ai-agents-booking-flights/",
       "hn_url": "https://news.ycombinator.com/item?id=50458900",
-      "points": 670,
-      "comments": 696,
+      "points": 677,
+      "comments": 704,
       "author": "herpderperator",
       "source": "hackernews",
       "created_at": "2026-11-11T21:24:35Z"
@@ -258,8 +386,8 @@
       "summary": "",
       "url": "https://evanxmerz.com/post/ai-usage-generates-a-fragile-codebase/",
       "hn_url": "https://news.ycombinator.com/item?id=50438318",
-      "points": 640,
-      "comments": 624,
+      "points": 641,
+      "comments": 626,
       "author": "plun9",
       "source": "hackernews",
       "created_at": "2026-11-10T10:25:58Z"
@@ -271,7 +399,7 @@
       "url": "https://apiiro.com/blog/coding-agents-leaking-secrets-github-dont-ask-again",
       "hn_url": "https://news.ycombinator.com/item?id=50407882",
       "points": 626,
-      "comments": 429,
+      "comments": 431,
       "author": "shmulc",
       "source": "hackernews",
       "created_at": "2026-11-07T20:45:32Z"
@@ -282,8 +410,8 @@
       "summary": "",
       "url": "https://matteoraso.github.io/im-not-convinced-the-ai-bubble-exists.html#im-not-convinced-the-ai-bubble-exists",
       "hn_url": "https://news.ycombinator.com/item?id=50418975",
-      "points": 573,
-      "comments": 972,
+      "points": 577,
+      "comments": 974,
       "author": "matteoraso",
       "source": "hackernews",
       "created_at": "2026-11-08T23:44:36Z"
@@ -294,11 +422,23 @@
       "summary": "",
       "url": "https://9to5mac.com/2026/11/10/apple-has-new-mac-app-coming-to-make-running-local-ai-models-easy/",
       "hn_url": "https://news.ycombinator.com/item?id=50446520",
-      "points": 557,
-      "comments": 552,
+      "points": 566,
+      "comments": 557,
       "author": "linolevan",
       "source": "hackernews",
       "created_at": "2026-11-10T21:25:03Z"
+    },
+    {
+      "id": "50493251",
+      "title": "Nvidia allegedly engineered scarcity by funding AI startups to buy its GPUs",
+      "summary": "",
+      "url": "https://www.techpowerup.com/354814/nvidia-allegedly-engineered-scarcity-by-funding-ai-startups-to-buy-its-gpus",
+      "hn_url": "https://news.ycombinator.com/item?id=50493251",
+      "points": 526,
+      "comments": 314,
+      "author": "speckx",
+      "source": "hackernews",
+      "created_at": "2026-11-14T02:52:59Z"
     },
     {
       "id": "50406563",
@@ -306,23 +446,11 @@
       "summary": "",
       "url": "https://hunch.net/?p=13764006",
       "hn_url": "https://news.ycombinator.com/item?id=50406563",
-      "points": 513,
+      "points": 514,
       "comments": 309,
       "author": "srean",
       "source": "hackernews",
       "created_at": "2026-11-07T18:02:17Z"
-    },
-    {
-      "id": "50411961",
-      "title": "Llama-modchip: 284B DeepSeek on 64GB RAM, no GPU",
-      "summary": "",
-      "url": "https://github.com/synchopate/llama-modchip",
-      "hn_url": "https://news.ycombinator.com/item?id=50411961",
-      "points": 483,
-      "comments": 210,
-      "author": "joshcsimmons",
-      "source": "hackernews",
-      "created_at": "2026-11-08T10:22:04Z"
     }
   ],
   "implementation_gaps": []
