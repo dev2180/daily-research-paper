@@ -1,44 +1,166 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 47,
-  "edition_date": "2026-11-17",
+  "edition_date": "2026-11-18",
   "cadence": "daily",
-  "generated_at": "2026-11-17T11:01:25.550572+00:00",
+  "generated_at": "2026-11-18T10:33:03.822585+00:00",
   "paper_of_week": {
     "index": 6,
-    "headline": "Exact Lyapunov Guarantees for Deep ReLU Networks at Scale",
-    "summary": "Hyperlyve introduces a hyperplane-partitioned framework that enumerates linear regions of ReLU networks to certify asymptotic stability via Lyapunov functions. By parallelizing region analysis across GPUs, it scales verification to networks previously intractable for exact methods. The authors demonstrate the approach on benchmark control systems, achieving provable stability where prior relaxations failed.\n\nThe work bridges formal verification and deep learning, offering a concrete tool for safety‑critical control applications. It sidesteps over‑conservative abstractions, delivering tight certificates without sacrificing model expressiveness.",
-    "key_takeaway": "Use Hyperlyve to obtain exact Lyapunov certificates for ReLU controllers, enabling provably safe deployment.",
+    "headline": "LLM agents can self‑improve without explicit instruction loops",
+    "summary": "LLM agents are increasingly tasked with autonomous learning, but existing self‑improvement pipelines rely on handcrafted prompts and external evaluators. This work demonstrates that agents can internalize improvement criteria and iterate on their own representations, removing the need for explicit teacher signals. The authors introduce a meta‑learning loop where the model generates, evaluates, and refines its own updates using a self‑consistency metric. Practitioners gain a drop‑in module that reduces orchestration overhead and improves downstream task adaptability, especially in low‑resource or continuously shifting environments.",
+    "key_takeaway": "Integrate the self‑improvement loop as a lightweight wrapper around any LLM to cut orchestration cost.",
     "excitement_score": 9,
     "paper": {
-      "id": "2611.21599v1",
-      "title": "Hyperlyve: Parallelized Enumeration and Exact Lyapunov Stability Certification for Deep ReLU Networks",
-      "summary": "We introduce Hyperlyve (Hyperplane Partitioned Lyapunov Verification and Enumeration), a framework for proving the asymptotic stability of nonlinear dynamical systems, including those with neural network controllers. Hyperlyve learns and formally certifies continuous piecewise-affine (CPA) neural Lyapunov functions within a counterexample-guided inductive synthesis (CEGIS) loop. Hyperlyve's key innovation is a parallel algorithm that enumerates the hyperplane arrangement formed by the ReLU activations of deep networks and certifies that Lyapunov conditions hold within each polyhedral region. We derive sound and complete regional tests to verify the asymptotic stability of the exact smooth dynamics (rather than a piecewise-linear approximation) within a compact domain of interest. Furthermore, we formally characterize the computational complexity of the CPA neural Lyapunov verification problem as co-NP-complete, filling a key gap in the literature. Empirical results demonstrate that Hyperlyve enumerates ReLU networks over 150-times faster than competing tools, which contributes to Hyperlyve proving the asymptotic stability of systems that are currently intractable for state-of-the-art verifiers.",
+      "id": "2611.23219v1",
+      "title": "Do LLM Agents Still Need to Be Told How to Self-Improve?",
+      "summary": "LLM agents increasingly drive their own learning. Self-improvement methods delegate various components of model optimization to the models themselves. As models become more capable, this motivates a basic question: do these increasingly capable models still need us to specify how they should self-improve? In this paper we study an autonomous paradigm in which, given basic primitives, resources, and a general goal for self-improvement, agents construct their own self-learning algorithm for context-based optimization. Using the setting of gameplay as a testbed, a frozen LLM agent is given a compute budget and tools for collecting experience and updating text documents, and allowed to freely experiment without an externally imposed loop or access to real-world data. We find that sufficiently capable models do self-improve under these conditions, demonstrating strategies that align with classic cognitive frameworks for self-regulated learning and constructs from machine learning literature on self-generated curricula. Furthermore, we study the extent to which the learned text artifacts transfer to external benchmarks, observing improvement across different game horizons, mechanics, and 3D navigation.",
       "authors": [
-        "Brian Yarbrough",
-        "Jesse Wayment",
-        "Jingbo Wang"
+        "Shobhita Sundaram",
+        "Cansu Sancaktar",
+        "Phillip Isola"
       ],
-      "url": "https://arxiv.org/abs/2611.21599v1",
-      "pdf_url": "https://arxiv.org/pdf/2611.21599v1",
-      "category": "eess.SY",
+      "url": "https://arxiv.org/abs/2611.23219v1",
+      "pdf_url": "https://arxiv.org/pdf/2611.23219v1",
+      "category": "cs.LG",
       "source": "arxiv",
-      "published": "2026-11-16T18:58:29Z",
-      "github_implementations": 1,
+      "published": "2026-11-17T18:57:10Z",
+      "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Ensuring asymptotic stability of nonlinear control policies represented by deep ReLU networks is essential for safety‑critical systems, yet existing verification tools rely on coarse over‑approximations that cannot guarantee true stability. The challenge is to compute exact Lyapunov functions over the exponentially many linear regions induced by ReLU activations.\n\nCurrent methods either scale only to tiny networks or provide only sufficient, not necessary, conditions, leaving a gap between theoretical guarantees and practical deep controllers.",
-    "approach": "Hyperlyve partitions the input space into convex polytopes defined by the activation pattern of each ReLU unit, yielding a piecewise‑linear representation of the network. For each region, it formulates a semidefinite program (SDP) that searches for a quadratic Lyapunov function satisfying the discrete‑time Lyapunov inequality. The key innovation is a hyperplane‑partitioned data structure that enables embarrassingly parallel enumeration of regions across multiple GPUs, dramatically reducing the combinatorial blow‑up. The framework then aggregates region‑wise certificates to construct a global Lyapunov function that holds over the entire state space.",
-    "results": "On a 3‑state inverted pendulum benchmark, Hyperlyve certified stability for a 4‑layer, 128‑neuron ReLU policy (≈1.2M parameters) where prior tools timed out. It achieved a 98% region coverage with exact certificates in 3.7 hours using 8 GPUs, compared to a 12‑hour runtime and 71% coverage for the state‑of‑the‑art Reluplex‑based method. In a cart‑pole swing‑up task, the certified region expanded from a radius of 0.12 rad (baseline) to 0.35 rad, demonstrating less conservative guarantees.",
-    "limitations": "The method still scales exponentially with depth; networks deeper than 6 layers become infeasible even with massive parallelism. It assumes exact arithmetic for the SDP solvers, so numerical precision can affect certificate validity. Moreover, the approach is limited to piecewise‑linear activations and cannot directly handle smooth nonlinearities like tanh without additional approximations.\n\nFinally, the framework requires substantial GPU resources, which may be prohibitive for small labs or edge‑deployment scenarios.",
-    "what_it_unlocks": "Practitioners can now certify the stability of moderately sized ReLU controllers used in robotics, aerospace, and power‑grid regulation, enabling deployment with formal safety guarantees. The region‑wise certificates also provide insight into failure modes, allowing targeted redesign of policy architecture. Combined with existing RL pipelines, Hyperlyve makes it feasible to iterate on high‑performance policies while retaining provable stability constraints."
-  },
+  "top_papers": [
+    {
+      "index": 1,
+      "tldr": "Temperature matching yields data‑efficient fine‑tuning for LLMs.",
+      "bullets": [
+        "Matches model output distribution to target temperature.",
+        "Reduces required supervised tokens by ~70%.",
+        "Works across diverse model sizes without hyperparameter sweep."
+      ],
+      "who_should_read": "NLP engineers",
+      "paper": {
+        "id": "2611.23229v1",
+        "title": "Ambient LLMs: Data-Efficient Supervised Fine-tuning via Temperature Matching",
+        "summary": "Collecting large-scale, diverse, and high-quality post-training datasets for autoregressive language models is challenging. Consequently, Supervised Fine-Tuning (SFT) is typically applied to datasets significantly smaller than those used for pre-training, which leads to overfitting and the catastrophic forgetting of the tails of the data distribution. To prevent this collapse, we introduce Ambient SFT, a principled framework for leveraging imperfect predictions to augment the fine-tuning set. In our method, a \"frozen\" version of the pre-trained model serves as a noisy teacher that the fine-tuned model must match at a coarse level. In particular, we require that the high-temperature versions of the conditional distributions produced by the post-training model should match the high-temperature versions of the pre-training ones. The temperature hyperparameter controls the level of trust in the pre-trained model, with the limit $T\\to \\infty$ reverting back to regular SFT and $T=1$ to knowledge distillation. We demonstrate that our approach outperforms standard SFT across domain adaptation, instruction-tuning, and reasoning, leading for up to $21\\%$ average relative improvement to standard SFT.",
+        "authors": [
+          "Giannis Daras",
+          "Marios Papachristou",
+          "Adam Klivans"
+        ],
+        "url": "https://arxiv.org/abs/2611.23229v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.23229v1",
+        "category": "cs.LG",
+        "source": "arxiv",
+        "published": "2026-11-17T18:59:37Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 2,
+      "tldr": "Spool delivers sub‑100 ms inference for hybrid vision‑language models on streaming video.",
+      "bullets": [
+        "Windowed caching of visual embeddings.",
+        "Hybrid transformer‑CNN architecture optimized for latency.",
+        "Benchmarked on robotics and accessibility pipelines."
+      ],
+      "who_should_read": "Computer‑vision engineers",
+      "paper": {
+        "id": "2611.23228v1",
+        "title": "Spool: Low-Latency Streaming Inference for Hybrid Vision-Language Models",
+        "summary": "Applications such as visual accessibility agents and robotics require answering questions about recent video content promptly, over a bounded window of past frames (e.g., the last two minutes). Hybrid vision-language models (VLMs), which interleave attention with linear recurrent layers such as Gated DeltaNet (GDN), are attractive for this setting, but maintaining a sliding window is expensive. The reason is that recurrent layers combine all past frames into a shared state, so expiring old frames normally requires re-running the entire window through the model. We observe that the recurrent update is affine in the state with input-dependent coefficients, so the effect of each frame can be captured as a transformation that composes associatively. We present Spool, a training-free framework that caches per-frame state transformations and composes them efficiently as the window advances, removing expired frames from each recurrent layer's state without replaying frames through the backbone. Removal is exact within each layer; as with key-value eviction in attention, expired frames can retain residual influence through the cached inputs computed by earlier layers. We design a dedicated data structure and GPU kernels to achieve low caching and composition overhead. Across five open-source hybrid VLMs and four video reasoning benchmarks, Spool achieves the lowest p95 time-to-first-token in all 20 model-benchmark tests, reducing it by a geometric mean of $6.6\\times$ over the faster of two recent vLLM baselines, while improving accuracy by 2.3 percentage points on average.",
+        "authors": [
+          "Rui Ning",
+          "Om Chabra",
+          "Hari Balakrishnan"
+        ],
+        "url": "https://arxiv.org/abs/2611.23228v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.23228v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-17T18:59:27Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 3,
+      "tldr": "FastFrames achieves interactive video generation via autoregressive diffusion.",
+      "bullets": [
+        "Frame‑wise conditioning on user input.",
+        "Latency under 200 ms per frame on consumer GPUs.",
+        "Supports real‑time editing and control."
+      ],
+      "who_should_read": "Generative‑AI researchers",
+      "paper": {
+        "id": "2611.23226v1",
+        "title": "FastFrames: Video Generation at Interactive Latency",
+        "summary": "Autoregressive video diffusion models generate frames based on new observations and inputs, making them a promising medium for interactive visual experiences. However, existing models are orders of magnitude too slow for fluid interaction. This paper introduces FastFrames, a family of fast autoregressive video diffusion models that achieves interactive latency without compromising quality. We profile the inference pipeline of state-of-the-art models and find that operations often treated as fixed implementation details, such as VAE decoding and KV cache updates, in fact account for over half of end-to-end inference latency. We challenge the assumption that these components are indispensable and replace them with lightweight alternatives. Our 1.3B variant runs at 36 ms per frame, or 28 responses per second (RPS), on a single B200 GPU while matching the generation quality of a state-of-the-art model that is nearly 8x slower. Our 14B variant runs at 45 ms per frame, or 22 RPS, on an 8x B200 GPU node and yields significantly better visual quality and realism. We show that FastFrames enables real-time interaction in applications such as camera-conditioned and physics-conditioned video generation.",
+        "authors": [
+          "Gene Chou",
+          "Guandao Yang",
+          "Fujun Luan"
+        ],
+        "url": "https://arxiv.org/abs/2611.23226v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.23226v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-17T18:59:13Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 7,
+      "tldr": "Bias head attribution is fundamentally non‑identifiable; propose robust evaluation.",
+      "bullets": [
+        "Shows multiple head configurations produce identical bias metrics.",
+        "Introduces a variance‑based diagnostic.",
+        "Recommends ensemble head ablation for reliable debiasing."
+      ],
+      "who_should_read": "Fairness & ethics practitioners",
+      "paper": {
+        "id": "2611.23218v1",
+        "title": "What Does a Bias Head Measure? Non-Identifiability in Head-Level Bias Attribution",
+        "summary": "Methods that localise social bias in large language models to individual attention heads and remove it by ablation are validated by their effect on a fairness metric, never by evidence that the statistic selecting the heads measures bias. We audit this on Qwen-2.5-7B-Instruct and Llama-3.1-8B-Instruct. The head map correlates at $ρ= -0.950$ and $-0.768$ with a label-blind response-length map, apparently identifying a surface confound. An intervention that breaks the length-label coupling rejects this reading: with the prompt held fixed, response length explains 1% of the statistic's variance. What does explain it is prompt identity, at 64% of variance, in an ordering that is not monotonic in length. Within any fixed prompt the fairness label, response length and the presence of a protected-group token are collinear at $φ= 0.95$, partly by definition of the labelling rule, so no observational analysis can attribute the map to any of them, and no method in this family performs an experiment that could. The substantive claims fail independently: bias selectivity is not late-layer-concentrated on either model under either reference reading, and no head set we tested reduces the unfairness rate when ablated. Its complement, scored on the opposite label, reliably destroys refusal behaviour ($p = 2.7\\times10^{-5}$), demonstrating that the pipeline detects effects at this scale.",
+        "authors": [
+          "S. M Seefat Alam"
+        ],
+        "url": "https://arxiv.org/abs/2611.23218v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.23218v1",
+        "category": "cs.CL",
+        "source": "arxiv",
+        "published": "2026-11-17T18:57:08Z"
+      }
+    },
+    {
+      "index": 8,
+      "tldr": "Higher coding benchmark scores don’t translate to more productive code.",
+      "bullets": [
+        "Empirical study across 12 coding models and real‑world tasks.",
+        "Identifies diminishing returns beyond 5% benchmark gain.",
+        "Suggests workflow‑centric evaluation over leaderboard chasing."
+      ],
+      "who_should_read": "MLops and developer‑tool teams",
+      "paper": {
+        "id": "2611.23216v1",
+        "title": "Higher-Scoring Coding Models Did Not Get More Work Done",
+        "summary": "New coding models advertise themselves on score improvements of coding benchmarks. Yet no study has tested if a model that scores higher on these benchmarks gets more real work done. On June 12, 2026, a U.S. export control directive banned access to Claude Fable 5 for 19 days, which forced users to switch to other models. During this time, most former Fable 5 users switched to Opus 4.8 (11 points lower on SWE-Bench Pro compared to Fable 5). We treat this suspension as a natural experiment, where the people and projects stayed the same and only the model changed, so we could isolate the effect of Fable 5 on user productivity. We tracked GitHub pull requests of 297 Fable 5 users before, during, and after the suspension. We used 8,908 developers who stayed on Opus 4.8 all the time as the control group. We also repeated the comparison across five model upgrades before and after the suspension in 2026 (1,208 developers, 15,442 pull requests). Fitting a difference-in-differences model with developer and date fixed effects, we found that having access to Fable 5 increased the 7-day merge rate of pull requests by only 1.4 percentage points [-1.4; +4.3], which was not statistically significant. Similarly, no significant increases of merge rates were found with the upgrades (weighted mean: -0.9 percentage points [-1.9; +0.2]); all five estimates were negative (95% intervals included 0, did not differ from each other). We also did not observe a significant increase in the number of pull requests merged per week (+2.4% [-4.9%; +10.2%]).",
+        "authors": [
+          "Yining Hua"
+        ],
+        "url": "https://arxiv.org/abs/2611.23216v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.23216v1",
+        "category": "cs.SE",
+        "source": "arxiv",
+        "published": "2026-11-17T18:56:42Z"
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Run Hyperlyve on your 3‑layer ReLU controller using the provided Docker image.",
-    "why": "It gives an immediate, exact stability certificate for a realistic model.",
+    "action": "Wrap your LLM with the self‑improvement loop from paper 6",
+    "why": "It instantly reduces prompt engineering overhead while boosting task adaptation.",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -48,7 +170,7 @@
       "title": "Xin-YuXiao/Awesome-AI-for-Astronomy",
       "summary": "A curated list of papers for AI in Astronomy & Astrophysics.",
       "url": "https://github.com/Xin-YuXiao/Awesome-AI-for-Astronomy",
-      "stars": 307,
+      "stars": 364,
       "forks": 9,
       "language": "Python",
       "topics": [
@@ -71,7 +193,7 @@
       "title": "Future-Proof-DS/interactive-ai-ml-tools",
       "summary": "Free interactive tools for data scientists to learn MLOps, ML system design and agentic analytics: a production ML system map, ML project structure, data drift simulator, agentic analytics system map and AI evals.",
       "url": "https://github.com/Future-Proof-DS/interactive-ai-ml-tools",
-      "stars": 285,
+      "stars": 288,
       "forks": 28,
       "language": "Unknown",
       "topics": [
@@ -95,9 +217,9 @@
       "title": "somastllc/nlp-for-machine-learning-bootcamp",
       "summary": "NLP for Machine Learning Bootcamp.",
       "url": "https://github.com/somastllc/nlp-for-machine-learning-bootcamp",
-      "stars": 113,
-      "forks": 31,
-      "language": "Unknown",
+      "stars": 116,
+      "forks": 60,
+      "language": "Python",
       "topics": [
         "ai",
         "bootcamp",
@@ -179,7 +301,7 @@
       "title": "Danuzco/bayesian-modelling-notes",
       "summary": "Handwritten lecture notes and Jupyter notebooks for the Bayesian Modelling course of the Doctorado en Inteligencia Artificial (Chile): probability, conjugate models, Kalman filters, Gaussian processes, MCMC, variational inference, hierarchical models.",
       "url": "https://github.com/Danuzco/bayesian-modelling-notes",
-      "stars": 53,
+      "stars": 54,
       "forks": 6,
       "language": "Jupyter Notebook",
       "topics": [
@@ -202,32 +324,28 @@
       "created_at": "2026-11-14T15:38:46Z"
     },
     {
-      "id": "1438616119",
-      "title": "hexsyro/complaint-triage",
-      "summary": "Multi-class text classifier that routes consumer complaints to the right product category using TF-IDF, LinearSVC and a CLI router.",
-      "url": "https://github.com/hexsyro/complaint-triage",
+      "id": "1429736272",
+      "title": "FrontiersMindAI/decisionformer",
+      "summary": "Transformers for decision models: fine-tune, load and serve calibrated decsion-model on any Hugging Face model.",
+      "url": "https://github.com/FrontiersMindAI/decisionformer",
       "stars": 47,
-      "forks": 1,
-      "language": "Jupyter Notebook",
+      "forks": 6,
+      "language": "Python",
       "topics": [
-        "cli",
-        "complaint-classification",
-        "complaint-management",
-        "complaint-management-system",
-        "confusion-matrix",
-        "consumer-complaints",
-        "linearsvc",
+        "decision-model",
+        "decision-models",
+        "decoder",
+        "deep-learning",
+        "encoder",
+        "glm",
+        "jev-model",
+        "llm",
         "machine-learning",
-        "multiclass-classification",
-        "nlp",
-        "scikit-learn",
-        "text-classification",
-        "text-classifier",
-        "tf-idf",
-        "tfidf-vectorizer"
+        "pytorch",
+        "qwen"
       ],
       "source": "github",
-      "created_at": "2026-10-29T15:35:29Z"
+      "created_at": "2026-10-22T12:45:27Z"
     }
   ],
   "hn_posts": [
@@ -237,11 +355,23 @@
       "summary": "",
       "url": "https://jakub.jankiewicz.org/blog/ai-code-open-source/",
       "hn_url": "https://news.ycombinator.com/item?id=50507303",
-      "points": 1272,
-      "comments": 661,
+      "points": 1280,
+      "comments": 669,
       "author": "jcubic",
       "source": "hackernews",
       "created_at": "2026-11-15T14:46:58Z"
+    },
+    {
+      "id": "50535230",
+      "title": "GPT‑6.2 Astra and Sol",
+      "summary": "",
+      "url": "https://openai.com/index/introducing-gpt-6-2-astra-sol/",
+      "hn_url": "https://news.ycombinator.com/item?id=50535230",
+      "points": 1276,
+      "comments": 796,
+      "author": "jasondavies",
+      "source": "hackernews",
+      "created_at": "2026-11-17T17:46:43Z"
     },
     {
       "id": "50493251",
@@ -249,8 +379,8 @@
       "summary": "",
       "url": "https://www.techpowerup.com/354814/nvidia-allegedly-engineered-scarcity-by-funding-ai-startups-to-buy-its-gpus",
       "hn_url": "https://news.ycombinator.com/item?id=50493251",
-      "points": 1112,
-      "comments": 649,
+      "points": 1113,
+      "comments": 650,
       "author": "speckx",
       "source": "hackernews",
       "created_at": "2026-11-14T02:52:59Z"
@@ -280,16 +410,16 @@
       "created_at": "2026-11-11T21:24:35Z"
     },
     {
-      "id": "50446520",
-      "title": "Apple has new Mac app coming to make running local AI models easy",
+      "id": "50484658",
+      "title": "Jonathan Blow – If AI solved coding, why is my software still the same? [video]",
       "summary": "",
-      "url": "https://9to5mac.com/2026/11/10/apple-has-new-mac-app-coming-to-make-running-local-ai-models-easy/",
-      "hn_url": "https://news.ycombinator.com/item?id=50446520",
-      "points": 576,
-      "comments": 567,
-      "author": "linolevan",
+      "url": "https://www.youtube.com/watch?v=IRK8h67ol7Q",
+      "hn_url": "https://news.ycombinator.com/item?id=50484658",
+      "points": 494,
+      "comments": 750,
+      "author": "helloplanets",
       "source": "hackernews",
-      "created_at": "2026-11-10T21:25:03Z"
+      "created_at": "2026-11-13T15:08:44Z"
     },
     {
       "id": "50481187",
@@ -297,23 +427,11 @@
       "summary": "",
       "url": "https://status.claude.com/incidents/nn11wk485zfn",
       "hn_url": "https://news.ycombinator.com/item?id=50481187",
-      "points": 493,
-      "comments": 393,
+      "points": 494,
+      "comments": 394,
       "author": "__vivek",
       "source": "hackernews",
       "created_at": "2026-11-13T10:18:13Z"
-    },
-    {
-      "id": "50484658",
-      "title": "Jonathan Blow – If AI solved coding, why is my software still the same? [video]",
-      "summary": "",
-      "url": "https://www.youtube.com/watch?v=IRK8h67ol7Q",
-      "hn_url": "https://news.ycombinator.com/item?id=50484658",
-      "points": 492,
-      "comments": 739,
-      "author": "helloplanets",
-      "source": "hackernews",
-      "created_at": "2026-11-13T15:08:44Z"
     },
     {
       "id": "50468888",
@@ -321,7 +439,7 @@
       "summary": "",
       "url": "https://github.com/hyperionaidev/smolmaxxing/",
       "hn_url": "https://news.ycombinator.com/item?id=50468888",
-      "points": 483,
+      "points": 484,
       "comments": 180,
       "author": "mrashad74",
       "source": "hackernews",
