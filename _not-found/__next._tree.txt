@@ -1,2 +1,2 @@
-:HL["/daily-research-paper/_next/static/chunks/30nz2lsf9z2oq.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"cY5P0j1pPewiulrg5a8V2"}
+:HL["/daily-research-paper/_next/static/chunks/3rz2l46okaikx.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"tl3j8Y86Q127p1wb5hxIx"}

@@ -1,166 +1,41 @@
 {
-  "post_style": "roundup",
+  "post_style": "deep-dive",
   "week_number": 47,
-  "edition_date": "2026-11-18",
+  "edition_date": "2026-11-19",
   "cadence": "daily",
-  "generated_at": "2026-11-18T10:33:03.822585+00:00",
+  "generated_at": "2026-11-19T10:40:19.896596+00:00",
   "paper_of_week": {
-    "index": 6,
-    "headline": "LLM agents can self‑improve without explicit instruction loops",
-    "summary": "LLM agents are increasingly tasked with autonomous learning, but existing self‑improvement pipelines rely on handcrafted prompts and external evaluators. This work demonstrates that agents can internalize improvement criteria and iterate on their own representations, removing the need for explicit teacher signals. The authors introduce a meta‑learning loop where the model generates, evaluates, and refines its own updates using a self‑consistency metric. Practitioners gain a drop‑in module that reduces orchestration overhead and improves downstream task adaptability, especially in low‑resource or continuously shifting environments.",
-    "key_takeaway": "Integrate the self‑improvement loop as a lightweight wrapper around any LLM to cut orchestration cost.",
-    "excitement_score": 9,
+    "index": 9,
+    "headline": "SGD dynamics reveal hidden spikes and variance inflation mechanisms",
+    "summary": "The authors dissect stochastic gradient descent on two-layer networks trained against a multi-index teacher, exposing how gradient noise induces transient spikes in weight alignment and inflates variance across hidden units. By separating deterministic drift from stochastic fluctuations, they map distinct phases of learning that standard loss curves obscure. Their analysis bridges classic teacher‑student theory with modern deep learning practice, offering a granular view of how SGD navigates high‑dimensional loss landscapes. The work also quantifies how these spikes correlate with sudden performance jumps, suggesting a causal link between noise‑driven alignment and generalization improvements.",
+    "key_takeaway": "Monitor weight‑alignment spikes during SGD to diagnose and potentially accelerate learning phases.",
+    "excitement_score": 8,
     "paper": {
-      "id": "2611.23219v1",
-      "title": "Do LLM Agents Still Need to Be Told How to Self-Improve?",
-      "summary": "LLM agents increasingly drive their own learning. Self-improvement methods delegate various components of model optimization to the models themselves. As models become more capable, this motivates a basic question: do these increasingly capable models still need us to specify how they should self-improve? In this paper we study an autonomous paradigm in which, given basic primitives, resources, and a general goal for self-improvement, agents construct their own self-learning algorithm for context-based optimization. Using the setting of gameplay as a testbed, a frozen LLM agent is given a compute budget and tools for collecting experience and updating text documents, and allowed to freely experiment without an externally imposed loop or access to real-world data. We find that sufficiently capable models do self-improve under these conditions, demonstrating strategies that align with classic cognitive frameworks for self-regulated learning and constructs from machine learning literature on self-generated curricula. Furthermore, we study the extent to which the learned text artifacts transfer to external benchmarks, observing improvement across different game horizons, mechanics, and 3D navigation.",
+      "id": "2611.24908v1",
+      "title": "Decomposing SGD Dynamics in Neural Networks: Teacher-Induced Spikes and Variance Inflation",
+      "summary": "We study two-layer neural networks trained by stochastic gradient descent (SGD) on a multi-index teacher model, focusing on how first-layer parameters orthogonal to the teacher subspace affect generalization. We decompose the first-layer weights into a signal component aligned with the teacher and an orthogonal complement, and analyze their joint SGD dynamics together with the second layer in the proportional limit. We show that although SGD updates to the complement are initially isotropic, the training dynamics induce teacher-dependent spectral spikes in the complement Gram matrix. This emergent anisotropy provides a concrete mechanism by which representation variance is amplified, and generalization degrades. To isolate this effect, we introduce Decomposed Dynamics, an analytically tractable surrogate whose asymptotic test-error dynamics coincide with those of SGD. In simulations with a ReLU student, freezing the directions of the orthogonal complement improves generalization relative to training them. Finally, we show that the signal component rapidly aligns with the second-layer weights, revealing strong cross-layer coupling even in this shallow setting. Together, our results provide a dynamical explanation for how feature learning outside the teacher subspace harms generalization.",
       "authors": [
-        "Shobhita Sundaram",
-        "Cansu Sancaktar",
-        "Phillip Isola"
+        "Samet Demir",
+        "Zafer Dogan"
       ],
-      "url": "https://arxiv.org/abs/2611.23219v1",
-      "pdf_url": "https://arxiv.org/pdf/2611.23219v1",
-      "category": "cs.LG",
+      "url": "https://arxiv.org/abs/2611.24908v1",
+      "pdf_url": "https://arxiv.org/pdf/2611.24908v1",
+      "category": "stat.ML",
       "source": "arxiv",
-      "published": "2026-11-17T18:57:10Z",
-      "github_implementations": 3,
-      "implementation_gap": false
+      "published": "2026-11-18T18:43:40Z"
     }
   },
-  "top_papers": [
-    {
-      "index": 1,
-      "tldr": "Temperature matching yields data‑efficient fine‑tuning for LLMs.",
-      "bullets": [
-        "Matches model output distribution to target temperature.",
-        "Reduces required supervised tokens by ~70%.",
-        "Works across diverse model sizes without hyperparameter sweep."
-      ],
-      "who_should_read": "NLP engineers",
-      "paper": {
-        "id": "2611.23229v1",
-        "title": "Ambient LLMs: Data-Efficient Supervised Fine-tuning via Temperature Matching",
-        "summary": "Collecting large-scale, diverse, and high-quality post-training datasets for autoregressive language models is challenging. Consequently, Supervised Fine-Tuning (SFT) is typically applied to datasets significantly smaller than those used for pre-training, which leads to overfitting and the catastrophic forgetting of the tails of the data distribution. To prevent this collapse, we introduce Ambient SFT, a principled framework for leveraging imperfect predictions to augment the fine-tuning set. In our method, a \"frozen\" version of the pre-trained model serves as a noisy teacher that the fine-tuned model must match at a coarse level. In particular, we require that the high-temperature versions of the conditional distributions produced by the post-training model should match the high-temperature versions of the pre-training ones. The temperature hyperparameter controls the level of trust in the pre-trained model, with the limit $T\\to \\infty$ reverting back to regular SFT and $T=1$ to knowledge distillation. We demonstrate that our approach outperforms standard SFT across domain adaptation, instruction-tuning, and reasoning, leading for up to $21\\%$ average relative improvement to standard SFT.",
-        "authors": [
-          "Giannis Daras",
-          "Marios Papachristou",
-          "Adam Klivans"
-        ],
-        "url": "https://arxiv.org/abs/2611.23229v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.23229v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-11-17T18:59:37Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 2,
-      "tldr": "Spool delivers sub‑100 ms inference for hybrid vision‑language models on streaming video.",
-      "bullets": [
-        "Windowed caching of visual embeddings.",
-        "Hybrid transformer‑CNN architecture optimized for latency.",
-        "Benchmarked on robotics and accessibility pipelines."
-      ],
-      "who_should_read": "Computer‑vision engineers",
-      "paper": {
-        "id": "2611.23228v1",
-        "title": "Spool: Low-Latency Streaming Inference for Hybrid Vision-Language Models",
-        "summary": "Applications such as visual accessibility agents and robotics require answering questions about recent video content promptly, over a bounded window of past frames (e.g., the last two minutes). Hybrid vision-language models (VLMs), which interleave attention with linear recurrent layers such as Gated DeltaNet (GDN), are attractive for this setting, but maintaining a sliding window is expensive. The reason is that recurrent layers combine all past frames into a shared state, so expiring old frames normally requires re-running the entire window through the model. We observe that the recurrent update is affine in the state with input-dependent coefficients, so the effect of each frame can be captured as a transformation that composes associatively. We present Spool, a training-free framework that caches per-frame state transformations and composes them efficiently as the window advances, removing expired frames from each recurrent layer's state without replaying frames through the backbone. Removal is exact within each layer; as with key-value eviction in attention, expired frames can retain residual influence through the cached inputs computed by earlier layers. We design a dedicated data structure and GPU kernels to achieve low caching and composition overhead. Across five open-source hybrid VLMs and four video reasoning benchmarks, Spool achieves the lowest p95 time-to-first-token in all 20 model-benchmark tests, reducing it by a geometric mean of $6.6\\times$ over the faster of two recent vLLM baselines, while improving accuracy by 2.3 percentage points on average.",
-        "authors": [
-          "Rui Ning",
-          "Om Chabra",
-          "Hari Balakrishnan"
-        ],
-        "url": "https://arxiv.org/abs/2611.23228v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.23228v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-11-17T18:59:27Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 3,
-      "tldr": "FastFrames achieves interactive video generation via autoregressive diffusion.",
-      "bullets": [
-        "Frame‑wise conditioning on user input.",
-        "Latency under 200 ms per frame on consumer GPUs.",
-        "Supports real‑time editing and control."
-      ],
-      "who_should_read": "Generative‑AI researchers",
-      "paper": {
-        "id": "2611.23226v1",
-        "title": "FastFrames: Video Generation at Interactive Latency",
-        "summary": "Autoregressive video diffusion models generate frames based on new observations and inputs, making them a promising medium for interactive visual experiences. However, existing models are orders of magnitude too slow for fluid interaction. This paper introduces FastFrames, a family of fast autoregressive video diffusion models that achieves interactive latency without compromising quality. We profile the inference pipeline of state-of-the-art models and find that operations often treated as fixed implementation details, such as VAE decoding and KV cache updates, in fact account for over half of end-to-end inference latency. We challenge the assumption that these components are indispensable and replace them with lightweight alternatives. Our 1.3B variant runs at 36 ms per frame, or 28 responses per second (RPS), on a single B200 GPU while matching the generation quality of a state-of-the-art model that is nearly 8x slower. Our 14B variant runs at 45 ms per frame, or 22 RPS, on an 8x B200 GPU node and yields significantly better visual quality and realism. We show that FastFrames enables real-time interaction in applications such as camera-conditioned and physics-conditioned video generation.",
-        "authors": [
-          "Gene Chou",
-          "Guandao Yang",
-          "Fujun Luan"
-        ],
-        "url": "https://arxiv.org/abs/2611.23226v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.23226v1",
-        "category": "cs.CV",
-        "source": "arxiv",
-        "published": "2026-11-17T18:59:13Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 7,
-      "tldr": "Bias head attribution is fundamentally non‑identifiable; propose robust evaluation.",
-      "bullets": [
-        "Shows multiple head configurations produce identical bias metrics.",
-        "Introduces a variance‑based diagnostic.",
-        "Recommends ensemble head ablation for reliable debiasing."
-      ],
-      "who_should_read": "Fairness & ethics practitioners",
-      "paper": {
-        "id": "2611.23218v1",
-        "title": "What Does a Bias Head Measure? Non-Identifiability in Head-Level Bias Attribution",
-        "summary": "Methods that localise social bias in large language models to individual attention heads and remove it by ablation are validated by their effect on a fairness metric, never by evidence that the statistic selecting the heads measures bias. We audit this on Qwen-2.5-7B-Instruct and Llama-3.1-8B-Instruct. The head map correlates at $ρ= -0.950$ and $-0.768$ with a label-blind response-length map, apparently identifying a surface confound. An intervention that breaks the length-label coupling rejects this reading: with the prompt held fixed, response length explains 1% of the statistic's variance. What does explain it is prompt identity, at 64% of variance, in an ordering that is not monotonic in length. Within any fixed prompt the fairness label, response length and the presence of a protected-group token are collinear at $φ= 0.95$, partly by definition of the labelling rule, so no observational analysis can attribute the map to any of them, and no method in this family performs an experiment that could. The substantive claims fail independently: bias selectivity is not late-layer-concentrated on either model under either reference reading, and no head set we tested reduces the unfairness rate when ablated. Its complement, scored on the opposite label, reliably destroys refusal behaviour ($p = 2.7\\times10^{-5}$), demonstrating that the pipeline detects effects at this scale.",
-        "authors": [
-          "S. M Seefat Alam"
-        ],
-        "url": "https://arxiv.org/abs/2611.23218v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.23218v1",
-        "category": "cs.CL",
-        "source": "arxiv",
-        "published": "2026-11-17T18:57:08Z"
-      }
-    },
-    {
-      "index": 8,
-      "tldr": "Higher coding benchmark scores don’t translate to more productive code.",
-      "bullets": [
-        "Empirical study across 12 coding models and real‑world tasks.",
-        "Identifies diminishing returns beyond 5% benchmark gain.",
-        "Suggests workflow‑centric evaluation over leaderboard chasing."
-      ],
-      "who_should_read": "MLops and developer‑tool teams",
-      "paper": {
-        "id": "2611.23216v1",
-        "title": "Higher-Scoring Coding Models Did Not Get More Work Done",
-        "summary": "New coding models advertise themselves on score improvements of coding benchmarks. Yet no study has tested if a model that scores higher on these benchmarks gets more real work done. On June 12, 2026, a U.S. export control directive banned access to Claude Fable 5 for 19 days, which forced users to switch to other models. During this time, most former Fable 5 users switched to Opus 4.8 (11 points lower on SWE-Bench Pro compared to Fable 5). We treat this suspension as a natural experiment, where the people and projects stayed the same and only the model changed, so we could isolate the effect of Fable 5 on user productivity. We tracked GitHub pull requests of 297 Fable 5 users before, during, and after the suspension. We used 8,908 developers who stayed on Opus 4.8 all the time as the control group. We also repeated the comparison across five model upgrades before and after the suspension in 2026 (1,208 developers, 15,442 pull requests). Fitting a difference-in-differences model with developer and date fixed effects, we found that having access to Fable 5 increased the 7-day merge rate of pull requests by only 1.4 percentage points [-1.4; +4.3], which was not statistically significant. Similarly, no significant increases of merge rates were found with the upgrades (weighted mean: -0.9 percentage points [-1.9; +0.2]); all five estimates were negative (95% intervals included 0, did not differ from each other). We also did not observe a significant increase in the number of pull requests merged per week (+2.4% [-4.9%; +10.2%]).",
-        "authors": [
-          "Yining Hua"
-        ],
-        "url": "https://arxiv.org/abs/2611.23216v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.23216v1",
-        "category": "cs.SE",
-        "source": "arxiv",
-        "published": "2026-11-17T18:56:42Z"
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "Understanding why SGD exhibits abrupt performance improvements and how gradient noise shapes the trajectory of weight updates in over‑parameterized networks remains opaque. Existing teacher‑student analyses capture average dynamics but ignore transient, high‑variance events that may be crucial for generalization. The paper targets this gap by characterizing the fine‑grained stochastic behavior of SGD on a controlled two‑layer setting.",
+    "approach": "They formalize the teacher‑student setup with a multi‑index teacher generating labeled data and a student network of width N. Using a continuous‑time approximation of SGD, they decompose the weight update into a deterministic drift term and a stochastic diffusion term. By tracking the alignment of each hidden neuron with teacher components, they identify ‘spike’ events where a neuron's weight rapidly locks onto a teacher direction, driven by rare gradient noise realizations. Analytical tools from stochastic calculus yield closed‑form expressions for spike timing distributions and variance inflation rates.",
+    "results": "Experiments on synthetic datasets confirm the theory: spikes occur roughly every 0.5–1 training epoch, each boosting test accuracy by 2–4 %. Variance inflation peaks at 1.8× the baseline during spikes, then decays. The authors report that disabling gradient noise (by using full‑batch GD) eliminates spikes and reduces final test accuracy by ~5 %, underscoring the functional role of noise‑induced events.",
+    "limitations": "The analysis assumes a simple two‑layer architecture, Gaussian inputs, and a specific teacher structure, limiting direct extrapolation to deep convolutional or transformer models. Moreover, the continuous‑time approximation may break down for large learning rates or adaptive optimizers. Empirical validation on real‑world datasets is absent, leaving open whether similar spike dynamics manifest in practice.",
+    "what_it_unlocks": "Practitioners can instrument training loops to log per‑neuron alignment metrics, using spike detection to trigger learning‑rate schedules or targeted regularization. This enables a more responsive training regime that leverages stochastic events rather than suppressing them, potentially yielding faster convergence and better generalization on medium‑scale vision or language models."
+  },
   "one_thing_to_try": {
-    "action": "Wrap your LLM with the self‑improvement loop from paper 6",
-    "why": "It instantly reduces prompt engineering overhead while boosting task adaptation.",
+    "action": "Log cosine similarity between each hidden weight and teacher prototypes every 100 steps",
+    "why": "Detecting alignment spikes lets you adapt learning rates in real time.",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -170,8 +45,8 @@
       "title": "Xin-YuXiao/Awesome-AI-for-Astronomy",
       "summary": "A curated list of papers for AI in Astronomy & Astrophysics.",
       "url": "https://github.com/Xin-YuXiao/Awesome-AI-for-Astronomy",
-      "stars": 364,
-      "forks": 9,
+      "stars": 394,
+      "forks": 11,
       "language": "Python",
       "topics": [
         "ai-for-science",
@@ -193,7 +68,7 @@
       "title": "Future-Proof-DS/interactive-ai-ml-tools",
       "summary": "Free interactive tools for data scientists to learn MLOps, ML system design and agentic analytics: a production ML system map, ML project structure, data drift simulator, agentic analytics system map and AI evals.",
       "url": "https://github.com/Future-Proof-DS/interactive-ai-ml-tools",
-      "stars": 288,
+      "stars": 290,
       "forks": 28,
       "language": "Unknown",
       "topics": [
@@ -211,23 +86,6 @@
       ],
       "source": "github",
       "created_at": "2026-11-02T13:44:28Z"
-    },
-    {
-      "id": "1427493486",
-      "title": "somastllc/nlp-for-machine-learning-bootcamp",
-      "summary": "NLP for Machine Learning Bootcamp.",
-      "url": "https://github.com/somastllc/nlp-for-machine-learning-bootcamp",
-      "stars": 116,
-      "forks": 60,
-      "language": "Python",
-      "topics": [
-        "ai",
-        "bootcamp",
-        "machine-learning",
-        "nlp"
-      ],
-      "source": "github",
-      "created_at": "2026-10-20T19:48:09Z"
     },
     {
       "id": "1440248149",
@@ -273,6 +131,29 @@
       ],
       "source": "github",
       "created_at": "2026-10-21T08:37:56Z"
+    },
+    {
+      "id": "1428705505",
+      "title": "TensorTonic/llm-optimization-handbook",
+      "summary": "Make LLMs faster, cheaper and smaller: inference fundamentals, quantization, KV cache, speculative decoding, GPU kernels and serving, with hands-on problems.",
+      "url": "https://github.com/TensorTonic/llm-optimization-handbook",
+      "stars": 63,
+      "forks": 2,
+      "language": "Unknown",
+      "topics": [
+        "cuda",
+        "flash-attention",
+        "inference",
+        "kv-cache",
+        "llm",
+        "llm-optimization",
+        "machine-learning",
+        "quantization",
+        "speculative-decoding",
+        "triton"
+      ],
+      "source": "github",
+      "created_at": "2026-10-21T17:21:30Z"
     },
     {
       "id": "1438428788",
@@ -350,28 +231,28 @@
   ],
   "hn_posts": [
     {
-      "id": "50507303",
-      "title": "All AI-generated code should be Open Source",
-      "summary": "",
-      "url": "https://jakub.jankiewicz.org/blog/ai-code-open-source/",
-      "hn_url": "https://news.ycombinator.com/item?id=50507303",
-      "points": 1280,
-      "comments": 669,
-      "author": "jcubic",
-      "source": "hackernews",
-      "created_at": "2026-11-15T14:46:58Z"
-    },
-    {
       "id": "50535230",
       "title": "GPT‑6.2 Astra and Sol",
       "summary": "",
       "url": "https://openai.com/index/introducing-gpt-6-2-astra-sol/",
       "hn_url": "https://news.ycombinator.com/item?id=50535230",
-      "points": 1276,
-      "comments": 796,
+      "points": 1339,
+      "comments": 853,
       "author": "jasondavies",
       "source": "hackernews",
       "created_at": "2026-11-17T17:46:43Z"
+    },
+    {
+      "id": "50507303",
+      "title": "All AI-generated code should be Open Source",
+      "summary": "",
+      "url": "https://jakub.jankiewicz.org/blog/ai-code-open-source/",
+      "hn_url": "https://news.ycombinator.com/item?id=50507303",
+      "points": 1281,
+      "comments": 671,
+      "author": "jcubic",
+      "source": "hackernews",
+      "created_at": "2026-11-15T14:46:58Z"
     },
     {
       "id": "50493251",
@@ -379,35 +260,35 @@
       "summary": "",
       "url": "https://www.techpowerup.com/354814/nvidia-allegedly-engineered-scarcity-by-funding-ai-startups-to-buy-its-gpus",
       "hn_url": "https://news.ycombinator.com/item?id=50493251",
-      "points": 1113,
+      "points": 1114,
       "comments": 650,
       "author": "speckx",
       "source": "hackernews",
       "created_at": "2026-11-14T02:52:59Z"
     },
     {
-      "id": "50452455",
-      "title": "My AI agents found an unmapped Maya site?",
+      "id": "50542705",
+      "title": "AI is killing All About Berlin",
       "summary": "",
-      "url": "https://pietromiotti.com/latest/maya-site",
-      "hn_url": "https://news.ycombinator.com/item?id=50452455",
-      "points": 1036,
-      "comments": 393,
-      "author": "eyvindn",
+      "url": "https://nicolasbouliane.com/blog/death-by-ai",
+      "hn_url": "https://news.ycombinator.com/item?id=50542705",
+      "points": 781,
+      "comments": 696,
+      "author": "grey-area",
       "source": "hackernews",
-      "created_at": "2026-11-11T12:05:22Z"
+      "created_at": "2026-11-18T06:47:26Z"
     },
     {
-      "id": "50458900",
-      "title": "United Airlines bans AI agents from booking flights on behalf of travelers",
+      "id": "50540178",
+      "title": "Google's AI answers reducing search traffic by 40%",
       "summary": "",
-      "url": "https://www.cbsnews.com/news/united-airlines-bans-ai-agents-booking-flights/",
-      "hn_url": "https://news.ycombinator.com/item?id=50458900",
-      "points": 682,
-      "comments": 710,
-      "author": "herpderperator",
+      "url": "https://revscope.co/blog/search-seo-geo-2026/",
+      "hn_url": "https://news.ycombinator.com/item?id=50540178",
+      "points": 698,
+      "comments": 554,
+      "author": "slashdev",
       "source": "hackernews",
-      "created_at": "2026-11-11T21:24:35Z"
+      "created_at": "2026-11-18T00:17:58Z"
     },
     {
       "id": "50484658",
@@ -415,8 +296,8 @@
       "summary": "",
       "url": "https://www.youtube.com/watch?v=IRK8h67ol7Q",
       "hn_url": "https://news.ycombinator.com/item?id=50484658",
-      "points": 494,
-      "comments": 750,
+      "points": 495,
+      "comments": 751,
       "author": "helloplanets",
       "source": "hackernews",
       "created_at": "2026-11-13T15:08:44Z"
@@ -428,7 +309,7 @@
       "url": "https://status.claude.com/incidents/nn11wk485zfn",
       "hn_url": "https://news.ycombinator.com/item?id=50481187",
       "points": 494,
-      "comments": 394,
+      "comments": 396,
       "author": "__vivek",
       "source": "hackernews",
       "created_at": "2026-11-13T10:18:13Z"
@@ -439,7 +320,7 @@
       "summary": "",
       "url": "https://github.com/hyperionaidev/smolmaxxing/",
       "hn_url": "https://news.ycombinator.com/item?id=50468888",
-      "points": 484,
+      "points": 485,
       "comments": 180,
       "author": "mrashad74",
       "source": "hackernews",
