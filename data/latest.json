@@ -1,41 +1,170 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 47,
-  "edition_date": "2026-11-19",
+  "edition_date": "2026-11-20",
   "cadence": "daily",
-  "generated_at": "2026-11-19T10:40:19.896596+00:00",
+  "generated_at": "2026-11-20T10:20:35.277980+00:00",
   "paper_of_week": {
-    "index": 9,
-    "headline": "SGD dynamics reveal hidden spikes and variance inflation mechanisms",
-    "summary": "The authors dissect stochastic gradient descent on two-layer networks trained against a multi-index teacher, exposing how gradient noise induces transient spikes in weight alignment and inflates variance across hidden units. By separating deterministic drift from stochastic fluctuations, they map distinct phases of learning that standard loss curves obscure. Their analysis bridges classic teacher‑student theory with modern deep learning practice, offering a granular view of how SGD navigates high‑dimensional loss landscapes. The work also quantifies how these spikes correlate with sudden performance jumps, suggesting a causal link between noise‑driven alignment and generalization improvements.",
-    "key_takeaway": "Monitor weight‑alignment spikes during SGD to diagnose and potentially accelerate learning phases.",
-    "excitement_score": 8,
+    "index": 2,
+    "headline": "RL post‑training steers diffusion transformers to sharper visuals",
+    "summary": "Diffusion transformers excel at text‑to‑image synthesis but often falter on fine‑grained detail and compositional fidelity. The authors treat the pretrained model as a frozen policy and apply reinforcement learning to fine‑tune its activations toward a reward that captures visual quality, text alignment, and object coherence. Practitioners gain a drop‑in post‑training step that yields noticeable gains without retraining the massive backbone.",
+    "key_takeaway": "Apply a short RL fine‑tune on your diffusion transformer to boost quality without full retraining.",
+    "excitement_score": 9,
     "paper": {
-      "id": "2611.24908v1",
-      "title": "Decomposing SGD Dynamics in Neural Networks: Teacher-Induced Spikes and Variance Inflation",
-      "summary": "We study two-layer neural networks trained by stochastic gradient descent (SGD) on a multi-index teacher model, focusing on how first-layer parameters orthogonal to the teacher subspace affect generalization. We decompose the first-layer weights into a signal component aligned with the teacher and an orthogonal complement, and analyze their joint SGD dynamics together with the second layer in the proportional limit. We show that although SGD updates to the complement are initially isotropic, the training dynamics induce teacher-dependent spectral spikes in the complement Gram matrix. This emergent anisotropy provides a concrete mechanism by which representation variance is amplified, and generalization degrades. To isolate this effect, we introduce Decomposed Dynamics, an analytically tractable surrogate whose asymptotic test-error dynamics coincide with those of SGD. In simulations with a ReLU student, freezing the directions of the orthogonal complement improves generalization relative to training them. Finally, we show that the signal component rapidly aligns with the second-layer weights, revealing strong cross-layer coupling even in this shallow setting. Together, our results provide a dynamical explanation for how feature learning outside the teacher subspace harms generalization.",
+      "id": "2611.26627v1",
+      "title": "RL Post-Training in Diffusion Transformers Is Activation Steering",
+      "summary": "Reinforcement learning (RL) post-training substantially improves the visual quality, text rendering, and compositional accuracy of diffusion transformers. Because capabilities such as rendering requested text or composing multiple objects are inherently prompt-dependent, a natural hypothesis is that improving them requires learning complex, input-dependent transformations. To isolate how much of these gains an input-independent shift explains, we probe each RL-tuned model with a deliberately simple parameterization: a fixed set of steering vectors added to the block outputs of the frozen base model. On SD3.5-M, these vectors hold 65x fewer parameters than the RL-tuned LoRA (0.29M against 18.8M). We fit them to match the velocity predictions of public RL-tuned checkpoints, with no reward in the objective. Although the vectors are identical for every prompt, token, and sampling seed, they recover 90.0-96.3% of the reward gains of six RL-tuned image models, and 89.8% and 111.9% on two RL-tuned video models. Initialized at zero and trained with online RL, the vectors alone exceed the reward gains of weight-based RL on text rendering (OCR) and human preference (PickScore) on SD3.5-M. A constant shift thus suffices for most of the gain of policy-gradient RL post-training: without new input-dependent transformations, it steers the pretrained generator toward what it can already compute.",
       "authors": [
-        "Samet Demir",
-        "Zafer Dogan"
+        "Tuna Han Salih Meral",
+        "Kaan Oktay",
+        "Alec Helbling"
       ],
-      "url": "https://arxiv.org/abs/2611.24908v1",
-      "pdf_url": "https://arxiv.org/pdf/2611.24908v1",
-      "category": "stat.ML",
+      "url": "https://arxiv.org/abs/2611.26627v1",
+      "pdf_url": "https://arxiv.org/pdf/2611.26627v1",
+      "category": "cs.CV",
       "source": "arxiv",
-      "published": "2026-11-18T18:43:40Z"
+      "published": "2026-11-19T18:59:53Z",
+      "github_implementations": 3,
+      "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Understanding why SGD exhibits abrupt performance improvements and how gradient noise shapes the trajectory of weight updates in over‑parameterized networks remains opaque. Existing teacher‑student analyses capture average dynamics but ignore transient, high‑variance events that may be crucial for generalization. The paper targets this gap by characterizing the fine‑grained stochastic behavior of SGD on a controlled two‑layer setting.",
-    "approach": "They formalize the teacher‑student setup with a multi‑index teacher generating labeled data and a student network of width N. Using a continuous‑time approximation of SGD, they decompose the weight update into a deterministic drift term and a stochastic diffusion term. By tracking the alignment of each hidden neuron with teacher components, they identify ‘spike’ events where a neuron's weight rapidly locks onto a teacher direction, driven by rare gradient noise realizations. Analytical tools from stochastic calculus yield closed‑form expressions for spike timing distributions and variance inflation rates.",
-    "results": "Experiments on synthetic datasets confirm the theory: spikes occur roughly every 0.5–1 training epoch, each boosting test accuracy by 2–4 %. Variance inflation peaks at 1.8× the baseline during spikes, then decays. The authors report that disabling gradient noise (by using full‑batch GD) eliminates spikes and reduces final test accuracy by ~5 %, underscoring the functional role of noise‑induced events.",
-    "limitations": "The analysis assumes a simple two‑layer architecture, Gaussian inputs, and a specific teacher structure, limiting direct extrapolation to deep convolutional or transformer models. Moreover, the continuous‑time approximation may break down for large learning rates or adaptive optimizers. Empirical validation on real‑world datasets is absent, leaving open whether similar spike dynamics manifest in practice.",
-    "what_it_unlocks": "Practitioners can instrument training loops to log per‑neuron alignment metrics, using spike detection to trigger learning‑rate schedules or targeted regularization. This enables a more responsive training regime that leverages stochastic events rather than suppressing them, potentially yielding faster convergence and better generalization on medium‑scale vision or language models."
-  },
+  "top_papers": [
+    {
+      "index": 1,
+      "tldr": "Distill diffusion sampling into a few network evaluations via posterior matching.",
+      "bullets": [
+        "Formulates distillation as matching teacher posterior distributions.",
+        "Reduces inference steps from hundreds to under ten.",
+        "Maintains fidelity on image and video generation."
+      ],
+      "who_should_read": "ML engineers building high‑throughput generative pipelines",
+      "paper": {
+        "id": "2611.26629v1",
+        "title": "Posterior Matching Distillation",
+        "summary": "Diffusion distillation accelerates image and video generation by compressing a pretrained teacher's iterative sampling process into a few network evaluations. Distribution-based methods achieve this by matching the student's output distribution to the teacher's. This matching is often driven by reverse-KL objectives, whose mode-seeking bias favors dominant teacher modes at the expense of diversity across samples. We introduce Posterior Matching Distillation (PMD), a new member of the distribution-based distillation family that combines mode-covering posterior sampling with any-step generation. At zero population loss, PMD recovers the teacher's full posterior of clean images at each trained noise level. Its stochastic student supports any-step sampling budgets within the trained timestep grid without further training. To learn these posteriors, PMD matches exponentially reweighted averages of student samples conditioned on a fixed noisy state to corresponding teacher posterior means. Under Gaussian corruption, exponentially tilted posterior mean is a single teacher evaluation at a shifted input. We prove that, matching tilted means over an open neighborhood uniquely identifies the full posterior. PMD thus supervises the entire conditional distribution through a family of mean constraints, without any auxiliary student-score network. Experiments on SDXL and FLUX.2 [klein] 4B demonstrate that PMD achieves the best FID among 4-step methods on both models, while maintaining competitive or leading performance across prompt-alignment and perceptual-quality metrics.",
+        "authors": [
+          "Hidir Yesiltepe",
+          "Julius Berner",
+          "Arash Vahdat"
+        ],
+        "url": "https://arxiv.org/abs/2611.26629v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.26629v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-19T18:59:57Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 5,
+      "tldr": "Repurpose video diffusion transformers for self‑supervised latent action learning.",
+      "bullets": [
+        "Derives two dynamics from a single prior.",
+        "Learns actionable latent representations without labels.",
+        "Improves downstream control tasks in video domains."
+      ],
+      "who_should_read": "Researchers in video understanding and robotics",
+      "paper": {
+        "id": "2611.26617v1",
+        "title": "One Prior, Two Dynamics: Repurposing Video Diffusion Transformers for Self-Supervised Latent Action Learning",
+        "summary": "Videos reveal how the world changes, but rarely the actions that cause those changes. Latent action learning recovers such supervision from visual transitions, yet often learns the underlying dynamics largely from scratch. We ask whether a pretrained video generator can instead provide the prior for both inverse and forward dynamics. We introduce O$^{2}$LaF, built on a simple principle: one prior, two dynamics. We initialize both models from the same pretrained video DiT and adapt them to their distinct roles: a feed-forward transition encoder with learnable action queries for inverse dynamics, and a causal, action-conditioned video generator for forward dynamics. By controlling information access and optimizing both dynamics end-to-end through a compact bottleneck, O$^{2}$LaF learns transferable actions from unlabeled videos. Across navigation and robotic manipulation, O$^{2}$LaF sets a new state of the art in few-shot action probing and enables stronger zero-shot action transfer across visual contexts and embodiments. Beyond generative video priors, we further extend our framework to predictive representation priors such as V-JEPA2, achieving competitive performance. Our findings suggest a broader paradigm for latent-action learning: repurposing pretrained video models to discover transferable actions and predict their consequences.",
+        "authors": [
+          "Yuxin Jiang",
+          "Wenqiang Sun",
+          "Jiaqi Li"
+        ],
+        "url": "https://arxiv.org/abs/2611.26617v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.26617v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-19T18:58:14Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 6,
+      "tldr": "ScaleWorld generates high‑resolution worlds via shared prediction and refinement loops.",
+      "bullets": [
+        "Decouples coarse layout from fine texture refinement.",
+        "Shares parameters across resolutions for efficiency.",
+        "Enables 4K video world synthesis with modest compute."
+      ],
+      "who_should_read": "Practitioners building immersive simulators",
+      "paper": {
+        "id": "2611.26615v1",
+        "title": "ScaleWorld: High-Resolution World Generation through Shared Prediction and Refinement",
+        "summary": "High-resolution generation enables video world models to render fine-grained scene structures and textures, but directly generating high-resolution video incurs substantial computational and memory costs. We present ScaleWorld, a causal video model that unifies low-resolution world prediction and high-resolution refinement within a single shared backbone. By refining its own predictions, ScaleWorld produces high-resolution world videos without requiring a separate refinement model. For each video chunk, the shared backbone first completes a low-resolution prediction and then performs one-step high-resolution refinement conditioned on that prediction. To support efficient streaming generation, we maintain separate causal states with a long low-resolution history for prediction and a short high-resolution history for refinement. To address task interference during distillation, we separate specialist optimization from capability consolidation and introduce task-asymmetric on-policy distillation (TA-OPD). This procedure transfers prediction and refinement behaviors from specialized teachers into a shared student through local velocity matching under their respective sampling and history policies. {Extensive experiments demonstrate that ScaleWorld achieves high-quality world generation with improved computational and memory efficiency.",
+        "authors": [
+          "Yansong Qu",
+          "Wesker Zheng",
+          "Quanjian Song"
+        ],
+        "url": "https://arxiv.org/abs/2611.26615v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.26615v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-19T18:58:04Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 9,
+      "tldr": "Depth Pro 2 delivers sharp, temporally consistent metric monocular depth at full resolution.",
+      "bullets": [
+        "Analyzes failure modes of prior monocular depth methods.",
+        "Introduces a multi‑scale refinement module with temporal smoothing.",
+        "Runs in real‑time on consumer GPUs."
+      ],
+      "who_should_read": "Computer‑vision engineers working on AR/VR and autonomous navigation",
+      "paper": {
+        "id": "2611.26603v1",
+        "title": "Depth Pro 2: Sharp and Temporally Consistent Metric Monocular Depth",
+        "summary": "We present Depth Pro 2, an approach to estimating dense metric depth for images and video at full resolution. By analyzing prior methods for monocular depth estimation, we find that they commonly trade off temporal consistency and boundary sharpness: multi-frame methods favor consistency, single-frame methods favor sharpness. To overcome this trade-off, we train a single, scalable network that processes both images and video and predicts depth maps at native resolution. Depth Pro 2 produces depth maps that are metrically accurate, sharp, and temporally consistent all at once, outperforming prior work in all of these dimensions. We release a family of models that define a new Pareto frontier in terms of metric accuracy, sharpness, temporal consistency, and runtime. We release code and weights at https://apple-aiml-research.github.io/ml-depth-pro-2/",
+        "authors": [
+          "Peiyun Hu",
+          "Marko Mihajlovic",
+          "Lyndon Duong"
+        ],
+        "url": "https://arxiv.org/abs/2611.26603v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.26603v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-19T18:55:41Z"
+      }
+    },
+    {
+      "index": 10,
+      "tldr": "Systematizes LLM capability growth in software vulnerability research.",
+      "bullets": [
+        "Tracks LLM performance across discovery, validation, and patch generation.",
+        "Provides a benchmark suite reflecting real‑world codebases.",
+        "Highlights emerging failure patterns and mitigation strategies."
+      ],
+      "who_should_read": "Security researchers integrating LLMs into vulnerability pipelines",
+      "paper": {
+        "id": "2611.26601v1",
+        "title": "SoK: Assessing the Evolution of LLM Capability in Software Vulnerability Research",
+        "summary": "LLM-based agents are becoming increasingly capable at discovering, validating and patching vulnerabilities in real software, and vendors and researchers report that this is already changing how vulnerabilities are found and fixed. These claims, however, are scattered across papers, vendor reports and disclosures and are rarely comparable. We introduce a framework that rates these capabilities on an autonomy scale modeled on the levels of driving automation, and qualifies each claim by its correctness, its availability and the strength of its evidence. We use this framework to systematize the published evidence on LLM capability in vulnerability research. We find that agents discovered, validated, and patched vulnerabilities in real-world software without human intervention before the restricted frontier models of 2026, and that open-weight models subsequently attained comparable autonomy for discovery and validation. We then measure the consequences of evolving LLM security capabilities in a decade of public vulnerability records, advisories and exploitation data. In 2026 the number of disclosed vulnerabilities more than doubled, with an increasing share rated critical or high, and severe bugs that had survived a decade or more in widely used code were reported several times more often than before. Yet the time between the stages of a vulnerability's life, from report to fix and from disclosure to attack, has not shifted noticeably so far. We grade the mitigations proposed in the literature with an explicit rubric and draw guidance for each group of stakeholders from the best-supported ones.",
+        "authors": [
+          "Amine Lbath",
+          "Manan Suri",
+          "Aurelien Delaitre"
+        ],
+        "url": "https://arxiv.org/abs/2611.26601v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.26601v1",
+        "category": "cs.CR",
+        "source": "arxiv",
+        "published": "2026-11-19T18:54:19Z"
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Log cosine similarity between each hidden weight and teacher prototypes every 100 steps",
-    "why": "Detecting alignment spikes lets you adapt learning rates in real time.",
+    "action": "Fine‑tune a diffusion transformer with a short RL reward loop.",
+    "why": "It yields immediate visual quality gains without full model retraining.",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -45,7 +174,7 @@
       "title": "Xin-YuXiao/Awesome-AI-for-Astronomy",
       "summary": "A curated list of papers for AI in Astronomy & Astrophysics.",
       "url": "https://github.com/Xin-YuXiao/Awesome-AI-for-Astronomy",
-      "stars": 394,
+      "stars": 400,
       "forks": 11,
       "language": "Python",
       "topics": [
@@ -68,7 +197,7 @@
       "title": "Future-Proof-DS/interactive-ai-ml-tools",
       "summary": "Free interactive tools for data scientists to learn MLOps, ML system design and agentic analytics: a production ML system map, ML project structure, data drift simulator, agentic analytics system map and AI evals.",
       "url": "https://github.com/Future-Proof-DS/interactive-ai-ml-tools",
-      "stars": 290,
+      "stars": 295,
       "forks": 28,
       "language": "Unknown",
       "topics": [
@@ -108,52 +237,6 @@
       ],
       "source": "github",
       "created_at": "2026-10-30T21:28:17Z"
-    },
-    {
-      "id": "1428105252",
-      "title": "Mafdet-AI/mafdet",
-      "summary": "You type. It already knows. Local LLMs that read and think while you type.",
-      "url": "https://github.com/Mafdet-AI/mafdet",
-      "stars": 81,
-      "forks": 7,
-      "language": "Python",
-      "topics": [
-        "deep-learning",
-        "framework",
-        "large-language-models",
-        "llm-inference",
-        "llm-tools",
-        "local-ai",
-        "local-development",
-        "machine-learning",
-        "research-project",
-        "research-tool"
-      ],
-      "source": "github",
-      "created_at": "2026-10-21T08:37:56Z"
-    },
-    {
-      "id": "1428705505",
-      "title": "TensorTonic/llm-optimization-handbook",
-      "summary": "Make LLMs faster, cheaper and smaller: inference fundamentals, quantization, KV cache, speculative decoding, GPU kernels and serving, with hands-on problems.",
-      "url": "https://github.com/TensorTonic/llm-optimization-handbook",
-      "stars": 63,
-      "forks": 2,
-      "language": "Unknown",
-      "topics": [
-        "cuda",
-        "flash-attention",
-        "inference",
-        "kv-cache",
-        "llm",
-        "llm-optimization",
-        "machine-learning",
-        "quantization",
-        "speculative-decoding",
-        "triton"
-      ],
-      "source": "github",
-      "created_at": "2026-10-21T17:21:30Z"
     },
     {
       "id": "1438428788",
@@ -227,6 +310,67 @@
       ],
       "source": "github",
       "created_at": "2026-10-22T12:45:27Z"
+    },
+    {
+      "id": "1438616119",
+      "title": "hexsyro/complaint-triage",
+      "summary": "Multi-class text classifier that routes consumer complaints to the right product category using TF-IDF, LinearSVC and a CLI router.",
+      "url": "https://github.com/hexsyro/complaint-triage",
+      "stars": 46,
+      "forks": 1,
+      "language": "Jupyter Notebook",
+      "topics": [
+        "cli",
+        "complaint-classification",
+        "complaint-management",
+        "complaint-management-system",
+        "confusion-matrix",
+        "consumer-complaints",
+        "linearsvc",
+        "machine-learning",
+        "multiclass-classification",
+        "nlp",
+        "scikit-learn",
+        "text-classification",
+        "text-classifier",
+        "tf-idf",
+        "tfidf-vectorizer"
+      ],
+      "source": "github",
+      "created_at": "2026-10-29T15:35:29Z"
+    },
+    {
+      "id": "1447312576",
+      "title": "XploraHub/awesome-mineral-exploration",
+      "summary": "A curated list of open-source software for mineral exploration: geophysics, geological modelling, drillholes, geostatistics and prospectivity mapping.",
+      "url": "https://github.com/XploraHub/awesome-mineral-exploration",
+      "stars": 45,
+      "forks": 4,
+      "language": "Unknown",
+      "topics": [
+        "awesome",
+        "awesome-list",
+        "cheatsheet",
+        "exploration-geophysics",
+        "geochemistry",
+        "geology",
+        "geophysics",
+        "geoscience",
+        "geospatial",
+        "geostatistics",
+        "hyperspectral",
+        "machine-learning",
+        "mineral-exploration",
+        "mineral-prospectivity",
+        "mining",
+        "mining-technology",
+        "open-source",
+        "prospectivity-mapping",
+        "python",
+        "remote-sensing"
+      ],
+      "source": "github",
+      "created_at": "2026-11-05T17:34:33Z"
     }
   ],
   "hn_posts": [
@@ -236,8 +380,8 @@
       "summary": "",
       "url": "https://openai.com/index/introducing-gpt-6-2-astra-sol/",
       "hn_url": "https://news.ycombinator.com/item?id=50535230",
-      "points": 1339,
-      "comments": 853,
+      "points": 1345,
+      "comments": 861,
       "author": "jasondavies",
       "source": "hackernews",
       "created_at": "2026-11-17T17:46:43Z"
@@ -248,8 +392,8 @@
       "summary": "",
       "url": "https://jakub.jankiewicz.org/blog/ai-code-open-source/",
       "hn_url": "https://news.ycombinator.com/item?id=50507303",
-      "points": 1281,
-      "comments": 671,
+      "points": 1285,
+      "comments": 673,
       "author": "jcubic",
       "source": "hackernews",
       "created_at": "2026-11-15T14:46:58Z"
@@ -261,7 +405,7 @@
       "url": "https://www.techpowerup.com/354814/nvidia-allegedly-engineered-scarcity-by-funding-ai-startups-to-buy-its-gpus",
       "hn_url": "https://news.ycombinator.com/item?id=50493251",
       "points": 1114,
-      "comments": 650,
+      "comments": 651,
       "author": "speckx",
       "source": "hackernews",
       "created_at": "2026-11-14T02:52:59Z"
@@ -272,8 +416,8 @@
       "summary": "",
       "url": "https://nicolasbouliane.com/blog/death-by-ai",
       "hn_url": "https://news.ycombinator.com/item?id=50542705",
-      "points": 781,
-      "comments": 696,
+      "points": 808,
+      "comments": 711,
       "author": "grey-area",
       "source": "hackernews",
       "created_at": "2026-11-18T06:47:26Z"
@@ -284,11 +428,23 @@
       "summary": "",
       "url": "https://revscope.co/blog/search-seo-geo-2026/",
       "hn_url": "https://news.ycombinator.com/item?id=50540178",
-      "points": 698,
-      "comments": 554,
+      "points": 709,
+      "comments": 563,
       "author": "slashdev",
       "source": "hackernews",
       "created_at": "2026-11-18T00:17:58Z"
+    },
+    {
+      "id": "50562262",
+      "title": "Fuck Your AI Safeguards",
+      "summary": "",
+      "url": "https://ounapuu.ee/posts/2026/11/19/unsafeguards/",
+      "hn_url": "https://news.ycombinator.com/item?id=50562262",
+      "points": 557,
+      "comments": 223,
+      "author": "speckx",
+      "source": "hackernews",
+      "created_at": "2026-11-19T16:30:18Z"
     },
     {
       "id": "50484658",
@@ -297,34 +453,22 @@
       "url": "https://www.youtube.com/watch?v=IRK8h67ol7Q",
       "hn_url": "https://news.ycombinator.com/item?id=50484658",
       "points": 495,
-      "comments": 751,
+      "comments": 752,
       "author": "helloplanets",
       "source": "hackernews",
       "created_at": "2026-11-13T15:08:44Z"
     },
     {
-      "id": "50481187",
-      "title": "Elevated errors on claude.ai, Claude Code, and platform.claude.com",
+      "id": "50547777",
+      "title": "AI agents ask better questions than KPMG accountants in audit trial",
       "summary": "",
-      "url": "https://status.claude.com/incidents/nn11wk485zfn",
-      "hn_url": "https://news.ycombinator.com/item?id=50481187",
-      "points": 494,
-      "comments": 396,
-      "author": "__vivek",
+      "url": "https://europeanbusinessmagazine.com/ai-agents-better-questions-kpmg/",
+      "hn_url": "https://news.ycombinator.com/item?id=50547777",
+      "points": 490,
+      "comments": 259,
+      "author": "Betelbuddy",
       "source": "hackernews",
-      "created_at": "2026-11-13T10:18:13Z"
-    },
-    {
-      "id": "50468888",
-      "title": "I'm making LLMs work on small and old devices",
-      "summary": "",
-      "url": "https://github.com/hyperionaidev/smolmaxxing/",
-      "hn_url": "https://news.ycombinator.com/item?id=50468888",
-      "points": 485,
-      "comments": 180,
-      "author": "mrashad74",
-      "source": "hackernews",
-      "created_at": "2026-11-12T15:23:10Z"
+      "created_at": "2026-11-18T15:49:34Z"
     }
   ],
   "implementation_gaps": []
