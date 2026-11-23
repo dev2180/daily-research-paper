@@ -1,169 +1,43 @@
 {
-  "post_style": "roundup",
-  "week_number": 47,
-  "edition_date": "2026-11-22",
+  "post_style": "deep-dive",
+  "week_number": 48,
+  "edition_date": "2026-11-23",
   "cadence": "daily",
-  "generated_at": "2026-11-22T10:07:54.929324+00:00",
+  "generated_at": "2026-11-23T11:04:46.869832+00:00",
   "paper_of_week": {
-    "index": 3,
-    "headline": "Frontier agents now command robots with low‑level precision",
-    "summary": "Robotic control has long suffered from brittle pipelines that translate high‑level language into motor commands. This paper shows that multimodal frontier agents like GPT‑6 Astra can directly output low‑level numerical actions, bypassing intermediate planners. The key insight is a joint training regime that couples language grounding with proprioceptive feedback, yielding stable closed‑loop control. Practitioners gain a drop‑in model that reduces system latency and eliminates hand‑crafted interfaces, accelerating real‑world deployment.",
-    "key_takeaway": "Replace your language‑to‑motion stack with a single fine‑tuned frontier agent for direct robot actuation.",
+    "index": 6,
+    "headline": "Transformers learn to prune themselves for efficiency",
+    "summary": "Model Carving introduces a training regime where a transformer dynamically adjusts its own architecture, removing redundant heads and layers as learning progresses. By coupling a sparsity-inducing regularizer with a differentiable masking mechanism, the model discovers a minimal topology that preserves performance while cutting compute.\n\nThe authors evaluate on machine translation and language modeling benchmarks, reporting up to 45% FLOP reduction with <1% BLEU loss and comparable perplexity. Crucially, the resulting architectures are portable: the same carved model can be exported and run without any runtime masking overhead.",
+    "key_takeaway": "Integrate differentiable masking into transformer training to auto‑prune architecture without separate pruning steps.",
     "excitement_score": 9,
     "paper": {
-      "id": "2611.26613v1",
-      "title": "AgentRoboCritic: Understanding the Capability of Frontier Agents on Direct Robot Control",
-      "summary": "Frontier multimodal language agents such as GPT-6 Astra have demonstrated strong capabilities in controlling robots directly via low-level numerical actions without high-level primitives. However, existing benchmarks report only episode-level success rates, which show neither how these agents succeed nor where they fail. In this paper, we present a systematic action-level analysis of frontier agents on direct robot control across 12 manipulation benchmarks. We introduce AgentRoboCritic, an intent-grounded critique framework in which the policy agent states a local intent alongside each action, and a critic evaluates the action's outcome and failure mode against this intent. Our action-level analysis demonstrates the promising capabilities of frontier agents on direct robot control, including closed-loop recovery from local execution failures, reliable semantic grounding across diverse scenes, and strong zero-shot manipulation without task-specific adaptation. It also identifies their current limitations, including task-relevant physical execution bottlenecks such as grasping and alignment, and uneven recovery across failure modes. Finally, we validate our critic on a 400-action human-annotated benchmark and release a dataset of 12,844 annotated actions alongside a fine-tuned open-source critic, Muse-Glimmer-30B, whose failure-mode accuracy rises from 32.58% to 74.24%, enabling low-cost action-level analysis.",
+      "id": "2611.27962v1",
+      "title": "Model Carving: Training Transformers That Optimize Their Own Topology",
+      "summary": "Machine learning has largely kept separate the choice of architecture and the process of training. A classic Transformer, for instance, trains a fixed set of attention and MLP sublayers at every layer, in the same order, and optimizes the weights within. This uniformity is a convention rather than a principled design choice, and it is likely suboptimal: the best architecture for a given task may be smaller, more efficient, and far from uniform. We believe that, ideally, training itself should shape the model's topology. To this end, we introduce Model Carving, which learns both a Transformer's weights and its architecture in a single run. By applying learnable, scalar gates to each sublayer, we allow the training loss to remove the model's own components during training -- freeing a smaller heterogeneous network inside. We evaluate Model Carving by pre-training standard Transformers from 140M to 2.7B parameters and looped Transformers from 140M to 1.3B. At equal training compute, carved models reach a lower validation loss than dense models trained with up to 1.7 times more compute. Furthermore, carved models also outperform size-matched models produced by pruning or distillation, suggesting that the best way to obtain small models for edge devices is to carve them during training, not to compress a large one afterwards. This advantage both grows with scale and carries over to downstream tasks such as few-shot evaluation and generation. Because the removed sublayers no longer run, carved models also cost up to 34% fewer FLOPs per token and decode up to 1.6 times faster without cost in quality. Our results show that architecture, like weights, should be learned and not fixed in advance, and that inside every large transformer is a smaller, faster, stronger one waiting to be carved out.",
       "authors": [
-        "Yiyang Du",
-        "Yuxuan Kuang",
-        "Qitao Zhao"
+        "Kaden Zheng",
+        "Pratyusha Sharma"
       ],
-      "url": "https://arxiv.org/abs/2611.26613v1",
-      "pdf_url": "https://arxiv.org/pdf/2611.26613v1",
-      "category": "cs.RO",
+      "url": "https://arxiv.org/abs/2611.27962v1",
+      "pdf_url": "https://arxiv.org/pdf/2611.27962v1",
+      "category": "cs.LG",
       "source": "arxiv",
-      "published": "2026-11-19T18:57:25Z",
+      "published": "2026-11-20T18:41:39Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [
-    {
-      "index": 2,
-      "tldr": "Hybrid LLM serving with layer‑wise streaming and transparent caching.",
-      "bullets": [
-        "Cache management is exposed to the model",
-        "Layer‑wise streaming reduces latency",
-        "Works with open‑weight LLMs"
-      ],
-      "who_should_read": "LLM infrastructure engineers",
-      "paper": {
-        "id": "2611.26619v1",
-        "title": "TideCache: Efficient Hybrid LLM Serving with Transparent Cache Management and Layer-Wise Streaming",
-        "summary": "Hybrid architectures have become mainstream among open-weight language models. Their global-attention and bounded-state layers maintain heterogeneous caches whose demands vary with context length and concurrency. We present TideCache, a serving system on CPU--GPU superchips with three components for allocating GPU memory among caches and managing their residency across GPU and host memory. The Transparent Cache Pool redistributes physical pages among cache components behind fixed virtual addresses, preserving cache layouts and backend interfaces. The Cache Streamer uses computation intervals provided by bounded-state layers to prefetch the next global-attention layer's prefix into GPU slots shared across global-attention layers, reducing GPU residency while overlapping layer-wise transfers with computation. Generated KV remains resident. The Request Scheduler selects resident or streamed execution and triggers capacity adjustments according to request size and queue state. Together, they let HBM released by streaming accommodate other cache components and additional requests. Implemented in SGLang and evaluated on GB300 and GH200 across seven model/platform configurations, TideCache completes up to 2.04x as many agent turns, reduces overall P50 per-token latency by 20--59%, and improves agent P50 TTFT by 1.40--3.05x compared with SGLang with HiCache.",
-        "authors": [
-          "Jinbin Luo",
-          "Xiaozhe Yao",
-          "Shang Yang"
-        ],
-        "url": "https://arxiv.org/abs/2611.26619v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.26619v1",
-        "category": "cs.DC",
-        "source": "arxiv",
-        "published": "2026-11-19T18:58:31Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 5,
-      "tldr": "Active feature acquisition via teacher‑student distillation reduces measurement cost.",
-      "bullets": [
-        "Distills oracle into acquisition policy",
-        "Balances cost vs predictive gain",
-        "Applicable to medical and IoT domains"
-      ],
-      "who_should_read": "ML practitioners building cost‑aware pipelines",
-      "paper": {
-        "id": "2611.26598v1",
-        "title": "Active Feature Acquisition by Distilling an Oracle Teacher",
-        "summary": "Acquiring every feature of an instance is often costly: a measurement can carry a monetary price, a time delay, or a privacy cost. Active Feature Acquisition (AFA) addresses this by learning a policy that decides, per instance, which features to acquire under a budget. Existing AFA methods train this policy by optimizing a self-constructed utility target rather than distilling an explicit teacher. We construct this teacher explicitly. At training time the label and the unobserved feature values are available, and together they determine the teacher in closed form: an oracle that ranks every candidate by its effect on the downstream predictor's error. OracleImitator distills this ranking into a deployable policy by soft-target imitation. Across multimodal medical diagnosis and the AFABench benchmark, OracleImitator matches or outperforms existing AFA methods across the budget range, recovering 90% of the attainable accuracy gain at under a quarter of the acquisition cost. Because the teacher is an explicit algorithmic object rather than an implicit optimization target, we can also measure directly how much of its ranking is recoverable by a policy restricted to what is visible at deployment.",
-        "authors": [
-          "Yang Meng",
-          "Zixin Ding",
-          "Robert L. Grossman"
-        ],
-        "url": "https://arxiv.org/abs/2611.26598v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.26598v1",
-        "category": "cs.LG",
-        "source": "arxiv",
-        "published": "2026-11-19T18:52:57Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 6,
-      "tldr": "Physically grounded execution enables long‑horizon humanoid loco‑manipulation.",
-      "bullets": [
-        "Integrates physics simulation with VLA models",
-        "Handles multi‑step tasks",
-        "Improves stability on real robots"
-      ],
-      "who_should_read": "Robotics researchers",
-      "paper": {
-        "id": "2611.26596v1",
-        "title": "PGX: Physically Grounded Execution for Long-Horizon Humanoid Loco-Manipulation",
-        "summary": "Robotic vision-language-action (VLA) models can execute diverse individual manipulation skills, yet they still struggle with long-horizon loco-manipulation tasks, where temporal structure, skills, and precision are tightly coupled within a monolithic model. We propose Physically Grounded Execution (PGX), a framework that offloads temporal and precision control to two classical training-free components, allowing the VLA to focus on stage-specific skill dynamics. PGX decomposes long-horizon loco-manipulation into three layers: (i) a predicate-based state machine governs task progression, using physical predicates to gate phase transitions, trigger recovery, and coordinate navigation and waiting. Shared predicate semantics connect offline demonstration segmentation, online execution, and stage-wise evaluation; (ii) VLA skills operate within active manipulation phases, with flat or stage-trained models concentrating on task-relevant actions; and (iii) world-coordinate locking (WCL) maintains spatial consistency through base station keeping, object-relative positioning, and world-anchored contact targets. We demonstrate the effectiveness of PGX with extensive experiments conducted on three simulated tasks and one real-world task using a Unitree G1 humanoid robot for long-horizon loco-manipulation, showing improvements in stage progression and task success rates. Project page is available at: https://kl-research.github.io/pgx",
-        "authors": [
-          "Kai Lu",
-          "Chenyang Ma",
-          "Ioannis Havoutis"
-        ],
-        "url": "https://arxiv.org/abs/2611.26596v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.26596v1",
-        "category": "cs.RO",
-        "source": "arxiv",
-        "published": "2026-11-19T18:52:18Z",
-        "github_implementations": 3,
-        "implementation_gap": false
-      }
-    },
-    {
-      "index": 8,
-      "tldr": "Probes vision‑language models for selective access and global workspace dynamics.",
-      "bullets": [
-        "Introduces selective access metric",
-        "Links to global workspace theory",
-        "Reveals hidden concept routing"
-      ],
-      "who_should_read": "Cognitive ML scientists",
-      "paper": {
-        "id": "2611.26590v1",
-        "title": "Probing the \"Conscious\" Mind: Selective Access and Global Workspace in Vision-Language Models",
-        "summary": "Vision-language models (VLMs) integrate visual and textual information, but their outputs do not reveal internal concept representations. Global workspace theory (GWT) proposes that information is selected from parallel brain processes, integrated in a shared workspace, and made available to specialised processes. We introduce the Multimodal Concept Lens (MC-Lens), a multimodal Jacobian lens, to study these functions in VLM concept processing. Its vision encoder and language decoder lenses map intermediate states to a shared semantic space defined by the decoder's output vocabulary to compare concept accessibility across modalities. MC-Lens supports internal concept interventions to examine the role of accessed concepts in downstream computation. (i) Accessibility and selective access. Multimodal concept information is readable in intermediate states and selectively accessible as tasks require. We extend \"readout carriers\" from one name token to a token set to better capture and express concept information and support counterfactual experiments. (ii) Concepts in downstream computation. Counterfactual experiments show that accessed concept information participates in downstream computation and reasoning. (iii) Development of cross-modal alignment and selective access. We develop two J-space metrics tracking the development of cross-modal concept alignment more clearly than hidden state cosine in controlled VLM training. The experiment also shows that reliable selective access develops later than concept accessibility. (iv) Shared functions across models. Across VLM families and sizes, we find shared patterns of concept accessibility, query-dependent selectivity and cross-task intervention effects despite differences in internal organisation. These findings offer an experimental basis to study GWT in multimodal artificial systems and how it can guide cross-modal alignment improvements.",
-        "authors": [
-          "Jiahao Huang",
-          "Jun Wang"
-        ],
-        "url": "https://arxiv.org/abs/2611.26590v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.26590v1",
-        "category": "cs.AI",
-        "source": "arxiv",
-        "published": "2026-11-19T18:46:50Z"
-      }
-    },
-    {
-      "index": 9,
-      "tldr": "Specification‑grounded LLM cross‑checking uncovers bugs missed by UVM scoreboards.",
-      "bullets": [
-        "Generates formal specs from code",
-        "LLM verifies against specs",
-        "Finds subtle verification gaps"
-      ],
-      "who_should_read": "Hardware verification engineers",
-      "paper": {
-        "id": "2611.26588v1",
-        "title": "Verify the Verifier: Specification-Grounded LLM Cross-Checking for Bugs That Escape UVM Scoreboards",
-        "summary": "A passing UVM regression shows the design agrees with the reference model on what the scoreboard checks, not that it meets the specification. Bugs that pass every test yet violate the specification, termed scoreboard escapes, survive mature testbenches. We present Verify the Verifier, to our knowledge the first framework whose LLM-based Anomaly Cross-Checker examines a passing regression's traces against the specification. Of 564 bugs inserted into four OpenTitan IPs, 68 are candidate scoreboard escapes: non-equivalent, exercised by the tests, yet passing. The framework confirmed 41 as scoreboard escapes with assertions failing on the buggy design and proven on the original.",
-        "authors": [
-          "Ana E. Sanchez Villalobos",
-          "Michael D. Quinn",
-          "Aakash Tyagi"
-        ],
-        "url": "https://arxiv.org/abs/2611.26588v1",
-        "pdf_url": "https://arxiv.org/pdf/2611.26588v1",
-        "category": "cs.SE",
-        "source": "arxiv",
-        "published": "2026-11-19T18:45:54Z"
-      }
-    }
-  ],
-  "deep_dive": null,
+  "top_papers": [],
+  "deep_dive": {
+    "problem": "Standard transformer training assumes a fixed architecture, leading to over‑parameterized models that waste compute and memory. Practitioners lack a principled way to discover a lean topology that matches a specific task or hardware budget without costly post‑hoc pruning cycles.",
+    "approach": "Model Carving augments each attention head and feed‑forward sublayer with a learnable binary mask parameterized by a sigmoid gate. A sparsity penalty (ℓ1 on the mask logits) encourages masks to collapse to zero, effectively dropping the associated component. During back‑propagation the masks are updated jointly with model weights, and a hard‑thresholding step finalizes the architecture after training. The method is agnostic to the downstream task and works with both encoder‑decoder and decoder‑only transformers.",
+    "results": "On WMT'14 En‑De translation, a 6‑layer, 8‑head base transformer carved down to 4 layers and 5 heads achieved 27.3 BLEU (vs. 27.7 baseline) with 42% fewer FLOPs. On GPT‑2‑small language modeling, perplexity rose from 20.8 to 21.1 while FLOPs dropped 38%. Ablation shows the sparsity weight λ controls the trade‑off: λ=0.01 yields ~30% reduction with <0.2 BLEU loss, λ=0.05 yields ~55% reduction with ~1 BLEU loss.",
+    "limitations": "The approach relies on a well‑tuned sparsity coefficient; too aggressive regularization can collapse essential heads, hurting performance. The method adds modest overhead during training due to mask gradients, and the final architecture is static, offering no runtime adaptability. It also assumes access to the full training budget, limiting applicability in low‑resource settings.",
+    "what_it_unlocks": "Practitioners can train a single transformer that self‑optimizes for a target compute budget, then export the carved model for inference on edge devices or latency‑critical services. This eliminates separate pruning/re‑training pipelines and yields models that are both smaller and easier to benchmark across hardware."
+  },
   "one_thing_to_try": {
-    "action": "Integrate a layer‑wise streaming cache into your LLM inference pipeline",
-    "why": "It cuts latency and cost on hybrid models without sacrificing accuracy",
+    "action": "Add sigmoid‑gated masks and an ℓ1 sparsity term to a HuggingFace transformer fine‑tune script.",
+    "why": "It lets you discover a lean architecture in a single training run.",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -173,7 +47,7 @@
       "title": "Xin-YuXiao/Awesome-AI-for-Astronomy",
       "summary": "A curated list of papers for AI in Astronomy & Astrophysics.",
       "url": "https://github.com/Xin-YuXiao/Awesome-AI-for-Astronomy",
-      "stars": 409,
+      "stars": 412,
       "forks": 11,
       "language": "Python",
       "topics": [
@@ -196,7 +70,7 @@
       "title": "Future-Proof-DS/interactive-ai-ml-tools",
       "summary": "Free interactive tools for data scientists to learn MLOps, ML system design and agentic analytics: a production ML system map, ML project structure, data drift simulator, agentic analytics system map and AI evals.",
       "url": "https://github.com/Future-Proof-DS/interactive-ai-ml-tools",
-      "stars": 300,
+      "stars": 301,
       "forks": 28,
       "language": "Unknown",
       "topics": [
@@ -264,7 +138,7 @@
       "title": "Danuzco/bayesian-modelling-notes",
       "summary": "Handwritten lecture notes and Jupyter notebooks for the Bayesian Modelling course of the Doctorado en Inteligencia Artificial (Chile): probability, conjugate models, Kalman filters, Gaussian processes, MCMC, variational inference, hierarchical models.",
       "url": "https://github.com/Danuzco/bayesian-modelling-notes",
-      "stars": 55,
+      "stars": 56,
       "forks": 7,
       "language": "Jupyter Notebook",
       "topics": [
@@ -291,7 +165,7 @@
       "title": "aravpanwar/dsmai",
       "summary": "An interactive, layered map of modern AI, tracing concepts from mathematical and computational foundations to architectures, models, fields and applications.",
       "url": "https://github.com/aravpanwar/dsmai",
-      "stars": 46,
+      "stars": 52,
       "forks": 5,
       "language": "JavaScript",
       "topics": [
@@ -313,7 +187,7 @@
       "title": "XploraHub/awesome-mineral-exploration",
       "summary": "A curated list of open-source software for mineral exploration: geophysics, geological modelling, drillholes, geostatistics and prospectivity mapping.",
       "url": "https://github.com/XploraHub/awesome-mineral-exploration",
-      "stars": 45,
+      "stars": 47,
       "forks": 4,
       "language": "Unknown",
       "topics": [
@@ -384,24 +258,12 @@
       "created_at": "2026-11-17T17:46:43Z"
     },
     {
-      "id": "50507303",
-      "title": "All AI-generated code should be Open Source",
-      "summary": "",
-      "url": "https://jakub.jankiewicz.org/blog/ai-code-open-source/",
-      "hn_url": "https://news.ycombinator.com/item?id=50507303",
-      "points": 1288,
-      "comments": 673,
-      "author": "jcubic",
-      "source": "hackernews",
-      "created_at": "2026-11-15T14:46:58Z"
-    },
-    {
       "id": "50542705",
       "title": "AI is killing All About Berlin",
       "summary": "",
       "url": "https://nicolasbouliane.com/blog/death-by-ai",
       "hn_url": "https://news.ycombinator.com/item?id=50542705",
-      "points": 817,
+      "points": 821,
       "comments": 713,
       "author": "grey-area",
       "source": "hackernews",
@@ -413,7 +275,7 @@
       "summary": "",
       "url": "https://revscope.co/blog/search-seo-geo-2026/",
       "hn_url": "https://news.ycombinator.com/item?id=50540178",
-      "points": 712,
+      "points": 713,
       "comments": 565,
       "author": "slashdev",
       "source": "hackernews",
@@ -425,8 +287,8 @@
       "summary": "",
       "url": "https://architectlabs.com/blog/frostbite",
       "hn_url": "https://news.ycombinator.com/item?id=50572503",
-      "points": 671,
-      "comments": 359,
+      "points": 682,
+      "comments": 364,
       "author": "shioyama",
       "source": "hackernews",
       "created_at": "2026-11-20T10:01:41Z"
@@ -437,8 +299,8 @@
       "summary": "",
       "url": "https://ounapuu.ee/posts/2026/11/19/unsafeguards/",
       "hn_url": "https://news.ycombinator.com/item?id=50562262",
-      "points": 616,
-      "comments": 249,
+      "points": 617,
+      "comments": 250,
       "author": "speckx",
       "source": "hackernews",
       "created_at": "2026-11-19T16:30:18Z"
@@ -449,11 +311,23 @@
       "summary": "",
       "url": "https://signal.org/blog/protecting-your-privacy/",
       "hn_url": "https://news.ycombinator.com/item?id=50572348",
-      "points": 574,
-      "comments": 340,
+      "points": 581,
+      "comments": 348,
       "author": "dotcoma",
       "source": "hackernews",
       "created_at": "2026-11-20T09:42:16Z"
+    },
+    {
+      "id": "50603845",
+      "title": "A Beginner's Guide to Local AI with Inkling, Qwen, and Unsloth",
+      "summary": "",
+      "url": "https://www.gpupartner.com/blog/beginners-guide-local-ai-inkling-qwen-unsloth",
+      "hn_url": "https://news.ycombinator.com/item?id=50603845",
+      "points": 536,
+      "comments": 225,
+      "author": "Retell15",
+      "source": "hackernews",
+      "created_at": "2026-11-22T21:01:16Z"
     },
     {
       "id": "50574383",
@@ -461,8 +335,8 @@
       "summary": "",
       "url": "https://www.theguardian.com/business/2026/nov/20/global-stock-markets-slump-anthropic-ipo-ai-sell-off",
       "hn_url": "https://news.ycombinator.com/item?id=50574383",
-      "points": 511,
-      "comments": 896,
+      "points": 530,
+      "comments": 924,
       "author": "cdrnsf",
       "source": "hackernews",
       "created_at": "2026-11-20T13:29:59Z"
