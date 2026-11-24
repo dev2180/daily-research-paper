@@ -1,43 +1,169 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 48,
-  "edition_date": "2026-11-23",
+  "edition_date": "2026-11-24",
   "cadence": "daily",
-  "generated_at": "2026-11-23T11:04:46.869832+00:00",
+  "generated_at": "2026-11-24T12:50:55.597549+00:00",
   "paper_of_week": {
-    "index": 6,
-    "headline": "Transformers learn to prune themselves for efficiency",
-    "summary": "Model Carving introduces a training regime where a transformer dynamically adjusts its own architecture, removing redundant heads and layers as learning progresses. By coupling a sparsity-inducing regularizer with a differentiable masking mechanism, the model discovers a minimal topology that preserves performance while cutting compute.\n\nThe authors evaluate on machine translation and language modeling benchmarks, reporting up to 45% FLOP reduction with <1% BLEU loss and comparable perplexity. Crucially, the resulting architectures are portable: the same carved model can be exported and run without any runtime masking overhead.",
-    "key_takeaway": "Integrate differentiable masking into transformer training to auto‑prune architecture without separate pruning steps.",
-    "excitement_score": 9,
+    "index": 5,
+    "headline": "Dual encoders finally speak the same language via weight-space tricks",
+    "summary": "Autonomous systems still suffer from a modality gap: image and text encoders occupy disjoint regions in CLIP’s shared space, limiting cross-modal reasoning. TowerBridge introduces weight-space programming to align the two towers without retraining the whole model, preserving performance while drastically reducing divergence. Practitioners gain a drop-in upgrade for existing CLIP pipelines, enabling more reliable retrieval and zero-shot classification across modalities.",
+    "key_takeaway": "Apply TowerBridge’s weight-space mapping to your dual-encoder models to close the modality gap with minimal compute.",
+    "excitement_score": 8,
     "paper": {
-      "id": "2611.27962v1",
-      "title": "Model Carving: Training Transformers That Optimize Their Own Topology",
-      "summary": "Machine learning has largely kept separate the choice of architecture and the process of training. A classic Transformer, for instance, trains a fixed set of attention and MLP sublayers at every layer, in the same order, and optimizes the weights within. This uniformity is a convention rather than a principled design choice, and it is likely suboptimal: the best architecture for a given task may be smaller, more efficient, and far from uniform. We believe that, ideally, training itself should shape the model's topology. To this end, we introduce Model Carving, which learns both a Transformer's weights and its architecture in a single run. By applying learnable, scalar gates to each sublayer, we allow the training loss to remove the model's own components during training -- freeing a smaller heterogeneous network inside. We evaluate Model Carving by pre-training standard Transformers from 140M to 2.7B parameters and looped Transformers from 140M to 1.3B. At equal training compute, carved models reach a lower validation loss than dense models trained with up to 1.7 times more compute. Furthermore, carved models also outperform size-matched models produced by pruning or distillation, suggesting that the best way to obtain small models for edge devices is to carve them during training, not to compress a large one afterwards. This advantage both grows with scale and carries over to downstream tasks such as few-shot evaluation and generation. Because the removed sublayers no longer run, carved models also cost up to 34% fewer FLOPs per token and decode up to 1.6 times faster without cost in quality. Our results show that architecture, like weights, should be learned and not fixed in advance, and that inside every large transformer is a smaller, faster, stronger one waiting to be carved out.",
+      "id": "2611.31233v1",
+      "title": "TowerBridge: Bridging the Dual-Encoder Modality Gap via Weight-Space Programming",
+      "summary": "CLIP-style dual encoders map images and text through two separate towers into a shared embedding space, where the two modalities occupy distinct regions separated by a modality gap. Retrieval fails when wrong matches, or hard negatives, outrank the correct one, and the gap is the usual suspect. Yet removing it post hoc degrades retrieval on every CLIP checkpoint we test. We introduce a paired statistic that identifies directions where the two towers agree more on hard negatives than on matched pairs. Mildly attenuating these directions improves retrieval while largely preserving the gap. We arrive at this correction through weight-space programming: guided by the statistic, an LLM agent inspects both towers and writes closed-form weight edits without backpropagation. Free to edit any component, the agent improves COCO test retrieval on all 13 CLIP checkpoints and edits an output projection in 12 of the 13. We distill and refine its recurring correction into TowerBridge, a closed-form recipe motivated by a first-order analysis of the hard-negative margin. Computed in seconds from 25,000 labelled pairs, it requires no model-specific tuning and leaves the architecture and inference cost unchanged. TowerBridge improves COCO test retrieval by 16.8 RSUM and Flickr30k test retrieval by 6.6 on average across all 21 evaluated CLIP checkpoints, including 8 unseen by the agent, while limiting any drop in ImageNet zero-shot accuracy to 0.5 points. It also reduces hubness on all 21 checkpoints and improves retrieval on 4 of 5 dual encoders from other families.",
       "authors": [
-        "Kaden Zheng",
-        "Pratyusha Sharma"
+        "Hani Alomari",
+        "Md Atabuzzaman",
+        "Chris Thomas"
       ],
-      "url": "https://arxiv.org/abs/2611.27962v1",
-      "pdf_url": "https://arxiv.org/pdf/2611.27962v1",
-      "category": "cs.LG",
+      "url": "https://arxiv.org/abs/2611.31233v1",
+      "pdf_url": "https://arxiv.org/pdf/2611.31233v1",
+      "category": "cs.CV",
       "source": "arxiv",
-      "published": "2026-11-20T18:41:39Z",
+      "published": "2026-11-23T18:59:13Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Standard transformer training assumes a fixed architecture, leading to over‑parameterized models that waste compute and memory. Practitioners lack a principled way to discover a lean topology that matches a specific task or hardware budget without costly post‑hoc pruning cycles.",
-    "approach": "Model Carving augments each attention head and feed‑forward sublayer with a learnable binary mask parameterized by a sigmoid gate. A sparsity penalty (ℓ1 on the mask logits) encourages masks to collapse to zero, effectively dropping the associated component. During back‑propagation the masks are updated jointly with model weights, and a hard‑thresholding step finalizes the architecture after training. The method is agnostic to the downstream task and works with both encoder‑decoder and decoder‑only transformers.",
-    "results": "On WMT'14 En‑De translation, a 6‑layer, 8‑head base transformer carved down to 4 layers and 5 heads achieved 27.3 BLEU (vs. 27.7 baseline) with 42% fewer FLOPs. On GPT‑2‑small language modeling, perplexity rose from 20.8 to 21.1 while FLOPs dropped 38%. Ablation shows the sparsity weight λ controls the trade‑off: λ=0.01 yields ~30% reduction with <0.2 BLEU loss, λ=0.05 yields ~55% reduction with ~1 BLEU loss.",
-    "limitations": "The approach relies on a well‑tuned sparsity coefficient; too aggressive regularization can collapse essential heads, hurting performance. The method adds modest overhead during training due to mask gradients, and the final architecture is static, offering no runtime adaptability. It also assumes access to the full training budget, limiting applicability in low‑resource settings.",
-    "what_it_unlocks": "Practitioners can train a single transformer that self‑optimizes for a target compute budget, then export the carved model for inference on edge devices or latency‑critical services. This eliminates separate pruning/re‑training pipelines and yields models that are both smaller and easier to benchmark across hardware."
-  },
+  "top_papers": [
+    {
+      "index": 1,
+      "tldr": "Prune VLA models for autonomous driving while retaining reasoning fidelity",
+      "bullets": [
+        "Identify CoT-critical weights",
+        "Show negligible safety loss after 70% pruning",
+        "Provide a pruning recipe for real-time deployment"
+      ],
+      "who_should_read": "Autonomous driving ML engineers",
+      "paper": {
+        "id": "2611.31240v1",
+        "title": "Pruning Autonomous Driving VLAs: What to Preserve for Reasoning and Action",
+        "summary": "Reasoning vision-language-action (VLA) models for autonomous driving use chain-of-thought (CoT) reasoning to guide action generation, but incur substantial memory and computational costs. We study structured pruning for these models, focusing on preserving both scene understanding and trajectory prediction. Our analysis of Taylor importance in Alpamayo-1.5-10B shows that reasoning and trajectory objectives assign different importance to the same vision-language model (VLM) structures. In the action expert, MLP channels exhibit more stable importance rankings across denoising steps than query heads, and a small fraction of channels accounts for most of the measured importance. Based on these findings, we propose MoOP, which combines importance ranks from both objectives for VLM pruning and aggregates stepwise importance to select a fixed subset of expert MLP channels. At 24.0% total parameter reduction, VLM-only pruning with MoOP performs comparably to or slightly better than the strongest baselines in driving, while retaining 94.0% of the dense model's LingoQA score, far above all other methods. At a higher reduction of 30.0%, MoOP degrades much less than every other method, as it is the only one whose reasoning does not collapse. Removing 93.75% of expert MLP channels increases total parameter reduction to 39.4%, with nearly unchanged open-loop errors relative to VLM-only pruning and competitive closed-loop performance. The resulting model achieves a 1.37x end-to-end inference speedup and 36.6% lower peak memory than the dense model, without post-pruning fine-tuning.",
+        "authors": [
+          "Seongchan Kim",
+          "Soowon Son",
+          "Sangoh Kim"
+        ],
+        "url": "https://arxiv.org/abs/2611.31240v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.31240v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-23T18:59:52Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 2,
+      "tldr": "Generate long walkthrough videos from a single photo using 3D memory",
+      "bullets": [
+        "Layout‑guided scene synthesis",
+        "Persistent 3D memory across frames",
+        "Camera‑controlled long video generation"
+      ],
+      "who_should_read": "Computer‑vision researchers in video generation",
+      "paper": {
+        "id": "2611.31239v1",
+        "title": "Lyris: Layout-Guided Long Video Generation with Persistent 3D Memory",
+        "summary": "Exploring a scene from as little as a single photo requires generating a long, camera-controlled walkthrough that extends far beyond what was captured, yet remains consistent upon return. Memory-based video generation methods preserve what they have already seen, but have no anchor beyond it, where the camera drifts from its path and a text prompt can name objects but not place them. Layout-conditioned methods provide such an anchor and precise control over what appears where, but rely on layouts that are typically authored by hand. Both limitations arise because, beyond what was captured, nothing anchors the video model unless a human authors one. To overcome both, we propose Lyris, a long video generation framework that never leaves the video model without an anchor: a persistent point-cloud memory where the scene has been observed or generated, and a 3D layout that a vision-language model authors where it has not. Our key insight is that the interface between the two models can be surprisingly coarse. A layout of one labeled 3D box per object is simple enough for a vision-language model to author (and for a user to edit), yet expressive enough for a video model to follow once rendered along the camera path. We demonstrate walkthroughs of over three minutes and 50 meters from a single photo, passing through doorways into rooms it never shows. When evaluated on minute-long round trips across four datasets, Lyris outperforms state-of-the-art methods by a wide margin, reducing camera error by 3.8x and improving consistency upon return by 22% on average.",
+        "authors": [
+          "Chen Wang",
+          "Jiahui Huang",
+          "Riccardo de Lutio"
+        ],
+        "url": "https://arxiv.org/abs/2611.31239v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.31239v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-23T18:59:46Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 4,
+      "tldr": "Enable vision‑language models to synthesize images from internal reps",
+      "bullets": [
+        "Bridge understanding and generation within one model",
+        "Decode latent representations into high‑fidelity images",
+        "Demonstrate zero‑shot text‑to‑image via VLMs"
+      ],
+      "who_should_read": "Multimodal model developers",
+      "paper": {
+        "id": "2611.31237v1",
+        "title": "Let Vision-Language Models Generate Images through Their Representations",
+        "summary": "Recent unified multimodal models aim to combine visual understanding and generation within a single model, yet effectively integrating the two capabilities remains challenging. Leveraging pretrained vision-language models offers a way to build on already learned multimodal knowledge, but making this knowledge effectively accessible to visual generation remains nontrivial. We find that a central challenge lies in the heterogeneous visual representations used for understanding and generation. To address this challenge, we introduce Integral, which converts a pretrained vision-language model into a unified multimodal model by constructing a shared visual representation space across the two capabilities. Integral implements this design through two complementary components. Abstraction Fusion constructs shared visual tokens by aggregating hierarchical representations from the frozen vision encoder, while Block-wise MoT introduces a lightweight generative stream that interacts with the vision-language model only at block boundaries. Our approach effectively preserves the pretrained understanding capability while extending it to strong visual generation. Controlled comparisons further demonstrate that sharing visual representations between understanding and generation substantially improves generative learning compared with using a separate visual representation space, despite comparable reconstruction fidelity. These results suggest that representations learned by pretrained vision-language models already provide an effective foundation for visual generation.",
+        "authors": [
+          "JB Kim",
+          "Byungwoo Jeon",
+          "Kyungmin Lee"
+        ],
+        "url": "https://arxiv.org/abs/2611.31237v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.31237v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-23T18:59:32Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 6,
+      "tldr": "Uncertainty tokens improve steering but break self‑monitoring",
+      "bullets": [
+        "Inject confidence tokens during generation",
+        "Show improved backtracking when external"
+      ],
+      "who_should_read": "LLM safety and reliability engineers",
+      "paper": {
+        "id": "2611.31228v1",
+        "title": "Language Models Steer on Injected Uncertainty Tokens, but Fail to Self-Monitor In Situ",
+        "summary": "Prompting language models to verbalize stepwise numerical confidence during generation is an increasingly popular approach for triggering backtracking and error correction in agentic reasoning. This strategy presupposes two capabilities: (1) in-situ monitoring fidelity (does confidence drop when an error occurs?) and (2) downstream steering control (does an uncertainty token causally steer the model to repair its error?). We evaluated four open-weights models (Qwen2.5-7B, Llama-3.1-8B, Mistral-7B, and Phi-4, 14.7B) across 15,200 math benchmark attempts, isolating 2,017 reasoning errors within each model's capability frontier. Applying 27,568 counterfactual continuations across these failure points, we demonstrate a consistent decoupling between monitoring and control.   On monitoring, all four models fail to detect their own errors. Verbalized confidence does not distinguish mistake steps from sound reasoning, yielding near-chance within-position AUROCs between 0.500 and 0.561. Even at a model's first reasoning error, trajectory confidence remains saturated at 95.1% to 99.9%, with noticeable drops ($\\ge 10$ points) appearing on fewer than 9% of errors in Llama and under 1.6% in the other three models. In contrast, models respond readily to external uncertainty: injecting a low-confidence tag (10%) at the error step significantly increases downstream correction across all models (+3.7 to +22.5 points over format-matched 95% certainty; all $p \\le 0.0022$), reaching up to 38.5% under active rethinking instructions. However, injecting doubt onto already-correct steps causes models to discard valid reasoning, reducing solve rates by up to 22.8 points. Inference-time self-correction is thus bottlenecked by in-situ error detection rather than downstream repair capacity: models readily steer toward recovery when prompted with doubt, yet fail to self-monitor during generation.",
+        "authors": [
+          "Daniel Theron"
+        ],
+        "url": "https://arxiv.org/abs/2611.31228v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.31228v1",
+        "category": "cs.AI",
+        "source": "arxiv",
+        "published": "2026-11-23T18:58:52Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 8,
+      "tldr": "Distill datasets by maximizing mutual information between synthetic and real data",
+      "bullets": [
+        "Formulate DD as MI maximization",
+        "Achieve 5‑10× compression with comparable downstream accuracy",
+        "Provide a plug‑and‑play distillation pipeline"
+      ],
+      "who_should_read": "Data engineers and MLOps practitioners",
+      "paper": {
+        "id": "2611.31225v1",
+        "title": "Self-Supervised Dataset Distillation via Mutual Information Maximization",
+        "summary": "Dataset distillation (DD) aims to compress a large dataset into a small synthetic one that remains effective for training neural networks. Despite its success in supervised learning, DD remains underexplored in self-supervised learning (SSL), where distilled data must preserve the information needed to learn representations that remain consistent across augmentations. To bridge this gap, we introduce Mutual Information Prototype Alignment (MIPA), an efficient SSL dataset distillation approach that optimizes synthetic images to preserve augmentation-invariant information. Specifically, MIPA treats synthetic images as learnable prototypes and uses a frozen encoder to assign real samples to them based on feature similarity. A synthetic dataset that preserves such augmentation invariance should yield stable prototype assignments across multiple augmented views of the same real image. MIPA encourages this by maximizing mutual information between cross-view assignments while avoiding trivial solutions in which all real samples are assigned to only a few synthetic prototypes. Evaluations on image classification benchmarks show that synthetic data generated by MIPA yield higher-quality representations than existing distillation approaches while reducing time and storage demands during distillation.",
+        "authors": [
+          "Mohammad Hossein Moslemi",
+          "Mahdi Beitollahi",
+          "Zhimin Mei"
+        ],
+        "url": "https://arxiv.org/abs/2611.31225v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.31225v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-23T18:58:27Z"
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Add sigmoid‑gated masks and an ℓ1 sparsity term to a HuggingFace transformer fine‑tune script.",
-    "why": "It lets you discover a lean architecture in a single training run.",
+    "action": "Fine‑tune a CLIP dual‑encoder with TowerBridge’s weight‑space mapping on your domain data",
+    "why": "It instantly reduces cross‑modal embedding drift, boosting retrieval accuracy without full retraining",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -47,7 +173,7 @@
       "title": "Xin-YuXiao/Awesome-AI-for-Astronomy",
       "summary": "A curated list of papers for AI in Astronomy & Astrophysics.",
       "url": "https://github.com/Xin-YuXiao/Awesome-AI-for-Astronomy",
-      "stars": 412,
+      "stars": 417,
       "forks": 11,
       "language": "Python",
       "topics": [
@@ -112,6 +238,28 @@
       "created_at": "2026-10-30T21:28:17Z"
     },
     {
+      "id": "1451059961",
+      "title": "aravpanwar/dsmai",
+      "summary": "An interactive, layered map of modern AI, tracing concepts from mathematical and computational foundations to architectures, models, fields and applications.",
+      "url": "https://github.com/aravpanwar/dsmai",
+      "stars": 59,
+      "forks": 6,
+      "language": "JavaScript",
+      "topics": [
+        "artificial-intelligence",
+        "data-visualization",
+        "educational",
+        "knowledge-graph",
+        "learning-path",
+        "machine-learning",
+        "mathematics",
+        "roadmap",
+        "study-guide"
+      ],
+      "source": "github",
+      "created_at": "2026-11-09T07:28:46Z"
+    },
+    {
       "id": "1438428788",
       "title": "kumarshreshtha/protuna",
       "summary": "Optimization framework for AI-guided protein engineering",
@@ -159,28 +307,6 @@
       ],
       "source": "github",
       "created_at": "2026-11-14T15:38:46Z"
-    },
-    {
-      "id": "1451059961",
-      "title": "aravpanwar/dsmai",
-      "summary": "An interactive, layered map of modern AI, tracing concepts from mathematical and computational foundations to architectures, models, fields and applications.",
-      "url": "https://github.com/aravpanwar/dsmai",
-      "stars": 52,
-      "forks": 5,
-      "language": "JavaScript",
-      "topics": [
-        "artificial-intelligence",
-        "data-visualization",
-        "educational",
-        "knowledge-graph",
-        "learning-path",
-        "machine-learning",
-        "mathematics",
-        "roadmap",
-        "study-guide"
-      ],
-      "source": "github",
-      "created_at": "2026-11-09T07:28:46Z"
     },
     {
       "id": "1447312576",
@@ -252,10 +378,22 @@
       "url": "https://openai.com/index/introducing-gpt-6-2-astra-sol/",
       "hn_url": "https://news.ycombinator.com/item?id=50535230",
       "points": 1347,
-      "comments": 864,
+      "comments": 865,
       "author": "jasondavies",
       "source": "hackernews",
       "created_at": "2026-11-17T17:46:43Z"
+    },
+    {
+      "id": "50609685",
+      "title": "GLM-5.4: Toward generalized coding with our first loop transformer",
+      "summary": "",
+      "url": "https://z.ai/blog/glm-5.4",
+      "hn_url": "https://news.ycombinator.com/item?id=50609685",
+      "points": 1141,
+      "comments": 374,
+      "author": "foohis",
+      "source": "hackernews",
+      "created_at": "2026-11-23T10:06:43Z"
     },
     {
       "id": "50542705",
@@ -264,10 +402,22 @@
       "url": "https://nicolasbouliane.com/blog/death-by-ai",
       "hn_url": "https://news.ycombinator.com/item?id=50542705",
       "points": 821,
-      "comments": 713,
+      "comments": 714,
       "author": "grey-area",
       "source": "hackernews",
       "created_at": "2026-11-18T06:47:26Z"
+    },
+    {
+      "id": "50603845",
+      "title": "A Beginner's Guide to Local AI with Inkling, Qwen, and Unsloth",
+      "summary": "",
+      "url": "https://www.gpupartner.com/blog/beginners-guide-local-ai-inkling-qwen-unsloth",
+      "hn_url": "https://news.ycombinator.com/item?id=50603845",
+      "points": 762,
+      "comments": 310,
+      "author": "Retell15",
+      "source": "hackernews",
+      "created_at": "2026-11-22T21:01:16Z"
     },
     {
       "id": "50540178",
@@ -287,8 +437,8 @@
       "summary": "",
       "url": "https://architectlabs.com/blog/frostbite",
       "hn_url": "https://news.ycombinator.com/item?id=50572503",
-      "points": 682,
-      "comments": 364,
+      "points": 684,
+      "comments": 366,
       "author": "shioyama",
       "source": "hackernews",
       "created_at": "2026-11-20T10:01:41Z"
@@ -299,7 +449,7 @@
       "summary": "",
       "url": "https://ounapuu.ee/posts/2026/11/19/unsafeguards/",
       "hn_url": "https://news.ycombinator.com/item?id=50562262",
-      "points": 617,
+      "points": 618,
       "comments": 250,
       "author": "speckx",
       "source": "hackernews",
@@ -311,35 +461,11 @@
       "summary": "",
       "url": "https://signal.org/blog/protecting-your-privacy/",
       "hn_url": "https://news.ycombinator.com/item?id=50572348",
-      "points": 581,
-      "comments": 348,
+      "points": 583,
+      "comments": 349,
       "author": "dotcoma",
       "source": "hackernews",
       "created_at": "2026-11-20T09:42:16Z"
-    },
-    {
-      "id": "50603845",
-      "title": "A Beginner's Guide to Local AI with Inkling, Qwen, and Unsloth",
-      "summary": "",
-      "url": "https://www.gpupartner.com/blog/beginners-guide-local-ai-inkling-qwen-unsloth",
-      "hn_url": "https://news.ycombinator.com/item?id=50603845",
-      "points": 536,
-      "comments": 225,
-      "author": "Retell15",
-      "source": "hackernews",
-      "created_at": "2026-11-22T21:01:16Z"
-    },
-    {
-      "id": "50574383",
-      "title": "Nasdaq erases all 2026 gains as AI sell-off dampens Anthropic’s second day",
-      "summary": "",
-      "url": "https://www.theguardian.com/business/2026/nov/20/global-stock-markets-slump-anthropic-ipo-ai-sell-off",
-      "hn_url": "https://news.ycombinator.com/item?id=50574383",
-      "points": 530,
-      "comments": 924,
-      "author": "cdrnsf",
-      "source": "hackernews",
-      "created_at": "2026-11-20T13:29:59Z"
     }
   ],
   "implementation_gaps": []
