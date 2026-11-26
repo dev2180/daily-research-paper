@@ -1,45 +1,174 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 48,
-  "edition_date": "2026-11-25",
+  "edition_date": "2026-11-26",
   "cadence": "daily",
-  "generated_at": "2026-11-25T11:36:22.109919+00:00",
+  "generated_at": "2026-11-26T11:21:09.027206+00:00",
   "paper_of_week": {
-    "index": 1,
-    "headline": "One policy, million robots: universal control breakthrough",
-    "summary": "OmniAct tackles the long‑standing challenge of scaling a single neural policy across a vast diversity of robotic embodiments. By embedding robot-specific kinematic and dynamic descriptors into a shared latent space, the method learns to modulate behavior without retraining per platform. The authors demonstrate zero‑shot transfer from a handful of training robots to thousands of unseen morphologies, preserving task success rates.\nThe work is built on a hierarchical policy: a high‑level task planner outputs abstract commands, while a low‑level adaptor conditions on a learned embodiment embedding. Training leverages massive multi‑embodiment simulation batches and a contrastive loss that aligns similar dynamics. Results on manipulation and locomotion benchmarks show less than 5% performance drop compared to per‑robot fine‑tuning, a striking scalability claim.",
-    "key_takeaway": "Embed robot dynamics into a shared latent space to reuse a single policy across heterogeneous platforms.",
+    "index": 5,
+    "headline": "Real-time head avatars finally get photorealistic relighting",
+    "summary": "Video‑driven avatar pipelines still struggle with consistent lighting across poses. LuxAvatar tackles this by learning a causal neural shading model on a 3D intrinsic proxy, enabling per‑pixel relighting at inference speed. The authors decouple geometry, albedo, and shading, then train a feed‑forward network to predict shading under arbitrary illumination. Practitioners gain a drop‑in module that turns a single portrait into a controllable, relightable avatar without costly multi‑view capture or offline rendering pipelines.",
+    "key_takeaway": "Integrate LuxAvatar's shading network to replace costly offline relighting in real‑time avatar systems.",
     "excitement_score": 9,
     "paper": {
-      "id": "2611.33158v1",
-      "title": "OmniAct: One Policy, One Million Embodiments",
-      "summary": "A single policy that controls diverse robots must not only transfer task knowledge across embodiments, but also adapt its behavior to each robot's capabilities. Existing approaches facilitate transfer through shared action representations, but these representations do not necessarily capture how differences in robot morphology should shape manipulation strategies. We introduce OmniAct, a cross-embodiment manipulation policy that conditions directly on each robot's kinematics in a specific scene to produce embodiment-specific behavior. This kinematic graph represents the robot's joint positions, motion axes, and connectivity to its visual observation, allowing the policy to account for how its embodiment related to objects and surfaces in the scene. A flow-matching policy predicts relative joint motions for each node, enabling control across robots with different degrees of freedom and kinematic configurations. To learn how physical structure shapes behavior at scale, we procedurally design and filter one million physically feasible robot embodiments; next, we develop algorithms to generate robot trajectories in simulation for all embodiments; finally, we train across diverse simulated manipulation tasks. On 2,000 embodiment-scene-held-out evaluation episodes, OmniAct achieves 63.0% success, compared to 17.8% for pi 0.5 and 57.9% for the strongest baseline; on the task families GPT-6 Astra was evaluated on, it achieves 64.7% against GPT-6 Astra's 41.1%. On a previously unseen real-world robot, it achieves nearly twice the success rate of the next best method, MolmoAct2. Beyond task success, we observe that OmniAct learns distinct manipulation strategies that exploit the capabilities and accommodate the limitations of different morphologies. Project: https://omniact.github.io/",
+      "id": "2611.34940v1",
+      "title": "LuxAvatar: Real-Time Relightable Head Avatars via Causal Neural Shading of 3D Intrinsic Proxies",
+      "summary": "We present LuxAvatar, a feed-forward framework for real-time head avatar animation and relighting from a single portrait. To achieve both 3D controllability and complex facial light transport, we factorize avatar synthesis into an animatable 3D intrinsic Gaussian proxy and a causal autoregressive neural shader. This proxy disentangles canonical geometry and reflectance attributes, rapidly rasterizing deformed Gaussians into view- and motion-consistent PBR buffers. Conditioned on these buffers, our neural shader formulates forward rendering as a conditional video diffusion process, bypassing explicit PBR computation to synthesize realistic shading effects under target illumination. We achieve real-time streaming through heterogeneous distillation from a pretrained multi-step bidirectional relighting teacher to a two-step causal autoregressive neural shader, inheriting broad synthetic lighting priors while minimizing conditioning and decoding latency. To further specialize these priors to human heads, we construct a hybrid relighting dataset for domain-specific fine-tuning, capturing authentic facial dynamics and physically grounded light transport. Extensive experiments show that our framework enables 3D-controllable, real-time portrait animation and relighting, outperforming state-of-the-art methods in visual fidelity, motion control, and lighting accuracy.",
       "authors": [
-        "Xiang Fan",
-        "Yuheng Wang",
-        "Jiayuan Yan"
+        "Yipengjing Sun",
+        "Chenyang Wang",
+        "Boyao Zhou"
       ],
-      "url": "https://arxiv.org/abs/2611.33158v1",
-      "pdf_url": "https://arxiv.org/pdf/2611.33158v1",
-      "category": "cs.RO",
+      "url": "https://arxiv.org/abs/2611.34940v1",
+      "pdf_url": "https://arxiv.org/pdf/2611.34940v1",
+      "category": "cs.CV",
       "source": "arxiv",
-      "published": "2026-11-24T18:59:58Z",
+      "published": "2026-11-25T18:59:46Z",
       "github_implementations": 3,
       "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Current robot learning pipelines require training a separate policy for each morphology, which is infeasible as the number of commercial and research platforms explodes. Practitioners need a way to deploy a single controller that can adapt to differing joint limits, actuation strengths, and sensor suites without costly retraining.\n",
-    "approach": "OmniAct constructs an embodiment encoder that ingests a robot’s kinematic tree, joint ranges, and inertial parameters, producing a fixed‑dimensional embedding. This embedding conditions both the observation encoder and the policy network via FiLM-like modulation layers. During training, a large pool of simulated robots is sampled each iteration, and a contrastive dynamics loss forces embeddings of robots with similar dynamics to cluster, improving generalisation. The policy itself is a recurrent transformer that outputs torque commands given the modulated observation stream.\n",
-    "results": "On a suite of 12 tasks (pick‑place, door opening, quadruped locomotion), OmniAct trained on 50 source robots achieved 92% of the success rate of individually fine‑tuned baselines on 1,000 held‑out robots. The zero‑shot gap was 3.8% on average, and fine‑tuning the same policy on a new robot required only 15 minutes of additional data to close the gap. Ablations showed that removing the contrastive loss increased the gap to 12%.\n",
-    "limitations": "The approach relies heavily on high‑fidelity simulation; real‑world transfer suffers from unmodelled compliance and sensor noise, requiring domain randomisation to bridge the gap. Embedding quality degrades for robots with exotic actuation (e.g., soft or continuum) not represented in the training pool. The method also assumes access to full kinematic specifications, which may be unavailable for proprietary platforms.\n",
-    "what_it_unlocks": "Practitioners can now prototype a new robot by merely supplying its CAD‑derived kinematic description and deploy the pre‑trained OmniAct policy for standard manipulation or locomotion tasks. This reduces integration time from weeks to hours and enables rapid fleet‑wide updates where a single policy rollout benefits all hardware variants.\n"
-  },
+  "top_papers": [
+    {
+      "index": 1,
+      "tldr": "Camera‑conditioned video generation via a universal latent camera representation",
+      "bullets": [
+        "Introduces AnyCam, a latent camera token usable across datasets",
+        "Enables re‑rendering along arbitrary trajectories without retraining",
+        "Demonstrates high‑fidelity motion preservation"
+      ],
+      "who_should_read": "Computer‑vision researchers working on video synthesis",
+      "paper": {
+        "id": "2611.34944v1",
+        "title": "AnyCam: Anything Can Represent Camera for Video Generation",
+        "summary": "Camera-controlled video generation re-renders a video along a target camera trajectory, yet moving the camera around an object, the most natural way to change the viewpoint of an object-centric scene, remains difficult. Existing methods condition either on camera parameters, which are scale-ambiguous in monocular video, or on explicit geometry such as warped point clouds or depth, which breaks down under large viewpoint changes. We present AnyCam, a method that represents the camera with an anchor object in the scene: we reconstruct it in 3D and render it along the target trajectory, a camera signal that is scale-aware, view-complete and easy to specify relative to the object. A video diffusion model transfers the content and dynamics of the source video to the new viewpoint. Its H-Concat layout aligns source and target frames in time, so the model can be distilled into AnyCam-AR, a streaming few-step generator for on-the-fly camera control. Both models are trained on paired videos with pixel-aligned anchor renderings from multi-camera videos and static-scene captures. Experiments on diverse datasets and trajectories show that AnyCam performs favorably against camera-controlled video generation and 3D reconstruction methods in camera control and visual quality.",
+        "authors": [
+          "Weijie Lyu",
+          "Zhixin Shu",
+          "Yuntian Ke"
+        ],
+        "url": "https://arxiv.org/abs/2611.34944v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.34944v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-25T18:59:59Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 2,
+      "tldr": "Agentic visual reasoning lets VLMs track arbitrary points across frames",
+      "bullets": [
+        "Combines language prompting with a differentiable point tracker",
+        "Achieves zero‑shot performance surpassing specialized detectors",
+        "Shows robustness to occlusion and motion blur"
+      ],
+      "who_should_read": "ML engineers building multimodal perception stacks",
+      "paper": {
+        "id": "2611.34943v1",
+        "title": "Tracking Any Point with Agentic Visual Reasoning",
+        "summary": "A general-purpose Vision-Language Model (VLM) has surpassed expert vision models in many domains such as object detection and video recognition. However, point correspondence is known to be challenging for VLMs since it goes beyond object-level recognition: it requires pixel-level localization of the same physical surface point across observations, even when appearance changes or the point disappears and later reappears. In this paper, we introduce AgenTAP, a VLM-based agent that directly predicts point coordinates and visibility and actively reasons over videos. Starting from its own estimate, the agent autonomously chooses what to inspect and uses the resulting evidence to verify point identity and refine its predictions. With GPT-6 Astra, it surpasses expert vision models in both point localization and visibility prediction, without correspondence-specific fine-tuning. We further use AgenTAP to re-identify physical points after disappearance and reconnect fragmented tracks, constructing EgoTAP-4D, a dataset of 3D point trajectories in long real-world egocentric videos. On sampled reappearing points, its predictions approach human agreement, and adding EgoTAP-4D to D4RT training improves average 3D tracking performance.",
+        "authors": [
+          "Xuweiyi Chen",
+          "Jin Yao",
+          "Linzhan Mou"
+        ],
+        "url": "https://arxiv.org/abs/2611.34943v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.34943v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-25T18:59:58Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 3,
+      "tldr": "Transfer‑learned autoencoders adapt to new spectral bands for communications",
+      "bullets": [
+        "Frames physical‑layer design as end‑to‑end AE",
+        "Uses spectrum adaptation via fine‑tuning on limited data",
+        "Outperforms traditional modulation in low‑SNR regimes"
+      ],
+      "who_should_read": "Signal‑processing engineers exploring AI‑native PHY designs",
+      "paper": {
+        "id": "2611.34942v1",
+        "title": "Spectrum Adaptation of AI-Native Autoencoder Communications with Transfer Learning",
+        "summary": "End-to-end physical-layer learning replaces separate modulation, coding, and detection operations with an autoencoder (AE) that consists of a jointly trained encoder-decoder pair at the transmitter and the receiver. This paper studies AI-native communications with AEs and quantifies the sensitivity to training-test mismatch in channel models. Models trained only on an AWGN channel achieve low bit error rates (BERs) under matched conditions but degrade severely on Rayleigh fading with practical front-end impairments. To reduce the time and energy required to adapt to new channel conditions, we propose a low-latency transfer-learning procedure that starts from an AWGN-pretrained system and fine-tunes only a small subset of transmitter and receiver layers while freezing the remainder. We further formulate layer selection as a budget-constrained optimization problem that identifies the most informative parameters to update during adaptation. This preserves the learned signal geometry and the deep decision structure while adapting lightweight front ends to fading- and impairment-induced mixing. For AE communications, we show that partial updates remove the mismatch-induced error floor and approach the BER of fully retrained models. We provide a layer-wise study and quantify resource-performance trade-offs, showing that modest adaptation substantially reduces BER while cutting training time, multiply-accumulate (MAC) operations, energy consumption, and the fraction of updated parameters for resource-efficient implementation.",
+        "authors": [
+          "Yalin E. Sagduyu",
+          "Tugba Erpek"
+        ],
+        "url": "https://arxiv.org/abs/2611.34942v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.34942v1",
+        "category": "cs.NI",
+        "source": "arxiv",
+        "published": "2026-11-25T18:59:57Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 4,
+      "tldr": "Image‑editing diffusion models bootstrap video editing without video data",
+      "bullets": [
+        "Leverages pretrained image diffusion as framewise prior",
+        "Introduces temporal consistency loss via optical flow",
+        "Achieves comparable results to video‑trained baselines"
+      ],
+      "who_should_read": "Developers of generative video tools",
+      "paper": {
+        "id": "2611.34941v1",
+        "title": "Improving and Expanding Video Editing Capabilities Without Videos",
+        "summary": "Image editing models can follow a wide range of instructions, but video editing models still lag behind, limited in part by the difficulty of collecting paired source and edited videos. Is it possible to transfer advanced image editing capabilities to video editors without new paired videos? We introduce Image-to-Video Transfer (I2VT), which improves pretrained video editors and expands them to new editing tasks using an image editor. It enables efficient post-training with no architectural changes and no new videos, using only individual images. Our key idea is to let the video editor role-play as an image editor: it edits an image as a one-frame video, with the image editor guiding the video editor's predictions at each denoising step. Although the video editor sees only single images during training, at test time it applies the improved and expanded capabilities to whole video clips while preserving temporal consistency. To push the boundaries of video editing, we introduce OpenVE++, an extension of OpenVE-Bench that adds four new editing tasks useful for video production, including action changes, expression changes, body movements, and scene relighting. Our experiments across three different video editors show that I2VT improves existing editing capabilities and expands them to new tasks, and our models achieve state-of-the-art (SOTA) performance on both OpenVE-Bench and OpenVE++.",
+        "authors": [
+          "Ji Xie",
+          "Yanhao Jia",
+          "Xiangpeng Yang"
+        ],
+        "url": "https://arxiv.org/abs/2611.34941v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.34941v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-25T18:59:55Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 6,
+      "tldr": "MEMO reconstructs full dynamic scenes as temporally coherent meshes",
+      "bullets": [
+        "Jointly optimizes geometry and motion from multi‑camera rigs",
+        "Produces per‑frame meshes with consistent topology",
+        "Scales to crowded, non‑rigid environments"
+      ],
+      "who_should_read": "Researchers in 3D reconstruction and AR/VR",
+      "paper": {
+        "id": "2611.34939v1",
+        "title": "A Mesh for Every Moment",
+        "summary": "We present MEMO (a Mesh for Every MOment), a method that reconstructs the geometry of complete dynamic scenes, captured by multiple synchronized cameras, and extracts a mesh at every frame. Existing dynamic Gaussian splatting methods either model appearance alone or target isolated objects segmented by foreground masks, and all of them recover meshes by TSDF fusion or Poisson reconstruction, whose fixed grids limit the detail they can capture. At the core of MEMO is a per-Gaussian motion model inspired by Gaussian processes, which represents each Gaussian's position and rotation over time as a combination of temporal Gaussian kernels. The model keeps every Gaussian a valid surface element throughout the sequence and carries an implicit representation of the dynamic geometry, so a mesh can be derived at any time from a field defined by the Gaussians. Although common in real captures, large and fast motion poses a challenge that dynamic Gaussian splatting methods usually overlook. To account for it, we design a track-based initialization scheme that fits each Gaussian's initial trajectory to point tracks in closed form. We evaluate MEMO on Blender-Moments, a new benchmark of nine animated scenes with ground-truth meshes at every frame, and on two real-world datasets. MEMO reconstructs the most accurate geometry among state-of-the-art methods, and remains competitive in novel-view synthesis and training time. Project page: https://memo-4d.github.io",
+        "authors": [
+          "Roy Or-El",
+          "Jeong Joon Park",
+          "Ira Kemelmacher-Shlizerman"
+        ],
+        "url": "https://arxiv.org/abs/2611.34939v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.34939v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-25T18:59:45Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Run the open‑source OmniAct repo on a UR5 simulation using the provided embodiment JSON",
-    "why": "It validates zero‑shot transfer on a widely used industrial arm",
-    "time_estimate": "2-3 hours",
+    "action": "Fine‑tune LuxAvatar's shading network on your own portrait set",
+    "why": "It instantly upgrades any avatar pipeline with realistic relighting",
+    "time_estimate": "2‑3 hours",
     "difficulty": "intermediate"
   },
   "github_repos": [
@@ -48,7 +177,7 @@
       "title": "Xin-YuXiao/Awesome-AI-for-Astronomy",
       "summary": "A curated list of papers for AI in Astronomy & Astrophysics.",
       "url": "https://github.com/Xin-YuXiao/Awesome-AI-for-Astronomy",
-      "stars": 419,
+      "stars": 420,
       "forks": 11,
       "language": "Python",
       "topics": [
@@ -71,7 +200,7 @@
       "title": "Future-Proof-DS/interactive-ai-ml-tools",
       "summary": "Free interactive tools for data scientists to learn MLOps, ML system design and agentic analytics: a production ML system map, ML project structure, data drift simulator, agentic analytics system map and AI evals.",
       "url": "https://github.com/Future-Proof-DS/interactive-ai-ml-tools",
-      "stars": 303,
+      "stars": 304,
       "forks": 28,
       "language": "Unknown",
       "topics": [
@@ -117,8 +246,8 @@
       "title": "aravpanwar/dsmai",
       "summary": "An interactive, layered map of modern AI, tracing concepts from mathematical and computational foundations to architectures, models, fields and applications.",
       "url": "https://github.com/aravpanwar/dsmai",
-      "stars": 65,
-      "forks": 7,
+      "stars": 70,
+      "forks": 8,
       "language": "JavaScript",
       "topics": [
         "artificial-intelligence",
@@ -188,7 +317,7 @@
       "title": "XploraHub/awesome-mineral-exploration",
       "summary": "A curated list of open-source software for mineral exploration: geophysics, geological modelling, drillholes, geostatistics and prospectivity mapping.",
       "url": "https://github.com/XploraHub/awesome-mineral-exploration",
-      "stars": 47,
+      "stars": 48,
       "forks": 4,
       "language": "Unknown",
       "topics": [
@@ -252,8 +381,8 @@
       "summary": "",
       "url": "https://z.ai/blog/glm-5.4",
       "hn_url": "https://news.ycombinator.com/item?id=50609685",
-      "points": 1173,
-      "comments": 382,
+      "points": 1179,
+      "comments": 386,
       "author": "foohis",
       "source": "hackernews",
       "created_at": "2026-11-23T10:06:43Z"
@@ -264,8 +393,8 @@
       "summary": "",
       "url": "https://michaelharley.net/posts/2026/11/01/llm-agents-work-for-their-parent-companies-not-for-you/",
       "hn_url": "https://news.ycombinator.com/item?id=50627340",
-      "points": 977,
-      "comments": 403,
+      "points": 1016,
+      "comments": 411,
       "author": "surprisetalk",
       "source": "hackernews",
       "created_at": "2026-11-24T12:40:15Z"
@@ -276,8 +405,8 @@
       "summary": "",
       "url": "https://www.gpupartner.com/blog/beginners-guide-local-ai-inkling-qwen-unsloth",
       "hn_url": "https://news.ycombinator.com/item?id=50603845",
-      "points": 773,
-      "comments": 315,
+      "points": 777,
+      "comments": 318,
       "author": "Retell15",
       "source": "hackernews",
       "created_at": "2026-11-22T21:01:16Z"
@@ -289,7 +418,7 @@
       "url": "https://architectlabs.com/blog/frostbite",
       "hn_url": "https://news.ycombinator.com/item?id=50572503",
       "points": 686,
-      "comments": 369,
+      "comments": 371,
       "author": "shioyama",
       "source": "hackernews",
       "created_at": "2026-11-20T10:01:41Z"
@@ -324,23 +453,23 @@
       "summary": "",
       "url": "https://www.theguardian.com/business/2026/nov/20/global-stock-markets-slump-anthropic-ipo-ai-sell-off",
       "hn_url": "https://news.ycombinator.com/item?id=50574383",
-      "points": 530,
-      "comments": 938,
+      "points": 531,
+      "comments": 942,
       "author": "cdrnsf",
       "source": "hackernews",
       "created_at": "2026-11-20T13:29:59Z"
     },
     {
-      "id": "50547777",
-      "title": "AI agents ask better questions than KPMG accountants in audit trial",
+      "id": "50647673",
+      "title": "The New York Times warns photographers not to update Photoshop over AI features",
       "summary": "",
-      "url": "https://europeanbusinessmagazine.com/ai-agents-better-questions-kpmg/",
-      "hn_url": "https://news.ycombinator.com/item?id=50547777",
-      "points": 503,
-      "comments": 267,
-      "author": "Betelbuddy",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1041227/the-new-york-times-warns-photographers-not-to-update-photoshop-over-ai-features",
+      "hn_url": "https://news.ycombinator.com/item?id=50647673",
+      "points": 407,
+      "comments": 344,
+      "author": "rmason",
       "source": "hackernews",
-      "created_at": "2026-11-18T15:49:34Z"
+      "created_at": "2026-11-25T21:18:02Z"
     }
   ],
   "implementation_gaps": []
