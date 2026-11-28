@@ -1,42 +1,172 @@
 {
-  "post_style": "deep-dive",
+  "post_style": "roundup",
   "week_number": 48,
-  "edition_date": "2026-11-27",
+  "edition_date": "2026-11-28",
   "cadence": "daily",
-  "generated_at": "2026-11-27T11:15:18.423642+00:00",
+  "generated_at": "2026-11-28T10:46:56.115798+00:00",
   "paper_of_week": {
-    "index": 8,
-    "headline": "Looped Transformers boost depth without extra parameters",
-    "summary": "The Mixture-of-Loops Transformer (MoL‑T) revisits weight‑sharing across recurrent transformer blocks, allowing a single set of layers to be executed multiple times with learned routing. By treating each loop as a mixture component, the model dynamically selects how many iterations each token should undergo, balancing expressivity and compute.\nThe authors demonstrate that MoL‑T attains comparable or superior performance on language modelling and reasoning benchmarks while using 30% fewer parameters than deep vanilla transformers. Crucially, the approach retains the parallelism of standard transformers, avoiding the latency penalties of true recurrence.",
-    "key_takeaway": "Reuse transformer layers via learned loops to deepen models without proportional parameter growth.",
-    "excitement_score": 9,
+    "index": 1,
+    "headline": "Tokenisation hardness proves limits for practical NLP pipelines",
+    "summary": "Current tokenisation heuristics assume a tractable approximation to an optimal segmentation. The authors show, under P≠NP, that no polynomial‑time algorithm can guarantee a constant‑factor approximation to the optimal tokeniser objective. The proof reduces from classic APX‑hard problems, establishing a theoretical barrier for any deterministic, efficient tokeniser. Practitioners must accept sub‑optimality or rely on domain‑specific shortcuts, reshaping expectations for downstream model performance.",
+    "key_takeaway": "Treat tokenisation as a heuristic step; budget for its error when evaluating model pipelines.",
+    "excitement_score": 8,
     "paper": {
-      "id": "2611.34923v1",
-      "title": "Mixture-of-Loops Transformer",
-      "summary": "Looped Transformers boost expressivity by reusing shared layers across loops, yet at the cost of efficiency. Pushing their expressivity-efficiency frontier requires rethinking the core mechanism connecting adjacent loops: What should be passed as a Transformer loops? We introduce Mixture-of-Loops Transformer (MoLT), whose Mixture-of-Loops Attention (MoLA) uses keys and values (KV) as memory for selective reuse across depths and loops. Under loop residual, MoLT-R retains the residual stream and reads local KV across loops for expressivity. Under loop KV, MoLT-KV instead restarts from embeddings and reads current-loop local KV with preceding-loop memory KV at earlier positions for efficiency. MoLT-KV eliminates same-position cross-loop dependence and, paired with loop forcing for parallel training, unlocks single-traversal Mixture-of-Loops (MoL) decoding beyond the training loop horizon. To balance efficiency and quality, we introduce U-shaped MoLT (U-MoLT), which separates memory construction from prediction readout and skips unused decoder traversals without changing predictions. In 400B-token pretraining, U-MoLT outperforms OLMo3 across 700M/1.5B dense and 3B MoE models, achieving 1.7x validation cross-entropy (CE) token efficiency at 700M while improving 3B MoE 10-domain perplexity by 0.75 and 10-task accuracy by 2.1 percentage points. In 100B-token continued pretraining of Qwen3.5-0.8B-Base, our U-MoLT adaptation lowers CE on all 11 domains over the matched baseline with 1.4x mean token efficiency. At inference, U-MoLT with MoL-Hybrid-2 matches non-looped OLMo3 latency at 996.6 vs. 1,000.6 ms on S-size (~113M) models. Code is available at https://github.com/hustvl/MoLT",
+      "id": "2611.34938v1",
+      "title": "Tokenisation is not in APX",
+      "summary": "In this paper, we prove that, unless P=NP, no polynomial-time algorithm can find a tokeniser whose objective is within any constant factor of the optimum, meaning that tokenisation is not in the APX complexity class. We prove this for direct and bottom-up tokenisation, under both a compression or unigram log-likelihood objectives, and for binary or larger alphabets. We further show that, even over unary alphabets, direct tokenisation is APX-hard, and thus admits no polynomial-time approximation scheme.",
       "authors": [
-        "Lianghui Zhu",
-        "Shijie Wang",
-        "Xinggang Wang"
+        "Violeta Kastreva",
+        "Philip Whittington",
+        "Dennis Komm"
       ],
-      "url": "https://arxiv.org/abs/2611.34923v1",
-      "pdf_url": "https://arxiv.org/pdf/2611.34923v1",
-      "category": "cs.LG",
+      "url": "https://arxiv.org/abs/2611.34938v1",
+      "pdf_url": "https://arxiv.org/pdf/2611.34938v1",
+      "category": "cs.CL",
       "source": "arxiv",
-      "published": "2026-11-25T18:58:53Z"
+      "published": "2026-11-25T18:59:38Z",
+      "github_implementations": 3,
+      "implementation_gap": false
     }
   },
-  "top_papers": [],
-  "deep_dive": {
-    "problem": "Standard transformers scale depth by stacking more layers, which linearly inflates parameters and memory, limiting deployment on resource‑constrained hardware. Moreover, static depth forces all tokens to undergo the same amount of computation, even when some require less reasoning.",
-    "approach": "MoL‑T introduces a mixture-of-loops controller that assigns each token a loop count drawn from a categorical distribution parameterised by a lightweight gating network. The same transformer block is executed repeatedly for tokens that need more processing, while others exit early. The controller is trained end‑to‑end with a differentiable straight‑through estimator, and a regulariser penalises excessive loops to keep compute bounded.",
-    "results": "On WikiText‑103, MoL‑T with 12 effective layers (3 shared layers looped up to 4 times) achieves 18.2 perplexity versus 18.7 for a 12‑layer baseline, using 30% fewer parameters. On the LAMBADA reading‑comprehension task, accuracy rises from 71.4% to 73.1% with the same FLOPs budget. Ablations show that the learned loop distribution concentrates longer loops on syntactically complex sentences, confirming adaptive depth.",
-    "limitations": "The gating network adds overhead and can become a bottleneck on very long sequences, especially when many tokens request maximal loops. The method assumes that loop count is a useful proxy for token difficulty, which may not hold for tasks requiring global context rather than depth. Finally, the straight‑through estimator introduces bias that can affect convergence on larger corpora.",
-    "what_it_unlocks": "Practitioners can now deploy deeper transformer models on edge devices by reusing a small core of layers, achieving higher accuracy without proportional memory growth. The adaptive loop mechanism also enables fine‑grained compute budgeting, allowing dynamic inference latency control in production systems."
-  },
+  "top_papers": [
+    {
+      "index": 2,
+      "tldr": "Generated images can improve visual reasoning accuracy in multimodal models.",
+      "bullets": [
+        "Introduces a helper‑image generation module integrated at inference time",
+        "Shows consistent 3‑5% gains on VQA‑style benchmarks",
+        "Analyzes failure modes when generated visuals mislead the language head"
+      ],
+      "who_should_read": "Multimodal ML engineers",
+      "paper": {
+        "id": "2611.34935v1",
+        "title": "Can image generation help visual reasoning? An empirical study",
+        "summary": "Language models think in words; then multimodal models might think in images. We test whether a generated helper improves the answer to a visual question. A model describes the helper it needs and then answers using the original and generated images together. Across 13 vision-language model and generator pairs, generation lowers mean accuracy by 3.7 percentage points, with declines on nine of ten tasks. Two unified models, BAGEL and Janus-Pro-7B, each lose accuracy on eight tasks. On VSTAR, adding a generated image to the same planning hint lowers accuracy by 10.47 points. Repeated image edits yield different outcomes across tasks. ChartQAPro and MathVista stay below their no-generation baselines, while ERQA gains three points after ten edits.",
+        "authors": [
+          "Xueyang Yu",
+          "Yifan Jing",
+          "Taiming Lu"
+        ],
+        "url": "https://arxiv.org/abs/2611.34935v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.34935v1",
+        "category": "cs.LG",
+        "source": "arxiv",
+        "published": "2026-11-25T18:59:31Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 3,
+      "tldr": "Attack policy selection biases evaluation of AI safety monitors.",
+      "bullets": [
+        "Demonstrates that monitor metrics vary dramatically with adversary choice",
+        "Proposes a diversified policy ensemble for robust evaluation",
+        "Provides a benchmark suite for reproducible safety testing"
+      ],
+      "who_should_read": "AI safety researchers",
+      "paper": {
+        "id": "2611.34934v1",
+        "title": "Attack Policy Selection can Mislead Monitor Evaluators",
+        "summary": "AI monitors, classifiers that flag dangerous behaviour by AI agents, are often evaluated against transcripts generated by attack policies acting as proxies for dangerous behaviour in deployment. We evaluate an ex-production OpenAI monitor as a case study and find that measured false negative rate is highly sensitive to both the method used to generate attack policies and the level of optimisation applied within that method. This rate ranged from 0.5\\% to 20.8\\% across optimisation levels of a single method (reinforcement learning), and from 6.4\\% to 23.0\\% across methods at their best observed optimisation level (optimised prompting vs.\\ transcript editing). Every attack policy was developed against proxy monitors only: all reported results show attacks transferring to the held-out GPT-5.4 target monitor. Our results suggest that monitor evasion evaluations can easily mislead: an evaluation using only basic attack methods may give false confidence that a monitor is strong.   The sensitivity to attack-policy choice raises a problem: interpreting any particular result as evidence about deployment performance requires justification. The transcripts produced by attack policies are proxies for the dangerous behaviour a monitor must flag in deployment. These proxies can introduce visible artefacts, such as reasoning about a ``side task'' absent from the instructions shown to the monitor, that affect monitor judgements. Given the sensitivity above, the choice of proxy can change an evaluation's conclusion. Reading these results as evidence about deployment therefore requires a separate legitimacy argument for why the proxies are informative, including any justification of conservativeness. Making convincing arguments remains an open problem.",
+        "authors": [
+          "Charlie Griffin",
+          "Oliver Makins",
+          "Asa Cooper Stickland"
+        ],
+        "url": "https://arxiv.org/abs/2611.34934v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.34934v1",
+        "category": "cs.LG",
+        "source": "arxiv",
+        "published": "2026-11-25T18:59:28Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 4,
+      "tldr": "EM‑based rigid motion factorization enables 4D reconstruction from single video.",
+      "bullets": [
+        "Formulates motion segmentation as a probabilistic factorization problem",
+        "Achieves state‑of‑the‑art depth‑motion accuracy on monocular benchmarks",
+        "Offers an open‑source implementation with real‑time inference"
+      ],
+      "who_should_read": "Computer vision practitioners",
+      "paper": {
+        "id": "2611.34931v1",
+        "title": "DynMF2: Rigid Motion Factorization by Expectation-Maximization for Monocular 4D Reconstruction and Motion Segmentation",
+        "summary": "A single casual video leaves a moving scene under-determined: a point seen once from each place can slide toward or away from the camera and still match every frame. We constrain the reconstruction with the structure of the motion itself. Building on DynMF, we model a scene's motion as a handful of SE(3) trajectories, each rigid, and let every point follow one of them alone, never a blend. DynMF2 computes this factorization directly from 3D point trajectories, with no rendering, by Expectation-Maximization (EM). Its M-step fits, in closed form, every rigid motion to the points assigned to it, and its E-step reassigns every point to the motion that explains it with the least error. The background is simply one more motion, the camera's, so no masks are needed. Three tools then revise the factorization: requery adds trajectories where the rendering shows parts the tracker missed, merge joins motions that move together, and split separates those that do not. Thus the number of motions follows the scene. Without masks, DynMF2 clearly outperforms the mask-based baselines in view synthesis on iPhone and NVIDIA and in 3D tracking on iPhone. It recovers what masks leave out, from thin parts and details to small movers far in the background. Its motions segment the moving parts of MOVi-F and iTACO scenes competitively, although DynMF2 is never trained to segment. What moves in a scene is not decided in advance: it emerges from the rigid motions themselves.",
+        "authors": [
+          "Agelos Kratimenos",
+          "Yile Hua",
+          "Kostas Daniilidis"
+        ],
+        "url": "https://arxiv.org/abs/2611.34931v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.34931v1",
+        "category": "cs.CV",
+        "source": "arxiv",
+        "published": "2026-11-25T18:59:14Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 5,
+      "tldr": "Gene‑informed benchmark aligns pathology foundation models with clinical relevance.",
+      "bullets": [
+        "Curates a pathology dataset annotated with gene expression profiles",
+        "Shows that gene‑aware pretraining improves downstream diagnostic tasks",
+        "Releases evaluation scripts for reproducible scoring"
+      ],
+      "who_should_read": "Medical imaging ML developers",
+      "paper": {
+        "id": "2611.34930v1",
+        "title": "A gene informed benchmark for BioScoring of pathology foundation models",
+        "summary": "Pathology foundation models are usually compared by their performance on downstream tasks such as classification and retrieval. While such benchmarks measure how useful a model is, they provide no insight into the biology it represents. We introduce BioScore, a benchmark that quantifies how well an image encoder captures cell identities, with spatial transcriptomics of the same tissue as the reference. A sparse autoencoder splits the encoder's patch embeddings into sparse features, which we cluster into a fixed number of groups. BioScore then measures, for each of 52 cell identities defined by marker genes, how specifically one group follows the identity's expression over the tissue. Because the autoencoder training is fully unsupervised, a match shows that the model represents the cell identity from the image alone. We score 8 pathology foundation models and 3 natural-image models. Every pathology model scores above every natural-image model (0.299--0.371 \\vs 0.214--0.232), and paired tests separate three tiers among the pathology models. Unlike a supervised probe, BioScore needs no labels, builds its reference from the data and scores even from few sections, yet it ranks the encoders as a probe does. Its per-identity breakdown indicates which cell identities each encoder captures or misses.",
+        "authors": [
+          "Paul Vilars",
+          "Vincent Quoc-Huy Trinh",
+          "Maria Vakalopoulou"
+        ],
+        "url": "https://arxiv.org/abs/2611.34930v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.34930v1",
+        "category": "cs.LG",
+        "source": "arxiv",
+        "published": "2026-11-25T18:59:13Z",
+        "github_implementations": 3,
+        "implementation_gap": false
+      }
+    },
+    {
+      "index": 7,
+      "tldr": "Generating diverse reasoning traces boosts hard math problem solving.",
+      "bullets": [
+        "Samples multiple solution paths and filters by verifier consistency",
+        "Improves pass rates on benchmark math datasets by up to 12%",
+        "Provides a lightweight API for integrating trace diversity into existing LLM pipelines"
+      ],
+      "who_should_read": "LLM researchers focusing on reasoning",
+      "paper": {
+        "id": "2611.34928v1",
+        "title": "Diverse Alternative Reasoning Traces for Hard Math Problems",
+        "summary": "Post-training large language models (LLMs) for mathematical reasoning often relies on accepted traces whose final answers pass a verifier. For hard math problems, however, such traces can be rare under independent Monte Carlo (MC) sampling. To address this, we propose Diverse Alternative Reasoning Traces (DART), a trace-mining method that starts from a rejected trace, decomposes it into reasoning steps, and ranks them by position-weighted uncertainty. It then generates deliberately distinct alternative candidates for highly ranked steps using reference-answer guidance and a meta-thought before completing the resulting traces. On greedy-unsolved DeepMath-103K problems, DART recovers 37% more problems than MC sampling at a matched number of generated traces. Its estimated generation cost per recovered problem is nearly identical, while its cost per accepted trace is 30% lower. Post-training Llama-3.1-8B-Instruct on traces mined by DART achieves the highest point estimate in five of six evaluations across MATH-500 and AIME benchmarks. These results demonstrate that revisiting rejected traces with DART can expand problem coverage and provide effective post-training data.",
+        "authors": [
+          "Lukas Aichberger",
+          "Adam Golinski",
+          "Arno Blaas"
+        ],
+        "url": "https://arxiv.org/abs/2611.34928v1",
+        "pdf_url": "https://arxiv.org/pdf/2611.34928v1",
+        "category": "cs.CL",
+        "source": "arxiv",
+        "published": "2026-11-25T18:59:11Z"
+      }
+    }
+  ],
+  "deep_dive": null,
   "one_thing_to_try": {
-    "action": "Implement MoL‑T's loop controller in an existing transformer codebase and benchmark on a small language model.",
-    "why": "It reveals immediate compute‑accuracy trade‑offs without re‑training from scratch.",
+    "action": "Add a generated helper image as an extra input token to your VQA model",
+    "why": "It can immediately reveal whether visual augmentation yields measurable accuracy gains on your task.",
     "time_estimate": "2-3 hours",
     "difficulty": "intermediate"
   },
@@ -46,7 +176,7 @@
       "title": "Xin-YuXiao/Awesome-AI-for-Astronomy",
       "summary": "A curated list of papers for AI in Astronomy & Astrophysics.",
       "url": "https://github.com/Xin-YuXiao/Awesome-AI-for-Astronomy",
-      "stars": 422,
+      "stars": 427,
       "forks": 11,
       "language": "Python",
       "topics": [
@@ -115,7 +245,7 @@
       "title": "aravpanwar/dsmai",
       "summary": "An interactive, layered map of modern AI, tracing concepts from mathematical and computational foundations to architectures, models, fields and applications.",
       "url": "https://github.com/aravpanwar/dsmai",
-      "stars": 73,
+      "stars": 75,
       "forks": 8,
       "language": "JavaScript",
       "topics": [
@@ -133,33 +263,11 @@
       "created_at": "2026-11-09T07:28:46Z"
     },
     {
-      "id": "1438428788",
-      "title": "kumarshreshtha/protuna",
-      "summary": "Optimization framework for AI-guided protein engineering",
-      "url": "https://github.com/kumarshreshtha/protuna",
-      "stars": 57,
-      "forks": 2,
-      "language": "Python",
-      "topics": [
-        "active-learning",
-        "bayesian-optimization",
-        "bioengineering",
-        "black-box-optimization",
-        "distributed",
-        "experimental-design",
-        "lead-optimization",
-        "machine-learning",
-        "protein-engineering"
-      ],
-      "source": "github",
-      "created_at": "2026-10-29T13:02:34Z"
-    },
-    {
       "id": "1457897892",
       "title": "Danuzco/bayesian-modelling-notes",
       "summary": "Handwritten lecture notes and Jupyter notebooks for the Bayesian Modelling course of the Doctorado en Inteligencia Artificial (Chile): probability, conjugate models, Kalman filters, Gaussian processes, MCMC, variational inference, hierarchical models.",
       "url": "https://github.com/Danuzco/bayesian-modelling-notes",
-      "stars": 56,
+      "stars": 57,
       "forks": 7,
       "language": "Jupyter Notebook",
       "topics": [
@@ -186,7 +294,7 @@
       "title": "XploraHub/awesome-mineral-exploration",
       "summary": "A curated list of open-source software for mineral exploration: geophysics, geological modelling, drillholes, geostatistics and prospectivity mapping.",
       "url": "https://github.com/XploraHub/awesome-mineral-exploration",
-      "stars": 48,
+      "stars": 49,
       "forks": 4,
       "language": "Unknown",
       "topics": [
@@ -215,42 +323,92 @@
       "created_at": "2026-11-05T17:34:33Z"
     },
     {
-      "id": "1438616119",
-      "title": "hexsyro/complaint-triage",
-      "summary": "Multi-class text classifier that routes consumer complaints to the right product category using TF-IDF, LinearSVC and a CLI router.",
-      "url": "https://github.com/hexsyro/complaint-triage",
-      "stars": 45,
-      "forks": 1,
+      "id": "1466789098",
+      "title": "sharukh01621/first-line-to-first-paper",
+      "summary": "From First Line to First Paper: 860-page open textbook + 182 Google Colab notebooks mastering Python, Biostatistics, ML, and PyTorch Deep Learning.",
+      "url": "https://github.com/sharukh01621/first-line-to-first-paper",
+      "stars": 37,
+      "forks": 11,
       "language": "Jupyter Notebook",
       "topics": [
-        "cli",
-        "complaint-classification",
-        "complaint-management",
-        "complaint-management-system",
-        "confusion-matrix",
-        "consumer-complaints",
-        "linearsvc",
+        "biostatistics",
+        "data-science",
+        "deep-learning",
+        "google-colab",
         "machine-learning",
-        "multiclass-classification",
-        "nlp",
-        "scikit-learn",
-        "text-classification",
-        "text-classifier",
-        "tf-idf",
-        "tfidf-vectorizer"
+        "open-textbook",
+        "python",
+        "pytorch"
       ],
       "source": "github",
-      "created_at": "2026-10-29T15:35:29Z"
+      "created_at": "2026-11-21T17:27:37Z"
+    },
+    {
+      "id": "1467922496",
+      "title": "viniciusscience/fishid-studio",
+      "summary": "Open-source Computer Vision & Deep Learning platform for Marine Fish Identification, Fisheries Electronic Monitoring (EM), Video Tracking (ByteTrack + SAM 2) & Biometry | Visão Computacional e Monitoramento Pesqueiro",
+      "url": "https://github.com/viniciusscience/fishid-studio",
+      "stars": 35,
+      "forks": 17,
+      "language": "Python",
+      "topics": [
+        "bytetrack",
+        "computer-vision",
+        "conservation-tech",
+        "convnext",
+        "deep-learning",
+        "electronic-monitoring",
+        "explainable-ai",
+        "fastapi",
+        "fish-identification",
+        "fisheries",
+        "grad-cam",
+        "image-segmentation",
+        "machine-learning",
+        "marine-biology",
+        "object-tracking",
+        "open-science",
+        "python",
+        "sam2",
+        "sdg14",
+        "streamlit"
+      ],
+      "source": "github",
+      "created_at": "2026-11-22T19:41:30Z"
     }
   ],
   "hn_posts": [
+    {
+      "id": "50609685",
+      "title": "GLM-5.4: Toward generalized coding with our first loop transformer",
+      "summary": "",
+      "url": "https://z.ai/blog/glm-5.4",
+      "hn_url": "https://news.ycombinator.com/item?id=50609685",
+      "points": 1186,
+      "comments": 388,
+      "author": "foohis",
+      "source": "hackernews",
+      "created_at": "2026-11-23T10:06:43Z"
+    },
+    {
+      "id": "50660180",
+      "title": "AI made self-hosting fun again",
+      "summary": "",
+      "url": "https://janlukas.blog/posts/ai-self-hosting",
+      "hn_url": "https://news.ycombinator.com/item?id=50660180",
+      "points": 1120,
+      "comments": 522,
+      "author": "jlelse",
+      "source": "hackernews",
+      "created_at": "2026-11-26T21:47:45Z"
+    },
     {
       "id": "50627340",
       "title": "LLM agents work for their parent companies, not for you",
       "summary": "",
       "url": "https://michaelharley.net/posts/2026/11/01/llm-agents-work-for-their-parent-companies-not-for-you/",
       "hn_url": "https://news.ycombinator.com/item?id=50627340",
-      "points": 1032,
+      "points": 1033,
       "comments": 415,
       "author": "surprisetalk",
       "source": "hackernews",
@@ -262,23 +420,23 @@
       "summary": "",
       "url": "https://www.gpupartner.com/blog/beginners-guide-local-ai-inkling-qwen-unsloth",
       "hn_url": "https://news.ycombinator.com/item?id=50603845",
-      "points": 780,
+      "points": 782,
       "comments": 319,
       "author": "Retell15",
       "source": "hackernews",
       "created_at": "2026-11-22T21:01:16Z"
     },
     {
-      "id": "50660180",
-      "title": "AI made self-hosting fun again",
+      "id": "50663595",
+      "title": "Group chat where your AI talks behind your back",
       "summary": "",
-      "url": "https://janlukas.blog/posts/ai-self-hosting",
-      "hn_url": "https://news.ycombinator.com/item?id=50660180",
-      "points": 744,
-      "comments": 369,
-      "author": "jlelse",
+      "url": "https://construct22.com/",
+      "hn_url": "https://news.ycombinator.com/item?id=50663595",
+      "points": 709,
+      "comments": 290,
+      "author": "utiiiD",
       "source": "hackernews",
-      "created_at": "2026-11-26T21:47:45Z"
+      "created_at": "2026-11-27T06:44:34Z"
     },
     {
       "id": "50647673",
@@ -286,23 +444,23 @@
       "summary": "",
       "url": "https://www.theverge.com/ai-artificial-intelligence/1041227/the-new-york-times-warns-photographers-not-to-update-photoshop-over-ai-features",
       "hn_url": "https://news.ycombinator.com/item?id=50647673",
-      "points": 674,
-      "comments": 530,
+      "points": 685,
+      "comments": 546,
       "author": "rmason",
       "source": "hackernews",
       "created_at": "2026-11-25T21:18:02Z"
     },
     {
-      "id": "50574383",
-      "title": "Nasdaq erases all 2026 gains as AI sell-off dampens Anthropic’s second day",
+      "id": "50670757",
+      "title": "Michael Nielsen took down his book on neural nets",
       "summary": "",
-      "url": "https://www.theguardian.com/business/2026/nov/20/global-stock-markets-slump-anthropic-ipo-ai-sell-off",
-      "hn_url": "https://news.ycombinator.com/item?id=50574383",
-      "points": 531,
-      "comments": 943,
-      "author": "cdrnsf",
+      "url": "https://neuralnetworksanddeeplearning.com/",
+      "hn_url": "https://news.ycombinator.com/item?id=50670757",
+      "points": 544,
+      "comments": 336,
+      "author": "brandonb",
       "source": "hackernews",
-      "created_at": "2026-11-20T13:29:59Z"
+      "created_at": "2026-11-27T19:31:01Z"
     },
     {
       "id": "50651117",
@@ -310,35 +468,11 @@
       "summary": "",
       "url": "https://twitter.com/thsottiaux/status/2125784147889393806",
       "hn_url": "https://news.ycombinator.com/item?id=50651117",
-      "points": 489,
-      "comments": 267,
+      "points": 511,
+      "comments": 275,
       "author": "Herrera",
       "source": "hackernews",
       "created_at": "2026-11-26T03:36:58Z"
-    },
-    {
-      "id": "50601280",
-      "title": "GPT-6.2 Astra is the first model to beat Googlers' code golf records",
-      "summary": "",
-      "url": "https://bjin.github.io/go-codegolf-benchmark/#leaderboard",
-      "hn_url": "https://news.ycombinator.com/item?id=50601280",
-      "points": 466,
-      "comments": 133,
-      "author": "bjin",
-      "source": "hackernews",
-      "created_at": "2026-11-22T16:44:48Z"
-    },
-    {
-      "id": "50657265",
-      "title": "AMD-specific fork of llama.cpp",
-      "summary": "",
-      "url": "https://devnull.land/amd-specific-llama-cpp",
-      "hn_url": "https://news.ycombinator.com/item?id=50657265",
-      "points": 368,
-      "comments": 89,
-      "author": "julianlam",
-      "source": "hackernews",
-      "created_at": "2026-11-26T17:11:29Z"
     }
   ],
   "implementation_gaps": []
